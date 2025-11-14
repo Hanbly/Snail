@@ -1,0 +1,3 @@
+[submodule "Snail/ventor/spdlog"]
+	path = Snail/ventor/spdlog
+	url = https://github.com/gabime/spdlog.git

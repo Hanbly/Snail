@@ -2,4 +2,7 @@
 bin/
 bin-int/
 
+.git commands.md
+.notes/
+
 *.user
