@@ -1,6 +1,10 @@
 .vs/
-bin/
-bin-int/
+
+# bin/ 忽略所有 bin 目录下的文件
+# 只忽略根目录下的bin
+/bin/ 
+
+/bin-int/
 
 .git commands.md
 .notes/
