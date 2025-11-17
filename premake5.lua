@@ -29,7 +29,8 @@ project "Snail"
     }
 
     includedirs {
-        "%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "%{prj.name}/src"
     }
 
     filter "system:windows"
@@ -67,7 +68,7 @@ project "Example"
 
     includedirs {
         "Snail/vendor/spdlog/include",
-        "Snail/src/"
+        "Snail/src"
     }
 
     links { "Snail" }

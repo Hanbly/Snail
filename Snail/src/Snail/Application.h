@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Core.h"
 
@@ -8,13 +8,13 @@ namespace Snail {
 	{
 	public:
 		Application();
-		// Application Àà»á±»ExampleËù¼Ì³Ğ£¬ËùÒÔÊ¹ÓÃvirtual
+		// Application ç±»ä¼šè¢«Exampleæ‰€ç»§æ‰¿ï¼Œæ‰€ä»¥ä½¿ç”¨virtual
 		virtual ~Application();
 
 		void run();
 	};
 
-	// ½«ÔÚ¿Í»§¶Ë£¨×ÓÀàÖĞ£©¸ø³öº¯ÊıÌå
+	// å°†åœ¨å®¢æˆ·ç«¯ï¼ˆå­ç±»ä¸­ï¼‰ç»™å‡ºå‡½æ•°ä½“
 	Application* CreateApplication();
 
 }

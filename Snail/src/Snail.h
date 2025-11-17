@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Snail/Application.h"
 
 #include "Snail/Log.h"
 
-// ³ÌĞòÈë¿Ú -------------------------
+// ç¨‹åºå…¥å£ -------------------------
 #include "Snail/EntryPoint.h"
 //----------------------------------

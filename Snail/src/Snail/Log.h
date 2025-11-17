@@ -1,10 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 
 #include "Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/fmt/ostr.h"
 
 namespace Snail {
 
@@ -26,15 +27,15 @@ namespace Snail {
 
 }
 
-// ...Óë__VA_ARGS__ ÊÇÒ»×é¿É±ä²ÎÊýµÄºê
-// Snail ¶Ëºê
+// ...ä¸Ž__VA_ARGS__ æ˜¯ä¸€ç»„å¯å˜å‚æ•°çš„å®
+// Snail ç«¯å®
 #define SNL_CORE_TRACE(...)		::Snail::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define SNL_CORE_INFO(...)		::Snail::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define SNL_CORE_WARN(...)		::Snail::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define SNL_CORE_ERROR(...)		::Snail::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define SNL_CORE_FATAL(...)		::Snail::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 
-// Ó¦ÓÃ¶Ëºê
+// åº”ç”¨ç«¯å®
 #define SNL_TRACE(...)			::Snail::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define SNL_INFO(...)			::Snail::Log::GetClientLogger()->info(__VA_ARGS__)
 #define SNL_WARN(...)			::Snail::Log::GetClientLogger()->warn(__VA_ARGS__)

@@ -4,6 +4,9 @@
     <Filter Include="Snail">
       <UniqueIdentifier>{3CEE1A0E-A802-43BF-7184-E61EDD573FF0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Snail\Events">
+      <UniqueIdentifier>{A0BEA64B-8C21-36F0-35A7-6EA621E90173}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Snail.h" />
@@ -15,6 +18,18 @@
     </ClInclude>
     <ClInclude Include="src\Snail\EntryPoint.h">
       <Filter>Snail</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Events\ApplicationEvent.h">
+      <Filter>Snail\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Events\Event.h">
+      <Filter>Snail\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Events\KeyboardEvent.h">
+      <Filter>Snail\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Events\MouseEvent.h">
+      <Filter>Snail\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Log.h">
       <Filter>Snail</Filter>

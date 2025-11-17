@@ -1,9 +1,9 @@
-#include "Snail.h"
+﻿#include "Snail.h"
 
 class Example : public Snail::Application {
 public:
-	Example(){}
-	~Example(){}
+	Example() {}
+	~Example() {}
 
 };
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef SNL_PLATFORM_WINDOWS
 	#ifdef SNL_BUILD_DLL
@@ -9,3 +9,5 @@
 #else
 	
 #endif
+
+#define BIT(x) (1 << x)
