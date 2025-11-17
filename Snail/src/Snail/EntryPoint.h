@@ -2,8 +2,6 @@
 
 #ifdef SNL_PLATFORM_WINDOWS
 
-#include <windows.h>
-
 	extern Snail::Application* Snail::CreateApplication();
 
 	int main(int argc, char** argv)

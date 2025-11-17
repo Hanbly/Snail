@@ -2,9 +2,6 @@
 
 #include "Snail/Core.h"
 
-#include <string>
-#include <functional>
-
 namespace Snail {
 
 	enum class EventType {

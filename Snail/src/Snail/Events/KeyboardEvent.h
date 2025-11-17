@@ -30,9 +30,7 @@ namespace Snail {
 		inline float GetRepeatCount() const { return m_RepeatCount; }
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[键盘输入事件]:" << m_KeyCode << ", 重复次数:" << m_RepeatCount;
-			return ss.str();
+			return fmt::format("[键盘输入事件]: {}, 重复次数: {}", m_KeyCode, m_RepeatCount);
 		}
 
 		EVENT_TYPE_FUNC_SET(KeyboardPress)
@@ -40,14 +38,12 @@ namespace Snail {
 	// ----------------------键盘释放事件------------------------------####################################################
 	class SNAIL_API KeyReleaseEvent : public KeyboardEvent {
 	public:
-		KeyReleaseEvent(int keycode, float repeatcount)
+		KeyReleaseEvent(int keycode)
 			: KeyboardEvent(keycode) {
 		}
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[键盘释放事件]:" << m_KeyCode;
-			return ss.str();
+			return fmt::format("[键盘释放事件]: {}", m_KeyCode);
 		}
 
 		EVENT_TYPE_FUNC_SET(KeyboardRelease)

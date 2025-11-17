@@ -42,7 +42,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(WindowMove)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------窗口关闭事件------------------------------####################################################
 	class SNAIL_API WindowCloseEvent : public Event {
@@ -54,7 +54,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(WindowClose)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------窗口聚焦事件------------------------------####################################################
 	class SNAIL_API WindowFocusEvent : public Event {
@@ -66,7 +66,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(WindowFocus)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------窗口失焦事件------------------------------####################################################
 	class SNAIL_API WindowLostFocusEvent : public Event {
@@ -78,7 +78,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(WindowLostFocus)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------AppTick事件------------------------------####################################################
 	class SNAIL_API AppTickEvent : public Event {
@@ -90,7 +90,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(AppTick)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------AppUpdate事件------------------------------####################################################
 	class SNAIL_API AppUpdateEvent : public Event {
@@ -102,7 +102,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(AppUpdate)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 	// ----------------------AppRender事件------------------------------####################################################
 	class SNAIL_API AppRenderEvent : public Event {
@@ -114,7 +114,7 @@ namespace Snail {
 		}
 
 		EVENT_TYPE_FUNC_SET(AppRender)
-			EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
+		EVENT_CATEGORY_FUNC_SET(ApplicationCategoryEvent)
 	};
 
 }

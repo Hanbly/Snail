@@ -4,14 +4,21 @@
     <Filter Include="Snail">
       <UniqueIdentifier>{3CEE1A0E-A802-43BF-7184-E61EDD573FF0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Snail\Application">
+      <UniqueIdentifier>{FF63F3BA-6B7A-F150-B4F1-7C722047C2D8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Snail\Events">
       <UniqueIdentifier>{A0BEA64B-8C21-36F0-35A7-6EA621E90173}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Snail\Logger">
+      <UniqueIdentifier>{8B287D5B-778B-0C00-2011-45B60C53D882}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
-    <ClInclude Include="src\Snail\Application.h">
-      <Filter>Snail</Filter>
+    <ClInclude Include="src\Snail\Application\Application.h">
+      <Filter>Snail\Application</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Core.h">
       <Filter>Snail</Filter>
@@ -31,16 +38,17 @@
     <ClInclude Include="src\Snail\Events\MouseEvent.h">
       <Filter>Snail\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Log.h">
-      <Filter>Snail</Filter>
+    <ClInclude Include="src\Snail\Logger\Log.h">
+      <Filter>Snail\Logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Snail\Application.cpp">
-      <Filter>Snail</Filter>
+    <ClCompile Include="src\SNLpch.cpp" />
+    <ClCompile Include="src\Snail\Application\Application.cpp">
+      <Filter>Snail\Application</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Log.cpp">
-      <Filter>Snail</Filter>
+    <ClCompile Include="src\Snail\Logger\Log.cpp">
+      <Filter>Snail\Logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -76,7 +76,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -95,7 +96,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -118,7 +120,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -140,19 +143,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
-    <ClInclude Include="src\Snail\Application.h" />
+    <ClInclude Include="src\Snail\Application\Application.h" />
     <ClInclude Include="src\Snail\Core.h" />
     <ClInclude Include="src\Snail\EntryPoint.h" />
     <ClInclude Include="src\Snail\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Snail\Events\Event.h" />
     <ClInclude Include="src\Snail\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Snail\Events\MouseEvent.h" />
-    <ClInclude Include="src\Snail\Log.h" />
+    <ClInclude Include="src\Snail\Logger\Log.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Snail\Application.cpp" />
-    <ClCompile Include="src\Snail\Log.cpp" />
+    <ClCompile Include="src\SNLpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Snail\Application\Application.cpp" />
+    <ClCompile Include="src\Snail\Logger\Log.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

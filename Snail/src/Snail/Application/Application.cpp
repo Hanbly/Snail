@@ -1,7 +1,9 @@
-﻿#include "Application.h"
+﻿#include "SNLpch.h"
 
-#include "Log.h"
-#include "Events/ApplicationEvent.h"
+#include "Application.h"
+#include "Snail/Logger/Log.h"
+#include "Snail/Events/ApplicationEvent.h"
+#include "Snail/Events/MouseEvent.h"
 
 namespace Snail {
 

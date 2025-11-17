@@ -1,4 +1,6 @@
-﻿#include "Snail.h"
+﻿#include "SNLpch.h"
+
+#include "Snail.h"
 
 class Example : public Snail::Application {
 public:

@@ -1,4 +1,6 @@
-﻿#include "Log.h"
+﻿#include "SNLpch.h"
+
+#include "Log.h"
 
 namespace Snail {
 

@@ -24,9 +24,7 @@ namespace Snail {
 		}
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[鼠标按钮输入事件]:" << m_button;
-			return ss.str();
+			return fmt::format("[鼠标按钮输入事件]: {}", m_button);
 		}
 
 		EVENT_TYPE_FUNC_SET(MouseButtonPress)
@@ -39,9 +37,7 @@ namespace Snail {
 		}
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[鼠标按钮释放事件]:" << m_button;
-			return ss.str();
+			return fmt::format("[鼠标按钮释放事件]: {}", m_button);
 		}
 
 		EVENT_TYPE_FUNC_SET(MouseButtonRelease)
@@ -61,9 +57,7 @@ namespace Snail {
 		inline float GetMouseY() const { return m_MouseY; }
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[鼠标移动事件] 当前鼠标位置: X-" << m_MouseX << "|Y-" << m_MouseY;
-			return ss.str();
+			return fmt::format("[鼠标移动事件] 当前鼠标位置: X-{}|Y-{}", m_MouseX, m_MouseY);
 		}
 
 		EVENT_TYPE_FUNC_SET(MouseMove)
@@ -83,9 +77,8 @@ namespace Snail {
 		inline float GetMouseScrollOffsetY() const { return m_MouseScrollOffsetY; }
 
 		std::string ToString() const override {
-			std::stringstream ss;
-			ss << "[鼠标滚动事件] 鼠标滚动偏移量: X轴偏移量-" << m_MouseScrollOffsetX << "|Y轴偏移量-" << m_MouseScrollOffsetY;
-			return ss.str();
+			return fmt::format("[鼠标滚动事件] 鼠标滚动偏移量: X轴偏移量-{}|Y轴偏移量-{}", 
+					m_MouseScrollOffsetX, m_MouseScrollOffsetY);
 		}
 
 		EVENT_TYPE_FUNC_SET(MouseScroll)

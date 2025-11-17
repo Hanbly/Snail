@@ -20,6 +20,9 @@ project "Snail"
     kind "SharedLib"
     language "C++"
 
+    pchheader "SNLpch.h"
+    pchsource "%{prj.name}/src/SNLpch.cpp"
+
     targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
 
@@ -57,6 +60,9 @@ project "Example"
     location "Example"
     kind "ConsoleApp"
     language "C++"
+
+    pchheader "SNLpch.h"
+    pchsource "%{prj.name}/src/SNLpch.cpp"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
