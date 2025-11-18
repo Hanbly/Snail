@@ -30,6 +30,7 @@ namespace Snail {
 		virtual int GetEventCategoryFlags() const override { return category; }
 
 	class SNAIL_API Event {
+		friend class EventDispatcher;
 	protected:
 		bool m_Handled = false;
 	public:

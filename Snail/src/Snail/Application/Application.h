@@ -2,10 +2,15 @@
 
 #include "Snail/Core.h"
 
+#include "Snail/Window/Window.h"
+
 namespace Snail {
 
 	class SNAIL_API Application
 	{
+	private:
+		std::unique_ptr<Window> m_AppWindow;
+		bool m_Running = false;
 	public:
 		Application();
 		// Application 类会被Example所继承，所以使用virtual

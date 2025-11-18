@@ -9,16 +9,29 @@ workspace "Snail"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
         buildoptions { "/utf-8" }
 
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+
+-- 引入子项目include表
+IncludeDirs = {}
+IncludeDirs["GLFW"] = "Snail/vendor/GLFW/include"
+IncludeDirs["GLAD"] = "Snail/vendor/GLAD/include"
+IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
+
+-- 引入GLFW项目（该项目需要编译，所以引入premake配置文件）
+-- 实际引入的是GLFW项目的premake5.lua文件
+include "Snail/vendor/GLFW"
+include "Snail/vendor/GLAD"
+
+
 project "Snail"
     location "Snail"
     kind "SharedLib"
     language "C++"
+    staticruntime "off"
 
     pchheader "SNLpch.h"
     pchsource "%{prj.name}/src/SNLpch.cpp"
@@ -32,8 +45,16 @@ project "Snail"
     }
 
     includedirs {
-        "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDirs.GLFW}",
+        "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.spdlog}",
         "%{prj.name}/src"
+    }
+
+    links { 
+        "GLFW",
+        "opengl32.lib",
+        "GLAD"
     }
 
     filter "system:windows"
@@ -45,10 +66,15 @@ project "Snail"
 
     filter "configurations:Debug"
         defines { "SNL_DEBUG" }
+        runtime "Debug"
         symbols "On"
+        defines {
+            "SNL_ENABLED_ASSERTS"
+        }
 
     filter "configurations:Release"
         defines { "SNL_RELEASE" }
+        runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
@@ -60,6 +86,7 @@ project "Example"
     location "Example"
     kind "ConsoleApp"
     language "C++"
+    staticruntime "off"
 
     pchheader "SNLpch.h"
     pchsource "%{prj.name}/src/SNLpch.cpp"
@@ -73,12 +100,13 @@ project "Example"
     }
 
     includedirs {
-        "Snail/vendor/spdlog/include",
+        "%{IncludeDirs.GLFW}",
+        "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.spdlog}",
         "Snail/src"
     }
 
     links { "Snail" }
-    dependson { "Snail" }
 
     filter { "system:windows" }
 
@@ -87,17 +115,19 @@ project "Example"
         }
 
         postbuildcommands {
-            -- �� Snail.dll ���Ƶ� Example.exe ���ڵ�Ŀ¼
-            -- ʹ�� %{cfg.targetdir} �����Զ���ȡ��ǰ��Ŀ�����Ŀ¼
+            -- 将 Snail.dll 复制到 Example.exe 所在的目录
+            -- 使用 %{cfg.targetdir} 可以自动获取当前项目的输出目录
             ("{COPYFILE} ../bin/" .. outputdir .. "/Snail/Snail.dll %{cfg.targetdir}")
         }
 
     filter { "configurations:Debug" }
         defines { "SNL_DEBUG" }
+        runtime "Debug"
         symbols "On"
 
     filter { "configurations:Release" }
         defines { "SNL_RELEASE" }
+        runtime "Release"
         optimize "On"
 
     filter { "configurations:Dist" }

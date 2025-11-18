@@ -1,7 +1,5 @@
 ﻿#include "SNLpch.h"
 
-#include "Log.h"
-
 namespace Snail {
 
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
