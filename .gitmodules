@@ -1,3 +1,9 @@
 [submodule "Snail/vendor/spdlog"]
 	path = Snail/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Snail/vendor/GLAD"]
+	path = Snail/vendor/GLAD
+	url = https://github.com/Hanbly/glad-v3.3-cpp.git
+[submodule "Snail/vendor/GLFW"]
+	path = Snail/vendor/GLFW
+	url = https://github.com/Hanbly/glfw.git
