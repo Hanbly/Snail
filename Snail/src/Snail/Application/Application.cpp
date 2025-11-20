@@ -13,10 +13,27 @@ namespace Snail {
 		if (m_AppWindow) {
 			m_Running = true;
 		}
+		// 将OnEvent绑定到 Window 的派生类 维护的函数指针 eventCallbackFn 之上
+		m_AppWindow->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}
 
 	Application::~Application()
 	{
+	}
+
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		// 接收一个bool(T&),T是某个事件类型
+		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+
+		SNL_CORE_INFO(e.ToString());
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_Running = false;
+		return true;
 	}
 
 	void Application::run()

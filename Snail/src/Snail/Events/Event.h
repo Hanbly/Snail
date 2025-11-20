@@ -21,12 +21,12 @@ namespace Snail {
 		MouseButtonCategoryEvent = BIT(4),
 	};
 
-#define EVENT_TYPE_FUNC_SET(type) \
+	#define EVENT_TYPE_FUNC_SET(type) \
 		static EventType GetStaticType() { return EventType::##type; }\
 		virtual EventType GetEventType() const override { return GetStaticType(); }\
 		virtual const char* GetEventName() const override { return #type; }
 
-#define EVENT_CATEGORY_FUNC_SET(category) \
+	#define EVENT_CATEGORY_FUNC_SET(category) \
 		virtual int GetEventCategoryFlags() const override { return category; }
 
 	class SNAIL_API Event {
@@ -34,6 +34,8 @@ namespace Snail {
 	protected:
 		bool m_Handled = false;
 	public:
+		virtual ~Event() = default;
+
 		virtual EventType GetEventType() const = 0;
 		virtual int GetEventCategoryFlags() const = 0;
 		virtual const char* GetEventName() const = 0;
@@ -56,7 +58,7 @@ namespace Snail {
 
 		template<typename T>
 		bool Dispatch(EventFn<T> eventFunc) {
-			if (m_Event.GetEventType == T::GetStaticType) {
+			if (m_Event.GetEventType() == T::GetStaticType()) {
 				m_Event.m_Handled = eventFunc(static_cast<T&>(m_Event));
 				return true;
 			}

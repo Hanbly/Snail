@@ -12,7 +12,7 @@ namespace Snail {
 			WindowProps props;
 			bool VSync;
 
-			EventCallbackFn eventCallBackFn;
+			EventCallbackFn eventCallbackFn;
 		};
 
 		WindowData m_Data;
@@ -32,8 +32,8 @@ namespace Snail {
 		}
 
 		// 11.18 这三个虚函数无法理解
-		inline void SetEventCallBack(const EventCallbackFn& eventCallbackFn) override {
-			m_Data.eventCallBackFn = eventCallbackFn;
+		inline void SetEventCallback(const EventCallbackFn& eventCallbackFn) override {
+			m_Data.eventCallbackFn = eventCallbackFn;
 		}
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override;

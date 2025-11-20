@@ -16,7 +16,7 @@ namespace Snail {
 	class SNAIL_API Window {
 	public:
 		Window() = default;
-		virtual ~Window() {}
+		virtual ~Window() = default;
 
 		using EventCallbackFn = std::function<void(Event&)>;
 
@@ -25,7 +25,7 @@ namespace Snail {
 		virtual unsigned int GetWindowHeight() const = 0;
 
 		// 11.18 这三个虚函数无法理解
-		virtual void SetEventCallBack(const EventCallbackFn& eventCallbackFn) = 0;
+		virtual void SetEventCallback(const EventCallbackFn& eventCallbackFn) = 0;
 		virtual void SetVSync(bool enable) = 0;
 		virtual bool IsVSync() const = 0;
 		
