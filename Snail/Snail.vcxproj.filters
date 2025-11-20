@@ -53,6 +53,8 @@
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Layer\Layer.h" />
+    <ClInclude Include="src\Snail\Layer\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SNLpch.cpp" />
@@ -65,5 +67,7 @@
     <ClCompile Include="src\Snail\Window\Platform\WindowsWindow.cpp">
       <Filter>Snail\Window\Platform</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Layer\Layer.cpp" />
+    <ClCompile Include="src\Snail\Layer\LayerStack.cpp" />
   </ItemGroup>
 </Project>
