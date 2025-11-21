@@ -22,10 +22,10 @@ namespace Snail {
 		void PushOverLayer(Layer* overLayer);
 		void PopOverLayer(Layer* overLayer);
 		
-		std::vector<Layer*>::iterator GetBegin();
-		std::vector<Layer*>::iterator GetEnd();
-		std::vector<Layer*>::const_iterator GetBegin() const;
-		std::vector<Layer*>::const_iterator GetEnd() const;
+		std::vector<Layer*>::iterator begin();
+		std::vector<Layer*>::iterator end();
+		std::vector<Layer*>::reverse_iterator rbegin();
+		std::vector<Layer*>::reverse_iterator rend();
 	};
 
 }

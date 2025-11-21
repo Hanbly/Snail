@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Snail/Application/Application.h"
+#include "Snail/Layer/Layer.h"
 
 #include "Snail/Logger/Log.h"
 

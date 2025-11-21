@@ -4,6 +4,7 @@
 
 #include "Snail/Events/ApplicationEvent.h"
 #include "Snail/Window/Window.h"
+#include "Snail/Layer/LayerStack.h"
 
 namespace Snail {
 
@@ -12,12 +13,19 @@ namespace Snail {
 	private:
 		std::unique_ptr<Window> m_AppWindow;
 		bool m_Running = false;
+		LayerStack m_LayerStack;
 	public:
 		Application();
 		// Application 类会被Example所继承，所以使用virtual
 		virtual ~Application();
 
 		void OnEvent(Event& e);
+		// push/pop normal layer
+		void PushNorLayer(Layer* norLayer);
+		void PopNorLayer(Layer* norLayer);
+		// push/pop Top layer
+		void PushOverLayer(Layer* overLayer);
+		void PopOverLayer(Layer* overLayer);
 
 		void run();
 	private:

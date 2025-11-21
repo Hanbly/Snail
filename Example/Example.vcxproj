@@ -149,6 +149,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layer\ExampleLayer.h" />
     <ClInclude Include="src\SNLpch.h" />
   </ItemGroup>
   <ItemGroup>

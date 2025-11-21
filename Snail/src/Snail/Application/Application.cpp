@@ -28,6 +28,27 @@ namespace Snail {
 		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
 
 		SNL_CORE_INFO(e.ToString());
+
+		// 层栈的事件处理，由顶层至底层
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); it++) {
+			(*it)->OnEvent(e);
+			if (e.GetIsHandled()) { break; }
+		}
+	}
+
+	// push/pop normal layer
+	void Application::PushNorLayer(Layer* norLayer) {
+		m_LayerStack.PushNorLayer(norLayer);
+	}
+	void Application::PopNorLayer(Layer* norLayer) {
+		m_LayerStack.PopNorLayer(norLayer);
+	}
+	// push/pop Top layer
+	void Application::PushOverLayer(Layer* overLayer) {
+		m_LayerStack.PushOverLayer(overLayer);
+	}
+	void Application::PopOverLayer(Layer* overLayer) {
+		m_LayerStack.PopOverLayer(overLayer);
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
@@ -48,6 +69,11 @@ namespace Snail {
 		while (m_Running) {
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			// 层栈的渲染处理，由底层至顶层
+			for (Layer* layer : m_LayerStack) {
+				layer->OnUpdate();
+			}
 			m_AppWindow->OnUpdate();
 		}
 	}
