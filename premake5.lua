@@ -7,6 +7,8 @@ workspace "Snail"
         "Dist"
     }
 
+    startproject "Example" -- 启动项目设置
+
     filter "system:windows"
         cppdialect "C++17"
         systemversion "latest"

@@ -2,8 +2,8 @@
 
 #include "ImGuiLayer.h"
 
-#include "Snail/ImGui/Platform/OpenGL/imgui_impl_opengl3.h"
-#include "Snail/ImGui/Platform/OpenGL/imgui_impl_glfw.h"
+#include "Snail/Platform/OpenGL/ImGuiLib/imgui_impl_opengl3.h"
+#include "Snail/ImGui/ImGuiLib/imgui_impl_glfw.h"
 
 #include "Snail/Application/Application.h"
 
@@ -32,7 +32,8 @@ namespace Snail {
 
 		// 初始化平台后端 (GLFW)
 		Application& app = Application::Get();
-		ImGui_ImplGlfw_InitForOpenGL(app.GetWindow().GetWindow(), false); // true 表示安装默认回调函数
+		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetWindow());
+		ImGui_ImplGlfw_InitForOpenGL(window, false); // true 表示安装默认回调函数
 
 		// 初始化渲染器后端 (OpenGL3)
 		ImGui_ImplOpenGL3_Init("#version 410");
@@ -63,12 +64,13 @@ namespace Snail {
 
 
 		Application& app = Application::Get();
+		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetWindow());
 		int display_w = app.GetWindow().GetWindowWidth();
 		int display_h = app.GetWindow().GetWindowHeight();
 
 		io.DisplaySize = ImVec2(display_w, display_h);
 
-		glfwGetFramebufferSize(app.GetWindow().GetWindow(), &display_w, & display_h);
+		glfwGetFramebufferSize(window, &display_w, & display_h);
 		glViewport(0, 0, display_w, display_h);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -152,7 +154,7 @@ namespace Snail {
 
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		GLFWwindow* window = app.GetWindow().GetWindow();
+		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetWindow());
 
 		io.AddKeyEvent(e.GetImGuiKey(), true);
 

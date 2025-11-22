@@ -30,7 +30,7 @@ namespace Snail {
 		inline unsigned int GetWindowHeight() const override {
 			return m_Data.props.height;
 		}
-		inline GLFWwindow* GetWindow() const override {
+		inline void* GetWindow() const override {
 			return m_Window;
 		}
 

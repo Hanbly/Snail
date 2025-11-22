@@ -2,7 +2,7 @@
 
 #include "Snail/Core.h"
 
-#include <spdlog/spdlog.h>
+#include "spdlog/spdlog.h"
 
 namespace Snail {
 

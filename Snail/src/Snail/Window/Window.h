@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-class GLFWwindow;
-
 namespace Snail {
 
 	struct WindowProps {
@@ -25,7 +23,7 @@ namespace Snail {
 		virtual void OnUpdate() = 0;
 		virtual unsigned int GetWindowWidth() const = 0;
 		virtual unsigned int GetWindowHeight() const = 0;
-		virtual GLFWwindow* GetWindow() const = 0;
+		virtual void* GetWindow() const = 0;
 
 		// 11.18 这三个虚函数无法理解
 		virtual void SetEventCallback(const EventCallbackFn& eventCallbackFn) = 0;

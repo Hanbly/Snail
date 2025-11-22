@@ -155,15 +155,15 @@
     <ClInclude Include="src\Snail\Events\Event.h" />
     <ClInclude Include="src\Snail\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Snail\Events\MouseEvent.h" />
-    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\GlfwKey_To_ImGuiKey.h" />
-    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_glfw.h" />
-    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="src\Snail\Layer\ImGuiLayer\ImGuiLayer.h" />
+    <ClInclude Include="src\Snail\ImGui\ImGuiLib\GlfwKey_To_ImGuiKey.h" />
+    <ClInclude Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.h" />
     <ClInclude Include="src\Snail\Layer\Layer.h" />
     <ClInclude Include="src\Snail\Layer\LayerStack.h" />
     <ClInclude Include="src\Snail\Logger\Log.h" />
-    <ClInclude Include="src\Snail\Window\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.h" />
+    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\Snail\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Snail\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -171,13 +171,13 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Snail\Application\Application.cpp" />
-    <ClCompile Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\Snail\Layer\ImGuiLayer\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\Snail\Layer\Layer.cpp" />
     <ClCompile Include="src\Snail\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Snail\Logger\Log.cpp" />
-    <ClCompile Include="src\Snail\Window\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
