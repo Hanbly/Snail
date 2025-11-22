@@ -19,6 +19,7 @@ namespace Snail {
 	{
 		if (norLayer == nullptr) {
 			SNL_CORE_WARN("LayerStack warning: 推入普通层失败: 试图使用空指针!");
+			return;
 		}
 		m_InsertPointer = m_Layers.insert(m_InsertPointer, norLayer) + 1;
 	}
@@ -40,6 +41,7 @@ namespace Snail {
 	{
 		if (overLayer == nullptr) {
 			SNL_CORE_WARN("LayerStack warning: 推入覆盖层失败: 试图使用空指针!");
+			return;
 		}
 		m_Layers.emplace_back(overLayer);
 	}

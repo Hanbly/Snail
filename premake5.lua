@@ -19,12 +19,14 @@ workspace "Snail"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Snail/vendor/GLFW/include"
 IncludeDirs["GLAD"] = "Snail/vendor/GLAD/include"
+IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 
 -- 引入GLFW项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是GLFW项目的premake5.lua文件
 include "Snail/vendor/GLFW"
 include "Snail/vendor/GLAD"
+include "Snail/vendor/Imgui"
 
 
 project "Snail"
@@ -47,6 +49,7 @@ project "Snail"
     includedirs {
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{prj.name}/src"
     }
@@ -54,7 +57,8 @@ project "Snail"
     links { 
         "GLFW",
         "opengl32.lib",
-        "GLAD"
+        "GLAD",
+        "Imgui"
     }
 
     filter "system:windows"

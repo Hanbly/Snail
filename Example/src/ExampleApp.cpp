@@ -6,7 +6,8 @@
 class Example : public Snail::Application {
 public:
 	Example() {
-		this->PushNorLayer(new ExampleLayer("example层"));
+		this->PushNorLayer(new ExampleLayer("example层", true));
+		this->PushOverLayer(new Snail::ImGuiLayer("ImGui层", true));
 	}
 	~Example() {}
 

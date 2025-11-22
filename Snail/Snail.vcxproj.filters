@@ -10,6 +10,9 @@
     <Filter Include="Snail\Events">
       <UniqueIdentifier>{A0BEA64B-8C21-36F0-35A7-6EA621E90173}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Snail\Layer">
+      <UniqueIdentifier>{08A8F4DB-745D-6DD1-FD51-67A8690664D5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Snail\Logger">
       <UniqueIdentifier>{8B287D5B-778B-0C00-2011-45B60C53D882}</UniqueIdentifier>
     </Filter>
@@ -44,30 +47,45 @@
     <ClInclude Include="src\Snail\Events\MouseEvent.h">
       <Filter>Snail\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Layer\Layer.h">
+      <Filter>Snail\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Layer\LayerStack.h">
+      <Filter>Snail\Layer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Snail\Logger\Log.h">
       <Filter>Snail\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Window\Platform\WindowsWindow.h">
+    <ClInclude Include="src\Snail\Window\Platform\Windows\WindowsWindow.h">
       <Filter>Snail\Window\Platform</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Layer\Layer.h" />
-    <ClInclude Include="src\Snail\Layer\LayerStack.h" />
+    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\Snail\Layer\ImGuiLayer\ImGuiLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SNLpch.cpp" />
     <ClCompile Include="src\Snail\Application\Application.cpp">
       <Filter>Snail\Application</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Layer\Layer.cpp">
+      <Filter>Snail\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Snail\Layer\LayerStack.cpp">
+      <Filter>Snail\Layer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Snail\Logger\Log.cpp">
       <Filter>Snail\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Window\Platform\WindowsWindow.cpp">
+    <ClCompile Include="src\Snail\Window\Platform\Windows\WindowsWindow.cpp">
       <Filter>Snail\Window\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Layer\Layer.cpp" />
-    <ClCompile Include="src\Snail\Layer\LayerStack.cpp" />
+    <ClCompile Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\Snail\ImGui\Platform\OpenGL\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Snail\Layer\ImGuiLayer\ImGuiLayer.cpp" />
   </ItemGroup>
 </Project>

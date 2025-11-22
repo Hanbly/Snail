@@ -30,6 +30,9 @@ namespace Snail {
 		inline unsigned int GetWindowHeight() const override {
 			return m_Data.props.height;
 		}
+		inline GLFWwindow* GetWindow() const override {
+			return m_Window;
+		}
 
 		// 11.18 这三个虚函数无法理解
 		inline void SetEventCallback(const EventCallbackFn& eventCallbackFn) override {

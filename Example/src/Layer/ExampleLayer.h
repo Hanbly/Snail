@@ -5,8 +5,8 @@
 class ExampleLayer : public Snail::Layer
 {
 public:
-	ExampleLayer(const std::string& name)
-		: Layer(name) {}
+	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
+		: Layer(layerName, layerEnabled) {}
 
 	virtual void OnAttach() override {
 

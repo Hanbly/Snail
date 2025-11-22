@@ -7,3 +7,7 @@
 [submodule "Snail/vendor/GLFW"]
 	path = Snail/vendor/GLFW
 	url = https://github.com/Hanbly/glfw.git
+[submodule "Snail/vendor/Imgui"]
+	path = Snail/vendor/Imgui
+	url = https://github.com/Hanbly/imgui.git
+	branch = docking

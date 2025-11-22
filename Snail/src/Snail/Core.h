@@ -15,13 +15,13 @@
 #ifdef SNL_ENABLED_ASSERTS
 #define SNL_ASSERT(x, ...) { \
 								if (!(x)) {\
-									SNL_CORE_ERROR("SNL客户端错误断言:{0}", x, __VA_ARGS__);\
+									SNL_CORE_ERROR("SNL客户端错误断言: {0}", __VA_ARGS__);\
 									__debugbreak;\
 								}\
 							}
 #define SNL_CORE_ASSERT(x, ...) { \
 									if(!(x)) {\
-										SNL_CORE_ERROR("SNL系统错误断言:{0}", x, __VA_ARGS__);\
+										SNL_CORE_ERROR("SNL系统错误断言: {0}", __VA_ARGS__);\
 										__debugbreak;\
 									}\
 								}
@@ -29,3 +29,5 @@
 #define SNL_ASSERT(x, ...)
 #define SNL_CORE_ASSERT(x, ...)
 #endif
+
+#define BIND_NSTATIC_MEMBER_Fn(x) std::bind(&x, this, std::placeholders::_1)
