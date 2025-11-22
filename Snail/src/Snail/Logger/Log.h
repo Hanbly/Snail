@@ -2,6 +2,8 @@
 
 #include "Snail/Core.h"
 
+#include <spdlog/spdlog.h>
+
 namespace Snail {
 
 	class SNAIL_API Log {

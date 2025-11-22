@@ -35,14 +35,16 @@ namespace Snail {
 		ImGui_ImplGlfw_InitForOpenGL(app.GetWindow().GetWindow(), false); // true 表示安装默认回调函数
 
 		// 初始化渲染器后端 (OpenGL3)
-		ImGui_ImplOpenGL3_Init("#version 410"); // 建议指定 GLSL 版本号
+		ImGui_ImplOpenGL3_Init("#version 410");
 
 	}
+
 	void ImGuiLayer::OnDetach() {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
+
 	void ImGuiLayer::OnUpdate() {
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -83,8 +85,98 @@ namespace Snail {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
+
 	void ImGuiLayer::OnEvent(Event& event) {
 
+		EventDispatcher dispatcher(event);
+
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnWindowClose));
+		dispatcher.Dispatch<MousePressEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnMouseButtonPress));
+		dispatcher.Dispatch<MouseReleaseEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnMouseButtonRelease));
+		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnMouseMove));
+		dispatcher.Dispatch<MouseScrollEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnMouseScroll));
+		dispatcher.Dispatch<KeyPressEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnKeyboardPress));
+		dispatcher.Dispatch<KeyReleaseEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnKeyboardRelease));
+		dispatcher.Dispatch<KeyTypeEvent>(BIND_NSTATIC_MEMBER_Fn(ImGuiLayer::OnKeyboardType));
+
+
+	}
+
+	bool ImGuiLayer::OnWindowResize(WindowResizeEvent& e) {
+		
+		ImGuiIO& io = ImGui::GetIO();
+		
+		io.DisplaySize = ImVec2(e.GetWindowWidth(), e.GetWindowHeight());
+		// 不知道啥意思------------------------------------------
+		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+		glViewport(0, 0, e.GetWindowWidth(), e.GetWindowHeight());
+		//-----------------------------------------------------
+
+		return false;
+	}
+	bool ImGuiLayer::OnWindowClose(WindowCloseEvent& e) {
+
+		return false;
+	}
+	bool ImGuiLayer::OnMouseButtonPress(MousePressEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[e.GetMouseButton()] = true;
+
+		return false;
+	}
+	bool ImGuiLayer::OnMouseButtonRelease(MouseReleaseEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[e.GetMouseButton()] = false;
+
+		return false;
+	}
+	bool ImGuiLayer::OnMouseMove(MouseMoveEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2(e.GetMouseX(), e.GetMouseY());
+
+		return false;
+	}
+	bool ImGuiLayer::OnMouseScroll(MouseScrollEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseWheelH = e.GetMouseScrollOffsetX();
+		io.MouseWheel = e.GetMouseScrollOffsetY();
+
+		return false;
+	}
+	bool ImGuiLayer::OnKeyboardPress(KeyPressEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+		GLFWwindow* window = app.GetWindow().GetWindow();
+
+		io.AddKeyEvent(e.GetImGuiKey(), true);
+
+		io.AddKeyEvent(ImGuiMod_Ctrl, (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
+		io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS));
+		io.AddKeyEvent(ImGuiMod_Alt, (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS));
+		io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS));
+
+		return false;
+	}
+	bool ImGuiLayer::OnKeyboardRelease(KeyReleaseEvent& e) {
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.AddKeyEvent(e.GetImGuiKey(), false);
+
+		return false;
+	}
+	bool ImGuiLayer::OnKeyboardType(KeyTypeEvent& e) {
+
+		ImGuiIO& io = ImGui::GetIO();
+		int keycode = e.GetKeyCode();
+		io.AddInputCharacter(static_cast<unsigned int>(keycode));
+
+		return false;
 	}
 
 }

@@ -106,6 +106,7 @@ project "Example"
     includedirs {
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "Snail/src"
     }

@@ -82,6 +82,13 @@ namespace Snail {
                     }
                 }
             });
+        glfwSetCharCallback(m_Window,
+            [](GLFWwindow* window, unsigned int keypoint) {
+                WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+                KeyTypeEvent event(keypoint);
+                data.eventCallbackFn(event);
+            });
         glfwSetMouseButtonCallback(m_Window,
             [](GLFWwindow* window, int button, int action, int mods) {
                 WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

@@ -7,7 +7,7 @@ namespace Snail {
 	enum class EventType {
 		None = 0,
 		AppTick, AppUpdate, AppRender,
-		KeyboardPress, KeyboardRelease,
+		KeyboardPress, KeyboardRelease, KeyboardType,
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll,
 		WindowResize, WindowMove, WindowClose, WindowFocus, WindowLostFocus,
 	};
@@ -24,6 +24,7 @@ namespace Snail {
 	#define EVENT_TYPE_FUNC_SET(type) \
 		static EventType GetStaticType() { return EventType::##type; }\
 		virtual bool GetIsHandled() const override { return m_Handled; }\
+		virtual void SetHandled(const bool& status) override { m_Handled = status; }\
 		virtual EventType GetEventType() const override { return GetStaticType(); }\
 		virtual const char* GetEventName() const override { return #type; }
 
@@ -38,6 +39,8 @@ namespace Snail {
 		virtual ~Event() = default;
 
 		virtual bool GetIsHandled() const = 0;
+		virtual void SetHandled(const bool& status) = 0;
+
 		virtual EventType GetEventType() const = 0;
 		virtual int GetEventCategoryFlags() const = 0;
 		virtual const char* GetEventName() const = 0;

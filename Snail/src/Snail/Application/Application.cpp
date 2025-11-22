@@ -1,8 +1,5 @@
 ﻿#include "SNLpch.h"
 
-#include "Snail/Events/ApplicationEvent.h"
-#include "Snail/Window/Window.h"
-
 #include "Application.h"
 
 namespace Snail {

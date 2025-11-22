@@ -2,9 +2,9 @@
 
 #include "Snail/Core.h"
 
-#include "Snail/Events/ApplicationEvent.h"
 #include "Snail/Window/Window.h"
 #include "Snail/Layer/LayerStack.h"
+#include "Snail/Events/ApplicationEvent.h"
 
 namespace Snail {
 

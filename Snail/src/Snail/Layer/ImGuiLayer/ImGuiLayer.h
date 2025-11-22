@@ -4,6 +4,10 @@
 
 #include "Snail/Layer/Layer.h"
 
+#include "Snail/Events/ApplicationEvent.h"
+#include "Snail/Events/KeyboardEvent.h"
+#include "Snail/Events/MouseEvent.h"
+
 namespace Snail {
 
 	class SNAIL_API ImGuiLayer : public Layer {
@@ -19,6 +23,16 @@ namespace Snail {
 		void OnUpdate() override;
 		void OnEvent(Event& event) override;
 
+	private:
+		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnMouseButtonPress(MousePressEvent& e);
+		bool OnMouseButtonRelease(MouseReleaseEvent& e);
+		bool OnMouseMove(MouseMoveEvent& e);
+		bool OnMouseScroll(MouseScrollEvent& e);
+		bool OnKeyboardPress(KeyPressEvent& e);
+		bool OnKeyboardRelease(KeyReleaseEvent& e);
+		bool OnKeyboardType(KeyTypeEvent& e);
 	};
 
 }

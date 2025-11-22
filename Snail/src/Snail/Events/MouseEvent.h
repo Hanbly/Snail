@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Event.h"
+
 namespace Snail {
 
 	// ----------------------鼠标按钮事件抽象类------------------------------################################################
@@ -14,7 +16,7 @@ namespace Snail {
 
 		EVENT_CATEGORY_FUNC_SET(InputCategoryEvent | MouseButtonCategoryEvent)
 	};
-	// ----------------------鼠标按钮输入事件------------------------------####################################################
+	// ----------------------鼠标按钮按下事件------------------------------####################################################
 	class SNAIL_API MousePressEvent : public MouseButttonEvent {
 	public:
 		MousePressEvent(int button)
@@ -22,7 +24,7 @@ namespace Snail {
 		}
 
 		std::string ToString() const override {
-			return fmt::format("[鼠标按钮输入事件]: {}", m_button);
+			return fmt::format("[鼠标按钮按下事件]: {}", m_button);
 		}
 
 		EVENT_TYPE_FUNC_SET(MouseButtonPress)
