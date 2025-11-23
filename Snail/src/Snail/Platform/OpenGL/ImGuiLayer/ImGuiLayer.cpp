@@ -175,8 +175,8 @@ namespace Snail {
 	bool ImGuiLayer::OnKeyboardType(KeyTypeEvent& e) {
 
 		ImGuiIO& io = ImGui::GetIO();
-		int keycode = e.GetKeyCode();
-		io.AddInputCharacter(static_cast<unsigned int>(keycode));
+		unsigned int keycode = e.GetKeyCode();
+		io.AddInputCharacter(keycode);
 
 		return false;
 	}

@@ -9,13 +9,13 @@ namespace Snail {
 	// ----------------------键盘事件------------------------------####################################################
 	class SNAIL_API KeyboardEvent : public Event {
 	protected:
-		int m_KeyCode;
-		KeyboardEvent(int keycode)
+		unsigned int m_KeyCode;
+		KeyboardEvent(unsigned int keycode)
 			: m_KeyCode(keycode) {
 		}
 
 	public:
-		inline int GetKeyCode() const { return m_KeyCode; }
+		inline unsigned int GetKeyCode() const { return m_KeyCode; }
 
 		inline ImGuiKey GetImGuiKey() const { return Snail_GlfwKey_To_ImGuiKey(m_KeyCode); }
 
@@ -25,13 +25,13 @@ namespace Snail {
 	// ----------------------键盘按下事件------------------------------####################################################
 	class SNAIL_API KeyPressEvent : public KeyboardEvent {
 	private:
-		float m_RepeatCount;
+		int m_RepeatCount;
 	public:
-		KeyPressEvent(int keycode, float repeatcount)
+		KeyPressEvent(unsigned int keycode, int repeatcount)
 			: KeyboardEvent(keycode), m_RepeatCount(repeatcount) {
 		}
 
-		inline float GetRepeatCount() const { return m_RepeatCount; }
+		inline int GetRepeatCount() const { return m_RepeatCount; }
 
 		std::string ToString() const override {
 			return fmt::format("[键盘按下事件]: {}, 重复次数: {}", m_KeyCode, m_RepeatCount);
@@ -42,7 +42,7 @@ namespace Snail {
 	// ----------------------键盘释放事件------------------------------####################################################
 	class SNAIL_API KeyReleaseEvent : public KeyboardEvent {
 	public:
-		KeyReleaseEvent(int keycode)
+		KeyReleaseEvent(unsigned int keycode)
 			: KeyboardEvent(keycode) {
 		}
 
@@ -55,7 +55,7 @@ namespace Snail {
 	// ----------------------键盘输入事件------------------------------####################################################
 	class SNAIL_API KeyTypeEvent : public KeyboardEvent {
 	public:
-		KeyTypeEvent(int keycode)
+		KeyTypeEvent(unsigned int keycode)
 			: KeyboardEvent(keycode) {
 		}
 

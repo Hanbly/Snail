@@ -2,6 +2,8 @@
 
 #include "Application.h"
 
+#include "Snail/Input/Input.h"
+
 namespace Snail {
 
 	Application* Application::s_Instance = nullptr;
@@ -76,18 +78,14 @@ namespace Snail {
 
 	void Application::run()
 	{
-		WindowResizeEvent winRE = WindowResizeEvent(1000, 750);
-		SNL_TRACE(winRE.ToString());
-
-		//TODO 某些处理事件的函数？函数符合 bool(事件类型&)
-		/*EventDispatcher ed = EventDispatcher(winRE);
-		ed.Dispatch()*/
-
 		while (m_Running) {
 
 			m_AppWindow->OnUpdate();
 
 			this->OnUpdate();
+
+			std::pair<float, float> pos = Input::GetMousePos();
+			SNL_CORE_TRACE("测试Input类: x-{0}, y-{1}", pos.first, pos.second);
 		}
 	}
 

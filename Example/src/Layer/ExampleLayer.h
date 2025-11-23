@@ -16,11 +16,11 @@ public:
 	}
 
 	inline void OnUpdate() override {
-		SNL_TRACE("ExampleLayer 调用: OnUpdate()");
+		//SNL_TRACE("ExampleLayer 调用: OnUpdate()");
 	}
 
 	inline void OnEvent(Snail::Event& e) {
-		SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
+		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
 	}
 };
 

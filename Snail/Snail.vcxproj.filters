@@ -95,6 +95,8 @@
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Input\Input.h" />
+    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SNLpch.cpp" />
@@ -122,5 +124,6 @@
     <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp">
       <Filter>Snail\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
 </Project>

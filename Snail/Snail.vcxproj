@@ -146,6 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Snail\Input\Input.h" />
+    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="src\Snail\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
