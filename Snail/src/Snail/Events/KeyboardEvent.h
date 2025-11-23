@@ -2,7 +2,7 @@
 
 #include "Event.h"
 
-#include "Snail/ImGui/ImGuiLib/GlfwKey_To_ImGuiKey.h"
+#include "Snail/ImGui/ImGuiLib/SnailKey_To_ImGuiKey.h"
 
 namespace Snail {
 
@@ -17,7 +17,7 @@ namespace Snail {
 	public:
 		inline unsigned int GetKeyCode() const { return m_KeyCode; }
 
-		inline ImGuiKey GetImGuiKey() const { return Snail_GlfwKey_To_ImGuiKey(m_KeyCode); }
+		inline ImGuiKey GetImGuiKey() const { return SnailKey_To_ImGuiKey(m_KeyCode); }
 
 		EVENT_CATEGORY_FUNC_SET(InputCategoryEvent | KeyboardCategoryEvent)
 		// 这里没有实现 EVENT_TYPE_FUNC_SET 中的一些纯虚函数，也就是 KeyboardEvent 不会被/不能被实例化，是一个抽象类！

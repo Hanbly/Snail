@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Snail\InputCodes.h" />
     <ClInclude Include="src\Snail\Input\Input.h" />
     <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\SNLpch.h" />
@@ -157,7 +158,7 @@
     <ClInclude Include="src\Snail\Events\Event.h" />
     <ClInclude Include="src\Snail\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Snail\Events\MouseEvent.h" />
-    <ClInclude Include="src\Snail\ImGui\ImGuiLib\GlfwKey_To_ImGuiKey.h" />
+    <ClInclude Include="src\Snail\ImGui\ImGuiLib\SnailKey_To_ImGuiKey.h" />
     <ClInclude Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.h" />
     <ClInclude Include="src\Snail\Layer\Layer.h" />
     <ClInclude Include="src\Snail\Layer\LayerStack.h" />

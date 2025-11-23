@@ -65,7 +65,7 @@
     <ClInclude Include="src\Snail\Events\MouseEvent.h">
       <Filter>Snail\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\ImGui\ImGuiLib\GlfwKey_To_ImGuiKey.h">
+    <ClInclude Include="src\Snail\ImGui\ImGuiLib\SnailKey_To_ImGuiKey.h">
       <Filter>Snail\ImGui\ImGuiLib</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.h">
@@ -97,6 +97,7 @@
     </ClInclude>
     <ClInclude Include="src\Snail\Input\Input.h" />
     <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
+    <ClInclude Include="src\Snail\InputCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SNLpch.cpp" />
