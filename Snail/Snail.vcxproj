@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_DEBUG;SNL_ENABLED_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\GLM\glm;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -101,7 +101,7 @@
       <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\GLM\glm;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -126,7 +126,7 @@
       <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_BUILD_DLL;SNL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\GLM\glm;vendor\Imgui;vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -146,9 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Snail\InputCodes.h" />
-    <ClInclude Include="src\Snail\Input\Input.h" />
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -160,17 +157,19 @@
     <ClInclude Include="src\Snail\Events\MouseEvent.h" />
     <ClInclude Include="src\Snail\ImGui\ImGuiLib\SnailKey_To_ImGuiKey.h" />
     <ClInclude Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Snail\Input\Input.h" />
+    <ClInclude Include="src\Snail\InputCodes.h" />
     <ClInclude Include="src\Snail\Layer\Layer.h" />
     <ClInclude Include="src\Snail\Layer\LayerStack.h" />
     <ClInclude Include="src\Snail\Logger\Log.h" />
     <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.h" />
     <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Snail\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Snail\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -181,6 +180,7 @@
     <ClCompile Include="src\Snail\Logger\Log.cpp" />
     <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.cpp" />
     <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

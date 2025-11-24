@@ -16,6 +16,9 @@
     <Filter Include="Snail\ImGui\ImGuiLib">
       <UniqueIdentifier>{47A1E67C-3330-7046-DC4E-8441C8BC80EC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Snail\Input">
+      <UniqueIdentifier>{3B5BC5DB-A710-3ED1-3005-38A89CB934D5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Snail\Layer">
       <UniqueIdentifier>{08A8F4DB-745D-6DD1-FD51-67A8690664D5}</UniqueIdentifier>
     </Filter>
@@ -71,6 +74,12 @@
     <ClInclude Include="src\Snail\ImGui\ImGuiLib\imgui_impl_glfw.h">
       <Filter>Snail\ImGui\ImGuiLib</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Input\Input.h">
+      <Filter>Snail\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\InputCodes.h">
+      <Filter>Snail</Filter>
+    </ClInclude>
     <ClInclude Include="src\Snail\Layer\Layer.h">
       <Filter>Snail\Layer</Filter>
     </ClInclude>
@@ -89,15 +98,15 @@
     <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3_loader.h">
       <Filter>Snail\Platform\OpenGL\ImGuiLib</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h">
+      <Filter>Snail\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Snail\Platform\Windows\WindowsWindow.h">
       <Filter>Snail\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Input\Input.h" />
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
-    <ClInclude Include="src\Snail\InputCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SNLpch.cpp" />
@@ -122,9 +131,11 @@
     <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.cpp">
       <Filter>Snail\Platform\OpenGL\ImGuiLib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp">
+      <Filter>Snail\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp">
       <Filter>Snail\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
 </Project>

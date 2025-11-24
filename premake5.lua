@@ -21,6 +21,7 @@ workspace "Snail"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Snail/vendor/GLFW/include"
 IncludeDirs["GLAD"] = "Snail/vendor/GLAD/include"
+IncludeDirs["GLM"] = "Snail/vendor/GLM/glm"
 IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 
@@ -51,6 +52,7 @@ project "Snail"
     includedirs {
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.GLM}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{prj.name}/src"
@@ -106,8 +108,7 @@ project "Example"
     }
 
     includedirs {
-        "%{IncludeDirs.GLFW}",
-        "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.GLM}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "Snail/src"

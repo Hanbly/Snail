@@ -11,3 +11,6 @@
 	path = Snail/vendor/Imgui
 	url = https://github.com/Hanbly/imgui.git
 	branch = docking
+[submodule "Snail/vendor/GLM"]
+	path = Snail/vendor/GLM
+	url = https://github.com/Hanbly/glm.git
