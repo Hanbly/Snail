@@ -34,7 +34,8 @@ include "Snail/vendor/Imgui"
 
 project "Snail"
     location "Snail"
-    kind "SharedLib"
+    kind "StaticLib"
+    -- kind "SharedLib"
     language "C++"
     staticruntime "off"
 
@@ -68,8 +69,11 @@ project "Snail"
     filter "system:windows"
 
         defines {
+            "_CRT_SECURE_NO_WARNINGS", -- 移除C库安全警告
+            "IMGUI_IMPL_OPENGL_LOADER_CUSTOM", -- 禁止ImGui重定义OpenGL宏
             "SNL_PLATFORM_WINDOWS",
-            "SNL_BUILD_DLL"
+            "SNL_BUILD_SLL"
+            -- "SNL_BUILD_DLL"
         }
 
     filter "configurations:Debug"
@@ -125,7 +129,7 @@ project "Example"
         postbuildcommands {
             -- 将 Snail.dll 复制到 Example.exe 所在的目录
             -- 使用 %{cfg.targetdir} 可以自动获取当前项目的输出目录
-            ("{COPYFILE} ../bin/" .. outputdir .. "/Snail/Snail.dll %{cfg.targetdir}")
+            -- ("{COPYFILE} ../bin/" .. outputdir .. "/Snail/Snail.dll %{cfg.targetdir}")
         }
 
     filter { "configurations:Debug" }

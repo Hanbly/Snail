@@ -13,10 +13,11 @@ namespace Snail {
 			  const bool& layerEnabled = true);
 		virtual ~Layer() = default;
 		
-		virtual void OnAttach();
-		virtual void OnDetach();
+		virtual void OnAttach() = 0;
+		virtual void OnDetach() = 0;
 		virtual void OnUpdate();
 		virtual void OnEvent(Event& event);
+		virtual void OnRender() = 0;
 
 		inline const std::string& GetLayerName() const { return m_DebugName; }
 		inline const bool& IsLayerEnabled() const { return m_Enabled; }

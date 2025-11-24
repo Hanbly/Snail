@@ -3,8 +3,10 @@
 #ifdef SNL_PLATFORM_WINDOWS
 	#ifdef SNL_BUILD_DLL
 		#define SNAIL_API __declspec(dllexport)
+	#elif SNL_BUILD_SLL
+		#define SNAIL_API
 	#else
-		#define SNAIL_API __declspec(dllimport)
+		#define SNAIL_API
 	#endif
 #else
 	
@@ -16,13 +18,13 @@
 #define SNL_ASSERT(x, ...) { \
 								if (!(x)) {\
 									SNL_CORE_ERROR("SNL客户端错误断言: {0}", __VA_ARGS__);\
-									__debugbreak;\
+									__debugbreak();\
 								}\
 							}
 #define SNL_CORE_ASSERT(x, ...) { \
 									if(!(x)) {\
 										SNL_CORE_ERROR("SNL系统错误断言: {0}", __VA_ARGS__);\
-										__debugbreak;\
+										__debugbreak();\
 									}\
 								}
 #else

@@ -18,13 +18,17 @@ namespace Snail {
 				   const bool& layerEnabled = true);
 		~ImGuiLayer();
 
-		void OnAttach() override;
-		void OnDetach() override;
-		void OnUpdate() override;
-		void OnEvent(Event& event) override;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnUpdate() override;
+		virtual void OnEvent(Event& event) override;
+
+		void BeginImGui();
+		virtual void OnRender() override;
+		void EndImGui();
 
 	private:
-		bool OnWindowResize(WindowResizeEvent& e);
+		/*bool OnWindowResize(WindowResizeEvent& e);
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnMouseButtonPress(MousePressEvent& e);
 		bool OnMouseButtonRelease(MouseReleaseEvent& e);
@@ -32,7 +36,7 @@ namespace Snail {
 		bool OnMouseScroll(MouseScrollEvent& e);
 		bool OnKeyboardPress(KeyPressEvent& e);
 		bool OnKeyboardRelease(KeyReleaseEvent& e);
-		bool OnKeyboardType(KeyTypeEvent& e);
+		bool OnKeyboardType(KeyTypeEvent& e);*/
 	};
 
 }

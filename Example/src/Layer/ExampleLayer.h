@@ -22,5 +22,9 @@ public:
 	inline void OnEvent(Snail::Event& e) {
 		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
 	}
+
+	inline void OnRender() override {
+		//SNL_TRACE("ExampleLayer 调用: OnRender()");
+	}
 };
 

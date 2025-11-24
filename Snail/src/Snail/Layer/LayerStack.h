@@ -9,8 +9,8 @@ namespace Snail {
 	class SNAIL_API LayerStack {
 	private:
 		std::vector<Layer*> m_Layers;
-		// 普通层的插入指针
-		std::vector<Layer*>::iterator m_InsertPointer;
+		// 普通层的插入索引
+		unsigned int m_InsertIndex;
 	public:
 		LayerStack();
 		~LayerStack();

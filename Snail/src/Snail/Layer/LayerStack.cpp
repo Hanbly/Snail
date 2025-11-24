@@ -5,7 +5,7 @@
 namespace Snail {
 
 	LayerStack::LayerStack() {
-		m_InsertPointer = m_Layers.begin();
+		m_InsertIndex = 0;
 	}
 
 	LayerStack::~LayerStack() {
@@ -21,16 +21,17 @@ namespace Snail {
 			SNL_CORE_WARN("LayerStack warning: 推入普通层失败: 试图使用空指针!");
 			return;
 		}
-		m_InsertPointer = m_Layers.insert(m_InsertPointer, norLayer) + 1;
+		m_Layers.insert(m_Layers.begin() + m_InsertIndex, norLayer);
+		m_InsertIndex++;
 	}
 
 	void LayerStack::PopNorLayer(Layer* norLayer)
 	{
-		auto it = std::find(m_Layers.begin(), m_InsertPointer, norLayer);
+		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_InsertIndex, norLayer);
 		// it迭代器在普通层的范围内
-		if (it < m_InsertPointer) {
+		if (it < m_Layers.begin() + m_InsertIndex) {
 			m_Layers.erase(it);
-			m_InsertPointer--;
+			m_InsertIndex--;
 		}
 		else {
 			SNL_CORE_WARN("LayerStack warning: 弹出普通层失败: 超出层栈边界!");
@@ -48,7 +49,7 @@ namespace Snail {
 
 	void LayerStack::PopOverLayer(Layer* overLayer)
 	{
-		auto it = std::find(m_InsertPointer, m_Layers.end(), overLayer);
+		auto it = std::find(m_Layers.begin() + m_InsertIndex, m_Layers.end(), overLayer);
 		// it迭代器在覆盖层的范围内
 		if (it < m_Layers.end()) {
 			m_Layers.erase(it);

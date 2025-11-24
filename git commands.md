@@ -16,4 +16,4 @@ git push origin master
 
 //下载第三方库作为子模块
 
-git submodule add https://github.com/gabime/spdlog.git Snail/ventor/spdlog/
+git submodule add https://github.com/gabime/spdlog.git -b [分支名] Snail/ventor/spdlog
