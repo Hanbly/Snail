@@ -33,3 +33,9 @@
 #endif
 
 #define BIND_NSTATIC_MEMBER_Fn(x) std::bind(&x, this, std::placeholders::_1)
+
+enum RENDER_API_TYPE : int
+{
+	GLFW_OPENGL = 0,
+	GLFW_VULKAN
+};

@@ -1,8 +1,8 @@
 ﻿#include "SNLpch.h"
 
-#include "Application.h"
-
 #include "Snail/Input/Input.h"
+
+#include "Application.h"
 
 namespace Snail {
 

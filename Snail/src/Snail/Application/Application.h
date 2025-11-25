@@ -3,7 +3,7 @@
 #include "Snail/Core.h"
 
 #include "Snail/Window/Window.h"
-#include "Snail/Platform/OpenGL/ImGuiLayer/ImGuiLayer.h"
+#include "Platform/glfw/OpenGL/ImGui/ImGuiLayer/ImGuiLayer.h"
 #include "Snail/Layer/LayerStack.h"
 #include "Snail/Events/ApplicationEvent.h"
 

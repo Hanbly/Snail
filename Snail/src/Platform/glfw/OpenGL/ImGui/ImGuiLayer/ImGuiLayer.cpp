@@ -2,7 +2,7 @@
 
 #include "ImGuiLayer.h"
 
-#include "Snail/Platform/OpenGL/ImGuiLib/imgui_impl_opengl3.h"
+#include "Platform/glfw/OpenGL/ImGui/ImGuiLib/imgui_impl_opengl3.h"
 #include "Snail/ImGui/ImGuiLib/imgui_impl_glfw.h"
 
 #include "Snail/Application/Application.h"

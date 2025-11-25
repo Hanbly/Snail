@@ -9,7 +9,6 @@
 namespace Snail {
 
     static bool s_GLFWInitialized = false;
-    static bool s_GLADInitialized = false;
 
     static void GLFWErrorCallback(int errorcode, const char* description) {
         SNL_CORE_ERROR("GLFW ERROR({0}): {1}", errorcode, description);
@@ -43,16 +42,10 @@ namespace Snail {
         const int& iHeight = static_cast<int>(m_Data.props.height);
 
         m_Window = glfwCreateWindow(iWidth, iHeight, iTitle.c_str(), nullptr, nullptr);
-        /* Make the window's context current */
-        glfwMakeContextCurrent(m_Window);
-
-        // 初始化glad
-        if (!s_GLADInitialized) {
-            int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-            SNL_CORE_ASSERT(status, "GLAD初始化失败!");
-
-            s_GLADInitialized = true;
-        }
+        
+        // 初始化图形API的渲染上下文
+        m_Renderer = std::make_unique<Renderer>();
+        m_Renderer->InitContext(m_Window, GLFW_OPENGL);
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
@@ -170,10 +163,9 @@ namespace Snail {
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Renderer->SwapBuffers();
     }
 
-    // cccccccccccccccccccccccc
     void WindowsWindow::SetVSync(bool enable)
     {
         if (enable) {

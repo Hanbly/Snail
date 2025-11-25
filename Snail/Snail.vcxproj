@@ -146,6 +146,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h" />
+    <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h" />
+    <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -162,14 +168,16 @@
     <ClInclude Include="src\Snail\Layer\Layer.h" />
     <ClInclude Include="src\Snail\Layer\LayerStack.h" />
     <ClInclude Include="src\Snail\Logger\Log.h" />
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.h" />
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h" />
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
     <ClInclude Include="src\Snail\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp" />
+    <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -178,10 +186,7 @@
     <ClCompile Include="src\Snail\Layer\Layer.cpp" />
     <ClCompile Include="src\Snail\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Snail\Logger\Log.cpp" />
-    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp" />
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

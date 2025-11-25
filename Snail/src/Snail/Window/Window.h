@@ -2,23 +2,31 @@
 
 namespace Snail {
 
-	struct WindowProps {
-		std::string title;
-		unsigned int width;
-		unsigned int height;
-
-		WindowProps(const std::string& title = "Snail Engine",
-					unsigned int width = 1280,
-					unsigned int height = 720)
-			: title(title), width(width), height(height) {}
-	};
-
 	class SNAIL_API Window {
+	protected:
+
+		using EventCallbackFn = std::function<void(Event&)>;
+
+		struct WindowProps {
+			std::string title;
+			unsigned int width;
+			unsigned int height;
+
+			WindowProps(const std::string& title = "Snail Engine",
+				unsigned int width = 1280,
+				unsigned int height = 720)
+				: title(title), width(width), height(height) {
+			}
+		};
+		struct WindowData {
+			WindowProps props;
+			bool VSync = true;
+
+			EventCallbackFn eventCallbackFn;
+		};
 	public:
 		Window() = default;
 		virtual ~Window() = default;
-
-		using EventCallbackFn = std::function<void(Event&)>;
 
 		virtual void OnUpdate() = 0;
 		virtual unsigned int GetWindowWidth() const = 0;

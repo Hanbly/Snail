@@ -1,6 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw">
+      <UniqueIdentifier>{29A5A261-9565-1E98-5EA0-6715CA1F6374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL">
+      <UniqueIdentifier>{3DC67E1E-2955-08E8-D273-1CE3BEE1188E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL\ImGui">
+      <UniqueIdentifier>{2735A4DA-1345-50AB-7CFE-B4C9682D3F44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL\ImGui\ImGuiLayer">
+      <UniqueIdentifier>{6E15B52E-DAD9-B31E-A33F-E4E80FC34F54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL\ImGui\ImGuiLib">
+      <UniqueIdentifier>{289F1417-9458-7FC1-1DB8-999B89703531}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Snail">
       <UniqueIdentifier>{3CEE1A0E-A802-43BF-7184-E61EDD573FF0}</UniqueIdentifier>
     </Filter>
@@ -25,26 +46,35 @@
     <Filter Include="Snail\Logger">
       <UniqueIdentifier>{8B287D5B-778B-0C00-2011-45B60C53D882}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Snail\Platform">
-      <UniqueIdentifier>{10EE6EEC-FCBB-62F2-E54F-D318D1BC3E57}</UniqueIdentifier>
+    <Filter Include="Snail\Render">
+      <UniqueIdentifier>{2BF1CA68-1754-5A0D-C0D9-92C3AC1B2690}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Snail\Platform\OpenGL">
-      <UniqueIdentifier>{442511BF-B091-CCB9-7985-6417E5B0EE21}</UniqueIdentifier>
+    <Filter Include="Snail\Render\RenderAPI">
+      <UniqueIdentifier>{14BE7162-00B8-9AB4-E924-31C5D5BD0021}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Snail\Platform\OpenGL\ImGuiLayer">
-      <UniqueIdentifier>{6B99BDAA-57EA-A8EC-804E-97AE6CFE3B56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Snail\Platform\OpenGL\ImGuiLib">
-      <UniqueIdentifier>{E5FF4112-D125-0C79-BA6B-9144A6303145}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Snail\Platform\Windows">
-      <UniqueIdentifier>{4AA851F9-36A2-7A4B-1F0F-115C0BA8E0B7}</UniqueIdentifier>
+    <Filter Include="Snail\Render\Renderer">
+      <UniqueIdentifier>{31B5FB02-9D21-B7FD-6615-4F5BD240D965}</UniqueIdentifier>
     </Filter>
     <Filter Include="Snail\Window">
       <UniqueIdentifier>{A31FBD74-8F82-4C19-3808-85CF244A189C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.h">
+      <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.h">
+      <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3_loader.h">
+      <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLib</Filter>
+    </ClInclude>
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h">
@@ -89,26 +119,30 @@
     <ClInclude Include="src\Snail\Logger\Log.h">
       <Filter>Snail\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.h">
-      <Filter>Snail\Platform\OpenGL\ImGuiLayer</Filter>
+    <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h">
+      <Filter>Snail\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.h">
-      <Filter>Snail\Platform\OpenGL\ImGuiLib</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3_loader.h">
-      <Filter>Snail\Platform\OpenGL\ImGuiLib</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsInput.h">
-      <Filter>Snail\Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Snail\Platform\Windows\WindowsWindow.h">
-      <Filter>Snail\Platform\Windows</Filter>
+    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h">
+      <Filter>Snail\Render\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">
+      <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.cpp">
+      <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLib</Filter>
+    </ClCompile>
     <ClCompile Include="src\SNLpch.cpp" />
     <ClCompile Include="src\Snail\Application\Application.cpp">
       <Filter>Snail\Application</Filter>
@@ -125,17 +159,9 @@
     <ClCompile Include="src\Snail\Logger\Log.cpp">
       <Filter>Snail\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLayer\ImGuiLayer.cpp">
-      <Filter>Snail\Platform\OpenGL\ImGuiLayer</Filter>
+    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp">
+      <Filter>Snail\Render\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Platform\OpenGL\ImGuiLib\imgui_impl_opengl3.cpp">
-      <Filter>Snail\Platform\OpenGL\ImGuiLib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsInput.cpp">
-      <Filter>Snail\Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Snail\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Snail\Platform\Windows</Filter>
-    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp" />
   </ItemGroup>
 </Project>

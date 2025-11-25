@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Snail/Render/Renderer/Renderer.h"
+
 #include "Snail/Window/Window.h"
 
 namespace Snail {
@@ -7,14 +9,7 @@ namespace Snail {
 	class SNAIL_API WindowsWindow : public Window {
 	private:
 		GLFWwindow* m_Window;
-
-		struct WindowData {
-			WindowProps props;
-			bool VSync;
-
-			EventCallbackFn eventCallbackFn;
-		};
-
+		std::unique_ptr<Renderer> m_Renderer;
 		WindowData m_Data;
 	private:
 		virtual void InitWindow(const WindowProps& props);
