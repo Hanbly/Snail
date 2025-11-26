@@ -12,6 +12,7 @@ namespace Snail {
 		inline void InitContext() { this->InitContextImpl(); }
 		inline void SwapBuffers() { this->SwapBuffersImpl(); }
 
+		static std::unique_ptr<RenderContext> CreateRenderContext(void* windowHandle);
 	};
 
 }

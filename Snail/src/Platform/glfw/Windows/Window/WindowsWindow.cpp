@@ -44,8 +44,8 @@ namespace Snail {
         m_Window = glfwCreateWindow(iWidth, iHeight, iTitle.c_str(), nullptr, nullptr);
         
         // 初始化图形API的渲染上下文
-        m_Renderer = std::make_unique<Renderer>();
-        m_Renderer->InitContext(m_Window, GLFW_OPENGL);
+        m_RenderContext = RenderContext::CreateRenderContext(m_Window);
+        m_RenderContext->InitContext();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
@@ -163,7 +163,7 @@ namespace Snail {
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
-        m_Renderer->SwapBuffers();
+        m_RenderContext->SwapBuffers();
     }
 
     void WindowsWindow::SetVSync(bool enable)
@@ -182,10 +182,4 @@ namespace Snail {
     {
         return m_Data.VSync;
     }
-
-    Window* Window::SNLCreateWindow(const WindowProps& props)
-    {
-        return new WindowsWindow(props);
-    }
-
 }

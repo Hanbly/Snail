@@ -10,18 +10,70 @@ namespace Snail {
 
 	Application::Application()
 	{
-		SNL_CORE_ASSERT(!s_Instance, "无法创建多个应用实例!");
+		SNL_CORE_ASSERT(!s_Instance, "Application: 无法创建多个应用实例!");
 		this->s_Instance = this;
 
 		m_AppWindow = std::unique_ptr<Window>(Window::SNLCreateWindow());
-		if (m_AppWindow) {
-			m_Running = true;
-		}
+		SNL_CORE_ASSERT(m_AppWindow, "Application: 创建窗口成员失败!");
+		m_Running = true;
+
 		// 将OnEvent绑定到 Window 的派生类 维护的函数指针 eventCallbackFn 之上
 		m_AppWindow->SetEventCallback(BIND_NSTATIC_MEMBER_Fn(Application::OnEvent));
 
 		m_ImGuiLayer = new ImGuiLayer();
 		this->PushOverLayer(m_ImGuiLayer);
+
+		// -------------------临时------------------------------------------
+		glGenVertexArrays(1, &m_VertexArray);
+		glBindVertexArray(m_VertexArray);
+
+		float vertices[3 * 3] = {
+			0.1f, 0.3f, 0.0f,
+			-0.8f, -0.6f, 0.0f,
+			0.5f, -0.8f, 0.0f
+		};
+		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices));
+		m_VertexBuffer->Bind();
+
+		// 顶点缓冲区布局layout
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+
+		uint32_t indices[1 * 3] = {
+			0, 2, 1
+		};
+		m_IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
+		m_IndexBuffer->Bind();
+
+		std::string vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);
+			}
+
+		)";
+		std::string fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+			}
+
+		)";
+		m_Shader = Shader::CreateShader(vertexSrc, fragmentSrc);
+		//------------------------------------------------------------------------------
 	}
 
 	Application::~Application()
@@ -53,14 +105,24 @@ namespace Snail {
 			layer->OnUpdate();
 		}
 
+
+		// -------------------临时------------------------------------------
+		m_Shader->Bind();
+		glBindVertexArray(m_VertexArray);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		//----------------------------------------------------------------
+
+
+
 		// 层栈的渲染处理，由底层至顶层
-		m_ImGuiLayer->BeginImGui();
+		//m_ImGuiLayer->BeginImGui();
 		for (Layer* layer : m_LayerStack) {
 			layer->OnRender();
 		}
-		m_ImGuiLayer->EndImGui();
+		//m_ImGuiLayer->EndImGui();
 
-		// 窗口的（事件等）逻辑更新处理，由顶层至底层
+		// 窗口的（事件等）
+		// 轮询事件 & 交换缓冲区
 		m_AppWindow->OnUpdate();
 
 	}
@@ -91,6 +153,10 @@ namespace Snail {
 	void Application::run()
 	{
 		while (m_Running) {
+
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // 深灰色背景
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			this->OnUpdate();
 		}
 

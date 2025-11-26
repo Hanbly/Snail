@@ -4,9 +4,6 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\Windows">
-      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform\glfw">
       <UniqueIdentifier>{29A5A261-9565-1E98-5EA0-6715CA1F6374}</UniqueIdentifier>
     </Filter>
@@ -21,6 +18,21 @@
     </Filter>
     <Filter Include="Platform\glfw\OpenGL\ImGui\ImGuiLib">
       <UniqueIdentifier>{289F1417-9458-7FC1-1DB8-999B89703531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL\Render">
+      <UniqueIdentifier>{0C9EAD43-78AB-DB29-0192-D7146D9EA7E0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\OpenGL\Render\RenderAPI">
+      <UniqueIdentifier>{35B81640-A17C-1530-6AE2-45FAD665B165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\Windows">
+      <UniqueIdentifier>{63687346-CFD4-2E41-98C8-C69E04F450A9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\Windows\Input">
+      <UniqueIdentifier>{A29630F1-0EA4-5ED7-978A-5AC203972A8E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\glfw\Windows\Window">
+      <UniqueIdentifier>{EAC78F37-D682-7FE3-7F3A-F82D6BD4C973}</UniqueIdentifier>
     </Filter>
     <Filter Include="Snail">
       <UniqueIdentifier>{3CEE1A0E-A802-43BF-7184-E61EDD573FF0}</UniqueIdentifier>
@@ -60,12 +72,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.h">
       <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLayer</Filter>
     </ClInclude>
@@ -74,6 +80,21 @@
     </ClInclude>
     <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3_loader.h">
       <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexBuffer.h">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Render\RenderAPI\Shader.h">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h">
+      <Filter>Platform\glfw\Windows\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h">
+      <Filter>Platform\glfw\Windows\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
@@ -122,26 +143,38 @@
     <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h">
       <Filter>Snail\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h">
-      <Filter>Snail\Render\Renderer</Filter>
+    <ClInclude Include="src\Snail\Render\RenderAPI\VertexBuffer.h">
+      <Filter>Snail\Render\RenderAPI</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\IndexBuffer.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLIndexBuffer.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp">
-      <Filter>Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp">
-      <Filter>Platform\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">
       <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLayer</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.cpp">
       <Filter>Platform\glfw\OpenGL\ImGui\ImGuiLib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexBuffer.cpp">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.cpp">
+      <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp">
+      <Filter>Platform\glfw\Windows\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp">
+      <Filter>Platform\glfw\Windows\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\SNLpch.cpp" />
     <ClCompile Include="src\Snail\Application\Application.cpp">
@@ -159,9 +192,12 @@
     <ClCompile Include="src\Snail\Logger\Log.cpp">
       <Filter>Snail\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp">
-      <Filter>Snail\Render\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\VertexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\RenderContext.cpp" />
+    <ClCompile Include="src\Snail\Window\Window.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\IndexBuffer.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLIndexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Shader.cpp" />
   </ItemGroup>
 </Project>

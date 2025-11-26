@@ -7,6 +7,10 @@
 #include "Snail/Layer/LayerStack.h"
 #include "Snail/Events/ApplicationEvent.h"
 
+#include "Snail/Render/RenderAPI/VertexBuffer.h"
+#include "Snail/Render/RenderAPI/IndexBuffer.h"
+#include "Snail/Render/RenderAPI/Shader.h"
+
 namespace Snail {
 
 	class SNAIL_API Application
@@ -16,8 +20,14 @@ namespace Snail {
 
 		std::unique_ptr<Window> m_AppWindow;
 		ImGuiLayer* m_ImGuiLayer;
-		bool m_Running = false;
 		LayerStack m_LayerStack;
+		bool m_Running = false;
+
+		// -------------------临时------------------------------------------
+		unsigned int m_VertexArray;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
 	public:
 		Application();
 		// Application 类会被Example所继承，所以使用virtual

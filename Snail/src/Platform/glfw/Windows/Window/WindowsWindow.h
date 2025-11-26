@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Snail/Render/Renderer/Renderer.h"
+#include "Snail/Render/RenderAPI/RenderContext.h"
 
 #include "Snail/Window/Window.h"
 
@@ -9,7 +9,7 @@ namespace Snail {
 	class SNAIL_API WindowsWindow : public Window {
 	private:
 		GLFWwindow* m_Window;
-		std::unique_ptr<Renderer> m_Renderer;
+		std::unique_ptr<RenderContext> m_RenderContext;
 		WindowData m_Data;
 	private:
 		virtual void InitWindow(const WindowProps& props);
@@ -35,8 +35,6 @@ namespace Snail {
 		}
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override;
-
-		static Window* SNLCreateWindow(const WindowProps& props = WindowProps());
 	};
 
 }

@@ -38,7 +38,7 @@ namespace Snail {
 		virtual void SetVSync(bool enable) = 0;
 		virtual bool IsVSync() const = 0;
 		
-		static Window* SNLCreateWindow(const WindowProps& props = WindowProps());
+		static std::unique_ptr<Window> SNLCreateWindow(const WindowProps& props = WindowProps());
 	};
 
 }

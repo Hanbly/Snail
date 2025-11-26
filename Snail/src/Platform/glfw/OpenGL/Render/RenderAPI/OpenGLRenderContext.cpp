@@ -29,6 +29,11 @@ namespace Snail {
             SNL_CORE_ASSERT(status, "GLAD初始化失败!");
 
             OpenGLRenderContext::s_GLADInitialized = true;
+
+            SNL_CORE_INFO("OpenGL Info: 已创建 OpenGL 渲染器上下文");
+            SNL_CORE_INFO("供应商: {0}", (const char*)glGetString(GL_VENDOR));
+            SNL_CORE_INFO("渲染设备: {0}", (const char*)glGetString(GL_RENDERER));
+            SNL_CORE_INFO("版本号: {0}", (const char*)glGetString(GL_VERSION));
         }
     }
 

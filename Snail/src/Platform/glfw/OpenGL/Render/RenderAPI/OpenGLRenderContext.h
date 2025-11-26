@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Snail/Core.h"
+
 #include "Snail/Render/RenderAPI/RenderContext.h"
 
 struct GLFWwindow;

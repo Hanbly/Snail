@@ -5,6 +5,7 @@
 #endif
 
 #include <iostream>
+#include <cstdint>
 #include <sstream>
 #include <memory>
 #include <algorithm>

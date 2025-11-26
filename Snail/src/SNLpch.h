@@ -5,6 +5,7 @@
 #endif
 
 #include <iostream>
+#include <cstdint>
 #include <sstream>
 #include <memory>
 #include <algorithm>
@@ -24,3 +25,5 @@
 #include "GLFW/glfw3.h"
 
 #include "imgui.h"
+
+#include "glm/glm.hpp"

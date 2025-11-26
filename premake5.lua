@@ -21,7 +21,7 @@ workspace "Snail"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Snail/vendor/GLFW/include"
 IncludeDirs["GLAD"] = "Snail/vendor/GLAD/include"
-IncludeDirs["GLM"] = "Snail/vendor/GLM/glm"
+IncludeDirs["GLM"] = "Snail/vendor/GLM"
 IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 
