@@ -27,16 +27,16 @@ namespace Snail {
 		this->PushOverLayer(m_ImGuiLayer);
 
 		// -------------------临时------------------------------------------
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray = VertexArray::CreateVertexArray();
+		m_VertexArray->Bind();
 
 		float vertices[3 * 7] = {
 			0.1f, 0.3f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 			-0.8f, -0.6f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
 			0.5f, -0.8f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		};
-		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices));
-		m_VertexBuffer->Bind();
+		auto VertexBuffer = VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices));
+		VertexBuffer->Bind();
 
 		// 创建 & 启用布局layout
 		std::shared_ptr<BufferLayout> layout = BufferLayout::CreateBufferLayout(
@@ -45,14 +45,16 @@ namespace Snail {
 				{ "color", VertexDataType::Float4 }
 			}
 		);
-		m_VertexBuffer->SetLayout(layout);
-		m_VertexBuffer->EnableLayout(false);
+		VertexBuffer->SetLayout(layout);
+
+		m_VertexArray->AddVertexBuffer(VertexBuffer);
 
 		uint32_t indices[1 * 3] = {
 			0, 2, 1
 		};
-		m_IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
-		m_IndexBuffer->Bind();
+		auto IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
+		
+		m_VertexArray->SetIndexBuffer(IndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -122,7 +124,7 @@ namespace Snail {
 
 		// -------------------临时------------------------------------------
 		m_Shader->Bind();
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray->Bind();
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 		//----------------------------------------------------------------
 

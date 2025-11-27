@@ -15,8 +15,13 @@ namespace Snail {
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 		~OpenGLVertexBuffer();
 
-		virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) override;
-		virtual void EnableLayout(bool enableNormalize) override;
+		inline virtual std::shared_ptr<BufferLayout> OpenGLVertexBuffer::GetLayout() const override {
+			return m_Layout;
+		}
+		inline virtual void OpenGLVertexBuffer::SetLayout(const std::shared_ptr<BufferLayout>& layout) override {
+			SNL_CORE_ASSERT(layout->GetLayoutElements().data(), "OpenGLVertexBuffer: Layout数据为空, 保存布局失败!");
+			m_Layout = layout;
+		}
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;

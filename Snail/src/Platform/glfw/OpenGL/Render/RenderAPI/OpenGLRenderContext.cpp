@@ -16,7 +16,6 @@ namespace Snail {
 
     OpenGLRenderContext::~OpenGLRenderContext()
     {
-        glfwDestroyWindow(m_WindowHandle);
     }
 
     void OpenGLRenderContext::InitContextImpl()

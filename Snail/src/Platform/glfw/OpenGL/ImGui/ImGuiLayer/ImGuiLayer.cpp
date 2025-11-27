@@ -11,6 +11,7 @@ namespace Snail {
 
 	ImGuiLayer::ImGuiLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
+
 	ImGuiLayer::~ImGuiLayer() {
 
 	}

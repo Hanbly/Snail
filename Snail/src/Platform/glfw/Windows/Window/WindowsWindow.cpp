@@ -156,7 +156,9 @@ namespace Snail {
 
     void WindowsWindow::ShutdownWindow()
     {
-        glfwDestroyWindow(m_Window);
+        if (m_Window) {
+            glfwDestroyWindow(m_Window);
+        }
     }
 
     // 轮询事件 & 交换缓冲区

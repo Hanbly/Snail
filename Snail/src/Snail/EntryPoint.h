@@ -13,6 +13,8 @@
 		auto app = Snail::CreateApplication();
 		app->run();
 		delete app;
+
+		return 0;
 	}
 
 #endif

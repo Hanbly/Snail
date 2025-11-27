@@ -10,8 +10,8 @@ namespace Snail {
 	public:
 		virtual ~VertexBuffer() {}
 
+		virtual std::shared_ptr<BufferLayout> GetLayout() const = 0;
 		virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) = 0;
-		virtual void EnableLayout(bool enableNormalize) = 0;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;

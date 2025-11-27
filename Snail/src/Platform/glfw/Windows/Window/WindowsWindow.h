@@ -17,6 +17,8 @@ namespace Snail {
 	public:
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
+		WindowsWindow(const WindowsWindow&) = delete;
+		WindowsWindow& operator=(const WindowsWindow&) = delete;
 
 		void OnUpdate() override;
 		inline unsigned int GetWindowWidth() const override {
