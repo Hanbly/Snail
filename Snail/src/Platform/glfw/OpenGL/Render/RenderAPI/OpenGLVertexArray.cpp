@@ -44,6 +44,7 @@ namespace Snail {
 		uint32_t& index = m_VertexBufferIndexOffset;
 		auto& layout = vertexBuffer->GetLayout();
 		auto& elements = layout->GetLayoutElements();
+		SNL_CORE_ASSERT(elements.size(), "OpenGLVertexArray: 添加VertexBuffer错误, 缓冲区布局为空!");
 		for (const auto& e : elements) {
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(

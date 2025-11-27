@@ -30,31 +30,46 @@ namespace Snail {
 		m_VertexArray = VertexArray::CreateVertexArray();
 		m_VertexArray->Bind();
 
-		float vertices[3 * 7] = {
-			0.1f, 0.3f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			-0.8f, -0.6f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.8f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		float position[4 * 3] = {
+			0.5f, 0.5f, 0.0f, 
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f
 		};
-		auto VertexBuffer = VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices));
-		VertexBuffer->Bind();
-
+		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(position, sizeof(position));
+		m_VertexBuffer->Bind();
 		// 创建 & 启用布局layout
 		std::shared_ptr<BufferLayout> layout = BufferLayout::CreateBufferLayout(
 			{
-				{ "position", VertexDataType::Float3 },
+				{ "position", VertexDataType::Float3 }
+			}
+		);
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+		float color[4 * 4] = {
+			1.0f, 0.0f, 1.0f, 1.0f,
+			0.0f, 1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 0.5f, 0.3f, 1.0f
+		};
+		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(color, sizeof(color));
+		m_VertexBuffer->Bind();
+		// 创建 & 启用布局layout
+		layout = BufferLayout::CreateBufferLayout(
+			{
 				{ "color", VertexDataType::Float4 }
 			}
 		);
-		VertexBuffer->SetLayout(layout);
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-		m_VertexArray->AddVertexBuffer(VertexBuffer);
-
-		uint32_t indices[1 * 3] = {
-			0, 2, 1
+		uint32_t indices[2 * 3] = {
+			0, 2, 1,
+			3, 1, 2
 		};
-		auto IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
+		m_IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
 		
-		m_VertexArray->SetIndexBuffer(IndexBuffer);
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -125,7 +140,7 @@ namespace Snail {
 		// -------------------临时------------------------------------------
 		m_Shader->Bind();
 		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetIndexBufferCount(), GL_UNSIGNED_INT, nullptr);
 		//----------------------------------------------------------------
 
 
