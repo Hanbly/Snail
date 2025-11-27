@@ -84,7 +84,7 @@
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h">
       <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexBuffer.h">
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLVertexBuffer.h">
       <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Render\RenderAPI\Shader.h">
@@ -143,16 +143,18 @@
     <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h">
       <Filter>Snail\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Render\RenderAPI\VertexBuffer.h">
+    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\VertexBuffer.h">
       <Filter>Snail\Render\RenderAPI</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Window\Window.h">
       <Filter>Snail\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\IndexBuffer.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLIndexBuffer.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.h" />
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">
@@ -164,7 +166,7 @@
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp">
       <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexBuffer.cpp">
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLVertexBuffer.cpp">
       <Filter>Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.cpp">
@@ -192,12 +194,14 @@
     <ClCompile Include="src\Snail\Logger\Log.cpp">
       <Filter>Snail\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Render\RenderAPI\VertexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="src\Snail\Render\RenderAPI\RenderContext.cpp" />
     <ClCompile Include="src\Snail\Window\Window.cpp" />
     <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\IndexBuffer.cpp" />
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLIndexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="src\Snail\Render\RenderAPI\Shader.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.cpp" />
   </ItemGroup>
 </Project>

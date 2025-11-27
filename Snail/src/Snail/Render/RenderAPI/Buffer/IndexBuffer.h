@@ -5,8 +5,6 @@
 namespace Snail {
 
 	class SNAIL_API IndexBuffer {
-	protected:
-		
 	public:
 		virtual ~IndexBuffer() {}
 

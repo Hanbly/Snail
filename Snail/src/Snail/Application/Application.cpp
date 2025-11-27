@@ -4,6 +4,9 @@
 
 #include "Application.h"
 
+#include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
+
+
 namespace Snail {
 
 	Application* Application::s_Instance = nullptr;
@@ -27,17 +30,23 @@ namespace Snail {
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		float vertices[3 * 3] = {
-			0.1f, 0.3f, 0.0f,
-			-0.8f, -0.6f, 0.0f,
-			0.5f, -0.8f, 0.0f
+		float vertices[3 * 7] = {
+			0.1f, 0.3f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			-0.8f, -0.6f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+			0.5f, -0.8f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		};
 		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices));
 		m_VertexBuffer->Bind();
 
-		// 顶点缓冲区布局layout
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+		// 创建 & 启用布局layout
+		std::shared_ptr<BufferLayout> layout = BufferLayout::CreateBufferLayout(
+			{
+				{ "position", VertexDataType::Float3 },
+				{ "color", VertexDataType::Float4 }
+			}
+		);
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexBuffer->EnableLayout(false);
 
 		uint32_t indices[1 * 3] = {
 			0, 2, 1
@@ -49,12 +58,15 @@ namespace Snail {
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
 
 			out vec3 v_Position;
+			out vec4 v_Color;
 
 			void main()
 			{
 				v_Position = a_Position;
+				v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);
 			}
 
@@ -65,10 +77,12 @@ namespace Snail {
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
+			in vec4 v_Color;
 
 			void main()
 			{
 				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = v_Color;
 			}
 
 		)";

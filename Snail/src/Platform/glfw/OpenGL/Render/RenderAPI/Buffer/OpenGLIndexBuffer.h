@@ -2,7 +2,7 @@
 
 #include "Snail/Core.h"
 
-#include "Snail/Render/RenderAPI/IndexBuffer.h"
+#include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
 
 namespace Snail {
 

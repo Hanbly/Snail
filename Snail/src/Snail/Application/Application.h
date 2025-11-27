@@ -7,8 +7,8 @@
 #include "Snail/Layer/LayerStack.h"
 #include "Snail/Events/ApplicationEvent.h"
 
-#include "Snail/Render/RenderAPI/VertexBuffer.h"
-#include "Snail/Render/RenderAPI/IndexBuffer.h"
+#include "Snail/Render/RenderAPI/Buffer/VertexBuffer.h"
+#include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
 #include "Snail/Render/RenderAPI/Shader.h"
 
 namespace Snail {

@@ -2,13 +2,16 @@
 
 #include "Snail/Core.h"
 
+#include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
+
 namespace Snail {
 
 	class SNAIL_API VertexBuffer {
-	protected:
-		
 	public:
 		virtual ~VertexBuffer() {}
+
+		virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) = 0;
+		virtual void EnableLayout(bool enableNormalize) = 0;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
