@@ -1,30 +1,25 @@
-#pragma once
+﻿#pragma once
 
 #include "Snail/Core.h"
 
-namespace Snail {
+#include "Snail/Render/RenderAPI/VertexArray.h"
+#include "Snail/Render/Renderer/RendererCommand.h"
 
-	enum class SNAIL_API RenderAPI {
-		None = 0,
-		OpenGL,
-		Vulkan
-	};
+namespace Snail {
 
 	class SNAIL_API Renderer
 	{
-	private:
-		static RenderAPI s_RenderAPI;
 	public:
 		Renderer() = default;
 		~Renderer() = default;
 
-		inline static RenderAPI GetAPI() {
-			return s_RenderAPI;
+		inline static RendererCommand::API GetAPI() {
+			return RendererCommand::GetAPI();
 		}
 
-		inline static RenderAPI SetAPI(RenderAPI api) {
-			s_RenderAPI = api;
-		}
+		static void BeginScene();
+		static void EndScene();
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
 	};
 
 }

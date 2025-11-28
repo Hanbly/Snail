@@ -52,12 +52,17 @@ namespace Snail {
 				e.GetComponentCount(),
 				GetOpenGLType(e.type),
 				e.enableNormalize ? GL_TRUE : GL_FALSE, // 显式转为 GL boolean
-				layout->GetLayoutSize(),
+				e.size,
 				(const void*)(uintptr_t)e.offset);		// 规范的 Offset 转换
 			index++;
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
+	}
+
+	const std::shared_ptr<IndexBuffer> OpenGLVertexArray::GetIndexBuffer() const
+	{
+		return m_IndexBuffer;
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)

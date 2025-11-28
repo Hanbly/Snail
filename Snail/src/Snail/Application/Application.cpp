@@ -140,7 +140,7 @@ namespace Snail {
 		// -------------------临时------------------------------------------
 		m_Shader->Bind();
 		m_VertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetIndexBufferCount(), GL_UNSIGNED_INT, nullptr);
+		Renderer::Submit(m_VertexArray);
 		//----------------------------------------------------------------
 
 
@@ -185,8 +185,8 @@ namespace Snail {
 	{
 		while (m_Running) {
 
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // 深灰色背景
-			glClear(GL_COLOR_BUFFER_BIT);
+			RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RendererCommand::Clear();
 
 			this->OnUpdate();
 		}

@@ -17,6 +17,7 @@ namespace Snail {
 		~OpenGLVertexArray();
 
 		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
+		virtual const std::shared_ptr<IndexBuffer> GetIndexBuffer() const override;
 		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
 
 		virtual void Bind() const override;
