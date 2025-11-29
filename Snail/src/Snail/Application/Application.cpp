@@ -1,7 +1,5 @@
 ﻿#include "SNLpch.h"
 
-#include "Snail/Input/Input.h"
-
 #include "Application.h"
 
 #include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
@@ -25,86 +23,6 @@ namespace Snail {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		this->PushOverLayer(m_ImGuiLayer);
-
-		// -------------------临时------------------------------------------
-		m_VertexArray = VertexArray::CreateVertexArray();
-		m_VertexArray->Bind();
-
-		float position[4 * 3] = {
-			0.5f, 0.5f, 0.0f, 
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f
-		};
-		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(position, sizeof(position));
-		m_VertexBuffer->Bind();
-		// 创建 & 启用布局layout
-		std::shared_ptr<BufferLayout> layout = BufferLayout::CreateBufferLayout(
-			{
-				{ "position", VertexDataType::Float3 }
-			}
-		);
-		m_VertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-		float color[4 * 4] = {
-			1.0f, 0.0f, 1.0f, 1.0f,
-			0.0f, 1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 0.0f, 1.0f,
-			1.0f, 0.5f, 0.3f, 1.0f
-		};
-		m_VertexBuffer = VertexBuffer::CreateVertexBuffer(color, sizeof(color));
-		m_VertexBuffer->Bind();
-		// 创建 & 启用布局layout
-		layout = BufferLayout::CreateBufferLayout(
-			{
-				{ "color", VertexDataType::Float4 }
-			}
-		);
-		m_VertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-		uint32_t indices[2 * 3] = {
-			0, 2, 1,
-			3, 1, 2
-		};
-		m_IndexBuffer = IndexBuffer::CreateIndexBuffer(indices, sizeof(indices));
-		
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
-			}
-
-		)";
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
-			}
-
-		)";
-		m_Shader = Shader::CreateShader(vertexSrc, fragmentSrc);
-		//------------------------------------------------------------------------------
 	}
 
 	Application::~Application()
@@ -135,15 +53,6 @@ namespace Snail {
 		for (Layer* layer : m_LayerStack) {
 			layer->OnUpdate();
 		}
-
-
-		// -------------------临时------------------------------------------
-		m_Shader->Bind();
-		m_VertexArray->Bind();
-		Renderer::Submit(m_VertexArray);
-		//----------------------------------------------------------------
-
-
 
 		// 层栈的渲染处理，由底层至顶层
 		//m_ImGuiLayer->BeginImGui();
@@ -187,6 +96,8 @@ namespace Snail {
 
 			RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RendererCommand::Clear();
+
+			glEnable(GL_DEPTH_TEST);
 
 			this->OnUpdate();
 		}

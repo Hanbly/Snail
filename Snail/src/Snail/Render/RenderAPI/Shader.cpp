@@ -8,11 +8,11 @@
 
 namespace Snail {
 
-	std::shared_ptr<Shader> Shader::CreateShader(std::string vertexShaderSrc, std::string fragmentShaderSrc)
+	std::shared_ptr<Shader> Shader::CreateShader(const std::string& filePath)
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
-		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(vertexShaderSrc, fragmentShaderSrc);
+		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(filePath);
 		case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!") return nullptr;
 		}
 

@@ -146,24 +146,19 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.h" />
-    <ClInclude Include="src\Snail\Render\Renderer\RendererCommand.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\VertexArray.h" />
-    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
     <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.h" />
     <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.h" />
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLVertexBuffer.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\Shader.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.h" />
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Snail\Render\Camera\Camera.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -180,31 +175,28 @@
     <ClInclude Include="src\Snail\Layer\Layer.h" />
     <ClInclude Include="src\Snail\Layer\LayerStack.h" />
     <ClInclude Include="src\Snail\Logger\Log.h" />
-    <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.h" />
     <ClInclude Include="src\Snail\Render\RenderAPI\Buffer\VertexBuffer.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\Shader.h" />
+    <ClInclude Include="src\Snail\Render\RenderAPI\VertexArray.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\RendererCommand.h" />
     <ClInclude Include="src\Snail\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.cpp" />
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.cpp" />
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.cpp" />
-    <ClCompile Include="src\Snail\Render\Renderer\RendererCommand.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\Shader.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\VertexArray.cpp" />
-    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp" />
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLib\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLBufferLayout.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\Buffer\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp" />
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLShader.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\RenderContext.cpp" />
-    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\VertexBuffer.cpp" />
-    <ClCompile Include="src\Snail\Window\Window.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -213,6 +205,15 @@
     <ClCompile Include="src\Snail\Layer\Layer.cpp" />
     <ClCompile Include="src\Snail\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Snail\Logger\Log.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\BufferLayout.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\IndexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Buffer\VertexBuffer.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\RenderContext.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\Shader.cpp" />
+    <ClCompile Include="src\Snail\Render\RenderAPI\VertexArray.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\RendererCommand.cpp" />
+    <ClCompile Include="src\Snail\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

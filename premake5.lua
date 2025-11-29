@@ -112,6 +112,8 @@ project "Example"
     }
 
     includedirs {
+        "%{IncludeDirs.GLFW}",
+        "%{IncludeDirs.GLAD}",
         "%{IncludeDirs.GLM}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",

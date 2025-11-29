@@ -11,7 +11,7 @@ namespace Snail {
 
 	void OpenGLRendererCommand::ClearImpl() const
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void OpenGLRendererCommand::DrawIndexedImpl(const std::shared_ptr<VertexArray>& vertexArray) const
