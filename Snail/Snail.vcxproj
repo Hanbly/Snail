@@ -158,7 +158,7 @@
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h" />
-    <ClInclude Include="src\Snail\Render\Camera\Camera.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -197,6 +197,7 @@
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

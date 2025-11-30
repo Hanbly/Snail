@@ -2,6 +2,8 @@
 
 #include "Snail/Core.h"
 
+#include "glm/glm.hpp"
+
 namespace Snail {
 
 	struct ShaderProgramSource

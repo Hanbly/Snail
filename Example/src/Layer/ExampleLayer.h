@@ -7,6 +7,7 @@
 #include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
 #include "Snail/Render/RenderAPI/Shader.h"
 #include "Snail/Render/Renderer/Renderer.h"
+#include "Snail/Render/Renderer/Camera/Camera.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -23,6 +24,7 @@ private:
 	std::shared_ptr<Snail::VertexBuffer> m_VertexBuffer;
 	std::shared_ptr<Snail::IndexBuffer> m_IndexBuffer;
 	std::shared_ptr<Snail::Shader> m_Shader;
+	std::unique_ptr<Snail::Camera> m_Camera;
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
@@ -82,6 +84,8 @@ public:
 
 
 		m_Shader = Snail::Shader::CreateShader("shaders/test.shader");
+
+		m_Camera = std::make_unique<Snail::Camera>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 		//------------------------------------------------------------------------------
 	}
 	virtual void OnDetach() override {
@@ -92,8 +96,7 @@ public:
 		SNL_TRACE("ExampleLayer 调用: OnUpdate()");
 
 		// -------------------临时------------------------------------------
-		// 1. 每一帧开始时，先绑定 Shader (非常重要，否则 Uniform 设置无效)
-		m_Shader->Bind();
+		Snail::Renderer::BeginScene(m_Camera);
 
 		// 2. 创建变换矩阵
 		glm::mat4 model = glm::mat4(1.0f);
@@ -102,42 +105,32 @@ public:
 
 		// 3. 计算变换 (现在有了头文件，这些函数就能用了)
 		model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 		// --- 修改开始：让物体动起来 ---
-
 		// 获取运行时间（秒）
 		float timeValue = (float)glfwGetTime();
-
 		// 旋转逻辑：
 		// 1. 每一帧都在 X 轴上稍微倾斜一点 (-55度常数，模拟俯视)
 		// 2. 每一帧都绕 Z 轴持续旋转 (timeValue * 50度/秒)
 		// 注意：旋转顺序很重要（先自转，再倾斜，或者反过来）
-
 		// 这里我们让它绕着一条斜轴 (1.0, 0.5, 0.0) 持续旋转，这样看得最清楚
 		model = glm::rotate(model, glm::radians(timeValue * 50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-
 		// 观察位置：稍微离远一点，看全貌
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
-
-		// 投影：保持不变
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
+		/*view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));*/
+		m_Camera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f + timeValue));
 		// --- 修改结束 ---
 		// 
 		// 4. 设置 Uniforms 到 Shader
-		uint32_t shaderID = m_Shader->GetRendererId();
-
 		// --- 设置 model 矩阵 ---
 		m_Shader->SetUniformMatrix4fv("model", model);
-		// --- 设置 view 矩阵 ---
-		m_Shader->SetUniformMatrix4fv("view", view);
-		// --- 设置 projection 矩阵 ---
-		m_Shader->SetUniformMatrix4fv("projection", projection);
 
+		
 		// 5. 渲染
-		m_VertexArray->Bind();
-		Snail::Renderer::Submit(m_VertexArray);
+		// --- 设置 view 矩阵 ---
+		// --- 设置 projection 矩阵 --- 也在submit实现
+		Snail::Renderer::Submit(m_Shader, m_VertexArray);
+
+
+		Snail::Renderer::EndScene();
 		//----------------------------------------------------------------
 	}
 

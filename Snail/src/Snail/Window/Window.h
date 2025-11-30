@@ -13,8 +13,8 @@ namespace Snail {
 			unsigned int height;
 
 			WindowProps(const std::string& title = "Snail Engine",
-				unsigned int width = 1280,
-				unsigned int height = 720)
+				unsigned int width = 1920,
+				unsigned int height = 1080)
 				: title(title), width(width), height(height) {
 			}
 		};
