@@ -47,7 +47,7 @@ namespace Snail {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate() 
+	void ImGuiLayer::OnUpdate(const Timestep& ts)
 	{
 	}
 

@@ -16,7 +16,7 @@ private:
 	std::shared_ptr<Snail::Shader> m_Shader;
 	std::unique_ptr<Snail::Camera> m_Camera;
 
-	float m_CameraMoveSpeed = 0.01f;
+	float m_CameraMoveSpeed = 5.0f;
 	float m_CameraRotateSpeed = glm::radians(1.0f);
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
@@ -85,25 +85,26 @@ public:
 
 	}
 
-	inline void OnUpdate() override {
+	inline void OnUpdate(const Snail::Timestep& ts) override {
+		const float& time = ts.GetSeconds();
 		if (Snail::Input::IsKeyPressed(SNL_KEY_W) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
-			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed);
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed * time);
 		}
 		else if (Snail::Input::IsKeyPressed(SNL_KEY_S) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
-			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_CameraMoveSpeed);
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_CameraMoveSpeed * time);
 		}
 		else {
 			if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::UP, m_CameraMoveSpeed);
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::UP, m_CameraMoveSpeed * time);
 			}
 			else if (Snail::Input::IsKeyPressed(SNL_KEY_S)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_CameraMoveSpeed);
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_CameraMoveSpeed * time);
 			}
 			if (Snail::Input::IsKeyPressed(SNL_KEY_A)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_CameraMoveSpeed);
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_CameraMoveSpeed * time);
 			}
 			else if (Snail::Input::IsKeyPressed(SNL_KEY_D)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed);
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed * time);
 			}
 		}
 

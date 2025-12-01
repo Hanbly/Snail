@@ -184,6 +184,7 @@
     <ClInclude Include="src\Snail\Render\Renderer\Renderer.h" />
     <ClInclude Include="src\Snail\Render\Renderer\RendererCommand.h" />
     <ClInclude Include="src\Snail\Window\Window.h" />
+    <ClInclude Include="src\Snail\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp" />

@@ -14,6 +14,9 @@
 #include <string>
 #include <vector>
 
+#include "Snail/InputCodes.h"
+#include "Snail/Timestep.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -21,8 +24,6 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/fmt/ostr.h"
-
-#include "Snail/InputCodes.h"
 
 #include "Snail/Logger/Log.h"
 #include "Snail/Events/Event.h"

@@ -3,11 +3,11 @@
 #include "Snail/Core.h"
 
 #include "Snail/Window/Window.h"
+
 #include "Platform/glfw/OpenGL/ImGui/ImGuiLayer/ImGuiLayer.h"
 #include "Snail/Layer/LayerStack.h"
-#include "Snail/Events/ApplicationEvent.h"
 
-#include "Snail/Render/Renderer/Renderer.h"
+#include "Snail/Events/ApplicationEvent.h"
 
 namespace Snail {
 
@@ -19,6 +19,9 @@ namespace Snail {
 		std::unique_ptr<Window> m_AppWindow;
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
+
+		float m_LastFrameTime = 0.0f;
+
 		bool m_Running = false;
 	public:
 		Application();

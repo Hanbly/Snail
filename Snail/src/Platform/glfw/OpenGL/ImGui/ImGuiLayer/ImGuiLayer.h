@@ -20,7 +20,7 @@ namespace Snail {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnUpdate() override;
+		virtual void OnUpdate(const Timestep& ts) override;
 		virtual void OnEvent(Event& event) override;
 
 		void BeginImGui();

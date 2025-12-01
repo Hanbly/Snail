@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+//-------------Core-----------------
+#include "Snail/Input/Input.h"
+#include "Snail/InputCodes.h"
+#include "Snail/Timestep.h"
+
 #include "Snail/Application/Application.h"
 
 //----------------Render-----------------------
@@ -14,9 +19,6 @@
 //----------------Event-----------------------
 #include "Snail/Events/Event.h"
 //---------------------------------------------
-
-#include "Snail/Input/Input.h"
-#include "Snail/InputCodes.h"
 
 #include "Snail/Layer/Layer.h"
 

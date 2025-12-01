@@ -15,7 +15,7 @@ namespace Snail {
 		
 		virtual void OnAttach() = 0;
 		virtual void OnDetach() = 0;
-		virtual void OnUpdate();
+		virtual void OnUpdate(const Timestep& ts);
 		virtual void OnEvent(Event& event);
 		virtual void OnRender() = 0;
 

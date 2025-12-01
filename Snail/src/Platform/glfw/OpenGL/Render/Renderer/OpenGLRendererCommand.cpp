@@ -4,6 +4,11 @@
 
 namespace Snail {
 
+	void OpenGLRendererCommand::EnableDepthTestImpl() const
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
+
 	void OpenGLRendererCommand::ClearColorImpl(const glm::vec4& color_RGBA) const
 	{
 		glClearColor(color_RGBA.r, color_RGBA.g, color_RGBA.b, color_RGBA.a);

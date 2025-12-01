@@ -2,8 +2,7 @@
 
 #include "Application.h"
 
-#include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
-
+#include "Snail/Render/Renderer/RendererCommand.h"
 
 namespace Snail {
 
@@ -49,9 +48,14 @@ namespace Snail {
 
 	void Application::OnUpdate()
 	{
+		//-----------------计算上一帧的时间和帧间隔时间------------------
+		float time = (float)glfwGetTime();
+		Timestep ts = Timestep(time - m_LastFrameTime);
+		m_LastFrameTime = time;
+
 		// 层栈的逻辑更新处理，由底层至顶层
 		for (Layer* layer : m_LayerStack) {
-			layer->OnUpdate();
+			layer->OnUpdate(ts);
 		}
 
 		// 层栈的渲染处理，由底层至顶层
@@ -97,7 +101,7 @@ namespace Snail {
 			RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RendererCommand::Clear();
 
-			glEnable(GL_DEPTH_TEST);
+			RendererCommand::EnableDepthTest();
 
 			this->OnUpdate();
 		}
