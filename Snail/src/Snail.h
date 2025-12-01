@@ -1,9 +1,24 @@
 ﻿#pragma once
 
 #include "Snail/Application/Application.h"
-#include "Snail/Layer/Layer.h"
 
-#include "Platform/glfw/OpenGL/ImGui/ImGuiLayer/ImGuiLayer.h"
+//----------------Render-----------------------
+#include "Snail/Render/RenderAPI/VertexArray.h"
+#include "Snail/Render/RenderAPI/Buffer/VertexBuffer.h"
+#include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
+#include "Snail/Render/RenderAPI/Shader.h"
+#include "Snail/Render/Renderer/Renderer.h"
+#include "Snail/Render/Renderer/Camera/Camera.h"
+//---------------------------------------------
+
+//----------------Event-----------------------
+#include "Snail/Events/Event.h"
+//---------------------------------------------
+
+#include "Snail/Input/Input.h"
+#include "Snail/InputCodes.h"
+
+#include "Snail/Layer/Layer.h"
 
 #include "Snail/Logger/Log.h"
 

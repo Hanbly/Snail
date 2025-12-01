@@ -1,20 +1,10 @@
 ﻿#pragma once
 
-#include "Snail\Layer\Layer.h"
-
-#include "Snail/Render/RenderAPI/VertexArray.h"
-#include "Snail/Render/RenderAPI/Buffer/VertexBuffer.h"
-#include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
-#include "Snail/Render/RenderAPI/Shader.h"
-#include "Snail/Render/Renderer/Renderer.h"
-#include "Snail/Render/Renderer/Camera/Camera.h"
+#include "Snail.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-
-#include <glad/glad.h>
-#include "GLFW/glfw3.h"
 
 class ExampleLayer : public Snail::Layer
 {
@@ -25,6 +15,9 @@ private:
 	std::shared_ptr<Snail::IndexBuffer> m_IndexBuffer;
 	std::shared_ptr<Snail::Shader> m_Shader;
 	std::unique_ptr<Snail::Camera> m_Camera;
+
+	float m_CameraMoveSpeed = 0.01f;
+	float m_CameraRotateSpeed = glm::radians(1.0f);
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
@@ -93,7 +86,26 @@ public:
 	}
 
 	inline void OnUpdate() override {
-		SNL_TRACE("ExampleLayer 调用: OnUpdate()");
+		if (Snail::Input::IsKeyPressed(SNL_KEY_W) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed);
+		}
+		else if (Snail::Input::IsKeyPressed(SNL_KEY_S) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_CameraMoveSpeed);
+		}
+		else {
+			if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::UP, m_CameraMoveSpeed);
+			}
+			else if (Snail::Input::IsKeyPressed(SNL_KEY_S)) {
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_CameraMoveSpeed);
+			}
+			if (Snail::Input::IsKeyPressed(SNL_KEY_A)) {
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_CameraMoveSpeed);
+			}
+			else if (Snail::Input::IsKeyPressed(SNL_KEY_D)) {
+				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed);
+			}
+		}
 
 		// -------------------临时------------------------------------------
 		Snail::Renderer::BeginScene(m_Camera);
@@ -104,31 +116,15 @@ public:
 		glm::mat4 projection = glm::mat4(1.0f);
 
 		// 3. 计算变换 (现在有了头文件，这些函数就能用了)
-		model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		// --- 修改开始：让物体动起来 ---
-		// 获取运行时间（秒）
-		float timeValue = (float)glfwGetTime();
-		// 旋转逻辑：
-		// 1. 每一帧都在 X 轴上稍微倾斜一点 (-55度常数，模拟俯视)
-		// 2. 每一帧都绕 Z 轴持续旋转 (timeValue * 50度/秒)
-		// 注意：旋转顺序很重要（先自转，再倾斜，或者反过来）
-		// 这里我们让它绕着一条斜轴 (1.0, 0.5, 0.0) 持续旋转，这样看得最清楚
-		model = glm::rotate(model, glm::radians(timeValue * 50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		// 观察位置：稍微离远一点，看全貌
-		/*view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));*/
-		m_Camera->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f + timeValue));
-		// --- 修改结束 ---
-		// 
+		model = glm::rotate(model, glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.5f));
 		// 4. 设置 Uniforms 到 Shader
 		// --- 设置 model 矩阵 ---
 		m_Shader->SetUniformMatrix4fv("model", model);
 
-		
 		// 5. 渲染
 		// --- 设置 view 矩阵 ---
 		// --- 设置 projection 矩阵 --- 也在submit实现
 		Snail::Renderer::Submit(m_Shader, m_VertexArray);
-
 
 		Snail::Renderer::EndScene();
 		//----------------------------------------------------------------
