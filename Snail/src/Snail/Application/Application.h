@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Snail/Core.h"
+#include "Snail/Core/Core.h"
 
 #include "Snail/Window/Window.h"
 

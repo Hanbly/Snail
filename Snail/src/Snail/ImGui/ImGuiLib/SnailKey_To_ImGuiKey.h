@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "imgui.h"
-#include "Snail/InputCodes.h"
+#include "Snail/Core/InputCodes.h"
 
 namespace Snail {
 

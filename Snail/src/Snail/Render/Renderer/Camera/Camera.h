@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Snail/Core.h"
+#include "Snail/Core/Core.h"
 
 #include "Snail/Input/Input.h"
 
@@ -11,19 +11,6 @@
 namespace Snail {
 
 	class Camera {
-	private:
-		glm::float32 m_FOV;
-		glm::float32 m_Aspect;
-		glm::float32 m_NearPoint;
-		glm::float32 m_FarPoint;
-
-		glm::vec3 m_Position;
-		glm::vec3 m_Front;
-		glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
-
-		glm::mat4 m_ViewMatrix;
-		glm::mat4 m_ProjectionMatrix;
-
 	public:
 
 		enum class TranslationDirection { // 平移方向
@@ -31,22 +18,47 @@ namespace Snail {
 			UP, LEFT, DOWN, RIGHT, FRONT, BACK
 		};
 
-		Camera(const glm::float32& fov, const glm::float32& aspect, const glm::vec3& position,
-			const glm::float32& np = 0.1f, const glm::float32& fp = 100.0f);
+		Camera(const float& fov, const float& aspect, const glm::vec3& position);
 		~Camera() = default;
 
+		void MoveCamera(const TranslationDirection& dir, const float& length);
+		void RotateCamera(const float& yaw, const float& pitch);
+
+		void RecalculateMatrix();
+	public:
 		inline const glm::vec3& GetPosition() const { return m_Position; }
 		inline const glm::vec3& GetFront() const { return m_Front; }
-
-		void MoveCamera(const TranslationDirection& dir, const float& length);
-		void SetFront(const glm::vec3& deltaFront);
 
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		inline void SetViewMatrix(const glm::mat4& mat4) { m_ViewMatrix = mat4; }
 		inline void SetProjectionMatrix(const glm::mat4& mat4) { m_ProjectionMatrix = mat4; }
 
-		void RecalculateMatrix();
+		inline const float& GetMoveSpeed() const {
+			return m_CameraMoveSpeed;
+		}
+
+	private:
+		float m_CameraMoveSpeed = 5.0f;
+		// 相机属性
+		glm::vec3 m_Position;
+		glm::vec3 m_Front; // 前方向量 (始终指向前方，长度为1)
+		glm::vec3 m_Up;    // 世界坐标的上 (0,1,0)
+		glm::vec3 m_Right; // 右向量
+
+		// 欧拉角 (累积值)
+		float m_Yaw;
+		float m_Pitch;
+
+		// 投影属性
+		float m_FOV;
+		float m_Aspect;
+		float m_Near = 0.1f;
+		float m_Far = 100.0f;
+
+		// 矩阵缓存
+		glm::mat4 m_ViewMatrix;
+		glm::mat4 m_ProjectionMatrix;
 	};
 
 }

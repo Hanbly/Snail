@@ -14,8 +14,10 @@
 #include <string>
 #include <vector>
 
-#include "Snail/InputCodes.h"
-#include "Snail/Timestep.h"
+#include "Snail/Core/InputCodes.h"
+#include "Snail/Core/Timestep.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "Snail/Core/stb_image.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"

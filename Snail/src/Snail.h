@@ -2,8 +2,8 @@
 
 //-------------Core-----------------
 #include "Snail/Input/Input.h"
-#include "Snail/InputCodes.h"
-#include "Snail/Timestep.h"
+#include "Snail/Core/InputCodes.h"
+#include "Snail/Core/Timestep.h"
 
 #include "Snail/Application/Application.h"
 
@@ -25,5 +25,5 @@
 #include "Snail/Logger/Log.h"
 
 // 程序入口 -------------------------
-#include "Snail/EntryPoint.h"
+#include "Snail/Core/EntryPoint.h"
 //----------------------------------

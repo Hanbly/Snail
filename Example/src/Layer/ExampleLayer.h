@@ -16,8 +16,10 @@ private:
 	std::shared_ptr<Snail::Shader> m_Shader;
 	std::unique_ptr<Snail::Camera> m_Camera;
 
-	float m_CameraMoveSpeed = 5.0f;
-	float m_CameraRotateSpeed = glm::radians(1.0f);
+	float m_LastMouseX;
+	float m_LastMouseY;
+	bool  m_FirstMouse = true; // 第一帧标志位
+	float m_MouseSensitivity = 0.1f; // 灵敏度
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
@@ -87,25 +89,23 @@ public:
 
 	inline void OnUpdate(const Snail::Timestep& ts) override {
 		const float& time = ts.GetSeconds();
-		if (Snail::Input::IsKeyPressed(SNL_KEY_W) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
-			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed * time);
+		if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_Camera->GetMoveSpeed() * time);
 		}
-		else if (Snail::Input::IsKeyPressed(SNL_KEY_S) && Snail::Input::IsKeyPressed(SNL_KEY_SPACE)) {
-			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_CameraMoveSpeed * time);
+		else if (Snail::Input::IsKeyPressed(SNL_KEY_S)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_Camera->GetMoveSpeed() * time);
 		}
-		else {
-			if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::UP, m_CameraMoveSpeed * time);
-			}
-			else if (Snail::Input::IsKeyPressed(SNL_KEY_S)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_CameraMoveSpeed * time);
-			}
-			if (Snail::Input::IsKeyPressed(SNL_KEY_A)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_CameraMoveSpeed * time);
-			}
-			else if (Snail::Input::IsKeyPressed(SNL_KEY_D)) {
-				m_Camera->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed * time);
-			}
+		if (Snail::Input::IsKeyPressed(SNL_KEY_E)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::UP, m_Camera->GetMoveSpeed() * time);
+		}
+		else if (Snail::Input::IsKeyPressed(SNL_KEY_Q)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_Camera->GetMoveSpeed() * time);
+		}
+		if (Snail::Input::IsKeyPressed(SNL_KEY_A)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_Camera->GetMoveSpeed() * time);
+		}
+		else if (Snail::Input::IsKeyPressed(SNL_KEY_D)) {
+			m_Camera->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_Camera->GetMoveSpeed() * time);
 		}
 
 		// -------------------临时------------------------------------------
@@ -133,6 +133,29 @@ public:
 
 	inline void OnEvent(Snail::Event& e) {
 		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
+		Snail::EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<Snail::MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(ExampleLayer::OnMouseMoveEvent));
+	}
+
+	inline bool OnMouseMoveEvent(Snail::MouseMoveEvent& e) {
+		if (m_FirstMouse) {
+			m_LastMouseX = e.GetMouseX();
+			m_LastMouseY = e.GetMouseY();
+			m_FirstMouse = false;
+			return false;
+		}
+		float xoffset = e.GetMouseX() - m_LastMouseX;
+		float yoffset = m_LastMouseY - e.GetMouseY();
+		m_LastMouseX = e.GetMouseX();
+		m_LastMouseY = e.GetMouseY();
+
+		xoffset *= m_MouseSensitivity;
+		yoffset *= m_MouseSensitivity;
+
+		if (Snail::Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
+			m_Camera->RotateCamera(xoffset, yoffset);
+		}
+		return false;
 	}
 
 	inline void OnRender() override {
