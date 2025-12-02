@@ -15,6 +15,8 @@ private:
 	std::shared_ptr<Snail::IndexBuffer> m_IndexBuffer;
 	std::shared_ptr<Snail::Shader> m_Shader;
 	std::unique_ptr<Snail::PerspectiveCameraController> m_CameraController;
+	glm::vec4 u_DeltaColor = {0.8f, 0.8f, 0.8f, 1.0f};
+	//------------------------------------------------------------------
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
@@ -100,6 +102,7 @@ public:
 				glm::rotate(glm::mat4(1.0f), glm::radians(i * 50.0f), glm::vec3(i * 0.5f, i * 1.0f, i * 0.5f)) * 
 				glm::scale(glm::mat4(1.0f), glm::vec3(i * 0.05, i * 0.05, i * 0.05));
 			Snail::Renderer::Submit(m_Shader, m_VertexArray, model);
+			m_Shader->SetUniform4f("u_Color", u_DeltaColor);
 		}
 
 		Snail::Renderer::EndScene();
@@ -113,7 +116,15 @@ public:
 
 	inline void OnRender() override {
 		//SNL_TRACE("ExampleLayer 调用: OnRender()");
+		OnImGuiRender();
+	}
 
+	inline void OnImGuiRender() {
+		ImGui::Begin("Settings");
+
+		ImGui::ColorEdit4("cubes_color", glm::value_ptr(u_DeltaColor));
+
+		ImGui::End();
 	}
 };
 

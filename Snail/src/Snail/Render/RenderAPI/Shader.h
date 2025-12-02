@@ -22,7 +22,7 @@ namespace Snail {
 
 		virtual uint32_t GetRendererId() const = 0;
 
-		virtual void SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3) const = 0;
+		virtual void SetUniform4f(const std::string& name, const glm::vec4& value) const = 0;
 		virtual void SetUniform1i(const std::string& name, const int& value) const = 0;
 		virtual void SetUniformMatrix4fv(const std::string& name, const glm::mat4& mat4) const = 0;
 

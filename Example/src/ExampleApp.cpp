@@ -8,8 +8,7 @@ public:
 	Example() {
 		this->PushNorLayer(new ExampleLayer("example层", true));
 	}
-	~Example() {}
-
+	~Example() = default;
 };
 
 Snail::Application* Snail::CreateApplication()

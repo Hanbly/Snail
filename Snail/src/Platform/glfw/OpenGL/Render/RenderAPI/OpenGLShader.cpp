@@ -46,11 +46,11 @@ namespace Snail {
 		glDeleteProgram(m_RendererId);
 	}
 
-	void OpenGLShader::SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3) const
+	void OpenGLShader::SetUniform4f(const std::string& name, const glm::vec4& value) const
 	{
 		this->Bind();
 		int location = GetUniformLocation(name);
-		glUniform4f(location, v0, v1, v2, v3);
+		glUniform4f(location, value.r, value.g, value.b, value.a);
 	}
 
 	void OpenGLShader::SetUniform1i(const std::string& name, const int& value) const

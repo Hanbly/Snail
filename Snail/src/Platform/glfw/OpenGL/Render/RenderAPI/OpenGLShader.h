@@ -18,7 +18,7 @@ namespace Snail {
 			return m_RendererId;
 		}
 
-		virtual void SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3) const override;
+		virtual void SetUniform4f(const std::string& name, const glm::vec4& value) const override;
 		virtual void SetUniform1i(const std::string& name, const int& value) const override;
 		virtual void SetUniformMatrix4fv(const std::string& name, const glm::mat4& mat4) const override;
 

@@ -59,11 +59,11 @@ namespace Snail {
 		}
 
 		// 层栈的渲染处理，由底层至顶层
-		//m_ImGuiLayer->BeginImGui();
+		m_ImGuiLayer->BeginImGui();
 		for (Layer* layer : m_LayerStack) {
 			layer->OnRender();
 		}
-		//m_ImGuiLayer->EndImGui();
+		m_ImGuiLayer->EndImGui();
 
 		// 窗口的（事件等）
 		// 轮询事件 & 交换缓冲区
