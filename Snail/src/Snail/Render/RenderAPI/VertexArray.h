@@ -19,7 +19,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static std::shared_ptr<VertexArray> CreateVertexArray();
+		static std::shared_ptr<VertexArray> Create();
 	};
 
 }

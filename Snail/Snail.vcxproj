@@ -164,6 +164,7 @@
     <ClInclude Include="src\Snail\Core\stb_image.h" />
     <ClInclude Include="src\Snail\Core\Timestep.h" />
     <ClInclude Include="src\Snail\Render\Renderer\Camera\Camera.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp" />
     <ClCompile Include="src\Snail\Render\Renderer\Camera\Camera.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

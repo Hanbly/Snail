@@ -70,7 +70,7 @@ namespace Snail {
 		virtual std::vector<VertexElement>& GetLayoutElements() = 0;
 		virtual uint32_t GetLayoutSize() const = 0;
 
-		static std::shared_ptr<BufferLayout> CreateBufferLayout(const std::initializer_list<VertexElement>& elements);
+		static std::shared_ptr<BufferLayout> Create(const std::initializer_list<VertexElement>& elements);
 	};
 
 }

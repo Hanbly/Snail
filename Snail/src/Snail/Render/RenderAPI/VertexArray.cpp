@@ -7,7 +7,7 @@
 
 namespace Snail {
 
-	std::shared_ptr<VertexArray> VertexArray::CreateVertexArray() {
+	std::shared_ptr<VertexArray> VertexArray::Create() {
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
 		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLVertexArray>();

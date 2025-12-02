@@ -16,7 +16,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static std::shared_ptr<VertexBuffer> CreateVertexBuffer(float* vertices, uint32_t size);
+		static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 }

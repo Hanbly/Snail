@@ -29,7 +29,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static std::shared_ptr<Shader> CreateShader(const std::string& filePath);
+		static std::shared_ptr<Shader> Create(const std::string& filePath);
 
 	private:
 		virtual ShaderProgramSource LoadShaderSource(const std::string& filePath) const = 0;

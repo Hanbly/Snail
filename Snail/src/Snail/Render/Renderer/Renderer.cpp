@@ -16,11 +16,12 @@ namespace Snail {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& model)
 	{
 		vertexArray->Bind();
 		shader->Bind();
 
+		shader->SetUniformMatrix4fv("model", model);
 		shader->SetUniformMatrix4fv("view", Renderer::m_SceneData.viewMatrix);
 		shader->SetUniformMatrix4fv("projection", Renderer::m_SceneData.projectionMatrix);
 

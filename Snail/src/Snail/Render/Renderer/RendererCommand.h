@@ -44,7 +44,7 @@ namespace Snail {
 			RC->DrawIndexedImpl(vertexArray);
 		}
 
-		static std::unique_ptr<RendererCommand> CreateRendererCommand();
+		static std::unique_ptr<RendererCommand> Create();
 
 		friend class Renderer;
 	};

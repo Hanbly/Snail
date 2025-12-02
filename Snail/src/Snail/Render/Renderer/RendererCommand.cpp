@@ -7,9 +7,9 @@ namespace Snail {
 
 	RendererCommand::API RendererCommand::s_API = RendererCommand::API::OpenGL;
 
-	std::unique_ptr<RendererCommand> RendererCommand::RC = RendererCommand::CreateRendererCommand();
+	std::unique_ptr<RendererCommand> RendererCommand::RC = RendererCommand::Create();
 
-	std::unique_ptr<RendererCommand> RendererCommand::CreateRendererCommand()
+	std::unique_ptr<RendererCommand> RendererCommand::Create()
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "Renderer: 取无效值 None!"); return nullptr;

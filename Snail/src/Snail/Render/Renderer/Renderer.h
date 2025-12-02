@@ -28,7 +28,7 @@ namespace Snail {
 
 		static void BeginScene(const std::unique_ptr<Snail::Camera>& camera);
 		static void EndScene();
-		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& model = glm::mat4(1.0f));
 	};
 
 }

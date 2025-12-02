@@ -7,7 +7,7 @@
 
 namespace Snail {
 
-	std::shared_ptr<BufferLayout> BufferLayout::CreateBufferLayout(const std::initializer_list<VertexElement>& elements)
+	std::shared_ptr<BufferLayout> BufferLayout::Create(const std::initializer_list<VertexElement>& elements)
 	{
 		switch (RendererCommand::GetAPI()) {
 			case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;

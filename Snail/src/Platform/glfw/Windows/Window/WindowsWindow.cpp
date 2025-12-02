@@ -44,7 +44,7 @@ namespace Snail {
         m_Window = glfwCreateWindow(iWidth, iHeight, iTitle.c_str(), nullptr, nullptr);
         
         // 初始化图形API的渲染上下文
-        m_RenderContext = RenderContext::CreateRenderContext(m_Window);
+        m_RenderContext = RenderContext::Create(m_Window);
         m_RenderContext->InitContext();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);

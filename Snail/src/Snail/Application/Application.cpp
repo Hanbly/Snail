@@ -13,7 +13,7 @@ namespace Snail {
 		SNL_CORE_ASSERT(!s_Instance, "Application: 无法创建多个应用实例!");
 		this->s_Instance = this;
 
-		m_AppWindow = std::unique_ptr<Window>(Window::SNLCreateWindow());
+		m_AppWindow = Window::Create();
 		SNL_CORE_ASSERT(m_AppWindow, "Application: 创建窗口成员失败!");
 		m_Running = true;
 

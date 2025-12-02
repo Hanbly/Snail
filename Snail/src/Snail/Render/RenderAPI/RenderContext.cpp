@@ -7,7 +7,7 @@
 
 namespace Snail {
 
-	std::unique_ptr<RenderContext> RenderContext::CreateRenderContext(void* windowHandle)
+	std::unique_ptr<RenderContext> RenderContext::Create(void* windowHandle)
 	{
 		switch (RendererCommand::GetAPI()) {
 			case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;

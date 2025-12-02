@@ -11,6 +11,7 @@
 namespace Snail {
 
 	class Camera {
+		friend class PerspectiveCameraController;
 	public:
 
 		enum class TranslationDirection { // 平移方向
@@ -20,31 +21,17 @@ namespace Snail {
 
 		Camera(const float& fov, const float& aspect, const glm::vec3& position);
 		~Camera() = default;
-
-		void MoveCamera(const TranslationDirection& dir, const float& length);
-		void RotateCamera(const float& yaw, const float& pitch);
-
-		void RecalculateMatrix();
 	public:
-		inline const glm::vec3& GetPosition() const { return m_Position; }
-		inline const glm::vec3& GetFront() const { return m_Front; }
-
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
-		inline void SetViewMatrix(const glm::mat4& mat4) { m_ViewMatrix = mat4; }
-		inline void SetProjectionMatrix(const glm::mat4& mat4) { m_ProjectionMatrix = mat4; }
-
-		inline const float& GetMoveSpeed() const {
-			return m_CameraMoveSpeed;
-		}
 
 	private:
-		float m_CameraMoveSpeed = 5.0f;
 		// 相机属性
 		glm::vec3 m_Position;
-		glm::vec3 m_Front; // 前方向量 (始终指向前方，长度为1)
-		glm::vec3 m_Up;    // 世界坐标的上 (0,1,0)
-		glm::vec3 m_Right; // 右向量
+		glm::vec3 m_Front;		// 前方向量 (始终指向前方，长度为1)
+		glm::vec3 m_Up;    
+		glm::vec3 m_WorldUp;	// 世界坐标的上 (0,1,0)
+		glm::vec3 m_Right;		// 右向量
 
 		// 欧拉角 (累积值)
 		float m_Yaw;

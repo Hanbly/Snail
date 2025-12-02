@@ -13,7 +13,7 @@
 #include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
 #include "Snail/Render/RenderAPI/Shader.h"
 #include "Snail/Render/Renderer/Renderer.h"
-#include "Snail/Render/Renderer/Camera/Camera.h"
+#include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"
 //---------------------------------------------
 
 //----------------Event-----------------------

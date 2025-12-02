@@ -7,7 +7,7 @@
 
 namespace Snail {
 
-	std::shared_ptr<VertexBuffer> VertexBuffer::CreateVertexBuffer(float* vertices, uint32_t size)
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (RendererCommand::GetAPI()) {
 			case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;

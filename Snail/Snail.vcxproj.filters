@@ -185,6 +185,7 @@
     <ClInclude Include="src\Snail\Core\InputCodes.h" />
     <ClInclude Include="src\Snail\Core\stb_image.h" />
     <ClInclude Include="src\Snail\Core\Timestep.h" />
+    <ClInclude Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">
@@ -264,5 +265,6 @@
       <Filter>Snail\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\Snail\Render\Renderer\Camera\Camera.cpp" />
+    <ClCompile Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.cpp" />
   </ItemGroup>
 </Project>
