@@ -4,152 +4,213 @@
 
 namespace Snail {
 
-	OpenGLShader::OpenGLShader(const std::string& filePath)
-		: m_RendererId(0)
-	{
-		ShaderProgramSource basicShader = LoadShaderSource(filePath);
+    static GLenum ShaderTypeFromString(const std::string& type)
+    {
+        if (type == "vertex") return GL_VERTEX_SHADER;
+        if (type == "fragment" || type == "pixel") return GL_FRAGMENT_SHADER;
+        SNL_CORE_ASSERT(false, "Unknown shader type!");
+        return 0;
+    }
 
-		unsigned int program = glCreateProgram();
+    OpenGLShader::OpenGLShader(const std::string& filepath)
+        : m_FilePath(filepath)
+    {
+        // 1. 读取文件
+        std::string source = ReadFile(filepath);
+        // 2. 预处理分割
+        auto shaderSources = PreProcess(source);
+        // 3. 编译
+        Compile(shaderSources);
 
-		unsigned int vshader = CompileShader(GL_VERTEX_SHADER, basicShader.VertexShader);
-		unsigned int fshader = CompileShader(GL_FRAGMENT_SHADER, basicShader.FragmentShader);
+        // 从路径提取名字 (例如 assets/shaders/Texture.glsl -> Texture)
+        std::filesystem::path path = filepath; 
+        m_Name = path.stem().string(); // Returns the file's name stripped of the extensi
+    }
 
-		glAttachShader(program, vshader);
-		glAttachShader(program, fshader);
-		glLinkProgram(program);
-		glValidateProgram(program);
+    OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+        : m_Name(name)
+    {
+        std::unordered_map<GLenum, std::string> sources;
+        sources[GL_VERTEX_SHADER] = vertexSrc;
+        sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+        Compile(sources);
+    }
 
-		int result;
-		glGetProgramiv(program, GL_LINK_STATUS, &result);
-		if (result == GL_FALSE) {
-			int length;
-			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
-			
-			std::vector<char> message(length);
-			glGetProgramInfoLog(program, length, &length, &message[0]);
-			SNL_CORE_ERROR("链接着色器程序失败! Error: ");
-			SNL_CORE_ERROR("{0}", message.data());
-			SNL_CORE_ASSERT(false, "");
+    OpenGLShader::~OpenGLShader()
+    {
+        glDeleteProgram(m_RendererID);
+    }
 
-			glDeleteProgram(program);
-			return;
-		}
+    std::string OpenGLShader::ReadFile(const std::string& filepath)
+    {
+        std::string result;
+        std::ifstream in(filepath, std::ios::in | std::ios::binary);
+        if (in)
+        {
+            in.seekg(0, std::ios::end);
+            size_t size = in.tellg();
+            if (size != -1)
+            {
+                result.resize(size);
+                in.seekg(0, std::ios::beg);
+                in.read(&result[0], size);
+            }
+            else {
+                SNL_CORE_ERROR("无法读取文件 '{0}'", filepath);
+            }
+        }
+        else {
+            SNL_CORE_ERROR("无法打开文件 '{0}'", filepath);
+        }
+        return result;
+    }
 
-		glDeleteShader(vshader);
-		glDeleteShader(fshader);
+    // --- 借用 Hazel 的解析逻辑，非常标准 ---
+    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+    {
+        std::unordered_map<GLenum, std::string> shaderSources;
 
-		m_RendererId = program;
-	}
+        const char* typeToken = "#type";
+        size_t typeTokenLength = strlen(typeToken);
+        size_t pos = source.find(typeToken, 0);
+        while (pos != std::string::npos)
+        {
+            size_t eol = source.find_first_of("\r\n", pos);
+            SNL_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+            size_t begin = pos + typeTokenLength + 1;
+            std::string type = source.substr(begin, eol - begin);
+            SNL_CORE_ASSERT(ShaderTypeFromString(type), "不可用的shader类型");
 
-	OpenGLShader::~OpenGLShader()
-	{
-		glDeleteProgram(m_RendererId);
-	}
+            size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+            SNL_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+            pos = source.find(typeToken, nextLinePos);
 
-	void OpenGLShader::SetUniform1f(const std::string& name, const float& value) const
-	{
-		this->Bind();
-		int location = GetUniformLocation(name);
-		glUniform1f(location, value);
-	}
+            shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+        }
+        return shaderSources;
+    }
 
-	void OpenGLShader::SetUniform4f(const std::string& name, const glm::vec4& value) const
-	{
-		this->Bind();
-		int location = GetUniformLocation(name);
-		glUniform4f(location, value.r, value.g, value.b, value.a);
-	}
+    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
+    {
+        GLuint program = glCreateProgram();
+        // 因为可能有多于2个着色器(比如Geometry Shader)，用vector存一下ID方便后面删除
+        std::vector<GLenum> glShaderIDs;
+        glShaderIDs.reserve(shaderSources.size());
 
-	void OpenGLShader::SetUniform1i(const std::string& name, const int& value) const
-	{
-		this->Bind();
-		int location = GetUniformLocation(name);
-		glUniform1i(location, value);
-	}
+        for (auto& kv : shaderSources)
+        {
+            GLenum type = kv.first;
+            const std::string& source = kv.second;
 
-	void OpenGLShader::SetUniformMatrix4fv(const std::string& name, const glm::mat4& mat4) const
-	{
-		this->Bind();
-		int location = GetUniformLocation(name);
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat4));
-	}
+            GLuint shader = glCreateShader(type);
 
-	void OpenGLShader::Bind() const
-	{
-		glUseProgram(m_RendererId);
-	}
+            const GLchar* sourceCStr = source.c_str();
+            glShaderSource(shader, 1, &sourceCStr, 0);
+            glCompileShader(shader);
 
-	void OpenGLShader::Unbind() const
-	{
-		glUseProgram(0);
-	}
+            GLint isCompiled = 0;
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+            if (isCompiled == GL_FALSE)
+            {
+                GLint maxLength = 0;
+                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 
-	ShaderProgramSource OpenGLShader::LoadShaderSource(const std::string& filePath) const
-	{
-		std::ifstream stream(filePath);
+                std::vector<GLchar> infoLog(maxLength);
+                glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
 
-		std::string line;
-		std::stringstream result[2];
-		ShaderType currentShaderType = ShaderType::UNKNOWN;
+                glDeleteShader(shader); // 失败了要清理
 
-		while (std::getline(stream, line)) {
-			if (line.find("#SHADER") != std::string::npos) {
-				if (line.find("vertex") != std::string::npos) {
-					currentShaderType = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos) {
-					currentShaderType = ShaderType::FRAGMENT;
-				}
-			}
-			else {
-				if (currentShaderType != ShaderType::UNKNOWN)
-					result[(int)currentShaderType] << line << "\n";
-			}
-		}
-		return { result[(int)ShaderType::VERTEX].str(), result[(int)ShaderType::FRAGMENT].str() };
-	}
+                SNL_CORE_ERROR("{0}", infoLog.data());
+                SNL_CORE_ASSERT(false, "Shader compilation failure!");
+                break;
+            }
 
-	uint32_t OpenGLShader::CompileShader(const uint32_t& shaderType, const std::string& shaderSource) const
-	{
-		uint32_t shaderId = glCreateShader(shaderType);
-		const char* srcPtr = shaderSource.c_str();
+            glAttachShader(program, shader);
+            glShaderIDs.push_back(shader);
+        }
 
-		glShaderSource(shaderId, 1, &srcPtr, nullptr);
-		glCompileShader(shaderId);
+        // Link Program
+        glLinkProgram(program);
 
-		int result;
-		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
-		if (result == GL_FALSE) {
-			int length;
-			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
-			
-			std::vector<char> message(length);
-			glGetShaderInfoLog(shaderId, length, &length, &message[0]);
-			SNL_CORE_ERROR(" 编译着色器 [", 
-				(shaderType == GL_VERTEX_SHADER ? "vertex" : shaderType == GL_FRAGMENT_SHADER ? "fragment" : "unknown"),
-				"] 失败! Error : ");
-			SNL_CORE_ERROR(message.data());
-			SNL_CORE_ASSERT(false, "");
+        GLint isLinked = 0;
+        glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+        if (isLinked == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+            std::vector<GLchar> infoLog(maxLength);
+            glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
-			glDeleteShader(shaderId);
-			return 0;
-		}
+            glDeleteProgram(program);
+            for (auto id : glShaderIDs) glDeleteShader(id);
 
-		return shaderId;
-	}
+            SNL_CORE_ERROR("{0}", infoLog.data());
+            SNL_CORE_ASSERT(false, "Shader link failure!");
+            return;
+        }
 
-	int OpenGLShader::GetUniformLocation(const std::string& name) const
-	{
-		if (m_UniformNameMap.find(name) != m_UniformNameMap.end()) {
-			return m_UniformNameMap[name];
-		}
-		int location = glGetUniformLocation(m_RendererId, name.c_str());
-		if (location == -1) {
-			SNL_CORE_ASSERT(false, "Uniform Location does not EXIST !");
-		} else {
-			m_UniformNameMap.insert({ name, location });
-		}
-		return location;
-	}
+        // Detach and delete shaders after linking
+        for (auto id : glShaderIDs)
+        {
+            glDetachShader(program, id);
+            glDeleteShader(id);
+        }
+
+        m_RendererID = program;
+    }
+
+    void OpenGLShader::Bind() const
+    {
+        glUseProgram(m_RendererID);
+    }
+
+    void OpenGLShader::Unbind() const
+    {
+        glUseProgram(0);
+    }
+
+    // --- Uniform Set 设置 ---
+
+    void OpenGLShader::SetInt(const std::string& name, int value)
+    {
+        glUniform1i(GetUniformLocation(name), value);
+    }
+    void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        glUniform1iv(GetUniformLocation(name), count, values);
+    }
+    void OpenGLShader::SetFloat(const std::string& name, float value)
+    {
+        glUniform1f(GetUniformLocation(name), value);
+    }
+    void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
+    {
+        glUniform2f(GetUniformLocation(name), value.x, value.y);
+    }
+    void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
+    {
+        glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
+    }
+    void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
+    {
+        glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
+    }
+    void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+    {
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+    }
+
+    GLint OpenGLShader::GetUniformLocation(const std::string& name) const
+    {
+        if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
+            return m_UniformLocationCache[name];
+
+        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        if (location == -1)
+            SNL_CORE_WARN("Warning: Uniform '{0}' 不存在!", name);
+
+        m_UniformLocationCache[name] = location;
+        return location;
+    }
 
 }

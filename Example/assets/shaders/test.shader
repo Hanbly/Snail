@@ -1,4 +1,4 @@
-﻿#SHADER vertex
+﻿#type vertex
 #version 330 core
 
 // 只有位置输入了
@@ -19,7 +19,7 @@ void main()
     v_texture1_coords = texture1_coords;
 }
 
-#SHADER fragment
+#type fragment
 #version 330 core
 
 layout(location = 0) out vec4 FinalColor; // 最终输出到屏幕
@@ -42,7 +42,7 @@ void main()
 
     // 方式 A: 线性插值 (Linear Interpolation)
     // 效果：像两张幻灯片叠在一起，u_MixValue 决定透明度
-    vec4 mixedTexture = mix(tex1, tex2, u_MixValue); 
+    vec4 mixedTexture = mix(tex1, tex2, u_MixValue);
 
     // 方式 B: 乘法 (Multiplication)
     // 效果：像是在纹理1上画了纹理2（通常用于光照贴图或细节叠加）

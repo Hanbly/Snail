@@ -113,10 +113,10 @@ public:
 
 		// 5. 渲染
 		// 设置uniform
-		m_Shader->SetUniform4f("u_Color", u_DeltaColor);
-		m_Shader->SetUniform1i("u_Texture1", 0);
-		m_Shader->SetUniform1i("u_Texture2", 1);
-		m_Shader->SetUniform1f("u_MixValue", u_MixValue);
+		m_Shader->SetFloat4("u_Color", u_DeltaColor);
+		m_Shader->SetInt("u_Texture1", 0);
+		m_Shader->SetInt("u_Texture2", 1);
+		m_Shader->SetFloat("u_MixValue", u_MixValue);
 		
 		// --- 设置 model 矩阵 ---
 		// --- 设置 view 矩阵 ---

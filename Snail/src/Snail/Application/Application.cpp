@@ -2,6 +2,7 @@
 
 #include "Application.h"
 
+#include "Snail/Render/Renderer/Renderer.h"
 #include "Snail/Render/Renderer/RendererCommand.h"
 
 namespace Snail {
@@ -19,6 +20,8 @@ namespace Snail {
 
 		// 将OnEvent绑定到 Window 的派生类 维护的函数指针 eventCallbackFn 之上
 		m_AppWindow->SetEventCallback(BIND_NSTATIC_MEMBER_Fn(Application::OnEvent));
+
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		this->PushOverLayer(m_ImGuiLayer);
@@ -100,8 +103,6 @@ namespace Snail {
 
 			RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RendererCommand::Clear();
-
-			RendererCommand::EnableDepthTest();
 
 			this->OnUpdate();
 		}

@@ -26,13 +26,13 @@ namespace Snail {
 	private: //-------------------------Commands-------------------------------------
 		static Uniptr<RendererCommand> RC;
 
-		virtual void EnableDepthTestImpl() const = 0;
+		virtual void InitImpl() = 0;
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const = 0;
 		virtual void ClearImpl() const = 0;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const = 0;
 	public:
-		inline static void EnableDepthTest() {
-			RC->EnableDepthTestImpl();
+		inline static void Init() {
+			RC->InitImpl();
 		}
 		inline static void ClearColor(const glm::vec4& color_RGBA) {
 			RC->ClearColorImpl(color_RGBA);
@@ -45,8 +45,6 @@ namespace Snail {
 		}
 
 		static Uniptr<RendererCommand> Create();
-
-		friend class Renderer;
 	};
 
 }

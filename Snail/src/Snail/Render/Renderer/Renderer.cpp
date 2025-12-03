@@ -6,6 +6,11 @@ namespace Snail {
 
 	Renderer::RendererSceneData Renderer::m_SceneData = Renderer::RendererSceneData();
 
+	void Renderer::Init()
+	{
+		RendererCommand::Init();
+	}
+
 	void Renderer::BeginScene(const Uniptr<Snail::Camera>& camera)
 	{
 		m_SceneData.viewMatrix = camera->GetViewMatrix();
@@ -21,11 +26,11 @@ namespace Snail {
 		vertexArray->Bind();
 		shader->Bind();
 
-		shader->SetUniformMatrix4fv("model", model);
-		shader->SetUniformMatrix4fv("view", Renderer::m_SceneData.viewMatrix);
-		shader->SetUniformMatrix4fv("projection", Renderer::m_SceneData.projectionMatrix);
+		shader->SetMat4("model", model);
+		shader->SetMat4("view", Renderer::m_SceneData.viewMatrix);
+		shader->SetMat4("projection", Renderer::m_SceneData.projectionMatrix);
 
-		RendererCommand::RC->DrawIndexed(vertexArray);
+		RendererCommand::DrawIndexed(vertexArray);
 	}
 
 }

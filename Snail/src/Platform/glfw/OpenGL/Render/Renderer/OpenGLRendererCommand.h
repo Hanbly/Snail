@@ -12,7 +12,7 @@ namespace Snail {
 		OpenGLRendererCommand() = default;
 		~OpenGLRendererCommand() = default;
 
-		virtual void EnableDepthTestImpl() const override;
+		virtual void InitImpl() override;
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const override;
 		virtual void ClearImpl() const override;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const override;

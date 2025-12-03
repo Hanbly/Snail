@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Snail/Core/Core.h"
 
@@ -6,30 +6,46 @@
 
 namespace Snail {
 
-	class OpenGLShader : public Shader {
-	private:
-		uint32_t m_RendererId;
-		mutable std::unordered_map<std::string, int> m_UniformNameMap;
-	public:
-		OpenGLShader(const std::string& filePath);
-		~OpenGLShader();
+    class OpenGLShader : public Shader
+    {
+    public:
+        // 构造函数：读取文件并编译
+        OpenGLShader(const std::string& filepath);
+        // 构造函数：直接传入源码（调试用）
+        OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+        ~OpenGLShader();
 
-		inline virtual uint32_t GetRendererId() const override {
-			return m_RendererId;
-		}
+        inline virtual uint32_t GetRendererId() const override { return m_RendererID; }
+        inline virtual const std::string& GetName() const override { return m_Name; }
 
-		virtual void SetUniform1f(const std::string& name, const float& value) const override;
-		virtual void SetUniform4f(const std::string& name, const glm::vec4& value) const override;
-		virtual void SetUniform1i(const std::string& name, const int& value) const override;
-		virtual void SetUniformMatrix4fv(const std::string& name, const glm::mat4& mat4) const override;
+        void Bind() const;
+        void Unbind() const;
 
-		virtual void Bind() const override;
-		virtual void Unbind() const override;
+        // --- Uniform 设置工具 (向 Hazel 看齐，名字更短更好用) ---
+        virtual void SetInt(const std::string& name, int value) override;
+        virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
+        virtual void SetFloat(const std::string& name, float value) override;
+        virtual void SetFloat2(const std::string& name, const glm::vec2& value) override;
+        virtual void SetFloat3(const std::string& name, const glm::vec3& value) override;
+        virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
+        virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 
-	private:
-		virtual ShaderProgramSource LoadShaderSource(const std::string& filePath) const override;
-		virtual uint32_t CompileShader(const uint32_t& shaderType, const std::string& shaderSource) const override;
-		virtual int GetUniformLocation(const std::string& name) const override;
-	};
+    private:
+        // 读取文件内容
+        virtual std::string ReadFile(const std::string& filepath) override;
+        // 分割源码
+        virtual std::unordered_map<GLenum, std::string> PreProcess(const std::string& source) override;
+        // 编译核心
+        virtual void Compile(const std::unordered_map<GLenum, std::string>& shaderSources) override;
+        // 获取 Uniform 位置 (带缓存)
+        virtual GLint GetUniformLocation(const std::string& name) const override;
 
+    private:
+        uint32_t m_RendererID;
+        std::string m_FilePath;
+        std::string m_Name;
+
+        // 缓存 Uniform 位置，避免每帧重复查询 OpenGL
+        mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
+    };
 }

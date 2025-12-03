@@ -4,9 +4,12 @@
 
 namespace Snail {
 
-	void OpenGLRendererCommand::EnableDepthTestImpl() const
+	void OpenGLRendererCommand::InitImpl()
 	{
 		glEnable(GL_DEPTH_TEST);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void OpenGLRendererCommand::ClearColorImpl(const glm::vec4& color_RGBA) const
