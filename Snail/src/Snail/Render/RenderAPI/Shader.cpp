@@ -8,7 +8,7 @@
 
 namespace Snail {
 
-	std::shared_ptr<Shader> Shader::Create(const std::string& filePath)
+	Refptr<Shader> Shader::Create(const std::string& filePath)
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;

@@ -7,7 +7,7 @@
 
 namespace Snail {
 
-	std::shared_ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	Refptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (RendererCommand::GetAPI()) {
 			case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;

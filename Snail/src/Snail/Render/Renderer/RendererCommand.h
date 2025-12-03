@@ -24,12 +24,12 @@ namespace Snail {
 	private:
 		static API s_API;
 	private: //-------------------------Commands-------------------------------------
-		static std::unique_ptr<RendererCommand> RC;
+		static Uniptr<RendererCommand> RC;
 
 		virtual void EnableDepthTestImpl() const = 0;
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const = 0;
 		virtual void ClearImpl() const = 0;
-		virtual void DrawIndexedImpl(const std::shared_ptr<VertexArray>& vertexArray) const = 0;
+		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const = 0;
 	public:
 		inline static void EnableDepthTest() {
 			RC->EnableDepthTestImpl();
@@ -40,11 +40,11 @@ namespace Snail {
 		inline static void Clear() {
 			RC->ClearImpl();
 		}
-		inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) {
+		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) {
 			RC->DrawIndexedImpl(vertexArray);
 		}
 
-		static std::unique_ptr<RendererCommand> Create();
+		static Uniptr<RendererCommand> Create();
 
 		friend class Renderer;
 	};

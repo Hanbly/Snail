@@ -33,3 +33,13 @@
 #endif
 
 #define BIND_NSTATIC_MEMBER_Fn(x) std::bind(&x, this, std::placeholders::_1)
+
+namespace Snail {
+
+	template<typename T>
+	using Refptr = std::shared_ptr<T>;
+
+	template<typename T>
+	using Uniptr = std::unique_ptr<T>;
+
+}

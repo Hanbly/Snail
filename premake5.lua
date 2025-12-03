@@ -24,6 +24,7 @@ IncludeDirs["GLAD"] = "Snail/vendor/GLAD/include"
 IncludeDirs["GLM"] = "Snail/vendor/GLM"
 IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
+IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
 
 -- 引入GLFW项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是GLFW项目的premake5.lua文件
@@ -47,7 +48,9 @@ project "Snail"
 
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/stb_image/**.h",
+        "%{prj.name}/vendor/stb_image/**.cpp"
     }
 
     includedirs {
@@ -56,6 +59,7 @@ project "Snail"
         "%{IncludeDirs.GLM}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
+        "%{IncludeDirs.stb_image}",
         "%{prj.name}/src"
     }
 

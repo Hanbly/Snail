@@ -9,7 +9,7 @@ namespace Snail {
 	class SNAIL_API WindowsWindow : public Window {
 	private:
 		GLFWwindow* m_Window;
-		std::unique_ptr<RenderContext> m_RenderContext;
+		Uniptr<RenderContext> m_RenderContext;
 		WindowData m_Data;
 	private:
 		virtual void InitWindow(const WindowProps& props);

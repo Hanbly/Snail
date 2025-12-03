@@ -46,6 +46,13 @@ namespace Snail {
 		glDeleteProgram(m_RendererId);
 	}
 
+	void OpenGLShader::SetUniform1f(const std::string& name, const float& value) const
+	{
+		this->Bind();
+		int location = GetUniformLocation(name);
+		glUniform1f(location, value);
+	}
+
 	void OpenGLShader::SetUniform4f(const std::string& name, const glm::vec4& value) const
 	{
 		this->Bind();
@@ -117,7 +124,7 @@ namespace Snail {
 			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
 			
 			std::vector<char> message(length);
-			glGetProgramInfoLog(shaderId, length, &length, &message[0]);
+			glGetShaderInfoLog(shaderId, length, &length, &message[0]);
 			SNL_CORE_ERROR(" 编译着色器 [", 
 				(shaderType == GL_VERTEX_SHADER ? "vertex" : shaderType == GL_FRAGMENT_SHADER ? "fragment" : "unknown"),
 				"] 失败! Error : ");

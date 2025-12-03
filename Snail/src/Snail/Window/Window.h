@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Snail/Core/Core.h"
+
 namespace Snail {
 
 	class SNAIL_API Window {
@@ -37,7 +39,7 @@ namespace Snail {
 		virtual void SetVSync(bool enable) = 0;
 		virtual bool IsVSync() const = 0;
 		
-		static std::unique_ptr<Window> Create(const WindowProps& props = WindowProps());
+		static Uniptr<Window> Create(const WindowProps& props = WindowProps());
 	};
 
 }

@@ -10,13 +10,13 @@ namespace Snail {
 	public:
 		virtual ~VertexBuffer() {}
 
-		virtual std::shared_ptr<BufferLayout> GetLayout() const = 0;
-		virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) = 0;
+		virtual Refptr<BufferLayout> GetLayout() const = 0;
+		virtual void SetLayout(const Refptr<BufferLayout>& layout) = 0;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Refptr<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 }

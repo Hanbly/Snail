@@ -19,7 +19,7 @@ namespace Snail {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererCommand::DrawIndexedImpl(const std::shared_ptr<VertexArray>& vertexArray) const
+	void OpenGLRendererCommand::DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const
 	{
 		const uint32_t& count = vertexArray->GetIndexBuffer()->GetIndexBufferCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);

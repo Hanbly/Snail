@@ -16,7 +16,7 @@ namespace Snail {
 	private:
 		static Application* s_Instance;
 
-		std::unique_ptr<Window> m_AppWindow;
+		Uniptr<Window> m_AppWindow;
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 

@@ -15,7 +15,4 @@
     <ClCompile Include="src\ExampleApp.cpp" />
     <ClCompile Include="src\SNLpch.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\test.shader" />
-  </ItemGroup>
 </Project>

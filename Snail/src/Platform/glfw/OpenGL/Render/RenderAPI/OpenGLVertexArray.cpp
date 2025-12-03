@@ -35,7 +35,7 @@ namespace Snail {
 		glDeleteVertexArrays(1, &m_ArrayId);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(const Refptr<VertexBuffer>& vertexBuffer)
 	{
 		this->Bind();
 		vertexBuffer->Bind();
@@ -52,7 +52,7 @@ namespace Snail {
 				e.GetComponentCount(),
 				GetOpenGLType(e.type),
 				e.enableNormalize ? GL_TRUE : GL_FALSE, // 显式转为 GL boolean
-				e.size,
+				layout->GetLayoutSize(),				// 重要！不要写成e.size
 				(const void*)(uintptr_t)e.offset);		// 规范的 Offset 转换
 			index++;
 		}
@@ -60,12 +60,12 @@ namespace Snail {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	const std::shared_ptr<IndexBuffer> OpenGLVertexArray::GetIndexBuffer() const
+	const Refptr<IndexBuffer> OpenGLVertexArray::GetIndexBuffer() const
 	{
 		return m_IndexBuffer;
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(const Refptr<IndexBuffer>& indexBuffer)
 	{
 		this->Bind();
 		indexBuffer->Bind();

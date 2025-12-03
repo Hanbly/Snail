@@ -26,9 +26,9 @@ namespace Snail {
 		void OnEvent(Event& e);
 		bool OnMouseMoveEvent(MouseMoveEvent& e);
 	public:
-		inline const std::unique_ptr<Snail::Camera>& GetCamera() const { return m_Camera; }
+		inline const Uniptr<Snail::Camera>& GetCamera() const { return m_Camera; }
 	private:
-		std::unique_ptr<Snail::Camera> m_Camera;
+		Uniptr<Snail::Camera> m_Camera;
 		float m_CameraMoveSpeed = 5.0f;
 
 		float m_LastMouseX;

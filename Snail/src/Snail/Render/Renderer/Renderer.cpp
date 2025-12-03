@@ -6,7 +6,7 @@ namespace Snail {
 
 	Renderer::RendererSceneData Renderer::m_SceneData = Renderer::RendererSceneData();
 
-	void Renderer::BeginScene(const std::unique_ptr<Snail::Camera>& camera)
+	void Renderer::BeginScene(const Uniptr<Snail::Camera>& camera)
 	{
 		m_SceneData.viewMatrix = camera->GetViewMatrix();
 		m_SceneData.projectionMatrix = camera->GetProjectionMatrix();
@@ -16,7 +16,7 @@ namespace Snail {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& model)
+	void Renderer::Submit(const Refptr<Shader>& shader, const Refptr<VertexArray>& vertexArray, const glm::mat4& model)
 	{
 		vertexArray->Bind();
 		shader->Bind();

@@ -2,19 +2,18 @@
 
 #include "Snail/Render/Renderer/RendererCommand.h"
 
-#include "RenderContext.h"
-#include "Platform/glfw/OpenGL/Render/RenderAPI/OpenGLRenderContext.h"
+#include "Texture.h"
+#include "Platform/glfw/OpenGL/Render/RenderAPI/OpenGLTexture.h"
 
 namespace Snail {
 
-	Uniptr<RenderContext> RenderContext::Create(void* windowHandle)
-	{
+	Refptr<Texture2D> Texture2D::Create(const std::string& path) {
 		switch (RendererCommand::GetAPI()) {
 			case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
-			case RendererCommand::API::OpenGL:		return std::make_unique<OpenGLRenderContext>(static_cast<GLFWwindow*>(windowHandle));
+			case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLTexture2D>(path);
 			case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!"); return nullptr;
-		}		
-		
+		}
+
 		SNL_CORE_ASSERT(false, "RenderAPI: switch无法取值!");
 		return nullptr;
 	}
