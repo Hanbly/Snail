@@ -12,19 +12,27 @@ namespace Snail {
         return 0;
     }
 
-    OpenGLShader::OpenGLShader(const std::string& filepath)
-        : m_FilePath(filepath)
+    OpenGLShader::OpenGLShader(const std::string& filePath)
+        : m_FilePath(filePath)
     {
         // 1. 读取文件
-        std::string source = ReadFile(filepath);
+        std::string source = ReadFile(filePath);
         // 2. 预处理分割
         auto shaderSources = PreProcess(source);
         // 3. 编译
         Compile(shaderSources);
 
         // 从路径提取名字 (例如 assets/shaders/Texture.glsl -> Texture)
-        std::filesystem::path path = filepath; 
-        m_Name = path.stem().string(); // Returns the file's name stripped of the extensi
+        std::filesystem::path path = filePath; 
+        m_Name = path.stem().string();          // 返回除去扩展名的文件名
+    }
+
+    OpenGLShader::OpenGLShader(const std::string& customName, const std::string& filePath)
+        : m_Name(customName)
+    {
+        std::string source = ReadFile(filePath);
+        auto shaderSources = PreProcess(source);
+        Compile(shaderSources);
     }
 
     OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -41,10 +49,10 @@ namespace Snail {
         glDeleteProgram(m_RendererID);
     }
 
-    std::string OpenGLShader::ReadFile(const std::string& filepath)
+    std::string OpenGLShader::ReadFile(const std::string& filePath)
     {
         std::string result;
-        std::ifstream in(filepath, std::ios::in | std::ios::binary);
+        std::ifstream in(filePath, std::ios::in | std::ios::binary);
         if (in)
         {
             in.seekg(0, std::ios::end);
@@ -56,11 +64,11 @@ namespace Snail {
                 in.read(&result[0], size);
             }
             else {
-                SNL_CORE_ERROR("无法读取文件 '{0}'", filepath);
+                SNL_CORE_ERROR("无法读取文件 '{0}'", filePath);
             }
         }
         else {
-            SNL_CORE_ERROR("无法打开文件 '{0}'", filepath);
+            SNL_CORE_ERROR("无法打开文件 '{0}'", filePath);
         }
         return result;
     }
@@ -92,41 +100,43 @@ namespace Snail {
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
     {
+        const uint8_t shaderSources_maxCount = 2;
         GLuint program = glCreateProgram();
-        // 因为可能有多于2个着色器(比如Geometry Shader)，用vector存一下ID方便后面删除
-        std::vector<GLenum> glShaderIDs;
-        glShaderIDs.reserve(shaderSources.size());
+        // 因为可能有多于2个着色器(比如Geometry Shader)，存一下ID方便后面删除
+        SNL_CORE_ASSERT((shaderSources.size() <= shaderSources_maxCount), "OpenGLShader: 资源内(单文件) shader 多于限定数量 '{0}'", shaderSources_maxCount);
+        std::array<GLenum, shaderSources_maxCount> glShaderIDs;
+        int glShaderIDIndex = 0;
 
         for (auto& kv : shaderSources)
         {
             GLenum type = kv.first;
             const std::string& source = kv.second;
 
-            GLuint shader = glCreateShader(type);
+            GLuint shaderId = glCreateShader(type);
 
             const GLchar* sourceCStr = source.c_str();
-            glShaderSource(shader, 1, &sourceCStr, 0);
-            glCompileShader(shader);
+            glShaderSource(shaderId, 1, &sourceCStr, 0);
+            glCompileShader(shaderId);
 
             GLint isCompiled = 0;
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+            glGetShaderiv(shaderId, GL_COMPILE_STATUS, &isCompiled);
             if (isCompiled == GL_FALSE)
             {
                 GLint maxLength = 0;
-                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+                glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
 
                 std::vector<GLchar> infoLog(maxLength);
-                glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+                glGetShaderInfoLog(shaderId, maxLength, &maxLength, &infoLog[0]);
 
-                glDeleteShader(shader); // 失败了要清理
+                glDeleteShader(shaderId); // 失败了要清理
 
                 SNL_CORE_ERROR("{0}", infoLog.data());
-                SNL_CORE_ASSERT(false, "Shader compilation failure!");
+                SNL_CORE_ASSERT(false, "着色器编译失败!");
                 break;
             }
 
-            glAttachShader(program, shader);
-            glShaderIDs.push_back(shader);
+            glAttachShader(program, shaderId);
+            glShaderIDs[glShaderIDIndex++] = shaderId;
         }
 
         // Link Program
@@ -150,8 +160,7 @@ namespace Snail {
         }
 
         // Detach and delete shaders after linking
-        for (auto id : glShaderIDs)
-        {
+        for (auto id : glShaderIDs) {
             glDetachShader(program, id);
             glDeleteShader(id);
         }

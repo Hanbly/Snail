@@ -13,7 +13,8 @@ private:
 	Snail::Refptr<Snail::VertexArray> m_VertexArray;
 	Snail::Refptr<Snail::VertexBuffer> m_VertexBuffer;
 	Snail::Refptr<Snail::IndexBuffer> m_IndexBuffer;
-	Snail::Refptr<Snail::Shader> m_Shader;
+	//Snail::Refptr<Snail::Shader> m_Shader;
+	Snail::ShaderLibrary m_ShaderLibrary;
 	Snail::Refptr<Snail::Texture> m_Texture1; // 纹理 1
 	Snail::Refptr<Snail::Texture> m_Texture2; // 纹理 2
 	Snail::Uniptr<Snail::PerspectiveCameraController> m_CameraController;
@@ -92,7 +93,8 @@ public:
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 
-		m_Shader = Snail::Shader::Create("assets/shaders/test.shader");
+		//m_Shader = Snail::Shader::Create("assets/shaders/test.shader");
+		m_ShaderLibrary.Load("test", "assets/shaders/test.shader");
 
 		m_Texture1 = Snail::Texture2D::Create("assets/images/kulisu.png");
 		m_Texture2 = Snail::Texture2D::Create("assets/images/mayoli.png");
@@ -113,10 +115,11 @@ public:
 
 		// 5. 渲染
 		// 设置uniform
-		m_Shader->SetFloat4("u_Color", u_DeltaColor);
-		m_Shader->SetInt("u_Texture1", 0);
-		m_Shader->SetInt("u_Texture2", 1);
-		m_Shader->SetFloat("u_MixValue", u_MixValue);
+		auto testShader = m_ShaderLibrary.Get("test");
+		testShader->SetFloat4("u_Color", u_DeltaColor);
+		testShader->SetInt("u_Texture1", 0);
+		testShader->SetInt("u_Texture2", 1);
+		testShader->SetFloat("u_MixValue", u_MixValue);
 		
 		// --- 设置 model 矩阵 ---
 		// --- 设置 view 矩阵 ---
@@ -133,7 +136,7 @@ public:
 			m_Texture1->Bind(0); // 绑定 kulisu 到槽位 0
 			m_Texture2->Bind(1); // 绑定 mayoli 到槽位 1
 
-			Snail::Renderer::Submit(m_Shader, m_VertexArray, model);
+			Snail::Renderer::Submit(testShader, m_VertexArray, model);
 		}
 
 		Snail::Renderer::EndScene();
