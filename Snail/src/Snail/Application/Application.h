@@ -23,6 +23,7 @@ namespace Snail {
 		float m_LastFrameTime = 0.0f;
 
 		bool m_Running = false;
+		bool m_Minimized = false;
 	public:
 		Application();
 		// Application 类会被Example所继承，所以使用virtual
@@ -46,6 +47,7 @@ namespace Snail {
 		void run();
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 	};
 
 	// 将在客户端（子类中）给出函数体

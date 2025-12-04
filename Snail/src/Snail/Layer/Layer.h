@@ -19,6 +19,8 @@ namespace Snail {
 		virtual void OnEvent(Event& event);
 		virtual void OnRender() = 0;
 
+		virtual void OnImGuiRender() {}
+
 		inline const std::string& GetLayerName() const { return m_DebugName; }
 		inline const bool& IsLayerEnabled() const { return m_Enabled; }
 	};

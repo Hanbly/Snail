@@ -106,10 +106,17 @@ public:
 
 	}
 
-	inline void OnUpdate(const Snail::Timestep& ts) override {
-
+	inline virtual void OnUpdate(const Snail::Timestep& ts) override {
 		m_CameraController->OnUpdate(ts);
-		
+	}
+
+	inline virtual void OnEvent(Snail::Event& e) {
+		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
+		m_CameraController->OnEvent(e);
+	}
+
+	inline virtual void OnRender() override {
+		//SNL_TRACE("ExampleLayer 调用: OnRender()");
 		// -------------------临时------------------------------------------
 		Snail::Renderer::BeginScene(m_CameraController->GetCamera());
 
@@ -120,7 +127,7 @@ public:
 		testShader->SetInt("u_Texture1", 0);
 		testShader->SetInt("u_Texture2", 1);
 		testShader->SetFloat("u_MixValue", u_MixValue);
-		
+
 		// --- 设置 model 矩阵 ---
 		// --- 设置 view 矩阵 ---
 		// --- 设置 projection 矩阵 --- 都在submit实现
@@ -143,17 +150,7 @@ public:
 		//----------------------------------------------------------------
 	}
 
-	inline void OnEvent(Snail::Event& e) {
-		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
-		m_CameraController->OnEvent(e);
-	}
-
-	inline void OnRender() override {
-		//SNL_TRACE("ExampleLayer 调用: OnRender()");
-		OnImGuiRender();
-	}
-
-	inline void OnImGuiRender() {
+	inline virtual void OnImGuiRender() override {
 		ImGui::Begin("Settings");
 
 		ImGui::ColorEdit4("cubes_color", glm::value_ptr(u_DeltaColor));

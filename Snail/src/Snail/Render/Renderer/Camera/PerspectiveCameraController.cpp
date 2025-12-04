@@ -39,12 +39,32 @@ namespace Snail {
 		this->RecalculateMatrix();
 	}
 
+	// 处理 滚轮缩放
+	void PerspectiveCameraController::UpdateZoomFov(const float& fovOffset)
+	{
+		m_Camera->m_FOV -= fovOffset;
+
+		// 防止FOV过小或过大
+		if (m_Camera->m_FOV < 1.0f) m_Camera->m_FOV = 1.0f;
+		if (m_Camera->m_FOV > 90.0f) m_Camera->m_FOV = 90.0f;
+
+		this->RecalculateMatrix();
+	}
+	// 处理 Resize
+	void PerspectiveCameraController::UpdateAspect(const float& aspect)
+	{
+		m_Camera->m_Aspect = aspect;
+
+		this->RecalculateMatrix();
+	}
+
 	void PerspectiveCameraController::RecalculateMatrix() {
 		// 根据现有相机属性，对其矩阵进行重新计算
 
 		// 参数: 眼睛位置, 目标位置, 上向量
 		// -----------------------------------------------------------
 		m_Camera->m_ViewMatrix = glm::lookAt(m_Camera->m_Position, m_Camera->m_Front + m_Camera->m_Position, m_Camera->m_Up);
+		m_Camera->m_ProjectionMatrix = glm::perspective(glm::radians(m_Camera->m_FOV), m_Camera->m_Aspect, m_Camera->m_Near, m_Camera->m_Far);
 	}
 
 	void PerspectiveCameraController::RecalculateVectors() {
@@ -86,11 +106,19 @@ namespace Snail {
 	void PerspectiveCameraController::OnEvent(Event& e) {
 
 		Snail::EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseMoveEvent));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnWindowResize));
+		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseMove));
+		dispatcher.Dispatch<MouseScrollEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseScroll));
 
 	}
 
-	bool PerspectiveCameraController::OnMouseMoveEvent(Snail::MouseMoveEvent& e) {
+	bool PerspectiveCameraController::OnWindowResize(WindowResizeEvent& e)
+	{
+		UpdateAspect((float)e.GetWindowWidth() / (float)e.GetWindowHeight());
+		return false;
+	}
+
+	bool PerspectiveCameraController::OnMouseMove(Snail::MouseMoveEvent& e) {
 
 		if (m_FirstMouse) {
 			m_LastMouseX = e.GetMouseX();
@@ -111,6 +139,13 @@ namespace Snail {
 		}
 		return false;
 
+	}
+
+	bool PerspectiveCameraController::OnMouseScroll(MouseScrollEvent& e)
+	{
+		const float& fovOffset = e.GetMouseScrollOffsetY() * 2;
+		UpdateZoomFov(fovOffset);
+		return false;
 	}
 
 }

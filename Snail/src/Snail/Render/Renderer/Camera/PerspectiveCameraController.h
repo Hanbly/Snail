@@ -5,6 +5,7 @@
 #include "Snail/Input/Input.h"
 
 #include "Snail/Events/Event.h"
+#include "Snail/Events/ApplicationEvent.h"
 #include "Snail/Events/MouseEvent.h"
 
 #include "Camera.h"
@@ -16,17 +17,22 @@ namespace Snail {
 		PerspectiveCameraController(const float& fov, const float& aspect, const glm::vec3& position);
 		~PerspectiveCameraController() = default;
 
-		void MoveCamera(const Camera::TranslationDirection& dir, const float& length);
-		void RotateCamera(const float& yaw, const float& pitch);
-
 		void RecalculateMatrix();
 		void RecalculateVectors();
 
+		void MoveCamera(const Camera::TranslationDirection& dir, const float& length);
+		void RotateCamera(const float& yaw, const float& pitch);
+		void UpdateZoomFov(const float& fovOffset);
+		void UpdateAspect(const float& aspect);
+
 		void OnUpdate(const Snail::Timestep& ts);
 		void OnEvent(Event& e);
-		bool OnMouseMoveEvent(MouseMoveEvent& e);
-	public:
+	
 		inline const Uniptr<Snail::Camera>& GetCamera() const { return m_Camera; }
+	private:
+		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnMouseMove(MouseMoveEvent& e);
+		bool OnMouseScroll(MouseScrollEvent& e);
 	private:
 		Uniptr<Snail::Camera> m_Camera;
 		float m_CameraMoveSpeed = 5.0f;

@@ -12,11 +12,12 @@ namespace Snail {
 	ImGuiLayer::ImGuiLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled) {}
 
-	ImGuiLayer::~ImGuiLayer() {
-
+	ImGuiLayer::~ImGuiLayer() 
+	{
 	}
 
-	void ImGuiLayer::OnAttach() {
+	void ImGuiLayer::OnAttach() 
+	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -41,7 +42,8 @@ namespace Snail {
 
 	}
 
-	void ImGuiLayer::OnDetach() {
+	void ImGuiLayer::OnDetach() 
+	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -51,7 +53,8 @@ namespace Snail {
 	{
 	}
 
-	void ImGuiLayer::OnEvent(Event& event) {
+	void ImGuiLayer::OnEvent(Event& event) 
+	{
 
 		/*EventDispatcher dispatcher(event);
 
@@ -67,6 +70,11 @@ namespace Snail {
 
 	}
 
+	void ImGuiLayer::OnRender()
+	{
+
+	}
+
 	void ImGuiLayer::BeginImGui()
 	{
 		// Start the Dear ImGui frame
@@ -75,12 +83,10 @@ namespace Snail {
 		ImGui::NewFrame();
 	}
 
-	void ImGuiLayer::OnRender()
+	void ImGuiLayer::OnImGuiRender()
 	{
-
 		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow();
-
 	}
 
 	void ImGuiLayer::EndImGui()

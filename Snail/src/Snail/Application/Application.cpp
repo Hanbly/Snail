@@ -41,6 +41,10 @@ namespace Snail {
 		EventDispatcher dispatcher(e);
 		// 接收一个bool(T&),T是某个事件类型
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_NSTATIC_MEMBER_Fn(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_NSTATIC_MEMBER_Fn(Application::OnWindowResize));
+
+		if (m_Minimized)
+			return;
 
 		// 层栈的事件处理，由顶层至底层
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); it++) {
@@ -61,17 +65,17 @@ namespace Snail {
 			layer->OnUpdate(ts);
 		}
 
-		// 层栈的渲染处理，由底层至顶层
-		m_ImGuiLayer->BeginImGui();
+		// 层栈的逻辑更新处理，由底层至顶层
 		for (Layer* layer : m_LayerStack) {
 			layer->OnRender();
 		}
+
+		// 层栈的渲染处理，由底层至顶层
+		m_ImGuiLayer->BeginImGui();
+		for (Layer* layer : m_LayerStack) {
+			layer->OnImGuiRender();
+		}
 		m_ImGuiLayer->EndImGui();
-
-		// 窗口的（事件等）
-		// 轮询事件 & 交换缓冲区
-		m_AppWindow->OnUpdate();
-
 	}
 
 	// push/pop normal layer
@@ -97,16 +101,31 @@ namespace Snail {
 		return true;
 	}
 
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWindowWidth() == 0 || e.GetWindowHeight() == 0) {
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+		return false;
+	}
+
 	void Application::run()
 	{
 		while (m_Running) {
+			// 只有在未最小化时，才进行渲染和逻辑更新
+			if (!m_Minimized)
+			{
+				RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+				RendererCommand::Clear();
 
-			RendererCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-			RendererCommand::Clear();
+				this->OnUpdate();
+			}
 
-			this->OnUpdate();
+			// 无论是否最小化，都处理窗口事件（PollEvents）和交换缓冲区
+			// 这样当你点击任务栏还原窗口时，App才能收到消息并恢复运行
+			m_AppWindow->OnUpdate();
 		}
-
 	}
-
 }

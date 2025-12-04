@@ -22,9 +22,10 @@ namespace Snail {
 		virtual void OnDetach() override;
 		virtual void OnUpdate(const Timestep& ts) override;
 		virtual void OnEvent(Event& event) override;
+		virtual void OnRender() override;
 
 		void BeginImGui();
-		virtual void OnRender() override;
+		void OnImGuiRender();
 		void EndImGui();
 
 	private:
