@@ -11,6 +11,13 @@ namespace Snail {
 		RendererCommand::Init();
 	}
 
+	void Renderer::SetViewPort(uint32_t width, uint32_t height)
+	{
+		// TODO: 以后不一定是从左下角0，0开始设置视口
+		// 视口可能还需要更多其它操作
+		RendererCommand::SetViewPort(0, 0, width, height);
+	}
+
 	void Renderer::BeginScene(const Uniptr<Snail::Camera>& camera)
 	{
 		m_SceneData.viewMatrix = camera->GetViewMatrix();

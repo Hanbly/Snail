@@ -27,6 +27,8 @@ namespace Snail {
 		}
 
 		static void Init();
+		static void SetViewPort(uint32_t width, uint32_t height);
+
 		static void BeginScene(const Uniptr<Snail::Camera>& camera);
 		static void EndScene();
 		static void Submit(const Refptr<Shader>& shader, const Refptr<VertexArray>& vertexArray, const glm::mat4& model = glm::mat4(1.0f));

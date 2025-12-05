@@ -12,6 +12,11 @@ namespace Snail {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
+	void OpenGLRendererCommand::SetViewPortImpl(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	{
+		glViewport(x, y, width, height);
+	}
+
 	void OpenGLRendererCommand::ClearColorImpl(const glm::vec4& color_RGBA) const
 	{
 		glClearColor(color_RGBA.r, color_RGBA.g, color_RGBA.b, color_RGBA.a);

@@ -8,6 +8,7 @@
 namespace Snail {
 
 	Application* Application::s_Instance = nullptr;
+	std::vector<ProfileResult> s_ProfilingResults;
 
 	Application::Application()
 	{
@@ -76,6 +77,8 @@ namespace Snail {
 			layer->OnImGuiRender();
 		}
 		m_ImGuiLayer->EndImGui();
+
+		s_ProfilingResults.clear();
 	}
 
 	// push/pop normal layer
@@ -108,12 +111,15 @@ namespace Snail {
 			return false;
 		}
 		m_Minimized = false;
+		Renderer::SetViewPort(e.GetWindowWidth(), e.GetWindowHeight());
+
 		return false;
 	}
 
 	void Application::run()
 	{
 		while (m_Running) {
+
 			// 只有在未最小化时，才进行渲染和逻辑更新
 			if (!m_Minimized)
 			{
@@ -124,7 +130,6 @@ namespace Snail {
 			}
 
 			// 无论是否最小化，都处理窗口事件（PollEvents）和交换缓冲区
-			// 这样当你点击任务栏还原窗口时，App才能收到消息并恢复运行
 			m_AppWindow->OnUpdate();
 		}
 	}

@@ -42,4 +42,12 @@ namespace Snail {
 	template<typename T>
 	using Uniptr = std::unique_ptr<T>;
 
+	struct ProfileResult {
+		const char* name;
+		float time;
+	};
+
+	extern std::vector<ProfileResult> s_ProfilingResults;
+	#define PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](Snail::ProfileResult pr){ Snail::s_ProfilingResults.push_back(pr); })
+
 }

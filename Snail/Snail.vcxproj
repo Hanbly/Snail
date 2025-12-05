@@ -159,6 +159,7 @@
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Snail\Core\Timer.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />

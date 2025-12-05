@@ -3,6 +3,7 @@
 #include "Snail/Core/Core.h"
 
 #include "Snail/Input/Input.h"
+#include "Snail/Core/Timestep.h"
 
 #include "Snail/Events/Event.h"
 #include "Snail/Events/ApplicationEvent.h"
@@ -25,16 +26,16 @@ namespace Snail {
 		void UpdateZoomFov(const float& fovOffset);
 		void UpdateAspect(const float& aspect);
 
-		void OnUpdate(const Snail::Timestep& ts);
+		void OnUpdate(const Timestep& ts);
 		void OnEvent(Event& e);
 	
-		inline const Uniptr<Snail::Camera>& GetCamera() const { return m_Camera; }
+		inline const Uniptr<Camera>& GetCamera() const { return m_Camera; }
 	private:
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnMouseMove(MouseMoveEvent& e);
 		bool OnMouseScroll(MouseScrollEvent& e);
 	private:
-		Uniptr<Snail::Camera> m_Camera;
+		Uniptr<Camera> m_Camera;
 		float m_CameraMoveSpeed = 5.0f;
 
 		float m_LastMouseX;

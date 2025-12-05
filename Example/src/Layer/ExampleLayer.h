@@ -107,6 +107,9 @@ public:
 	}
 
 	inline virtual void OnUpdate(const Snail::Timestep& ts) override {
+
+		Snail::PROFILE_SCOPE("ExampleLayer::OnUpdate");
+
 		m_CameraController->OnUpdate(ts);
 	}
 
@@ -155,6 +158,11 @@ public:
 
 		ImGui::ColorEdit4("cubes_color", glm::value_ptr(u_DeltaColor));
 		ImGui::SliderFloat("alphaSlider", &u_MixValue, 0.0f, 1.0f, "%.1f");
+
+		for (auto result : Snail::s_ProfilingResults) {
+			std::string timeCstr = std::to_string(result.time);
+			ImGui::Text("%s: %.3f ms", result.name, result.time); // 类似printf
+		}
 
 		ImGui::End();
 	}

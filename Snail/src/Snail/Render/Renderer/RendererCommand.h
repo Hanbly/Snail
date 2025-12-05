@@ -27,22 +27,18 @@ namespace Snail {
 		static Uniptr<RendererCommand> RC;
 
 		virtual void InitImpl() = 0;
+		virtual void SetViewPortImpl(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
+
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const = 0;
 		virtual void ClearImpl() const = 0;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const = 0;
 	public:
-		inline static void Init() {
-			RC->InitImpl();
-		}
-		inline static void ClearColor(const glm::vec4& color_RGBA) {
-			RC->ClearColorImpl(color_RGBA);
-		}
-		inline static void Clear() {
-			RC->ClearImpl();
-		}
-		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) {
-			RC->DrawIndexedImpl(vertexArray);
-		}
+		inline static void Init() { RC->InitImpl(); }
+		inline static void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { RC->SetViewPortImpl(x, y, width, height); }
+
+		inline static void ClearColor(const glm::vec4& color_RGBA) { RC->ClearColorImpl(color_RGBA); }
+		inline static void Clear() { RC->ClearImpl(); }
+		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) { RC->DrawIndexedImpl(vertexArray); }
 
 		static Uniptr<RendererCommand> Create();
 	};

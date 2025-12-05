@@ -1,13 +1,6 @@
 ﻿#pragma once
 
-//-------------Core-----------------
-#include "Snail/Input/Input.h"
-#include "Snail/Core/InputCodes.h"
-#include "Snail/Core/Timestep.h"
-
-#include "Snail/Application/Application.h"
-
-//----------------Render-----------------------
+//-------------Render------------
 #include "Snail/Render/RenderAPI/VertexArray.h"
 #include "Snail/Render/RenderAPI/Buffer/VertexBuffer.h"
 #include "Snail/Render/RenderAPI/Buffer/IndexBuffer.h"
@@ -15,15 +8,22 @@
 #include "Snail/Render/RenderAPI/Texture.h"
 #include "Snail/Render/Renderer/Renderer.h"
 #include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"
-//---------------------------------------------
+//----------------------------------
 
-//----------------Event-----------------------
-#include "Snail/Events/Event.h"
-//---------------------------------------------
+//-------------Core-----------------
+#include "Snail/Input/Input.h"
+#include "Snail/Core/InputCodes.h"
+#include "Snail/Core/Timestep.h"
+#include "Snail/Core/Timer.h"
+//---------------------------------
 
-#include "Snail/Layer/Layer.h"
-
+//----------------------------------
 #include "Snail/Logger/Log.h"
+#include "Snail/Layer/Layer.h"
+#include "Snail/Events/Event.h"
+
+#include "Snail/Application/Application.h"
+//---------------------------------
 
 // 程序入口 -------------------------
 #include "Snail/Core/EntryPoint.h"
