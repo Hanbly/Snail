@@ -153,6 +153,12 @@
     <ClInclude Include="src\Snail\Core\InputCodes.h">
       <Filter>src\Snail\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Core\Macro.h">
+      <Filter>src\Snail\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Core\Timer.h">
+      <Filter>src\Snail\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Snail\Core\Timestep.h">
       <Filter>src\Snail\Core</Filter>
     </ClInclude>
@@ -225,7 +231,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Core\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">

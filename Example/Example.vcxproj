@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SNL_PLATFORM_WINDOWS;SNL_DEBUG;SNL_ENABLED_ASSERTS;SNL_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Snail\vendor\GLFW\include;..\Snail\vendor\GLAD\include;..\Snail\vendor\GLM;..\Snail\vendor\Imgui;..\Snail\vendor\spdlog\include;..\Snail\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>

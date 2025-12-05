@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>SNLpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IMGUI_IMPL_OPENGL_LOADER_CUSTOM;SNL_PLATFORM_WINDOWS;SNL_BUILD_SLL;SNL_DEBUG;SNL_ENABLED_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IMGUI_IMPL_OPENGL_LOADER_CUSTOM;SNL_PLATFORM_WINDOWS;SNL_BUILD_SLL;SNL_DEBUG;SNL_ENABLED_ASSERTS;SNL_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\GLFW\include;vendor\GLAD\include;vendor\GLM;vendor\Imgui;vendor\spdlog\include;vendor\stb_image;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -159,13 +159,14 @@
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Input\WindowsInput.h" />
     <ClInclude Include="src\Platform\glfw\Windows\Window\WindowsWindow.h" />
-    <ClInclude Include="src\Snail\Core\Timer.h" />
     <ClInclude Include="src\SNLpch.h" />
     <ClInclude Include="src\Snail.h" />
     <ClInclude Include="src\Snail\Application\Application.h" />
     <ClInclude Include="src\Snail\Core\Core.h" />
     <ClInclude Include="src\Snail\Core\EntryPoint.h" />
     <ClInclude Include="src\Snail\Core\InputCodes.h" />
+    <ClInclude Include="src\Snail\Core\Macro.h" />
+    <ClInclude Include="src\Snail\Core\Timer.h" />
     <ClInclude Include="src\Snail\Core\Timestep.h" />
     <ClInclude Include="src\Snail\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Snail\Events\Event.h" />

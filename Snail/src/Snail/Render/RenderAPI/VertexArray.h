@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Snail/Core/Core.h"
+#include "Snail/Core/Macro.h"
 
 #include "Buffer/VertexBuffer.h"
 #include "Buffer/IndexBuffer.h"

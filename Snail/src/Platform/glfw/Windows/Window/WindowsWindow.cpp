@@ -16,6 +16,9 @@ namespace Snail {
 
     WindowsWindow::WindowsWindow(const WindowProps& props)
     {
+        SNL_PROFILE_FUNCTION();
+
+
         InitWindow(props);
     }
 
@@ -26,6 +29,9 @@ namespace Snail {
 
     void WindowsWindow::InitWindow(const WindowProps& props)
     {
+        SNL_PROFILE_FUNCTION();
+
+
         m_Data.props = props;
 
         if (!s_GLFWInitialized) {
@@ -156,6 +162,9 @@ namespace Snail {
 
     void WindowsWindow::ShutdownWindow()
     {
+        SNL_PROFILE_FUNCTION();
+
+
         if (m_Window) {
             glfwDestroyWindow(m_Window);
         }
@@ -164,6 +173,9 @@ namespace Snail {
     // 轮询事件 & 交换缓冲区
     void WindowsWindow::OnUpdate()
     {
+        SNL_PROFILE_FUNCTION();
+
+
         glfwPollEvents();
         m_RenderContext->SwapBuffers();
     }

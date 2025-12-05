@@ -27,11 +27,17 @@ namespace Snail {
 	OpenGLVertexArray::OpenGLVertexArray()
 		: m_VertexBufferIndexOffset(0)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		glGenVertexArrays(1, &m_ArrayId);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		glDeleteVertexArrays(1, &m_ArrayId);
 	}
 
@@ -75,11 +81,17 @@ namespace Snail {
 
 	void OpenGLVertexArray::Bind() const
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		glBindVertexArray(m_ArrayId);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		glBindVertexArray(0);
 	}
 

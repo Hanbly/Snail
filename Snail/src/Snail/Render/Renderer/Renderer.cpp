@@ -20,16 +20,25 @@ namespace Snail {
 
 	void Renderer::BeginScene(const Uniptr<Snail::Camera>& camera)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		m_SceneData.viewMatrix = camera->GetViewMatrix();
 		m_SceneData.projectionMatrix = camera->GetProjectionMatrix();
 	}
 
 	void Renderer::EndScene()
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 	}
 
 	void Renderer::Submit(const Refptr<Shader>& shader, const Refptr<VertexArray>& vertexArray, const glm::mat4& model)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		vertexArray->Bind();
 		shader->Bind();
 

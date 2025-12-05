@@ -26,6 +26,7 @@ public:
 		: Layer(layerName, layerEnabled) {}
 
 	virtual void OnAttach() override {
+		Snail::SNL_PROFILE_FUNCTION();
 		// -------------------临时------------------------------------------
 		m_VertexArray = Snail::VertexArray::Create();
 		m_VertexArray->Bind();
@@ -108,7 +109,7 @@ public:
 
 	inline virtual void OnUpdate(const Snail::Timestep& ts) override {
 
-		Snail::PROFILE_SCOPE("ExampleLayer::OnUpdate");
+		Snail::SNL_PROFILE_FUNCTION();
 
 		m_CameraController->OnUpdate(ts);
 	}
@@ -159,9 +160,13 @@ public:
 		ImGui::ColorEdit4("cubes_color", glm::value_ptr(u_DeltaColor));
 		ImGui::SliderFloat("alphaSlider", &u_MixValue, 0.0f, 1.0f, "%.1f");
 
-		for (auto result : Snail::s_ProfilingResults) {
-			std::string timeCstr = std::to_string(result.time);
-			ImGui::Text("%s: %.3f ms", result.name, result.time); // 类似printf
+		for (auto& result : Snail::s_ProfilingResults)
+		{
+			// 计算持续时间 (毫秒)
+			float duration = (result.end - result.start) * 0.001f;
+
+			// 显示
+			ImGui::Text("%.3fms,  %s", duration, result.name.c_str());
 		}
 
 		ImGui::End();

@@ -12,6 +12,9 @@ namespace Snail {
 
 	Application::Application()
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		SNL_CORE_ASSERT(!s_Instance, "Application: 无法创建多个应用实例!");
 		this->s_Instance = this;
 
@@ -30,6 +33,9 @@ namespace Snail {
 
 	Application::~Application()
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 	}
 
 	Application& Application::Get()
@@ -77,8 +83,6 @@ namespace Snail {
 			layer->OnImGuiRender();
 		}
 		m_ImGuiLayer->EndImGui();
-
-		s_ProfilingResults.clear();
 	}
 
 	// push/pop normal layer
@@ -119,9 +123,6 @@ namespace Snail {
 	void Application::run()
 	{
 		while (m_Running) {
-
-			PROFILE_SCOPE("Application::run");
-
 			// 只有在未最小化时，才进行渲染和逻辑更新
 			if (!m_Minimized)
 			{
@@ -129,6 +130,8 @@ namespace Snail {
 				RendererCommand::Clear();
 
 				this->OnUpdate();
+
+				s_ProfilingResults.clear();
 			}
 
 			// 无论是否最小化，都处理窗口事件（PollEvents）和交换缓冲区

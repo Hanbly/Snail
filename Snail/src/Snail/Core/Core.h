@@ -2,37 +2,14 @@
 
 #ifdef SNL_PLATFORM_WINDOWS
 	#ifdef SNL_BUILD_DLL
-		#define SNAIL_API __declspec(dllexport)
+	#define SNAIL_API __declspec(dllexport)
 	#elif SNL_BUILD_SLL
-		#define SNAIL_API
+	#define SNAIL_API
 	#else
-		#define SNAIL_API
+	#define SNAIL_API
 	#endif
-#else
-	
+	#else
 #endif
-
-#define BIT(x) (1 << x)
-
-#ifdef SNL_ENABLED_ASSERTS
-#define SNL_ASSERT(x, ...); { \
-								if (!(x)) {\
-									SNL_CORE_ERROR("SNL客户端错误断言: {0}", __VA_ARGS__);\
-									__debugbreak();\
-								}\
-							}
-#define SNL_CORE_ASSERT(x, ...); { \
-									if(!(x)) {\
-										SNL_CORE_ERROR("SNL系统错误断言: {0}", __VA_ARGS__);\
-										__debugbreak();\
-									}\
-								}
-#else
-#define SNL_ASSERT(x, ...);
-#define SNL_CORE_ASSERT(x, ...);
-#endif
-
-#define BIND_NSTATIC_MEMBER_Fn(x) std::bind(&x, this, std::placeholders::_1)
 
 namespace Snail {
 
@@ -43,11 +20,10 @@ namespace Snail {
 	using Uniptr = std::unique_ptr<T>;
 
 	struct ProfileResult {
-		const char* name;
-		float time;
+		std::string name;
+		long long start, end;
+		uint64_t threadID;
 	};
 
 	extern std::vector<ProfileResult> s_ProfilingResults;
-	#define PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](Snail::ProfileResult pr){ Snail::s_ProfilingResults.push_back(pr); })
-
 }

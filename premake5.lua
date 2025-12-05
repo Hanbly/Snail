@@ -81,11 +81,12 @@ project "Snail"
         }
 
     filter "configurations:Debug"
-        defines { "SNL_DEBUG" }
         runtime "Debug"
         symbols "On"
         defines {
-            "SNL_ENABLED_ASSERTS"
+            "SNL_DEBUG",
+            "SNL_ENABLED_ASSERTS",
+            "SNL_PROFILING"
         }
 
     filter "configurations:Release"
@@ -139,9 +140,13 @@ project "Example"
         }
 
     filter { "configurations:Debug" }
-        defines { "SNL_DEBUG" }
         runtime "Debug"
         symbols "On"
+        defines { 
+            "SNL_DEBUG",
+            "SNL_ENABLED_ASSERTS",
+            "SNL_PROFILING" 
+        }
 
     filter { "configurations:Release" }
         defines { "SNL_RELEASE" }

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Snail/Core/Core.h"
+#include "Snail/Core/Macro.h"
 
 #include "Snail/Render/RenderAPI/VertexArray.h"
 #include "Snail/Render/RenderAPI/Shader.h"
