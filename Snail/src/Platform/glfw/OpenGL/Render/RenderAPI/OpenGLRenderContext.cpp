@@ -8,6 +8,9 @@ namespace Snail {
 
     OpenGLRenderContext::OpenGLRenderContext(GLFWwindow* window)
     {
+        SNL_PROFILE_FUNCTION();
+
+
         m_WindowHandle = window;
         OpenGLRenderContext::s_GLADInitialized = false;
 

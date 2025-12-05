@@ -62,6 +62,9 @@ namespace Snail {
 
 	void Application::OnUpdate()
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		//-----------------计算上一帧的时间和帧间隔时间------------------
 		float time = (float)glfwGetTime();
 		Timestep ts = Timestep(time - m_LastFrameTime);

@@ -7,6 +7,9 @@ namespace Snail {
 	OpenGLBufferLayout::OpenGLBufferLayout(const std::initializer_list<VertexElement>& elements)
 		: m_Size(0)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		m_Elements = elements;
 		SNL_CORE_ASSERT(m_Elements.data(), "OpenGLBufferLayout: 布局构造错误, 布局数据为空!");
 
@@ -21,7 +24,8 @@ namespace Snail {
 	{
 	}
 
-	std::vector<VertexElement>& OpenGLBufferLayout::GetLayoutElements() {
+	std::vector<VertexElement>& OpenGLBufferLayout::GetLayoutElements() 
+	{
 		return m_Elements;
 	}
 
