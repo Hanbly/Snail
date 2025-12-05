@@ -120,6 +120,8 @@ namespace Snail {
 	{
 		while (m_Running) {
 
+			PROFILE_SCOPE("Application::run");
+
 			// 只有在未最小化时，才进行渲染和逻辑更新
 			if (!m_Minimized)
 			{

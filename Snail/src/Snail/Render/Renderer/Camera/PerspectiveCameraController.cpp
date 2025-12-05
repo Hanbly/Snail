@@ -81,9 +81,6 @@ namespace Snail {
 
 	void PerspectiveCameraController::OnUpdate(const Snail::Timestep& ts) {
 
-		PROFILE_SCOPE("PerspectiveCameraController::OnUpdate");
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
 		const float& time = ts.GetSeconds();
 		if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
 			this->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed * time);
