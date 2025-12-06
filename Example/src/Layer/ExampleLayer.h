@@ -23,6 +23,11 @@ private:
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
 	glm::vec4 u_LightColor = {1.0f, 1.0f, 1.0f, 1.0f};
 	float u_MixValue = 0.0f;
+
+	float u_AmbientStrength = 0.1f;     // 环境光照系数
+	float u_DiffuseStrength = 0.5f;     // 漫反射系数
+	float u_SpecularStrength = 0.5f;    // 镜面反射系数
+	float u_Shininess = 64.0f;           // 反光度
 	//------------------------------------------------------------------
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
@@ -117,6 +122,11 @@ public:
 		m_CubeMaterial->SetTexture("u_Texture1", m_Texture1);
 		m_CubeMaterial->SetTexture("u_Texture2", m_Texture2);
 		m_CubeMaterial->SetFloat("u_MixValue", u_MixValue);
+		m_CubeMaterial->SetFloat("u_AmbientStrength", u_AmbientStrength);
+		m_CubeMaterial->SetFloat("u_DiffuseStrength", u_DiffuseStrength);
+		m_CubeMaterial->SetFloat("u_SpecularStrength", u_SpecularStrength);
+		m_CubeMaterial->SetFloat("u_Shininess", u_Shininess);
+
 		m_LightMaterial = Snail::Material::Create(m_ShaderLibrary.Get("light_box"));
 
 		m_CameraController = std::make_unique<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
@@ -147,6 +157,11 @@ public:
 		// 画方块，只需传位置
 		{
 			m_CubeMaterial->SetFloat("u_MixValue", u_MixValue);
+			m_CubeMaterial->SetFloat("u_AmbientStrength", u_AmbientStrength);
+			m_CubeMaterial->SetFloat("u_DiffuseStrength", u_DiffuseStrength);
+			m_CubeMaterial->SetFloat("u_SpecularStrength", u_SpecularStrength);
+			m_CubeMaterial->SetFloat("u_Shininess", u_Shininess);
+
 			glm::mat4 transform = glm::mat4(1.0f);
 			// 放在正中心，稍微旋转一点展示立体感
 			transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -167,12 +182,16 @@ public:
 	}
 
 	inline virtual void OnImGuiRender() override {
-		ImGui::Begin("Settings");
+		ImGui::Begin(u8"设置");
 
 		// 关键：检测的变量必须在循环中维持更新
-		ImGui::SliderFloat3("Light Position", glm::value_ptr(u_LightPosition), -10.0f, 10.0f);
-		ImGui::ColorEdit4("Light Color", glm::value_ptr(u_LightColor));
-		ImGui::SliderFloat("Alpha Slider", &u_MixValue, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat3(u8"光源位置坐标", glm::value_ptr(u_LightPosition), -10.0f, 10.0f);
+		ImGui::ColorEdit4(u8"光线颜色", glm::value_ptr(u_LightColor));
+		ImGui::SliderFloat(u8"物体变换", &u_MixValue, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat(u8"环境光照系数", &u_AmbientStrength, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat(u8"漫反射系数", &u_DiffuseStrength, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat(u8"镜面反射系数", &u_SpecularStrength, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat(u8"反光度", &u_Shininess, 0.0f, 256.0f, "%.1f");
 
 		for (auto& result : Snail::s_ProfilingResults)
 		{

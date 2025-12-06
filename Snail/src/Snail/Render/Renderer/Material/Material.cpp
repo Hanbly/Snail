@@ -13,6 +13,8 @@ namespace Snail {
 		for (const auto& [name, value] : m_Floats) m_Shader->SetFloat(name, value);
 		for (const auto& [name, value] : m_Float3s) m_Shader->SetFloat3(name, value);
 		for (const auto& [name, value] : m_Float4s) m_Shader->SetFloat4(name, value);
+		for (const auto& [name, value] : m_Mat3s) m_Shader->SetMat3(name, value);
+		for (const auto& [name, value] : m_Mat4s) m_Shader->SetMat4(name, value);
 
 		// 绑定纹理
 		int slot = 0;

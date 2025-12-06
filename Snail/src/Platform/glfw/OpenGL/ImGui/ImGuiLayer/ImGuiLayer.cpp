@@ -40,6 +40,8 @@ namespace Snail {
 		// 初始化渲染器后端 (OpenGL3)
 		ImGui_ImplOpenGL3_Init("#version 410");
 
+		ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Snail/Snail/assets/fonts/cn.ttf", 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+
 	}
 
 	void ImGuiLayer::OnDetach() 

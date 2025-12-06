@@ -34,6 +34,9 @@
     <Filter Include="src\Platform\glfw\OpenGL\Render\Renderer">
       <UniqueIdentifier>{A9AA2A1B-9527-1E5E-BEA4-1E72AA80BAF1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Platform\glfw\OpenGL\Render\Renderer\Material">
+      <UniqueIdentifier>{67E734AD-D3AD-91C9-1C09-202C880E002E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform\glfw\Windows">
       <UniqueIdentifier>{BA449898-2607-CC22-6FB7-5AAFDBB8A400}</UniqueIdentifier>
     </Filter>
@@ -85,6 +88,9 @@
     <Filter Include="src\Snail\Render\Renderer\Camera">
       <UniqueIdentifier>{001D00E3-EC6D-EB24-15D2-D9E601827E8E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Snail\Render\Renderer\Material">
+      <UniqueIdentifier>{26F961EE-1235-6558-7B47-7D4F67A20D73}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Snail\Window">
       <UniqueIdentifier>{1AC6DD87-06BF-FCD9-2FF1-E15E1B49DCE5}</UniqueIdentifier>
     </Filter>
@@ -117,14 +123,14 @@
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.h">
       <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLShader.h">
-      <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLTexture.h">
-      <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.h">
       <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLShader.h">
+      <Filter>src\Platform\glfw\OpenGL\Render\Renderer\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLTexture.h">
+      <Filter>src\Platform\glfw\OpenGL\Render\Renderer\Material</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.h">
       <Filter>src\Platform\glfw\OpenGL\Render\Renderer</Filter>
@@ -204,12 +210,6 @@
     <ClInclude Include="src\Snail\Render\RenderAPI\RenderContext.h">
       <Filter>src\Snail\Render\RenderAPI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Render\Renderer\Material\Shader.h">
-      <Filter>src\Snail\Render\RenderAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Snail\Render\Renderer\Material\Texture.h">
-      <Filter>src\Snail\Render\RenderAPI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Snail\Render\RenderAPI\VertexArray.h">
       <Filter>src\Snail\Render\RenderAPI</Filter>
     </ClInclude>
@@ -219,7 +219,19 @@
     <ClInclude Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.h">
       <Filter>src\Snail\Render\Renderer\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\Snail\Render\Renderer\Material\Material.h">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Render\Renderer\Material\Shader.h">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Render\Renderer\Material\Texture.h">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClInclude>
     <ClInclude Include="src\Snail\Render\Renderer\Renderer.h">
+      <Filter>src\Snail\Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Snail\Render\Renderer\Renderer3D.h">
       <Filter>src\Snail\Render\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Snail\Render\Renderer\RendererCommand.h">
@@ -231,8 +243,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Snail\Render\Renderer\Material\Material.h" />
-    <ClInclude Include="src\Snail\Render\Renderer\Renderer3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\glfw\OpenGL\ImGui\ImGuiLayer\ImGuiLayer.cpp">
@@ -253,14 +263,14 @@
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLRenderContext.cpp">
       <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLShader.cpp">
-      <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLTexture.cpp">
-      <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\RenderAPI\OpenGLVertexArray.cpp">
       <Filter>src\Platform\glfw\OpenGL\Render\RenderAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLShader.cpp">
+      <Filter>src\Platform\glfw\OpenGL\Render\Renderer\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\Material\OpenGLTexture.cpp">
+      <Filter>src\Platform\glfw\OpenGL\Render\Renderer\Material</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.cpp">
       <Filter>src\Platform\glfw\OpenGL\Render\Renderer</Filter>
@@ -304,12 +314,6 @@
     <ClCompile Include="src\Snail\Render\RenderAPI\RenderContext.cpp">
       <Filter>src\Snail\Render\RenderAPI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Render\Renderer\Material\Shader.cpp">
-      <Filter>src\Snail\Render\RenderAPI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Snail\Render\Renderer\Material\Texture.cpp">
-      <Filter>src\Snail\Render\RenderAPI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Snail\Render\RenderAPI\VertexArray.cpp">
       <Filter>src\Snail\Render\RenderAPI</Filter>
     </ClCompile>
@@ -319,7 +323,19 @@
     <ClCompile Include="src\Snail\Render\Renderer\Camera\PerspectiveCameraController.cpp">
       <Filter>src\Snail\Render\Renderer\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Render\Renderer\Material\Material.cpp">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Snail\Render\Renderer\Material\Shader.cpp">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Snail\Render\Renderer\Material\Texture.cpp">
+      <Filter>src\Snail\Render\Renderer\Material</Filter>
+    </ClCompile>
     <ClCompile Include="src\Snail\Render\Renderer\Renderer.cpp">
+      <Filter>src\Snail\Render\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Snail\Render\Renderer\Renderer3D.cpp">
       <Filter>src\Snail\Render\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Snail\Render\Renderer\RendererCommand.cpp">
@@ -331,7 +347,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Snail\Render\Renderer\Renderer3D.cpp" />
-    <ClCompile Include="src\Snail\Render\Renderer\Material\Material.cpp" />
   </ItemGroup>
 </Project>

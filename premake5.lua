@@ -133,12 +133,6 @@ project "Example"
             "SNL_PLATFORM_WINDOWS"
         }
 
-        postbuildcommands {
-            -- 将 Snail.dll 复制到 Example.exe 所在的目录
-            -- 使用 %{cfg.targetdir} 可以自动获取当前项目的输出目录
-            -- ("{COPYFILE} ../bin/" .. outputdir .. "/Snail/Snail.dll %{cfg.targetdir}")
-        }
-
     filter { "configurations:Debug" }
         runtime "Debug"
         symbols "On"

@@ -47,6 +47,7 @@ namespace Snail {
 
 		shader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
 		shader->SetMat4("u_Model", transform);
+		shader->SetMat3("u_NormalMatrix", glm::transpose(glm::inverse(glm::mat3(transform))));
 
 		shader->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
 		shader->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);

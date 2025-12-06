@@ -26,6 +26,8 @@ namespace Snail {
 		void SetFloat(const std::string& name, float value) { m_Floats[name] = value; }
 		void SetFloat3(const std::string& name, const glm::vec3& value) { m_Float3s[name] = value; }
 		void SetFloat4(const std::string& name, const glm::vec4& value) { m_Float4s[name] = value; }
+		void SetMat3(const std::string& name, const glm::mat3& matrix) { m_Mat3s[name] = matrix; }
+		void SetMat4(const std::string& name, const glm::mat4& matrix) { m_Mat4s[name] = matrix; }
 
 		// 纹理设置：需要指定 Shader 中的 sampler 名字和对应的纹理资源
 		void SetTexture(const std::string& name, const Refptr<Texture>& texture) { m_Textures[name] = texture; }
@@ -40,6 +42,8 @@ namespace Snail {
 		std::unordered_map<std::string, float> m_Floats;
 		std::unordered_map<std::string, glm::vec3> m_Float3s;
 		std::unordered_map<std::string, glm::vec4> m_Float4s;
+		std::unordered_map<std::string, glm::mat3> m_Mat3s;
+		std::unordered_map<std::string, glm::mat4> m_Mat4s;
 		std::unordered_map<std::string, Refptr<Texture>> m_Textures;
 	};
 
