@@ -42,14 +42,16 @@ namespace Snail {
 
 	#define BIND_NSTATIC_MEMBER_Fn(x) std::bind(&x, this, std::placeholders::_1)
 
-	#if SNL_PROFILING
-	#define SNL_PROFILE_BEGIN_SESSION(name, path) Instrumentor::BeginSession(name, path)
+	#if SNL_PROFILING && 0
+	#define SNL_PROFILE_BEGIN_SESSION(name, path) Snail::Instrumentor::BeginSession(name, path)
 	#define SNL_PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](Snail::ProfileResult pr){ Snail::s_ProfilingResults.push_back(pr); })
-	#define SNL_PROFILE_FUNCTION() SNL_PROFILE_SCOPE(__FUNCSIG__)
-	#define SNL_PROFILE_END_SESSION() Instrumentor::EndSession()
+	#define SNL_PROFILE_FUNCTION() Snail::SNL_PROFILE_SCOPE(__FUNCSIG__)
+	#define SNL_PROFILE_END_SESSION() Snail::Instrumentor::EndSession()
 	#else
-	#define SNL_PROFILE_SCOPE(name, nullptr)
-	#define SNL_PROFILE_FUNCTION()
+	#define SNL_PROFILE_BEGIN_SESSION(name, path);
+	#define SNL_PROFILE_SCOPE(name, nullptr);
+	#define SNL_PROFILE_FUNCTION();
+	#define SNL_PROFILE_END_SESSION();
 	#endif
 
 }

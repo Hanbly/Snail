@@ -326,5 +326,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Snail\Core\Timestep.cpp" />
   </ItemGroup>
 </Project>

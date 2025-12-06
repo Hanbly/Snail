@@ -6,6 +6,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+// TODO:remove
+#include "GLFW/glfw3.h"
+
 class ExampleLayer : public Snail::Layer
 {
 private:
@@ -18,7 +21,8 @@ private:
 	Snail::Refptr<Snail::Texture> m_Texture1; // 纹理 1
 	Snail::Refptr<Snail::Texture> m_Texture2; // 纹理 2
 	Snail::Uniptr<Snail::PerspectiveCameraController> m_CameraController;
-	glm::vec4 u_DeltaColor = {0.8f, 0.8f, 0.8f, 1.0f};
+	glm::vec3 u_LightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
+	glm::vec4 u_LightColor = {1.0f, 1.0f, 1.0f, 1.0f};
 	float u_MixValue = 0.0f;
 	//------------------------------------------------------------------
 public:
@@ -26,7 +30,7 @@ public:
 		: Layer(layerName, layerEnabled) {}
 
 	virtual void OnAttach() override {
-		Snail::SNL_PROFILE_FUNCTION();
+		SNL_PROFILE_FUNCTION();
 		// -------------------临时------------------------------------------
 		m_VertexArray = Snail::VertexArray::Create();
 		m_VertexArray->Bind();
@@ -35,40 +39,46 @@ public:
 			// 格式: Position (x, y, z), TexCoords (u, v)
 
 			// 1. 前面 (Front Face) - Z = 0.5f
-			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // 0 左下
-			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // 1 右下
-			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // 2 右上
-			-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // 3 左上
+			// 位置				  // 纹理坐标	   // 法向量
+			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 0 左下
+			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 1 右下
+			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 2 右上
+			-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 3 左上
 
 			// 2. 右面 (Right Face) - X = 0.5f
-			 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // 4 左下 (对应前面的右下空间位置)
-			 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // 5 右下
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // 6 右上
-			 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // 7 左上
+			// 位置				  // 纹理坐标	   // 法向量
+			 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f, // 4 左下 (对应前面的右下空间位置)
+			 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, // 5 右下
+			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  1.0f, 0.0f, 0.0f, // 6 右上
+			 0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f, // 7 左上
 
 			 // 3. 后面 (Back Face) - Z = -0.5f (注意：为了看纹理是正的，UV顺序做了调整)
-			  0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // 8
-			 -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // 9
-			 -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // 10
-			  0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // 11
+			  // 位置			   // 纹理坐标	// 法向量
+			  0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, 0.0f, -1.0f, // 8
+			 -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f, 0.0f, -1.0f, // 9
+			 -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f, 0.0f, -1.0f, // 10
+			  0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  0.0f, 0.0f, -1.0f, // 11
 
 			  // 4. 左面 (Left Face) - X = -0.5f
-			  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // 12
-			  -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // 13
-			  -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // 14
-			  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // 15
+			   // 位置				// 纹理坐标	 // 法向量
+			  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  -1.0f, 0.0f, 0.0f, // 12
+			  -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  -1.0f, 0.0f, 0.0f, // 13
+			  -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  -1.0f, 0.0f, 0.0f, // 14
+			  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  -1.0f, 0.0f, 0.0f, // 15
 
 			  // 5. 上面 (Top Face) - Y = 0.5f
-			  -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, // 16
-			   0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // 17
-			   0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // 18
-			  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // 19
+			  // 位置				// 纹理坐标	 // 法向量
+			  -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  0.0f, 1.0f, 0.0f, // 16
+			   0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f, // 17
+			   0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f, 1.0f, 0.0f, // 18
+			  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  0.0f, 1.0f, 0.0f, // 19
 
 			  // 6. 下面 (Bottom Face) - Y = -0.5f
-			  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // 20
-			   0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // 21
-			   0.5f, -0.5f,  0.5f,  1.0f, 1.0f, // 22
-			  -0.5f, -0.5f,  0.5f,  0.0f, 1.0f  // 23
+			  // 位置				// 纹理坐标	 // 法向量
+			  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 20
+			   0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 21
+			   0.5f, -0.5f,  0.5f,  1.0f, 1.0f,  0.0f, -1.0f, 0.0f, // 22
+			  -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  0.0f, -1.0f, 0.0f, // 23
 		};
 		m_VertexBuffer = Snail::VertexBuffer::Create(vertices, sizeof(vertices));
 		m_VertexBuffer->Bind();
@@ -76,7 +86,8 @@ public:
 		Snail::Refptr<Snail::BufferLayout> layout = Snail::BufferLayout::Create(
 			{
 				{ "positions", Snail::VertexDataType::Float3 },
-				{ "texture_coords", Snail::VertexDataType::Float2 }
+				{ "texture_coords", Snail::VertexDataType::Float2 },
+				{ "normal", Snail::VertexDataType::Float3 }
 			}
 		);
 		m_VertexBuffer->SetLayout(layout);
@@ -93,9 +104,9 @@ public:
 		m_IndexBuffer = Snail::IndexBuffer::Create(indices, sizeof(indices));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-
-		//m_Shader = Snail::Shader::Create("assets/shaders/test.shader");
-		m_ShaderLibrary.Load("test", "assets/shaders/test.shader");
+		//m_Shader = Snail::Shader::Create("assets/shaders/cube.shader");
+		m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
+		m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
 
 		m_Texture1 = Snail::Texture2D::Create("assets/images/kulisu.png");
 		m_Texture2 = Snail::Texture2D::Create("assets/images/mayoli.png");
@@ -109,7 +120,7 @@ public:
 
 	inline virtual void OnUpdate(const Snail::Timestep& ts) override {
 
-		Snail::SNL_PROFILE_FUNCTION();
+		SNL_PROFILE_FUNCTION();
 
 		m_CameraController->OnUpdate(ts);
 	}
@@ -126,39 +137,100 @@ public:
 
 		// 5. 渲染
 		// 设置uniform
-		auto testShader = m_ShaderLibrary.Get("test");
-		testShader->SetFloat4("u_Color", u_DeltaColor);
+		auto testShader = m_ShaderLibrary.Get("cube");
+		testShader->Bind();
+		testShader->SetFloat4("u_LightColor", u_LightColor);
 		testShader->SetInt("u_Texture1", 0);
 		testShader->SetInt("u_Texture2", 1);
 		testShader->SetFloat("u_MixValue", u_MixValue);
+		testShader->SetFloat3("u_LightPosition", u_LightPosition);
+		testShader->SetFloat3("u_ViewPosition", m_CameraController->GetCamera()->GetCameraPos());
 
-		// --- 设置 model 矩阵 ---
-		// --- 设置 view 矩阵 ---
-		// --- 设置 projection 矩阵 --- 都在submit实现
-		glm::mat4 model = glm::mat4(1.0f);
-		for (int i = 20; i > 0; i--) {
-			// 3. 计算变换 (现在有了头文件，这些函数就能用了)
-			glm::mat4 translate = glm::mat4(1.0f), rotate = glm::mat4(1.0f), scale = glm::mat4(1.0f);
-			translate = glm::translate(glm::mat4(1.0f), glm::vec3((i - 20) * 1.0f));
-			//rotate = glm::rotate(glm::mat4(1.0f), glm::radians(i * 50.0f), glm::vec3(i * 0.5f, i * 1.0f, i * 0.5f));
-			scale = glm::scale(glm::mat4(1.0f), glm::vec3(i * 0.05, i * 0.05, i * 0.05));
-			model = translate * rotate * scale;
+		auto lightShader = m_ShaderLibrary.Get("light_box");
+		lightShader->Bind();
+		lightShader->SetFloat4("u_LightColor", u_LightColor); // 白色光照
 
-			m_Texture1->Bind(0); // 绑定 kulisu 到槽位 0
-			m_Texture2->Bind(1); // 绑定 mayoli 到槽位 1
+		// ============================================================
+		// 1. 更新光源位置 (自动绕 Y 轴旋转)
+		// ============================================================
+		// 半径
+		float radius = 4.0f;
+		// 速度 (如果你想用 accumulated time，可以用 m_Time += ts; 替代 glfwGetTime)
+		float timeValue = (float)glfwGetTime();
+
+		// 让光源在 XZ 平面上做圆周运动，高度 Y 保持不变(或者微调)
+		u_LightPosition.x = sin(timeValue) * radius;
+		u_LightPosition.z = cos(timeValue) * radius;
+		// u_LightPosition.y = 2.0f; // 如果你想固定高度，可以取消注释这行
+
+		// ============================================================
+		// 2. 渲染中间的 "主角" 立方体 (Hero Cube)
+		// ============================================================
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			// 放在正中心，稍微旋转一点展示立体感
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+			// 稍微大一点
+			model = glm::scale(model, glm::vec3(1.5f));
+
+			// 绑定纹理
+			m_Texture1->Bind(0);
+			m_Texture2->Bind(1);
+
+			// 提交给 Test Shader (带光照计算的)
+			testShader->Bind();
+			testShader->SetFloat3("u_LightPosition", u_LightPosition); // !!! 关键：更新Shader里的光源位置
+			Snail::Renderer::Submit(testShader, m_VertexArray, model);
+		}
+
+		// ============================================================
+		// 3. 渲染四周的 4 个参照立方体 (Satellites)
+		// ============================================================
+		// 定义4个位置：左、右、上、下 (或者前后左右)
+		glm::vec3 cubePositions[] = {
+			glm::vec3(3.0f,  0.0f,  0.0f),
+			glm::vec3(-3.0f,  0.0f,  0.0f),
+			glm::vec3(0.0f,  3.0f,  0.0f),
+			glm::vec3(0.0f, -3.0f,  0.0f)
+		};
+
+		for (int i = 0; i < 4; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			// 让它们以不同的角度旋转，这样能看到不同面的反光
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			model = glm::scale(model, glm::vec3(0.8f)); // 稍微小一点
 
 			Snail::Renderer::Submit(testShader, m_VertexArray, model);
 		}
 
-		Snail::Renderer::EndScene();
+		// ============================================================
+		// 4. 渲染光源本身 (Light Cube)
+		// ============================================================
+		{
+			auto lightShader = m_ShaderLibrary.Get("light_box");
+			lightShader->Bind();
+			lightShader->SetFloat4("u_LightColor", u_LightColor);
+
+			glm::mat4 model = glm::mat4(1.0f);
+			// 直接使用计算好的动态位置
+			model = glm::translate(model, glm::vec3(u_LightPosition.x, u_LightPosition.y, u_LightPosition.z));
+			model = glm::scale(model, glm::vec3(0.2f)); // 光源做小一点，看起来像灯泡
+
+			Snail::Renderer::Submit(lightShader, m_VertexArray, model);
+		}
 		//----------------------------------------------------------------
 	}
 
 	inline virtual void OnImGuiRender() override {
 		ImGui::Begin("Settings");
 
-		ImGui::ColorEdit4("cubes_color", glm::value_ptr(u_DeltaColor));
-		ImGui::SliderFloat("alphaSlider", &u_MixValue, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat3("Light Position", glm::value_ptr(u_LightPosition), -10.0f, 10.0f);
+		ImGui::ColorEdit4("Light Color", glm::value_ptr(u_LightColor));
+		ImGui::SliderFloat("Alpha Slider", &u_MixValue, 0.0f, 1.0f, "%.1f");
 
 		for (auto& result : Snail::s_ProfilingResults)
 		{

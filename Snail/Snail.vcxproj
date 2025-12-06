@@ -205,6 +205,7 @@
     <ClCompile Include="src\Platform\glfw\OpenGL\Render\Renderer\OpenGLRendererCommand.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Input\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\glfw\Windows\Window\WindowsWindow.cpp" />
+    <ClCompile Include="src\Snail\Core\Timestep.cpp" />
     <ClCompile Include="src\SNLpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

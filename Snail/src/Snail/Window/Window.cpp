@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Render/Renderer/RendererCommand.h"
+
 #include "Window.h"
 #include "Platform/glfw/Windows/Window/WindowsWindow.h"
 
@@ -9,8 +11,14 @@ namespace Snail {
     {
         SNL_PROFILE_FUNCTION();
 
-        // 之前可以switch选择不同的操作系统（平台）调用不同的构造方法
-        return std::make_unique<WindowsWindow>(props);
+
+        switch (RendererCommand::GetWindowAPI()) {
+            case RendererCommand::WindowAPI::None:		SNL_CORE_ASSERT(false, "Window: 取无效值 None!"); return nullptr;
+            case RendererCommand::WindowAPI::GLFW:		return std::make_unique<WindowsWindow>(props);
+        }
+
+        SNL_CORE_ASSERT(false, "Window: switch无法取值!");
+        return nullptr;
     }
 
 }

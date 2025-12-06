@@ -79,33 +79,32 @@ namespace Snail {
 		m_Camera->m_Up = glm::normalize(glm::cross(m_Camera->m_Right, m_Camera->m_Front));
 	}
 
-	void PerspectiveCameraController::OnUpdate(const Snail::Timestep& ts) {
+	void PerspectiveCameraController::OnUpdate(const Timestep& ts) {
 
-		const float& time = ts.GetSeconds();
-		if (Snail::Input::IsKeyPressed(SNL_KEY_W)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::FRONT, m_CameraMoveSpeed * time);
+		if (Input::IsKeyPressed(SNL_KEY_W)) {
+			this->MoveCamera(Camera::TranslationDirection::FRONT, m_CameraMoveSpeed * ts);
 		}
-		else if (Snail::Input::IsKeyPressed(SNL_KEY_S)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::BACK, m_CameraMoveSpeed * time);
+		else if (Input::IsKeyPressed(SNL_KEY_S)) {
+			this->MoveCamera(Camera::TranslationDirection::BACK, m_CameraMoveSpeed * ts);
 		}
-		if (Snail::Input::IsKeyPressed(SNL_KEY_E)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::UP, m_CameraMoveSpeed * time);
+		if (Input::IsKeyPressed(SNL_KEY_E)) {
+			this->MoveCamera(Camera::TranslationDirection::UP, m_CameraMoveSpeed * ts);
 		}
-		else if (Snail::Input::IsKeyPressed(SNL_KEY_Q)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::DOWN, m_CameraMoveSpeed * time);
+		else if (Input::IsKeyPressed(SNL_KEY_Q)) {
+			this->MoveCamera(Camera::TranslationDirection::DOWN, m_CameraMoveSpeed * ts);
 		}
-		if (Snail::Input::IsKeyPressed(SNL_KEY_A)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::LEFT, m_CameraMoveSpeed * time);
+		if (Input::IsKeyPressed(SNL_KEY_A)) {
+			this->MoveCamera(Camera::TranslationDirection::LEFT, m_CameraMoveSpeed * ts);
 		}
-		else if (Snail::Input::IsKeyPressed(SNL_KEY_D)) {
-			this->MoveCamera(Snail::Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed * time);
+		else if (Input::IsKeyPressed(SNL_KEY_D)) {
+			this->MoveCamera(Camera::TranslationDirection::RIGHT, m_CameraMoveSpeed * ts);
 		}
 
 	}
 
 	void PerspectiveCameraController::OnEvent(Event& e) {
 
-		Snail::EventDispatcher dispatcher(e);
+		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnWindowResize));
 		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseMove));
 		dispatcher.Dispatch<MouseScrollEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseScroll));
@@ -118,7 +117,7 @@ namespace Snail {
 		return false;
 	}
 
-	bool PerspectiveCameraController::OnMouseMove(Snail::MouseMoveEvent& e) {
+	bool PerspectiveCameraController::OnMouseMove(MouseMoveEvent& e) {
 
 		if (m_FirstMouse) {
 			m_LastMouseX = e.GetMouseX();
@@ -134,7 +133,7 @@ namespace Snail {
 		xoffset *= m_Sensitivity;
 		yoffset *= m_Sensitivity;
 
-		if (Snail::Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
+		if (Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
 			this->RotateCamera(xoffset, yoffset);
 		}
 		return false;

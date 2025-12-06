@@ -6,6 +6,7 @@
 namespace Snail {
 
 	RendererCommand::API RendererCommand::s_API = RendererCommand::API::OpenGL;
+	RendererCommand::WindowAPI RendererCommand::s_WindowAPI = RendererCommand::WindowAPI::GLFW;
 
 	Uniptr<RendererCommand> RendererCommand::RC = RendererCommand::Create();
 

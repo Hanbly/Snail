@@ -17,13 +17,17 @@ namespace Snail {
 			OpenGL,
 			Vulkan
 		};
+		enum class WindowAPI {
+			None = 0,
+			GLFW
+		};
 		virtual ~RendererCommand() = default;
 
-		inline static API GetAPI() {
-			return s_API;
-		}
+		inline static API GetAPI() { return s_API; }
+		inline static WindowAPI GetWindowAPI() { return s_WindowAPI; }
 	private:
 		static API s_API;
+		static WindowAPI s_WindowAPI;
 	private: //-------------------------Commands-------------------------------------
 		static Uniptr<RendererCommand> RC;
 

@@ -66,7 +66,7 @@ namespace Snail {
 
 
 		//-----------------计算上一帧的时间和帧间隔时间------------------
-		float time = (float)glfwGetTime();
+		float time = Timestep::GetTime();
 		Timestep ts = Timestep(time - m_LastFrameTime);
 		m_LastFrameTime = time;
 
