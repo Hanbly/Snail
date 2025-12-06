@@ -4,7 +4,7 @@
 
 #include "Shader.h"
 
-#include "Platform/glfw/OpenGL/Render/RenderAPI/OpenGLShader.h"
+#include "Platform/glfw/OpenGL/Render/Renderer/Material/OpenGLShader.h"
 
 namespace Snail {
 

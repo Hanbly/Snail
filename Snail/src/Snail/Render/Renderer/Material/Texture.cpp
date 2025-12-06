@@ -3,7 +3,7 @@
 #include "Snail/Render/Renderer/RendererCommand.h"
 
 #include "Texture.h"
-#include "Platform/glfw/OpenGL/Render/RenderAPI/OpenGLTexture.h"
+#include "Platform/glfw/OpenGL/Render/Renderer/Material/OpenGLTexture.h"
 
 namespace Snail {
 

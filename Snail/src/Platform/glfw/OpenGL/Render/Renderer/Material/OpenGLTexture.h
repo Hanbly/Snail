@@ -3,7 +3,7 @@
 #include "Snail/Core/Core.h"
 #include "Snail/Core/Macro.h"
 
-#include "Snail/Render/RenderAPI/Texture.h"
+#include "Snail/Render/Renderer/Material/Texture.h"
 
 namespace Snail {
 

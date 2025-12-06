@@ -15,7 +15,4 @@
     <ClCompile Include="src\ExampleApp.cpp" />
     <ClCompile Include="src\SNLpch.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\light_box.glsl" />
-  </ItemGroup>
 </Project>

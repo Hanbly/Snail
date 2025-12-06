@@ -6,9 +6,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-// TODO:remove
-#include "GLFW/glfw3.h"
-
 class ExampleLayer : public Snail::Layer
 {
 private:
@@ -20,6 +17,8 @@ private:
 	Snail::ShaderLibrary m_ShaderLibrary;
 	Snail::Refptr<Snail::Texture> m_Texture1; // 纹理 1
 	Snail::Refptr<Snail::Texture> m_Texture2; // 纹理 2
+	Snail::Refptr<Snail::Material> m_CubeMaterial;
+	Snail::Refptr<Snail::Material> m_LightMaterial;
 	Snail::Uniptr<Snail::PerspectiveCameraController> m_CameraController;
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
 	glm::vec4 u_LightColor = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -104,12 +103,21 @@ public:
 		m_IndexBuffer = Snail::IndexBuffer::Create(indices, sizeof(indices));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		//m_Shader = Snail::Shader::Create("assets/shaders/cube.shader");
+
+
+
 		m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
 		m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
 
 		m_Texture1 = Snail::Texture2D::Create("assets/images/kulisu.png");
 		m_Texture2 = Snail::Texture2D::Create("assets/images/mayoli.png");
+
+		// 材质
+		m_CubeMaterial = Snail::Material::Create(m_ShaderLibrary.Get("cube"));
+		m_CubeMaterial->SetTexture("u_Texture1", m_Texture1);
+		m_CubeMaterial->SetTexture("u_Texture2", m_Texture2);
+		m_CubeMaterial->SetFloat("u_MixValue", u_MixValue);
+		m_LightMaterial = Snail::Material::Create(m_ShaderLibrary.Get("light_box"));
 
 		m_CameraController = std::make_unique<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 		//------------------------------------------------------------------------------
@@ -133,101 +141,35 @@ public:
 	inline virtual void OnRender() override {
 		//SNL_TRACE("ExampleLayer 调用: OnRender()");
 		// -------------------临时------------------------------------------
-		Snail::Renderer::BeginScene(m_CameraController->GetCamera());
+		Snail::Renderer3D::BeginScene(m_CameraController->GetCamera(), u_LightPosition, u_LightColor);
 
 		// 5. 渲染
-		// 设置uniform
-		auto testShader = m_ShaderLibrary.Get("cube");
-		testShader->Bind();
-		testShader->SetFloat4("u_LightColor", u_LightColor);
-		testShader->SetInt("u_Texture1", 0);
-		testShader->SetInt("u_Texture2", 1);
-		testShader->SetFloat("u_MixValue", u_MixValue);
-		testShader->SetFloat3("u_LightPosition", u_LightPosition);
-		testShader->SetFloat3("u_ViewPosition", m_CameraController->GetCamera()->GetCameraPos());
-
-		auto lightShader = m_ShaderLibrary.Get("light_box");
-		lightShader->Bind();
-		lightShader->SetFloat4("u_LightColor", u_LightColor); // 白色光照
-
-		// ============================================================
-		// 1. 更新光源位置 (自动绕 Y 轴旋转)
-		// ============================================================
-		// 半径
-		float radius = 4.0f;
-		// 速度 (如果你想用 accumulated time，可以用 m_Time += ts; 替代 glfwGetTime)
-		float timeValue = (float)glfwGetTime();
-
-		// 让光源在 XZ 平面上做圆周运动，高度 Y 保持不变(或者微调)
-		u_LightPosition.x = sin(timeValue) * radius;
-		u_LightPosition.z = cos(timeValue) * radius;
-		// u_LightPosition.y = 2.0f; // 如果你想固定高度，可以取消注释这行
-
-		// ============================================================
-		// 2. 渲染中间的 "主角" 立方体 (Hero Cube)
-		// ============================================================
+		// 画方块，只需传位置
 		{
-			glm::mat4 model = glm::mat4(1.0f);
+			m_CubeMaterial->SetFloat("u_MixValue", u_MixValue);
+			glm::mat4 transform = glm::mat4(1.0f);
 			// 放在正中心，稍微旋转一点展示立体感
-			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-			model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-			// 稍微大一点
-			model = glm::scale(model, glm::vec3(1.5f));
-
-			// 绑定纹理
-			m_Texture1->Bind(0);
-			m_Texture2->Bind(1);
-
-			// 提交给 Test Shader (带光照计算的)
-			testShader->Bind();
-			testShader->SetFloat3("u_LightPosition", u_LightPosition); // !!! 关键：更新Shader里的光源位置
-			Snail::Renderer::Submit(testShader, m_VertexArray, model);
+			transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+			transform = glm::rotate(transform, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+			transform = glm::scale(transform, glm::vec3(1.5f));
+			Snail::Renderer3D::DrawMesh(m_VertexArray, m_CubeMaterial, transform);
 		}
 
-		// ============================================================
-		// 3. 渲染四周的 4 个参照立方体 (Satellites)
-		// ============================================================
-		// 定义4个位置：左、右、上、下 (或者前后左右)
-		glm::vec3 cubePositions[] = {
-			glm::vec3(3.0f,  0.0f,  0.0f),
-			glm::vec3(-3.0f,  0.0f,  0.0f),
-			glm::vec3(0.0f,  3.0f,  0.0f),
-			glm::vec3(0.0f, -3.0f,  0.0f)
-		};
-
-		for (int i = 0; i < 4; i++)
+		// 画光源 (用另一个简单的材质)
 		{
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			// 让它们以不同的角度旋转，这样能看到不同面的反光
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			model = glm::scale(model, glm::vec3(0.8f)); // 稍微小一点
-
-			Snail::Renderer::Submit(testShader, m_VertexArray, model);
+			glm::mat4 lightTransform = glm::mat4(1.0f);
+			lightTransform = glm::translate(lightTransform, glm::vec3(u_LightPosition.x, u_LightPosition.y, u_LightPosition.z));
+			lightTransform = glm::scale(lightTransform, glm::vec3(0.2f));
+			Snail::Renderer3D::DrawMesh(m_VertexArray, m_LightMaterial, lightTransform);
 		}
 
-		// ============================================================
-		// 4. 渲染光源本身 (Light Cube)
-		// ============================================================
-		{
-			auto lightShader = m_ShaderLibrary.Get("light_box");
-			lightShader->Bind();
-			lightShader->SetFloat4("u_LightColor", u_LightColor);
-
-			glm::mat4 model = glm::mat4(1.0f);
-			// 直接使用计算好的动态位置
-			model = glm::translate(model, glm::vec3(u_LightPosition.x, u_LightPosition.y, u_LightPosition.z));
-			model = glm::scale(model, glm::vec3(0.2f)); // 光源做小一点，看起来像灯泡
-
-			Snail::Renderer::Submit(lightShader, m_VertexArray, model);
-		}
 		//----------------------------------------------------------------
 	}
 
 	inline virtual void OnImGuiRender() override {
 		ImGui::Begin("Settings");
 
+		// 关键：检测的变量必须在循环中维持更新
 		ImGui::SliderFloat3("Light Position", glm::value_ptr(u_LightPosition), -10.0f, 10.0f);
 		ImGui::ColorEdit4("Light Color", glm::value_ptr(u_LightColor));
 		ImGui::SliderFloat("Alpha Slider", &u_MixValue, 0.0f, 1.0f, "%.1f");

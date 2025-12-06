@@ -10,23 +10,22 @@ out vec2 v_texture1_coords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 u_Model;
+uniform mat4 u_ViewProjection;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(position, 1.0);
+    gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
     v_texture1_coords = texture1_coords;
 
     // [重要修复]：计算法线矩阵并变换法线到世界空间
     // 注意：在实际引擎中，这个计算通常在 CPU 端完成并作为一个 mat3 uniform 传入，
     // 因为在顶点着色器中对每个顶点都做逆矩阵计算开销很大。
     // 但为了演示原理，这里先写在 Shader 里。
-    mat3 normalMatrix = transpose(inverse(mat3(model)));
+    mat3 normalMatrix = transpose(inverse(mat3(u_Model)));
     v_Normal = normalize(normalMatrix * a_Normal);
 
-    v_FragPos = vec3(model * vec4(position, 1.0));
+    v_FragPos = vec3(u_Model * vec4(position, 1.0));
 }
 
 #type fragment

@@ -1,0 +1,40 @@
+﻿#pragma once
+
+#include "Snail/Core/Core.h"
+#include "Snail/Core/Macro.h"
+
+#include "Snail/Render/RenderAPI/VertexArray.h"
+#include "Camera/Camera.h"
+#include "Material/Material.h"
+
+#include "Snail/Render/Renderer/RendererCommand.h"
+
+namespace Snail {
+
+	class Renderer3D
+	{
+	private:
+		// 3D 场景所需的全局数据
+		struct Renderer3DSceneData {
+			glm::mat4 ViewProjectionMatrix; // VP 矩阵
+			glm::vec3 CameraPosition;       // 相机位置 (用于镜面光计算)
+
+			// 简单的单光源数据 (未来可以扩展为光源列表)
+			glm::vec3 LightPosition;
+			glm::vec4 LightColor;
+		};
+
+		static Renderer3DSceneData s_3DSceneData;
+
+	public:
+		static void Init();
+		static void Shutdown();
+
+		// BeginScene 升级：接收相机 + 光源信息
+		static void BeginScene(const Uniptr<Camera>& camera, const glm::vec3& lightPos, const glm::vec4& lightColor);
+		static void EndScene();
+
+		static void DrawMesh(const Refptr<VertexArray>& vertexArray, const Refptr<Material>& material, const glm::mat4& transform = glm::mat4(1.0f));
+	};
+
+}
