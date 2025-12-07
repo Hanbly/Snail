@@ -4,7 +4,7 @@
 
 namespace Snail {
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t size)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(const uint32_t* indices, const uint32_t& size)
 		: m_Count(0)
 	{
 		SNL_PROFILE_FUNCTION();

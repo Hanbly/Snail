@@ -7,6 +7,7 @@
 #include "Snail/Render/Renderer/Material/Shader.h"
 #include "Snail/Render/Renderer/Material/Texture.h"
 #include "Snail/Render/Renderer/Material/Material.h"
+#include "Snail/Render/Renderer/Mesh/Mesh.h"
 #include "Snail/Render/Renderer/Renderer.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
 #include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"

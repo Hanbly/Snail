@@ -4,7 +4,7 @@
 
 namespace Snail {
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* vertices, const uint32_t& size)
 	{
 		SNL_PROFILE_FUNCTION();
 

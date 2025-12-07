@@ -12,7 +12,7 @@ namespace Snail {
 		uint32_t m_BufferId;
 		uint32_t m_Count;
 	public:
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t size);
+		OpenGLIndexBuffer(const uint32_t* indices, const uint32_t& size);
 		~OpenGLIndexBuffer();
 
 		virtual uint32_t GetIndexBufferCount() const override;

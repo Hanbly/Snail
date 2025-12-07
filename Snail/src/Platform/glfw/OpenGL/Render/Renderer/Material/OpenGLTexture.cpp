@@ -7,7 +7,7 @@
 namespace Snail {
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-		: m_RendererId(0)
+		: m_RendererId(0), m_Path(path)
 	{
 		SNL_PROFILE_FUNCTION();
 

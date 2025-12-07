@@ -3,8 +3,8 @@
 
 // 只有位置输入了
 layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 Texture1Coords;
-layout(location = 2) in vec3 a_Normal;
+layout(location = 1) in vec3 a_Normal;
+layout(location = 2) in vec2 Texture1Coords;
 
 out vec2 v_Texture1Coords;
 out vec3 v_Normal;
@@ -34,8 +34,8 @@ in vec3 v_Normal;
 in vec3 v_FragPos;
 
 uniform vec4 u_LightColor;      // 光照色调
-uniform sampler2D u_Texture1;   // 纹理 1
-uniform sampler2D u_Texture2;   // 纹理 2
+uniform sampler2D u_Diffuse1;   // 纹理 1
+uniform sampler2D u_Diffuse2;   // 纹理 2
 uniform float u_MixValue;       // 混合比例 (0.0 = 全显示纹理1， 1.0 = 全显示纹理2)
 uniform vec3 u_LightPosition;   // 光源位置
 uniform vec3 u_ViewPosition;    // 相机的观察位置
@@ -48,8 +48,8 @@ uniform float u_Shininess;           // 反光度
 void main()
 {
     // 1. 分别采样纹理12
-    vec4 tex1 = texture(u_Texture1, v_Texture1Coords);
-    vec4 tex2 = texture(u_Texture2, v_Texture1Coords);
+    vec4 tex1 = texture(u_Diffuse1, v_Texture1Coords);
+    vec4 tex2 = texture(u_Diffuse2, v_Texture1Coords);
 
     // 2. 混合纹理 (两种常见方式)
 

@@ -13,7 +13,7 @@ namespace Snail {
 		uint32_t m_BufferId;
 		Refptr<BufferLayout> m_Layout;
 	public:
-		OpenGLVertexBuffer(float* vertices, uint32_t size);
+		OpenGLVertexBuffer(const void* vertices, const uint32_t& size);
 		~OpenGLVertexBuffer();
 
 		inline virtual Refptr<BufferLayout> OpenGLVertexBuffer::GetLayout() const override {

@@ -5,9 +5,17 @@
 
 #include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
 
+#include "glm/glm.hpp"
+
 namespace Snail {
 
-	class SNAIL_API VertexBuffer {
+	struct Vertex {
+		glm::vec3 position;
+		glm::vec3 normal;
+		glm::vec2 texCoords;
+	};
+
+	class VertexBuffer {
 	public:
 		virtual ~VertexBuffer() {}
 
@@ -17,7 +25,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static Refptr<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Refptr<VertexBuffer> Create(const void* vertices, const uint32_t& size);
 	};
 
 }

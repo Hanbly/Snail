@@ -14,7 +14,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static Refptr<IndexBuffer> Create(uint32_t* indices, uint32_t size);
+		static Refptr<IndexBuffer> Create(const uint32_t* indices, const uint32_t& size);
 	};
 
 }
