@@ -14,3 +14,6 @@
 [submodule "Snail/vendor/GLM"]
 	path = Snail/vendor/GLM
 	url = https://github.com/Hanbly/glm.git
+[submodule "Snail/vendor/Assimp"]
+	path = Snail/vendor/Assimp
+	url = https://github.com/Hanbly/assimp.git

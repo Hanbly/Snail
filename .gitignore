@@ -11,3 +11,18 @@
 
 *.user
 /Example/*.json
+
+# Visual Studio
+*.sln
+*.ncb
+**/*.vcxproj
+**/*.vcxproj.filters
+**/*.vcxproj.user
+*.VC.db
+*.VC.db-shm
+*.VC.db-wal
+*.VC.opendb
+*.ipch
+.vs/
+out/
+CMakeSettings.json

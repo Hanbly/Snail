@@ -25,18 +25,19 @@ IncludeDirs["GLM"] = "Snail/vendor/GLM"
 IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
+IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
 
--- 引入GLFW项目（该项目需要编译，所以引入premake配置文件）
--- 实际引入的是GLFW项目的premake5.lua文件
+-- 引入需要编译项目（该项目需要编译，所以引入premake配置文件）
+-- 实际引入的是项目的premake5.lua文件
 include "Snail/vendor/GLFW"
 include "Snail/vendor/GLAD"
 include "Snail/vendor/Imgui"
+include "Snail/vendor/Assimp"
 
 
 project "Snail"
     location "Snail"
     kind "StaticLib"
-    -- kind "SharedLib"
     language "C++"
     staticruntime "off"
 
@@ -60,6 +61,7 @@ project "Snail"
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.stb_image}",
+        "%{IncludeDirs.Assimp}",
         "%{prj.name}/src"
     }
 
@@ -67,7 +69,8 @@ project "Snail"
         "GLFW",
         "opengl32.lib",
         "GLAD",
-        "Imgui"
+        "Imgui",
+        "Assimp"
     }
 
     filter "system:windows"
@@ -128,7 +131,6 @@ project "Example"
     links { "Snail" }
 
     filter { "system:windows" }
-
         defines {
             "SNL_PLATFORM_WINDOWS"
         }
