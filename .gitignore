@@ -9,7 +9,6 @@
 .git commands.md
 .notes/
 
-*.user
 /Example/*.json
 
 # Visual Studio
@@ -26,3 +25,15 @@
 .vs/
 out/
 CMakeSettings.json
+
+# models
+**/models/**/**/*.obj
+**/models/**/*.mtl
+**/models/**/*.png
+**/models/**/*.jpg
+**/models/**/*.jpeg
+**/models/**/*.fbx
+**/models/**/*.dae
+**/models/**/*.blend
+
+**/models/**/**/*.txt

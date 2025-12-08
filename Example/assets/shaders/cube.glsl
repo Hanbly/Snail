@@ -4,9 +4,9 @@
 // 只有位置输入了
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 a_Normal;
-layout(location = 2) in vec2 Texture1Coords;
+layout(location = 2) in vec2 TextureCoords;
 
-out vec2 v_Texture1Coords;
+out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 
@@ -17,7 +17,7 @@ uniform mat3 u_NormalMatrix;
 void main()
 {
     gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
-    v_Texture1Coords = Texture1Coords;
+    v_TextureCoords = TextureCoords;
 
     v_Normal = normalize(u_NormalMatrix * a_Normal);
 
@@ -29,7 +29,7 @@ void main()
 
 out vec4 FinalColor; // 最终输出到屏幕
 
-in vec2 v_Texture1Coords;
+in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
 
@@ -48,8 +48,8 @@ uniform float u_Shininess;           // 反光度
 void main()
 {
     // 1. 分别采样纹理12
-    vec4 tex1 = texture(u_Diffuse1, v_Texture1Coords);
-    vec4 tex2 = texture(u_Diffuse2, v_Texture1Coords);
+    vec4 tex1 = texture(u_Diffuse1, v_TextureCoords);
+    vec4 tex2 = texture(u_Diffuse2, v_TextureCoords);
 
     // 2. 混合纹理 (两种常见方式)
 

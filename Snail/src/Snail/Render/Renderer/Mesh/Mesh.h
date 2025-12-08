@@ -15,10 +15,17 @@ namespace Snail {
 		std::string type;
 		std::string path;
 
+		TextureData() = default;
 		TextureData(const Refptr<Texture>& tex, const std::string& type)
 			: texture(tex), type(type)
 		{
-			path = tex->GetPath();
+			if (tex) {
+				path = tex->GetPath();
+			}
+			else {
+				path = "";
+				SNL_CORE_ERROR("TextureData initialized with null texture! Type: {0}", type);
+			}
 		}
 	};
 
@@ -29,9 +36,7 @@ namespace Snail {
 		glm::mat4 m_LocalTransform; // 保存某部分 mesh 相对于整体 Model 原点的偏移
 	public:
 		Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
-			const Refptr<Shader>& shader, const glm::mat4& localTransform = glm::mat4(1.0f));
-		Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
-			const std::vector<TextureData>& textures, const Refptr<Shader>& shader,
+			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {}, 
 			const glm::mat4& localTransform = glm::mat4(1.0f));
 		~Mesh() = default;
 
@@ -40,9 +45,7 @@ namespace Snail {
 		void Draw(const glm::mat4& worldTransform) const;
 
 	private:
-		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader);
-		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, 
-			const std::vector<TextureData>& textures, const Refptr<Shader>& shader);
+		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {});
 	};
 
 }

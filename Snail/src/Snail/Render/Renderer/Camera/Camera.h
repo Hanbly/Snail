@@ -43,7 +43,7 @@ namespace Snail {
 		float m_FOV;
 		float m_Aspect;
 		float m_Near = 0.1f;
-		float m_Far = 100.0f;
+		float m_Far = 2000.0f;
 
 		// 矩阵缓存
 		glm::mat4 m_ViewMatrix;

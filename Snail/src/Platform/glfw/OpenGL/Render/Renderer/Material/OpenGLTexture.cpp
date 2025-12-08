@@ -30,19 +30,18 @@ namespace Snail {
 			dataFormat = GL_RGB;
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		}
+		else if (channels == 1) // 高光图往往是单通道灰度图！
+		{
+			internalFormat = GL_R8;
+			dataFormat = GL_RED;
+		}
 
-		//glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererId);
-		//// 在gpu存数据，第二个参数是mipmaps级别
-		//glTextureStorage2D(m_RendererId, 1, internalFormat, m_Width, m_Height);
-		//Bind();
-		//// 为当前绑定的纹理对象设置环绕、过滤方式
-		//glTextureParameteri(m_RendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTextureParameteri(m_RendererId, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//glTextureParameteri(m_RendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		//glTextureParameteri(m_RendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		//glTexSubImage2D(m_RendererId, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-		////glGenerateMipmap(GL_TEXTURE_2D);
+		if (internalFormat == 0 || dataFormat == 0)
+		{
+			SNL_CORE_ASSERT(false, "纹理格式错误! Channels: {0}, Path: {1}", channels, path);
+			stbi_image_free(data);
+			return; // 或者抛出异常
+		}
 
 		glGenTextures(1, &m_RendererId);
 		Bind(0);
@@ -51,6 +50,12 @@ namespace Snail {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// 缩小使用临近取色
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // u%方向超出0-1的处理
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // v%方向超出0-1的处理
+
+		// ------------ 内存对齐 ------------
+		// 告诉 OpenGL 哪怕是 1 字节对齐也可以
+		// 防止宽度不是 4 的倍数时读取越界崩溃
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		// ---------------------------------
 
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
