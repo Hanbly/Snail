@@ -125,6 +125,7 @@ project "Example"
         "%{IncludeDirs.GLM}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
+        "%{IncludeDirs.Assimp}",
         "Snail/src"
     }
 
