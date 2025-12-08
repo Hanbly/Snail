@@ -32,6 +32,7 @@ in vec3 v_FragPos;
 
 uniform vec4 u_LightColor;
 uniform sampler2D u_Diffuse1;
+uniform sampler2D u_Specular1;
 uniform bool u_UseTexture;
 uniform vec3 u_LightPosition;
 uniform vec3 u_ViewPosition;
@@ -74,15 +75,22 @@ void main()
     vec3 viewDir = normalize(u_ViewPosition - v_FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
-    vec3 specular = spec * u_ColorSpecular * u_LightColor.rgb * vec3(u_SpecularStrength);
-
+    
+    float specMask = 1.0; // 默认全反光
+    if (u_UseTexture) {
+        // 从纹理采样。因为高光图通常是黑白的，取红色通道 r 即可
+        // 这决定了“哪里该亮，哪里不该亮”
+        specMask = texture(u_Specular1, v_TextureCoords).r;
+    }
+    // 原始高光 * 材质高光色(Ks) * 光源颜色 * 全局强度系数 * 贴图遮罩(specMask)
+    vec3 specular = spec * u_ColorSpecular * u_LightColor.rgb * vec3(u_SpecularStrength) * specMask;
 
 
 
 
     // 5. 组合结果
     // (环境光 + 漫反射) * 物体颜色 + 镜面高光
-    vec3 result = (ambient + diffuse) * objectColor.rgb + specular;
+    vec3 result = (ambient + diffuse + specular) * objectColor.rgb;
 
     FinalColor = vec4(result, 1.0);
 }
