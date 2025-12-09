@@ -19,19 +19,14 @@ private:
 	//Snail::Refptr<Snail::Texture> m_Texture2; // 纹理 2
 	//Snail::Refptr<Snail::Material> m_CubeMaterial;
 	//Snail::Refptr<Snail::Material> m_LightMaterial;
-	Snail::Refptr<Snail::Mesh> m_CubeMesh;
+	//Snail::Refptr<Snail::Mesh> m_CubeMesh;
 	Snail::Refptr<Snail::Mesh> m_LightMesh;
-	Snail::Refptr<Snail::Model> m_Model;
+	std::vector<Snail::Refptr<Snail::ModelInstance>> m_Objs;
+	int8_t m_SelectedModelIndex = -1;
 	
 	Snail::Uniptr<Snail::PerspectiveCameraController> m_CameraController;
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
 	glm::vec4 u_LightColor = {1.0f, 1.0f, 1.0f, 1.0f};
-	float u_MixValue = 0.0f;
-
-	float u_AmbientStrength = 0.1f;     // 环境光照系数
-	float u_DiffuseStrength = 0.8f;     // 漫反射系数
-	float u_SpecularStrength = 0.5f;    // 镜面反射系数
-	float u_Shininess = 32.0f;           // 反光度
 	//------------------------------------------------------------------
 public:
 	ExampleLayer(const std::string& layerName, const bool& layerEnabled)
@@ -93,22 +88,44 @@ public:
 		m_ShaderLibrary.Load("model", "assets/shaders/Model_Shader.glsl");
 		
 
+		// 独属于Cube示例的纹理设置
 		std::vector<Snail::TextureData> td;
 		td.push_back(Snail::TextureData(Snail::Texture2D::Create("assets/images/kulisu.png"), "texture_diffuse"));
 		td.push_back(Snail::TextureData(Snail::Texture2D::Create("assets/images/mayoli.png"), "texture_diffuse"));
-		m_CubeMesh = std::make_shared<Snail::Mesh>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
-		m_LightMesh = std::make_shared<Snail::Mesh>(vertices, indices, m_ShaderLibrary.Get("light_box"));
-
-		m_CubeMesh->GetMaterial()->SetFloat("u_MixValue", u_MixValue);
-		m_CubeMesh->GetMaterial()->SetFloat("u_AmbientStrength", u_AmbientStrength);
-		m_CubeMesh->GetMaterial()->SetFloat("u_DiffuseStrength", u_DiffuseStrength);
-		m_CubeMesh->GetMaterial()->SetFloat("u_SpecularStrength", u_SpecularStrength);
-		m_CubeMesh->GetMaterial()->SetFloat("u_Shininess", u_Shininess);
+		// --- 创建 Cube 实例 ---
+		{
+			Snail::ModelInstance cubeObj;
+			cubeObj.name = "Cube";
+			// 假设 Mesh 也可以被包装进 Model，或者你的 ModelInstance 支持 Mesh
+			cubeObj.mesh = std::make_shared<Snail::Mesh>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
+			cubeObj.pos = { 0.0f, 20.0f, 0.0f };
+			cubeObj.scale = { 25.0f, 25.0f, 25.0f };
+			cubeObj.rot = { 20.0f, 0.0f, 0.0f }; // 初始旋转
+			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(cubeObj));
+		}
+		// --- 创建 Light 实例 ---
+		{
+			Snail::ModelInstance lightObj;
+			lightObj.name = "Light";
+			// 假设 Mesh 也可以被包装进 Model，或者你的 ModelInstance 支持 Mesh
+			lightObj.mesh = std::make_shared<Snail::Mesh>(vertices, indices, m_ShaderLibrary.Get("light_box"));
+			lightObj.pos = { 0.0f, 60.0f, 0.0f };
+			lightObj.scale = { 25.0f, 25.0f, 25.0f };
+			lightObj.rot = { 20.0f, 0.0f, 0.0f }; // 初始旋转
+			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(lightObj));
+		}
 
 		//m_Model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/bugatti/bugatti.obj");
 		//m_Model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/dragon/dragon.obj");
 		//m_Model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
-		m_Model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+		// --- 创建 Sponza 模型实例 ---
+		{
+			Snail::ModelInstance sponzaObj;
+			sponzaObj.name = "Sponza Palace";
+			sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+			//sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider_3.fbx");
+			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(sponzaObj));
+		}
 
 
 		m_CameraController = std::make_unique<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
@@ -136,69 +153,206 @@ public:
 		Snail::Renderer3D::BeginScene(m_CameraController->GetCamera(), u_LightPosition, u_LightColor);
 
 		// 5. 渲染
-		// 
-		{
-			for (const auto& mesh : m_Model->GetMeshs()) {
-				mesh->GetMaterial()->SetFloat("u_AmbientStrength", u_AmbientStrength);
-				mesh->GetMaterial()->SetFloat("u_DiffuseStrength", u_DiffuseStrength);
-				mesh->GetMaterial()->SetFloat("u_SpecularStrength", u_SpecularStrength);
+		for (const auto& obj : m_Objs) {
+			if (obj->model) // 如果是外部加载的模型
+			{
+				for (const auto& mesh : obj->model->GetMeshs()) {
+					mesh->GetMaterial()->SetFloat("u_AmbientStrength", obj->ambient);
+					mesh->GetMaterial()->SetFloat("u_DiffuseStrength", obj->diffuse);
+					mesh->GetMaterial()->SetFloat("u_SpecularStrength", obj->specular);
+					mesh->GetMaterial()->SetFloat("u_Shininess", obj->shininess);
+				}
+				obj->model->Draw(obj->GetTransform());
 			}
-
-			glm::mat4 transform = glm::mat4(1.0f);
-			// 放在正中心
-			transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-			transform = glm::scale(transform, glm::vec3(1.0f));
-			m_Model->Draw(transform);
+			else if (obj->mesh) // 如果是手动创建的单独 Mesh (如 Cube)
+			{
+				obj->mesh->GetMaterial()->SetFloat("u_AmbientStrength", obj->ambient);
+				obj->mesh->GetMaterial()->SetFloat("u_DiffuseStrength", obj->diffuse);
+				obj->mesh->GetMaterial()->SetFloat("u_SpecularStrength", obj->specular);
+				obj->mesh->GetMaterial()->SetFloat("u_Shininess", obj->shininess);
+				obj->mesh->Draw(obj->GetTransform());
+			}
 		}
-		// 画方块，只需传位置
-		{
-			m_CubeMesh->GetMaterial()->SetFloat("u_MixValue", u_MixValue);
-			m_CubeMesh->GetMaterial()->SetFloat("u_AmbientStrength", u_AmbientStrength);
-			m_CubeMesh->GetMaterial()->SetFloat("u_DiffuseStrength", u_DiffuseStrength);
-			m_CubeMesh->GetMaterial()->SetFloat("u_SpecularStrength", u_SpecularStrength);
-			m_CubeMesh->GetMaterial()->SetFloat("u_Shininess", u_Shininess);
-
-			glm::mat4 transform = glm::mat4(1.0f);
-			// 放在正中心，稍微旋转一点展示立体感
-			transform = glm::translate(transform, glm::vec3(0.0f, 20.0f, 0.0f));
-			transform = glm::rotate(transform, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-			transform = glm::scale(transform, glm::vec3(25.0f));
-			m_CubeMesh->Draw(transform);
-		}
-
-		// 画光源 (用另一个简单的材质)
-		{
-			glm::mat4 lightTransform = glm::mat4(1.0f);
-			lightTransform = glm::translate(lightTransform, glm::vec3(u_LightPosition.x, u_LightPosition.y, u_LightPosition.z));
-			lightTransform = glm::scale(lightTransform, glm::vec3(10.0f));
-			m_LightMesh->Draw(lightTransform);
-		}
-
 		//----------------------------------------------------------------
 	}
 
 	inline virtual void OnImGuiRender() override {
-		ImGui::Begin(u8"设置");
+        // ==========================================================
+		// 1. 场景列表 (Scene Hierarchy)
+		// ==========================================================
+        ImGui::Begin(u8"场景列表 (Hierarchy)");
 
-		// 关键：检测的变量必须在循环中维持更新
-		ImGui::SliderFloat3(u8"光源位置坐标", glm::value_ptr(u_LightPosition), -200.0f, 500.0f);
-		ImGui::ColorEdit4(u8"光线颜色", glm::value_ptr(u_LightColor));
-		ImGui::SliderFloat(u8"纹理变换", &u_MixValue, 0.0f, 1.0f, "%.1f");
-		ImGui::SliderFloat(u8"环境光照系数", &u_AmbientStrength, 0.0f, 1.0f, "%.1f");
-		ImGui::SliderFloat(u8"漫反射系数", &u_DiffuseStrength, 0.0f, 1.0f, "%.1f");
-		ImGui::SliderFloat(u8"镜面反射系数", &u_SpecularStrength, 0.0f, 1.0f, "%.1f");
-		ImGui::SliderFloat(u8"反光度", &u_Shininess, 0.0f, 256.0f, "%.1f");
+        // 遍历所有对象
+        for (int i = 0; i < m_Objs.size(); i++)
+        {
+            auto& obj = m_Objs[i];
+            ImGuiTreeNodeFlags flags = ((m_SelectedModelIndex == i) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+            flags |= ImGuiTreeNodeFlags_SpanAvailWidth; // 选中条占满宽度
 
-		for (auto& result : Snail::s_ProfilingResults)
-		{
-			// 计算持续时间 (毫秒)
-			float duration = (result.end - result.start) * 0.001f;
+            // 渲染列表项
+            bool opened = ImGui::TreeNodeEx((void*)(uint64_t)i, flags, obj->name.c_str());
 
-			// 显示
-			ImGui::Text("%.3fms,  %s", duration, result.name.c_str());
-		}
+            // 处理点击选中
+            if (ImGui::IsItemClicked())
+            {
+                m_SelectedModelIndex = i;
+            }
 
-		ImGui::End();
+            // 右键菜单 (ContextMenu) - 可以在这里添加"删除"等功能
+            bool entityDeleted = false;
+            if (ImGui::BeginPopupContextItem())
+            {
+                if (ImGui::MenuItem(u8"删除对象"))
+                {
+                    entityDeleted = true;
+                }
+                ImGui::EndPopup();
+            }
+
+            // 如果展开了节点 (目前没有子节点，这里只是为了演示结构，可以只是简单的Text)
+            if (opened)
+            {
+                ImGui::TreePop();
+            }
+
+            // 执行删除操作
+            if (entityDeleted)
+            {
+                m_Objs.erase(m_Objs.begin() + i);
+                if (m_SelectedModelIndex == i) m_SelectedModelIndex = -1;
+                i--; // 调整循环索引
+            }
+        }
+
+        // 点击空白处取消选中
+        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+            m_SelectedModelIndex = -1;
+
+        ImGui::Separator();
+        if (ImGui::Button(u8"添加模型..."))
+        {
+            // ImportModel(); 
+        }
+        ImGui::End();
+
+
+        // ==========================================================
+        // 2. 属性面板 (Inspector)
+        // ==========================================================
+        ImGui::Begin(u8"属性面板 (Inspector)");
+
+        if (m_SelectedModelIndex >= 0 && m_SelectedModelIndex < m_Objs.size())
+        {
+            auto& selectedObj = m_Objs[m_SelectedModelIndex];
+
+            // 简单的重命名输入框
+            char buffer[256];
+            memset(buffer, 0, sizeof(buffer));
+            strcpy_s(buffer, sizeof(buffer), selectedObj->name.c_str());
+            if (ImGui::InputText(u8"名称", buffer, sizeof(buffer)))
+            {
+                selectedObj->name = std::string(buffer);
+            }
+
+            ImGui::Separator();
+
+            // --- 变换组件 (Transform) ---
+            // 使用 TreeNodeEx 默认展开，看起来更像组件
+            if (ImGui::CollapsingHeader(u8"变换 (Transform)", ImGuiTreeNodeFlags_DefaultOpen))
+            {
+                // 封装一个简单的 lambda 来画带有 Reset 按钮的滑动条
+                auto DrawVec3Control = [](const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+                    {
+                        ImGui::PushID(label.c_str());
+
+                        ImGui::Columns(2);
+                        ImGui::SetColumnWidth(0, columnWidth);
+                        ImGui::Text(label.c_str());
+                        ImGui::NextColumn();
+
+                        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+                        // X
+                        if (ImGui::Button("R")) { values = glm::vec3(resetValue); }
+                        ImGui::SameLine();
+                        ImGui::DragFloat3("##Values", glm::value_ptr(values), 0.1f);
+
+                        ImGui::PopStyleVar();
+                        ImGui::Columns(1);
+                        ImGui::PopID();
+                    };
+
+                DrawVec3Control(u8"位置 (Position)", selectedObj->pos, 0.0f);
+                DrawVec3Control(u8"旋转 (Rotation)", selectedObj->rot, 0.0f);
+                DrawVec3Control(u8"缩放 (Scale)", selectedObj->scale, 1.0f);
+            }
+
+            ImGui::Separator();
+
+            // --- 材质组件 (Material) ---
+            if (ImGui::CollapsingHeader(u8"材质 (Material)", ImGuiTreeNodeFlags_DefaultOpen))
+            {
+                ImGui::Text(u8"光照参数");
+                ImGui::SliderFloat(u8"环境光##Amb", &selectedObj->ambient, 0.0f, 1.0f);
+                ImGui::SliderFloat(u8"漫反射##Diff", &selectedObj->diffuse, 0.0f, 1.0f);
+                ImGui::SliderFloat(u8"镜面光##Spec", &selectedObj->specular, 0.0f, 1.0f);
+                ImGui::DragFloat(u8"反光度##Shin", &selectedObj->shininess, 1.0f, 2.0f, 256.0f);
+
+                // 如果你想看用了什么纹理，可以列出来
+                if (selectedObj->model) {
+                    ImGui::TextDisabled(u8"包含 %d 个 Mesh", selectedObj->model->GetMeshs().size());
+                }
+            }
+        }
+        else
+        {
+            // 提示用户选择物体
+            ImGui::TextDisabled(u8"在场景列表中选择一个物体以查看属性。");
+        }
+
+        ImGui::End();
+
+
+        // ==========================================================
+        // 3. 全局设置 (Environment & Stats)
+        // ==========================================================
+        ImGui::Begin(u8"全局设置");
+
+        // --- 性能统计 (Stats) ---
+        ImGui::Text(u8"性能监控:");
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%.1f FPS (%.3f ms)", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+        ImGui::Separator();
+
+        // --- 相机设置 (Camera) ---
+        if (ImGui::TreeNodeEx(u8"相机设置", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Text(u8"位置: %.2f, %.2f, %.2f",
+                m_CameraController->GetCamera()->GetCameraPos().x,
+                m_CameraController->GetCamera()->GetCameraPos().y,
+				m_CameraController->GetCamera()->GetCameraPos().z);
+            ImGui::TreePop();
+        }
+
+        // --- 光源设置 (Lighting) ---
+        if (ImGui::TreeNodeEx(u8"定向光/点光源", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            bool posChanged = ImGui::DragFloat3(u8"光源位置", glm::value_ptr(u_LightPosition), 0.5f);
+            ImGui::ColorEdit3(u8"光源颜色", glm::value_ptr(u_LightColor));
+
+            if (posChanged)
+            {
+                for (auto& obj : m_Objs) {
+                    if (obj->name == "Light")
+                    {
+                        obj->pos = u_LightPosition;
+                    }
+                }
+            }
+            ImGui::TreePop();
+        }
+
+        ImGui::End();
 	}
 };
 

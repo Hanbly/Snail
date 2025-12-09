@@ -28,8 +28,9 @@ namespace Snail {
 	// 读取数据是否非空 & 读取数据是否完整
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			SNL_CORE_ASSERT(false, "Model Importer 读取模型错误: ERROR::ASSIMP:: '{0}'", importer.GetErrorString())
-				return;
+			SNL_CORE_ERROR("Model Importer 读取模型错误: ERROR::ASSIMP:: '{0}'", importer.GetErrorString());
+			SNL_CORE_ASSERT(false, "Model Importer 读取模型错误");
+			return;
 		}
 		m_Directory = path.substr(0, path.find_last_of('/'));
 
@@ -185,6 +186,12 @@ namespace Snail {
 				// 确保路径拼接逻辑正确
 				std::string filename = std::string(str.C_Str());
 				std::replace(filename.begin(), filename.end(), '\\', '/');
+
+				std::filesystem::path filePath(filename);
+				if (filePath.extension() != ".png" && filePath.extension() != ".jpg") {
+					filename += ".png";
+				}
+
 				std::string fullPath = m_Directory + '/' + filename;
 
 				SNL_CORE_TRACE("Model: 加载纹理路径: '{0}' 中...", fullPath);
