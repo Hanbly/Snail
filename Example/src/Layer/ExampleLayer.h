@@ -34,6 +34,8 @@ public:
 
 	virtual void OnAttach() override {
 		SNL_PROFILE_FUNCTION();
+
+
 		// -------------------临时------------------------------------------
 		std::vector<Snail::Vertex> vertices = {
 			// 格式需对应 Vertex 结构体定义: { Position, Normal, TexCoord }
@@ -122,8 +124,8 @@ public:
 		{
 			Snail::ModelInstance sponzaObj;
 			sponzaObj.name = "Sponza Palace";
-			sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
-			//sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider_3.fbx");
+			//sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+			sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
 			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(sponzaObj));
 		}
 
@@ -139,6 +141,7 @@ public:
 
 		SNL_PROFILE_FUNCTION();
 
+
 		m_CameraController->OnUpdate(ts);
 	}
 
@@ -148,6 +151,9 @@ public:
 	}
 
 	inline virtual void OnRender() override {
+		SNL_PROFILE_FUNCTION();
+
+
 		//SNL_TRACE("ExampleLayer 调用: OnRender()");
 		// -------------------临时------------------------------------------
 		Snail::Renderer3D::BeginScene(m_CameraController->GetCamera(), u_LightPosition, u_LightColor);
@@ -177,6 +183,9 @@ public:
 	}
 
 	inline virtual void OnImGuiRender() override {
+		SNL_PROFILE_FUNCTION();
+
+
         // ==========================================================
 		// 1. 场景列表 (Scene Hierarchy)
 		// ==========================================================

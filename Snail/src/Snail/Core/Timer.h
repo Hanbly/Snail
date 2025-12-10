@@ -8,33 +8,6 @@
 
 namespace Snail {
 
-	template<typename Fn>
-	class Timer {
-	private:
-		std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
-        std::string m_Name;
-		Fn m_Function;
-	public:
-		Timer(const std::string& name, Fn&& func)
-			: m_Name(name), m_Function(func)
-		{
-			m_StartTimepoint = std::chrono::high_resolution_clock::now();
-		}
-
-		~Timer()
-		{
-			auto EndTimepoint = std::chrono::high_resolution_clock::now();
-
-			long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
-			long long end = std::chrono::time_point_cast<std::chrono::microseconds>(EndTimepoint).time_since_epoch().count();
-
-			uint64_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
-			Instrumentor::WriteProfile({ m_Name, start, end, threadID });
-
-			m_Function({ m_Name, start, end, threadID });
-		}
-	};
-
     class Instrumentor {
     private:
         std::string m_SessionName;
@@ -127,5 +100,28 @@ namespace Snail {
             m_OutputStream.flush();
         }
     };
+
+	class Timer {
+	private:
+		std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
+        std::string m_Name;
+	public:
+		Timer(const std::string& name)
+			: m_Name(name)
+		{
+			m_StartTimepoint = std::chrono::high_resolution_clock::now();
+		}
+
+		~Timer()
+		{
+			auto EndTimepoint = std::chrono::high_resolution_clock::now();
+
+			long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
+			long long end = std::chrono::time_point_cast<std::chrono::microseconds>(EndTimepoint).time_since_epoch().count();
+
+			uint64_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+			Instrumentor::WriteProfile({ m_Name, start, end, threadID });
+		}
+	};
 
 }

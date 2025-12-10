@@ -24,6 +24,4 @@ namespace Snail {
 		long long start, end;
 		uint64_t threadID;
 	};
-
-	extern std::vector<ProfileResult> s_ProfilingResults;
 }

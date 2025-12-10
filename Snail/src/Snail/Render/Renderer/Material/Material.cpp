@@ -18,8 +18,17 @@ namespace Snail {
 
 		// 绑定纹理
 		int slot = 0;
+
+		int maxTextureUnits;
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
+
 		for (const auto& [name, texture] : m_Textures)
 		{
+			if (slot >= maxTextureUnits) {
+				SNL_CORE_WARN("Material Bind: 纹理数量超过上限 ({0})! 跳过加载 {1}", maxTextureUnits, name);
+				break;
+			}
+
 			texture->Bind(slot);
 			m_Shader->SetInt(name, slot);
 			slot++;

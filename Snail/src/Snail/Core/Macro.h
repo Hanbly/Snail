@@ -44,7 +44,7 @@ namespace Snail {
 
 	#if SNL_PROFILING && 0
 	#define SNL_PROFILE_BEGIN_SESSION(name, path) Snail::Instrumentor::BeginSession(name, path)
-	#define SNL_PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](Snail::ProfileResult pr){ Snail::s_ProfilingResults.push_back(pr); })
+	#define SNL_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
 	#define SNL_PROFILE_FUNCTION() Snail::SNL_PROFILE_SCOPE(__FUNCSIG__)
 	#define SNL_PROFILE_END_SESSION() Snail::Instrumentor::EndSession()
 	#else

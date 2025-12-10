@@ -8,7 +8,6 @@
 namespace Snail {
 
 	Application* Application::s_Instance = nullptr;
-	std::vector<ProfileResult> s_ProfilingResults;
 
 	Application::Application()
 	{
@@ -133,8 +132,6 @@ namespace Snail {
 				RendererCommand::Clear();
 
 				this->OnUpdate();
-
-				s_ProfilingResults.clear();
 			}
 
 			// 无论是否最小化，都处理窗口事件（PollEvents）和交换缓冲区

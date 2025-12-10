@@ -7,11 +7,17 @@ namespace Snail {
 	Model::Model(const Refptr<Shader>& shader, const std::string& path)
 		: m_Shader(shader)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		Load(path);
 	}
 
 	void Model::Draw(const glm::mat4& worldTransform) const
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		for (const Refptr<Mesh> mesh : m_Meshs) {
 			mesh->Draw(worldTransform);
 		}
@@ -19,19 +25,25 @@ namespace Snail {
 
 	void Model::Load(const std::string& path)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(
 			path,
 			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
-		//	  分割成三角形      |      反转y轴		  |    自动生成顶点的法向量
+			//	  分割成三角形      |      反转y轴		  |   自动生成顶点的法向量	 
 
-	// 读取数据是否非空 & 读取数据是否完整
+		// 读取数据是否非空 & 读取数据是否完整
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			SNL_CORE_ERROR("Model Importer 读取模型错误: ERROR::ASSIMP:: '{0}'", importer.GetErrorString());
 			SNL_CORE_ASSERT(false, "Model Importer 读取模型错误");
 			return;
 		}
+		// 示例：assets/models/sponza/sponza.obj 
+		//      0 - - - - - - - - - -/ 后面的剔除，取assets/models/sponza
+		// 只取 0 到 从后往前数第一个'/'位置 的字符串，find_last_of返回首次找到'/'的索引
 		m_Directory = path.substr(0, path.find_last_of('/'));
 
 		ProcessNode(scene->mRootNode, scene, glm::mat4(1.0f));
@@ -57,6 +69,9 @@ namespace Snail {
 
 	Refptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, const glm::mat4& localTransformation)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
 		std::vector<TextureData> textures;
@@ -155,6 +170,9 @@ namespace Snail {
 
 	std::vector<TextureData> Model::LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const std::string& typeName)
 	{
+		SNL_PROFILE_FUNCTION();
+
+
 		std::vector<TextureData> textures;
 
 		for (uint32_t i = 0; i < mat->GetTextureCount(type); i++)
@@ -170,11 +188,13 @@ namespace Snail {
 				SNL_CORE_WARN("Model: Texture path is empty!");
 				continue;
 			}
+			std::string filename = std::string(str.C_Str());
+			std::replace(filename.begin(), filename.end(), '\\', '/');
 
 			bool cacheFlag = false; // 将标志位定义移到这里，每次循环重置
 
 			for (uint32_t j = 0; j < m_LoadedTextures.size(); j++) {
-				if (std::strcmp(m_LoadedTextures[j].path.data(), str.C_Str()) == 0) {
+				if (std::strcmp(m_LoadedTextures[j].path.data(), filename.c_str()) == 0) {
 					textures.push_back(m_LoadedTextures[j]);
 					cacheFlag = true;
 					break;
@@ -183,9 +203,6 @@ namespace Snail {
 
 			if (!cacheFlag)	{
 				TextureData texture;
-				// 确保路径拼接逻辑正确
-				std::string filename = std::string(str.C_Str());
-				std::replace(filename.begin(), filename.end(), '\\', '/');
 
 				std::filesystem::path filePath(filename);
 				if (filePath.extension() != ".png" && filePath.extension() != ".jpg") {
@@ -209,7 +226,7 @@ namespace Snail {
 
 	//--------------Tools--------------------
 	glm::mat4 Model::ConvertaiMat4ToglmMat4(const aiMatrix4x4& matrix) const
-	{		
+	{
 		glm::mat4 to;
 		// Assimp: Row-Major (a1, a2, a3, a4 是第一行)
 		// GLM: Column-Major
