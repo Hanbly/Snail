@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Render/Renderer/Renderer3D.h"
+
 #include "Model.h"
 
 namespace Snail {
@@ -18,9 +20,7 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 
 
-		for (const Refptr<Mesh> mesh : m_Meshs) {
-			mesh->Draw(worldTransform);
-		}
+		Renderer3D::DrawModel(*this, worldTransform);
 	}
 
 	void Model::Load(const std::string& path)

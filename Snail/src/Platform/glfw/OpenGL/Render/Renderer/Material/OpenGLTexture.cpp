@@ -28,12 +28,10 @@ namespace Snail {
 		else if (channels == 3) {
 			internalFormat = GL_RGB8;
 			dataFormat = GL_RGB;
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		}
 		else if (channels == 2) {
 			internalFormat = GL_RG8;
 			dataFormat = GL_RG;
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		}
 		else if (channels == 1) // 高光图往往是单通道灰度图！
 		{

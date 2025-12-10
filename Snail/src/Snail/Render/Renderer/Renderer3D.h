@@ -7,6 +7,9 @@
 #include "Camera/Camera.h"
 #include "Material/Material.h"
 
+#include "Snail/Render/Renderer/Mesh/Mesh.h"
+#include "Snail/Render/Renderer/Model/Model.h"
+
 #include "Snail/Render/Renderer/RendererCommand.h"
 
 namespace Snail {
@@ -34,7 +37,8 @@ namespace Snail {
 		static void BeginScene(const Uniptr<Camera>& camera, const glm::vec3& lightPos, const glm::vec4& lightColor);
 		static void EndScene();
 
-		static void DrawMesh(const Refptr<VertexArray>& vertexArray, const Refptr<Material>& material, const glm::mat4& transform = glm::mat4(1.0f));
+		static void DrawMesh(const Mesh& mesh, const glm::mat4& transform = glm::mat4(1.0f));
+		static void DrawModel(const Model& model, const glm::mat4& transform = glm::mat4(1.0f));
 	};
 
 }

@@ -24,7 +24,7 @@ private:
 	std::vector<Snail::Refptr<Snail::ModelInstance>> m_Objs;
 	int8_t m_SelectedModelIndex = -1;
 	
-	Snail::Uniptr<Snail::PerspectiveCameraController> m_CameraController;
+	Snail::Refptr<Snail::PerspectiveCameraController> m_CameraController;
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
 	glm::vec4 u_LightColor = {1.0f, 1.0f, 1.0f, 1.0f};
 	//------------------------------------------------------------------
@@ -122,15 +122,30 @@ public:
 		//m_Model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
 		// --- 创建 Sponza 模型实例 ---
 		{
-			Snail::ModelInstance sponzaObj;
-			sponzaObj.name = "Sponza Palace";
-			//sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
-			sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
-			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(sponzaObj));
+			Snail::ModelInstance ml;
+            ml.name = "Sponza Palace";
+            ml.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+			//sponzaObj.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
+			m_Objs.push_back(std::make_shared<Snail::ModelInstance>(ml));
 		}
+        {
+            Snail::ModelInstance ml;
+            ml.name = "SportsCar";
+            ml.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
+            ml.pos = { 0.0f, 90.0f, 0.0f };
+            ml.scale = { 25.0f, 25.0f, 25.0f };
+            m_Objs.push_back(std::make_shared<Snail::ModelInstance>(ml));
+        }
+        {
+            Snail::ModelInstance ml;
+            ml.name = "Spider";
+            ml.model = std::make_shared<Snail::Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider.fbx");
+            ml.pos = { 10.0f, 10.0f, -210.0f };
+            m_Objs.push_back(std::make_shared<Snail::ModelInstance>(ml));
+        }
 
 
-		m_CameraController = std::make_unique<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
+		m_CameraController = std::make_shared<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 		//------------------------------------------------------------------------------
 	}
 	virtual void OnDetach() override {
@@ -148,6 +163,52 @@ public:
 	inline virtual void OnEvent(Snail::Event& e) {
 		//SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
 		m_CameraController->OnEvent(e);
+
+		Snail::EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<Snail::MousePressEvent>(BIND_NSTATIC_MEMBER_Fn(ExampleLayer::OnMousePressed));
+	}
+
+	inline bool OnMousePressed(Snail::MousePressEvent& e)
+	{
+        // 如果鼠标在操作 ImGui 窗口，则不进行场景拾取
+        if (ImGui::GetIO().WantCaptureMouse) return false;
+        if (Snail::Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) // 鼠标左键
+        {
+            // 获取鼠标位置
+            float mx = Snail::Input::GetMouseX();
+            float my = Snail::Input::GetMouseY();
+            float width = Snail::Application::Get().GetWindow().GetWindowWidth();
+            float height = Snail::Application::Get().GetWindow().GetWindowHeight();
+
+            // 1. 构建射线
+            Snail::MouseRay ray(mx, my, width, height, m_CameraController);
+
+            int hitIndex = -1;
+            float minDst = std::numeric_limits<float>::max(); // 记录最近的距离
+
+            // 2. 遍历所有物体
+            for (int i = 0; i < m_Objs.size(); i++)
+            {
+                float currentDst = 0.0f;
+                // 传入引用获取距离
+                if (ray.Is_Cross(m_Objs[i], currentDst))
+                {
+                    // 3. 寻找最近的物体 (处理遮挡)
+                    if (currentDst < minDst)
+                    {
+                        minDst = currentDst;
+                        hitIndex = i;
+                    }
+                }
+            }
+
+            // 4. 更新选中状态
+            m_SelectedModelIndex = hitIndex;
+
+            if (hitIndex != -1)
+                SNL_CORE_INFO("选中物体: {0}", m_Objs[hitIndex]->name);
+        }
+        return false;
 	}
 
 	inline virtual void OnRender() override {

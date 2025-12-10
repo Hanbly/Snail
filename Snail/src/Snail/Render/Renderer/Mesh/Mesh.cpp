@@ -20,7 +20,7 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 
 
-		Renderer3D::DrawMesh(m_VAO, m_Material, worldTransform * m_LocalTransform);
+		Renderer3D::DrawMesh(*this, worldTransform * m_LocalTransform);
 	}
 
 	void Mesh::SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures)
@@ -92,6 +92,26 @@ namespace Snail {
 		m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
 		m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
 		m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度
+
+		CalculateBoundingBox(vertices);
+	}
+
+	void Mesh::CalculateBoundingBox(const std::vector<Vertex>& vertices)
+	{
+		if (vertices.empty()) return;
+
+		m_MinVertex = vertices[0].position;
+		m_MaxVertex = vertices[0].position;
+
+		for (const auto& v : vertices) {
+			m_MinVertex.x = std::min(m_MinVertex.x, v.position.x);
+			m_MinVertex.y = std::min(m_MinVertex.y, v.position.y);
+			m_MinVertex.z = std::min(m_MinVertex.z, v.position.z);
+
+			m_MaxVertex.x = std::max(m_MaxVertex.x, v.position.x);
+			m_MaxVertex.y = std::max(m_MaxVertex.y, v.position.y);
+			m_MaxVertex.z = std::max(m_MaxVertex.z, v.position.z);
+		}
 	}
 
 }

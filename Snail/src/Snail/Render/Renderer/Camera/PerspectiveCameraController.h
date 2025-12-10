@@ -37,7 +37,7 @@ namespace Snail {
 		bool OnMouseScroll(MouseScrollEvent& e);
 	private:
 		Uniptr<Camera> m_Camera;
-		float m_CameraMoveSpeed = 50.0f;
+		float m_CameraMoveSpeed = 150.0f;
 
 		float m_LastMouseX;
 		float m_LastMouseY;

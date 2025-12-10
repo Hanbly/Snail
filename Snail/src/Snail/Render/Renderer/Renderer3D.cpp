@@ -34,16 +34,16 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 	}
 
-	void Renderer3D::DrawMesh(const Refptr<VertexArray>& vertexArray, const Refptr<Material>& material, const glm::mat4& transform)
+	void Renderer3D::DrawMesh(const Mesh& mesh, const glm::mat4& transform)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
 		// 绑定 Shader，绑定纹理，上传材质特有的 Uniform
-		material->Bind();
+		mesh.GetMaterial()->Bind();
 
 		// 这些是所有物体共用的，但在 Draw 时需要设置给当前绑定的 Shader
-		auto shader = material->GetShader();
+		auto shader = mesh.GetMaterial()->GetShader();
 
 		shader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
 		shader->SetMat4("u_Model", transform);
@@ -54,8 +54,18 @@ namespace Snail {
 		shader->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
 
 		// 绘制几何体
-		vertexArray->Bind();
-		RendererCommand::DrawIndexed(vertexArray);
+		mesh.GetVAO()->Bind();
+		RendererCommand::DrawIndexed(mesh.GetVAO());
+	}
+
+	void Renderer3D::DrawModel(const Model& model, const glm::mat4& transform)
+	{
+		SNL_PROFILE_FUNCTION();
+
+
+		for (const Refptr<Mesh> mesh : model.GetMeshs()) {
+			DrawMesh(*mesh, transform);
+		}
 	}
 
 }
