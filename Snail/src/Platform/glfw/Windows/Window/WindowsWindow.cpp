@@ -47,6 +47,9 @@ namespace Snail {
         const int& iWidth = static_cast<int>(m_Data.props.width);
         const int& iHeight = static_cast<int>(m_Data.props.height);
 
+        glfwWindowHint(GLFW_DEPTH_BITS, 24); // 确保有24位深度
+        glfwWindowHint(GLFW_STENCIL_BITS, 8); // [关键] 必须显式申请8位模板缓冲
+
         m_Window = glfwCreateWindow(iWidth, iHeight, iTitle.c_str(), nullptr, nullptr);
         
         // 初始化图形API的渲染上下文

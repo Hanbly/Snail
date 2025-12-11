@@ -21,6 +21,11 @@ namespace Snail {
 			None = 0,
 			GLFW
 		};
+		enum class StencilFuncType {
+			None = 0,
+			ALWAYS,
+			NOTEQUAL
+		};
 		virtual ~RendererCommand() = default;
 
 		inline static API GetAPI() { return s_API; }
@@ -37,13 +42,30 @@ namespace Snail {
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const = 0;
 		virtual void ClearImpl() const = 0;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const = 0;
-	public:
-		inline static void Init() { RC->InitImpl(); }
-		inline static void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { RC->SetViewPortImpl(x, y, width, height); }
 
-		inline static void ClearColor(const glm::vec4& color_RGBA) { RC->ClearColorImpl(color_RGBA); }
-		inline static void Clear() { RC->ClearImpl(); }
-		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) { RC->DrawIndexedImpl(vertexArray); }
+		virtual void StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const = 0;
+		virtual void StencilMaskImpl(const bool& status) const = 0;
+		virtual void DepthTestImpl(const bool& enable) const = 0;
+
+	public:
+		inline static void Init() 
+		{ RC->InitImpl(); }
+		inline static void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height) 
+		{ RC->SetViewPortImpl(x, y, width, height); }
+
+		inline static void ClearColor(const glm::vec4& color_RGBA) 
+		{ RC->ClearColorImpl(color_RGBA); }
+		inline static void Clear() 
+		{ RC->ClearImpl(); }
+		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) 
+		{ RC->DrawIndexedImpl(vertexArray); }
+
+		inline static void StencilFunc(const StencilFuncType& type, const int& ref, const int& mask)
+		{ RC->StencilFuncImpl(type, ref, mask); }
+		inline static void StencilMask(const bool& status) 
+		{ RC->StencilMaskImpl(status); }
+		inline static void DepthTest(const bool& enable) 
+		{ RC->DepthTestImpl(enable); }
 
 		static Uniptr<RendererCommand> Create();
 	};

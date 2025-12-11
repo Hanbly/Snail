@@ -19,6 +19,10 @@ namespace Snail {
 		virtual void ClearColorImpl(const glm::vec4& color_RGBA) const override;
 		virtual void ClearImpl() const override;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const override;
+
+		virtual void StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const override;
+		virtual void StencilMaskImpl(const bool& status) const override;
+		virtual void DepthTestImpl(const bool& enable) const override;
 	};
 
 }

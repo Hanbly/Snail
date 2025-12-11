@@ -15,12 +15,12 @@ namespace Snail {
 		SetupMesh(vertices, indices, shader, textures);
 	}
 
-	void Mesh::Draw(const glm::mat4& worldTransform) const
+	void Mesh::Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const
 	{
 		SNL_PROFILE_FUNCTION();
 
 
-		Renderer3D::DrawMesh(*this, worldTransform * m_LocalTransform);
+		Renderer3D::DrawMesh(*this, edgeEnable, worldTransform * m_LocalTransform);
 	}
 
 	void Mesh::SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures)

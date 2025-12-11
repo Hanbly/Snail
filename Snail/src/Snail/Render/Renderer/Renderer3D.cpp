@@ -8,6 +8,8 @@ namespace Snail {
 
 	void Renderer3D::Init()
 	{
+		s_3DSceneData.ShaderLibrary.Load("single_color", "assets/shaders/single_color.glsl");
+		s_3DSceneData.ShaderLibrary.Load("edge_shader", "assets/shaders/edge_shader.glsl");
 	}
 
 	void Renderer3D::Shutdown()
@@ -34,7 +36,7 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 	}
 
-	void Renderer3D::DrawMesh(const Mesh& mesh, const glm::mat4& transform)
+	void Renderer3D::DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -55,16 +57,42 @@ namespace Snail {
 
 		// 绘制几何体
 		mesh.GetVAO()->Bind();
+
+		RendererCommand::StencilMask(edgeEnable);
+		RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
+
 		RendererCommand::DrawIndexed(mesh.GetVAO());
+
+		if (edgeEnable) {
+			RendererCommand::StencilMask(false); // 不再写入模板，只读取模板信息
+			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::NOTEQUAL, 1, 0xFF);
+
+			// 临时边框shader
+			auto edgeshader = s_3DSceneData.ShaderLibrary.Get("single_color");
+			edgeshader->Bind();
+			edgeshader->SetMat4("u_Model", glm::scale(transform, glm::vec3(1.03f, 1.03f, 1.03f)));
+			edgeshader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
+			//edgeshader->SetFloat("u_Edge", 0.05f); // 边框厚度 (法线外扩方法再使用)
+			edgeshader->SetFloat4("u_Color", { 1.0f, 0.5f, 0.0f, 1.0f }); // 橙色边框
+
+			// 绘制放大后的物体
+			// 注意：这里需要再次调用 Draw，但是用新的 Shader 和 放大后的 Matrix
+			mesh.GetVAO()->Bind();
+			RendererCommand::DrawIndexed(mesh.GetVAO());
+
+			// 恢复状态 (非常重要，否则后续渲染会乱)
+			RendererCommand::StencilMask(true);
+			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
+		}
 	}
 
-	void Renderer3D::DrawModel(const Model& model, const glm::mat4& transform)
+	void Renderer3D::DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
 		for (const Refptr<Mesh> mesh : model.GetMeshs()) {
-			DrawMesh(*mesh, transform);
+			DrawMesh(*mesh, edgeEnable, transform);
 		}
 	}
 

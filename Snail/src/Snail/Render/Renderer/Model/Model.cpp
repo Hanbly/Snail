@@ -15,12 +15,12 @@ namespace Snail {
 		Load(path);
 	}
 
-	void Model::Draw(const glm::mat4& worldTransform) const
+	void Model::Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const
 	{
 		SNL_PROFILE_FUNCTION();
 
 
-		Renderer3D::DrawModel(*this, worldTransform);
+		Renderer3D::DrawModel(*this, edgeEnable, worldTransform);
 	}
 
 	void Model::Load(const std::string& path)

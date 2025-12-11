@@ -203,10 +203,15 @@ public:
             }
 
             // 4. 更新选中状态
-            m_SelectedModelIndex = hitIndex;
+            for (const auto& obj : m_Objs) {
+                obj->edgeEnable = false;
+            }
 
-            if (hitIndex != -1)
+            m_SelectedModelIndex = hitIndex;
+            if (hitIndex != -1) {
                 SNL_CORE_INFO("选中物体: {0}", m_Objs[hitIndex]->name);
+                m_Objs[hitIndex]->edgeEnable = true;
+            }
         }
         return false;
 	}
@@ -229,7 +234,7 @@ public:
 					mesh->GetMaterial()->SetFloat("u_SpecularStrength", obj->specular);
 					mesh->GetMaterial()->SetFloat("u_Shininess", obj->shininess);
 				}
-				obj->model->Draw(obj->GetTransform());
+				obj->model->Draw(obj->GetTransform(), obj->edgeEnable);
 			}
 			else if (obj->mesh) // 如果是手动创建的单独 Mesh (如 Cube)
 			{
@@ -237,7 +242,7 @@ public:
 				obj->mesh->GetMaterial()->SetFloat("u_DiffuseStrength", obj->diffuse);
 				obj->mesh->GetMaterial()->SetFloat("u_SpecularStrength", obj->specular);
 				obj->mesh->GetMaterial()->SetFloat("u_Shininess", obj->shininess);
-				obj->mesh->Draw(obj->GetTransform());
+				obj->mesh->Draw(obj->GetTransform(), obj->edgeEnable);
 			}
 		}
 		//----------------------------------------------------------------

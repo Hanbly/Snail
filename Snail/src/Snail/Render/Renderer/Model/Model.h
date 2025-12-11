@@ -27,7 +27,7 @@ namespace Snail {
 
 		inline const std::vector<Refptr<Mesh>>& GetMeshs() const { return m_Meshs; }
 
-		void Draw(const glm::mat4& worldTransform) const;
+		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 
 	private:
 		void Load(const std::string& path);
@@ -43,6 +43,7 @@ namespace Snail {
         std::string name;       // 在编辑器里显示的名字
         Refptr<Model> model;    // 指向的模型资源
         Refptr<Mesh> mesh;      // 兼容单一 Mesh
+        bool edgeEnable = false;
 
         // 变换参数
         glm::vec3 pos = { 0.0f, 0.0f, 0.0f };

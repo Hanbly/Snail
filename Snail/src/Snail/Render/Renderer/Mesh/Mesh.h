@@ -46,7 +46,7 @@ namespace Snail {
 		inline const Refptr<VertexArray>& GetVAO() const { return m_VAO; }
 		inline const Refptr<Material>& GetMaterial() const { return m_Material; }
 
-		void Draw(const glm::mat4& worldTransform) const;
+		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 
 	private:
 		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {});
