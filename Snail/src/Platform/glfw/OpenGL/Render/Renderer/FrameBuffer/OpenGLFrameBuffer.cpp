@@ -5,19 +5,21 @@
 namespace Snail {
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
-		: m_Specification(spec)
+		: m_RendererId(0), m_ColorAttachment(0), m_DepthAttachment(0), m_RenderbufferObjectAttachment(0), m_Specification(spec)
 	{
-		Generate();
+		ReGenerate();
 	}
 
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
-		glDeleteFramebuffers(1, &m_RendererId);
+		Delete();
 	}
 
 	void OpenGLFrameBuffer::Bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererId);
+
+		glViewport(0, 0, m_Specification.width, m_Specification.height);
 	}
 
 	void OpenGLFrameBuffer::Unbind() const
@@ -25,8 +27,13 @@ namespace Snail {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void OpenGLFrameBuffer::Generate()
+	void OpenGLFrameBuffer::ReGenerate()
 	{
+		if (m_RendererId) {
+			Delete();
+		}
+
+		// 重新生成
 		glGenFramebuffers(1, &m_RendererId);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererId);
 
@@ -63,6 +70,23 @@ namespace Snail {
 
 		SNL_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "OpenGLFrameBuffer: 帧缓冲附件不完整!");
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFrameBuffer::Resize(const uint32_t& width, const uint32_t& height)
+	{
+		m_Specification.width = width;
+		m_Specification.height = height;
+
+		ReGenerate();
+	}
+
+	void OpenGLFrameBuffer::Delete()
+	{
+		glDeleteTextures(1, &m_ColorAttachment);
+		//glDeleteTextures(1, &m_DepthAttachment);
+		glDeleteRenderbuffers(1, &m_RenderbufferObjectAttachment);
+
+		glDeleteFramebuffers(1, &m_RendererId);
 	}
 
 }

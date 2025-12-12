@@ -23,7 +23,9 @@ namespace Snail {
 		inline virtual const uint32_t& GetColorAttachment() const override { return m_ColorAttachment; }
 		inline virtual const FrameBufferSpecification& GetSpecification() const override { return m_Specification; }
 
-		virtual void Generate() override;
+		virtual void ReGenerate() override;
+		virtual void Resize(const uint32_t& width, const uint32_t& height) override;
+		virtual void Delete() override;
 	};
 
 }

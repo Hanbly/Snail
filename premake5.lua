@@ -102,14 +102,61 @@ project "Snail"
         optimize "On"
 
 
+project "SnailEditor"
+    location "SnailEditor"
+    kind "ConsoleApp"
+    language "C++"
+    staticruntime "off"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
+
+    files {
+        "%{prj.name}/src/**.h", 
+        "%{prj.name}/src/**.cpp"
+    }
+
+    includedirs {
+        "%{IncludeDirs.GLFW}",
+        "%{IncludeDirs.GLAD}",
+        "%{IncludeDirs.GLM}",
+        "%{IncludeDirs.ImGui}",
+        "%{IncludeDirs.spdlog}",
+        "%{IncludeDirs.Assimp}",
+        "Snail/src"
+    }
+
+    links { "Snail" }
+
+    filter { "system:windows" }
+        defines {
+            "SNL_PLATFORM_WINDOWS"
+        }
+
+    filter { "configurations:Debug" }
+        runtime "Debug"
+        symbols "On"
+        defines { 
+            "SNL_DEBUG",
+            "SNL_ENABLED_ASSERTS",
+            "SNL_PROFILING" 
+        }
+
+    filter { "configurations:Release" }
+        defines { "SNL_RELEASE" }
+        runtime "Release"
+        optimize "On"
+
+    filter { "configurations:Dist" }
+        defines { "SNL_DIST" }
+        optimize "On"
+
+
 project "Example"
     location "Example"
     kind "ConsoleApp"
     language "C++"
     staticruntime "off"
-
-    pchheader "SNLpch.h"
-    pchsource "%{prj.name}/src/SNLpch.cpp"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")

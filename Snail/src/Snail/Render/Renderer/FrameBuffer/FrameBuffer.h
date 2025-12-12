@@ -27,7 +27,9 @@ namespace Snail {
 		virtual const uint32_t& GetColorAttachment() const = 0;
 		virtual const FrameBufferSpecification& GetSpecification() const = 0;
 
-		virtual void Generate() = 0;
+		virtual void ReGenerate() = 0;
+		virtual void Resize(const uint32_t& width, const uint32_t& height) = 0;
+		virtual void Delete() = 0;
 
 		static Refptr<FrameBuffer> Create(const FrameBufferSpecification& spec);
 	};
