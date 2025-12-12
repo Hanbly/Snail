@@ -26,6 +26,7 @@ IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
 IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
+IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
 
 -- 引入需要编译项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是项目的premake5.lua文件
@@ -62,6 +63,7 @@ project "Snail"
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.stb_image}",
         "%{IncludeDirs.Assimp}",
+        "%{IncludeDirs.EnTT}",
         "%{prj.name}/src"
     }
 
@@ -123,6 +125,7 @@ project "SnailEditor"
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.Assimp}",
+        "%{IncludeDirs.EnTT}",
         "Snail/src"
     }
 
@@ -173,6 +176,7 @@ project "Example"
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.Assimp}",
+        "%{IncludeDirs.EnTT}",
         "Snail/src"
     }
 
