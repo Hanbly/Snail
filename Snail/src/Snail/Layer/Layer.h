@@ -9,11 +9,10 @@ namespace Snail {
 
 	class SNAIL_API Layer {
 	protected:
-		std::string m_DebugName;
+		std::string m_LayerName;
 		bool m_Enabled;
 	public:
-		Layer(const std::string& debugName = "Layer",
-			  const bool& layerEnabled = true);
+		Layer(const std::string& layerName, const bool& layerEnabled);
 		virtual ~Layer() = default;
 		
 		virtual void OnAttach() = 0;
@@ -24,7 +23,7 @@ namespace Snail {
 
 		virtual void OnImGuiRender() {}
 
-		inline const std::string& GetLayerName() const { return m_DebugName; }
+		inline const std::string& GetLayerName() const { return m_LayerName; }
 		inline const bool& IsLayerEnabled() const { return m_Enabled; }
 	};
 

@@ -26,6 +26,8 @@ private:
     Snail::Refptr<Snail::FrameBuffer> m_FBO;
     glm::vec2 m_ViewportSize;
     glm::vec2 m_ViewportBounds[2]; // 左上角Min, 右下角Max (屏幕绝对坐标)
+    bool m_ViewportHovered = false; // 鼠标是否悬停在视口上
+    bool m_ViewportFocused = false; // 视口是否处于焦点
 	
 	Snail::Refptr<Snail::PerspectiveCameraController> m_CameraController;
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
@@ -164,7 +166,8 @@ public:
 		SNL_PROFILE_FUNCTION();
 
 
-		m_CameraController->OnUpdate(ts);
+        if (m_ViewportFocused) // 只有聚焦在视口，才调用OnUpdate（目前只控制相机移动，视角控制在 OnEvent）
+		    m_CameraController->OnUpdate(ts);
 	}
 
 	inline virtual void OnEvent(Snail::Event& e) {
@@ -179,6 +182,9 @@ public:
 	{
         if (Snail::Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) // 鼠标左键
         {
+            if (!m_ViewportHovered) // 没有悬浮就不作反应
+                return false;
+
             // 获取鼠标位置
             // 获取 ImGui 体系下的屏幕绝对鼠标坐标
             auto [mx_global, my_global] = ImGui::GetMousePos();
@@ -537,6 +543,7 @@ public:
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
         ImGui::Begin(u8"离屏渲染视口");
 
+        // ----------------- 处理鼠标坐标 ------------------
         // 获取视口范围和位置
         auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
         auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
@@ -545,7 +552,15 @@ public:
         m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
         m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
-        // 处理resize
+        // ---------------- 处理imgui事件 -------------------
+        m_ViewportHovered = ImGui::IsWindowHovered();
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        // !(m_ViewportHovered || m_ViewportFocused) 与 !m_ViewportHovered && !m_ViewportFocused : (鼠标 悬浮在视口 || 聚焦在视口) 都会让imgui忽略鼠标事件，从而让视口内容接收鼠标事件；不知道为什么键盘事件始终无法被imgui捕获，不论视口是什么状态。
+        // 目标是：鼠标 一旦悬浮在视口 imgui就忽略鼠标事件；一旦聚焦于视口 imgui就忽略键盘事件；当鼠标悬浮在视口以外其它部分时，imgui应该拦截鼠标事件；当聚焦于视口以外其它部分时，imgui应该拦截键盘事件。
+        Snail::Application::Get().GetImGuiLayer()->BlockMouseEvents(!m_ViewportHovered);
+        Snail::Application::Get().GetImGuiLayer()->BlockKeyEvents(!m_ViewportFocused);
+
+        // ---------------- 处理resize ------------------
         ImVec2 ImguiViewportSize = ImGui::GetContentRegionAvail();
         ImGui::Text("视口大小: %.0f x %.0f", ImguiViewportSize.x, ImguiViewportSize.y);
         if (m_ViewportSize != *(glm::vec2*)&ImguiViewportSize) {

@@ -57,6 +57,29 @@ namespace Snail {
 
 	void ImGuiLayer::OnEvent(Event& event) 
 	{
+		// 当window事件发生时，会传递到imgui这里
+		// 此时根据内部的阻塞状态：m_BlockMouseEvents 和 m_BlockKeyEvents 来判断
+		// 如果为 true 表示阻塞/捕获事件，允许imgui层把对应的事件状态表示为 "已处理" 即SetHandled(true)
+		// 如果为 false 表示禁止imgui阻塞事件，不执行任何事件状态处理，能够让其他层看到对应事件
+		ImGuiIO& io = ImGui::GetIO();
+		if (m_BlockMouseEvents)
+		{
+			// 如果是鼠标事件，且 ImGui 想要捕获鼠标，则拦截
+			if (event.IsEventInCategory(EventCategory::MouseCategoryEvent) && io.WantCaptureMouse)
+			{
+				event.SetHandled(true);
+			}
+		}
+		if (m_BlockKeyEvents)
+		{
+			// 当视口依据自身聚焦状态给出 m_BlockKeyEvents 状态为真（视口未聚焦，事件属于其它imgui窗口）
+			// 只要是键盘事件，直接拦截
+			// 不管 io.WantCaptureKeyboard 是真是假
+			if (event.IsEventInCategory(EventCategory::KeyboardCategoryEvent))
+			{
+				event.SetHandled(true);
+			}
+		}
 
 		/*EventDispatcher dispatcher(event);
 

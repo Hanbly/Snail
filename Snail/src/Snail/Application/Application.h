@@ -41,9 +41,8 @@ namespace Snail {
 		void PushOverLayer(Layer* overLayer);
 		void PopOverLayer(Layer* overLayer);
 
-		inline Window& GetWindow() const {
-			return *m_AppWindow;
-		}
+		inline ImGuiLayer* GetImGuiLayer() const { return m_ImGuiLayer; }
+		inline Window& GetWindow() const { return *m_AppWindow; }
 
 		void run();
 	private:

@@ -47,7 +47,7 @@ namespace Snail {
 		virtual const char* GetEventName() const = 0;
 		virtual std::string ToString() const { return GetEventName(); }
 
-		inline bool IsEventInCategory(int categoryflags) const {
+		inline bool IsEventInCategory(const int& categoryflags) const {
 			return GetEventCategoryFlags() & categoryflags;
 		}
 	};

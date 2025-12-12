@@ -13,7 +13,8 @@ namespace Snail {
 
 	class SNAIL_API ImGuiLayer : public Layer {
 	private:
-
+		bool m_BlockMouseEvents = true;
+		bool m_BlockKeyEvents = true;
 	public:
 		ImGuiLayer(const std::string& layerName = "ImGuiLayer",
 				   const bool& layerEnabled = true);
@@ -28,6 +29,9 @@ namespace Snail {
 		void BeginImGui();
 		void OnImGuiRender();
 		void EndImGui();
+
+		inline void BlockMouseEvents(const bool& status) { m_BlockMouseEvents = status; }
+		inline void BlockKeyEvents(const bool& status) { m_BlockKeyEvents = status; }
 
 	private:
 		/*bool OnWindowResize(WindowResizeEvent& e);
