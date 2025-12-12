@@ -4,6 +4,8 @@
 
 namespace Snail {
 
+	static const uint32_t MaxFrameBufferSize = 8162;
+
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
 		: m_RendererId(0), m_ColorAttachment(0), m_DepthAttachment(0), m_RenderbufferObjectAttachment(0), m_Specification(spec)
 	{
@@ -74,6 +76,10 @@ namespace Snail {
 
 	void OpenGLFrameBuffer::Resize(const uint32_t& width, const uint32_t& height)
 	{
+		if (width <= 0 || height <= 0 || width > MaxFrameBufferSize || height > MaxFrameBufferSize) {
+			return;
+		}
+
 		m_Specification.width = width;
 		m_Specification.height = height;
 

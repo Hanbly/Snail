@@ -2,8 +2,8 @@
 
 #include "glm/glm.hpp"
 
-#include "Snail/Core/Core.h"
-#include "Snail/Core/Macro.h"
+#include "Snail/Basic/Core.h"
+#include "Snail/Basic/Macro.h"
 
 #include "Snail/Render/RenderAPI/VertexArray.h"
 #include "Snail/Render/Renderer/Material/Material.h"

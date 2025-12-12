@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Snail/Core/Core.h"
-#include "Snail/Core/Macro.h"
+#include "Snail/Basic/Core.h"
+#include "Snail/Basic/Macro.h"
 
-#include "Snail/Core/Timestep.h"
+#include "Snail/Basic/Timestep.h"
 
 namespace Snail {
 

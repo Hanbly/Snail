@@ -14,9 +14,9 @@
 
 //-------------Core-----------------
 #include "Snail/Input/Input.h"
-#include "Snail/Core/InputCodes.h"
-#include "Snail/Core/Timestep.h"
-#include "Snail/Core/Timer.h"
+#include "Snail/Basic/InputCodes.h"
+#include "Snail/Basic/Timestep.h"
+#include "Snail/Basic/Timer.h"
 //---------------------------------
 
 //----------------------------------
@@ -28,5 +28,5 @@
 //---------------------------------
 
 // 程序入口 -------------------------
-#include "Snail/Core/EntryPoint.h"
+#include "Snail/Basic/EntryPoint.h"
 //----------------------------------

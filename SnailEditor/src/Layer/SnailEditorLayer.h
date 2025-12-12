@@ -563,7 +563,7 @@ public:
         // ---------------- 处理resize ------------------
         ImVec2 ImguiViewportSize = ImGui::GetContentRegionAvail();
         ImGui::Text("视口大小: %.0f x %.0f", ImguiViewportSize.x, ImguiViewportSize.y);
-        if (m_ViewportSize != *(glm::vec2*)&ImguiViewportSize) {
+        if ((m_ViewportSize != *(glm::vec2*)&ImguiViewportSize) && ImguiViewportSize.x > 0 && ImguiViewportSize.y > 0) {
             m_FBO->Resize((uint32_t)ImguiViewportSize.x, (uint32_t)ImguiViewportSize.y);
             m_ViewportSize.x = (uint32_t)ImguiViewportSize.x;
             m_ViewportSize.y = (uint32_t)ImguiViewportSize.y;

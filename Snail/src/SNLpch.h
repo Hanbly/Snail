@@ -23,9 +23,9 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/fmt/ostr.h"
 
-#include "Snail/Core/InputCodes.h"
-#include "Snail/Core/Timestep.h"
-#include "Snail/Core/Timer.h"
+#include "Snail/Basic/InputCodes.h"
+#include "Snail/Basic/Timestep.h"
+#include "Snail/Basic/Timer.h"
 
 #include "Snail/Logger/Log.h"
 #include "Snail/Events/Event.h"
