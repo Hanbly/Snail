@@ -64,6 +64,7 @@ namespace Snail {
 		RendererCommand::DrawIndexed(mesh.GetVAO());
 
 		if (edgeEnable) {
+			//RendererCommand::DepthTest(false);
 			RendererCommand::StencilMask(false); // 不再写入模板，只读取模板信息
 			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::NOTEQUAL, 1, 0xFF);
 
@@ -81,6 +82,7 @@ namespace Snail {
 			RendererCommand::DrawIndexed(mesh.GetVAO());
 
 			// 恢复状态 (非常重要，否则后续渲染会乱)
+			RendererCommand::DepthTest(true);
 			RendererCommand::StencilMask(true);
 			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
 		}

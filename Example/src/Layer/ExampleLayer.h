@@ -3,7 +3,6 @@
 #include "Snail.h"
 
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
 class ExampleLayer : public Snail::Layer
@@ -23,6 +22,8 @@ private:
 	Snail::Refptr<Snail::Mesh> m_LightMesh;
 	std::vector<Snail::Refptr<Snail::ModelInstance>> m_Objs;
 	int8_t m_SelectedModelIndex = -1;
+
+    Snail::Refptr<Snail::FrameBuffer> m_FBO;
 	
 	Snail::Refptr<Snail::PerspectiveCameraController> m_CameraController;
 	glm::vec3 u_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
@@ -146,6 +147,10 @@ public:
 
 
 		m_CameraController = std::make_shared<Snail::PerspectiveCameraController>(45.0f, 1920.0f/1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
+
+
+        Snail::FrameBufferSpecification spec(1920, 1080);
+        m_FBO = Snail::FrameBuffer::Create(spec);
 		//------------------------------------------------------------------------------
 	}
 	virtual void OnDetach() override {
@@ -170,8 +175,6 @@ public:
 
 	inline bool OnMousePressed(Snail::MousePressEvent& e)
 	{
-        // 如果鼠标在操作 ImGui 窗口，则不进行场景拾取
-        if (ImGui::GetIO().WantCaptureMouse) return false;
         if (Snail::Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) // 鼠标左键
         {
             // 获取鼠标位置
@@ -222,6 +225,9 @@ public:
 
 		//SNL_TRACE("ExampleLayer 调用: OnRender()");
 		// -------------------临时------------------------------------------
+        m_FBO->Bind();
+        Snail::RendererCommand::Clear();
+
 		Snail::Renderer3D::BeginScene(m_CameraController->GetCamera(), u_LightPosition, u_LightColor);
 
 		// 5. 渲染
@@ -245,6 +251,8 @@ public:
 				obj->mesh->Draw(obj->GetTransform(), obj->edgeEnable);
 			}
 		}
+
+        m_FBO->Unbind();
 		//----------------------------------------------------------------
 	}
 
@@ -426,6 +434,26 @@ public:
             }
             ImGui::TreePop();
         }
+
+        ImGui::End();
+
+
+        // ==========================================================
+        // 4. 使用 m_FBO 的color attachment，实现离屏渲染
+        // ==========================================================
+        ImGui::Begin(u8"离屏渲染视口");
+
+        // 获取帧缓冲信息
+        uint32_t textureId = m_FBO->GetColorAttachment();
+        // 显示纹理
+        ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+        ImGui::Text("视口大小: %.0f x %.0f", viewportSize.x, viewportSize.y);
+
+        ImGui::Image(
+            (void*)(intptr_t)textureId, ImGui::GetContentRegionAvail(),
+            ImVec2(0, 1), // UV0: 纹理的(0,1) -> 对应 OpenGL 左上
+            ImVec2(1, 0)  // UV1: 纹理的(1,0) -> 对应 OpenGL 右下
+        );
 
         ImGui::End();
 	}

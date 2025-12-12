@@ -8,6 +8,7 @@
 #include "Snail/Render/Renderer/Model/Model.h"
 #include "Snail/Render/Renderer/Renderer.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
+#include "Snail/Render/Renderer/FrameBuffer/FrameBuffer.h"
 #include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"
 //----------------------------------
 

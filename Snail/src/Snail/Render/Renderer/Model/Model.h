@@ -95,9 +95,6 @@ namespace Snail {
 
         bool Is_Cross(const Refptr<ModelInstance>& model, float& outDistance)
         {
-            // 1. 获取模型局部包围盒 (前提：你已经在 Mesh 加载时算好了 m_MinVertex 和 m_MaxVertex)
-            // 如果 ModelInstance 有多个 Mesh，你需要遍历合并它们的包围盒
-            // 这里假设 model->mesh 是主 Mesh
             glm::vec3 localMin(std::numeric_limits<float>::max());
             glm::vec3 localMax(std::numeric_limits<float>::lowest());
             if (model->mesh) {

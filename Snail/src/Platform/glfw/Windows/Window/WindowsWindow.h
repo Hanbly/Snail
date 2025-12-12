@@ -21,10 +21,10 @@ namespace Snail {
 		WindowsWindow& operator=(const WindowsWindow&) = delete;
 
 		void OnUpdate() override;
-		inline unsigned int GetWindowWidth() const override {
+		inline uint32_t GetWindowWidth() const override {
 			return m_Data.props.width;
 		}
-		inline unsigned int GetWindowHeight() const override {
+		inline uint32_t GetWindowHeight() const override {
 			return m_Data.props.height;
 		}
 		inline void* GetWindow() const override {
