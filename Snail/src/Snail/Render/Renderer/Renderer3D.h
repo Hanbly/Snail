@@ -36,7 +36,7 @@ namespace Snail {
 		static void Shutdown();
 
 		// BeginScene 升级：接收相机 + 光源信息
-		static void BeginScene(const Uniptr<Camera>& camera, const glm::vec3& lightPos, const glm::vec4& lightColor);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor);
 		static void EndScene();
 
 		static void DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));

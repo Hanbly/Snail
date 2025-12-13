@@ -1,17 +1,5 @@
 ﻿#pragma once
 
-//-------------Render------------
-#include "Snail/Render/Renderer/Material/Shader.h"
-#include "Snail/Render/Renderer/Material/Texture.h"
-#include "Snail/Render/Renderer/Material/Material.h"
-#include "Snail/Render/Renderer/Mesh/Mesh.h"
-#include "Snail/Render/Renderer/Model/Model.h"
-#include "Snail/Render/Renderer/Renderer.h"
-#include "Snail/Render/Renderer/Renderer3D.h"
-#include "Snail/Render/Renderer/FrameBuffer/FrameBuffer.h"
-#include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"
-//----------------------------------
-
 //-------------Core-----------------
 #include "Snail/Input/Input.h"
 #include "Snail/Basic/InputCodes.h"
@@ -26,6 +14,25 @@
 
 #include "Snail/Application/Application.h"
 //---------------------------------
+
+//-------------Render------------
+#include "Snail/Render/Renderer/Material/Shader.h"
+#include "Snail/Render/Renderer/Material/Texture.h"
+#include "Snail/Render/Renderer/Material/Material.h"
+#include "Snail/Render/Renderer/Mesh/Mesh.h"
+#include "Snail/Render/Renderer/Model/Model.h"
+#include "Snail/Render/Renderer/Renderer.h"
+#include "Snail/Render/Renderer/Renderer3D.h"
+#include "Snail/Render/Renderer/FrameBuffer/FrameBuffer.h"
+#include "Snail/Render/Renderer/Camera/PerspectiveCameraController.h"
+//----------------------------------
+
+// ------------Scene--------------
+#include "Snail/Scene/Scene.h"
+#include "Snail/Scene/Entity.h"
+#include "Snail/Scene/Component.h"
+#include "Snail/Scene/SceneUtils.h"
+//--------------------------------
 
 // 程序入口 -------------------------
 #include "Snail/Basic/EntryPoint.h"

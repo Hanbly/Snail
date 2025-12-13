@@ -20,9 +20,14 @@ namespace Snail {
 		int slot = 0;
 		for (const auto& [name, texture] : m_Textures)
 		{
-			texture->Bind(slot);
-			m_Shader->SetInt(name, slot);
-			slot++;
+			if (texture) {
+				texture->Bind(slot);
+				m_Shader->SetInt(name, slot);
+				slot++;
+			}
+			else {
+				SNL_CORE_WARN("Material: 尝试绑定名为 '{0}' 的空纹理!", name);
+			}
 		}
 	}
 

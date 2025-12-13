@@ -16,16 +16,16 @@ namespace Snail {
 	{
 	}
 
-	void Renderer3D::BeginScene(const Uniptr<Camera>& camera, const glm::vec3& lightPos, const glm::vec4& lightColor)
+	void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
 		// 计算 View * Projection
-		s_3DSceneData.ViewProjectionMatrix = camera->GetProjectionMatrix() * camera->GetViewMatrix();
+		s_3DSceneData.ViewProjectionMatrix = camera.GetProjectionMatrix() * glm::inverse(transform);
 
 		// 获取相机位置
-		s_3DSceneData.CameraPosition = camera->GetCameraPos();
+		s_3DSceneData.CameraPosition = glm::vec3(transform[3]);
 
 		s_3DSceneData.LightPosition = lightPos;
 		s_3DSceneData.LightColor = lightColor;

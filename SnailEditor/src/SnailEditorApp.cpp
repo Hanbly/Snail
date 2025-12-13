@@ -6,7 +6,7 @@
 class SnailEditor : public Snail::Application {
 public:
 	SnailEditor() {
-		this->PushNorLayer(new SnailEditorLayer("SnailEditorLayer 层", true));
+		this->PushNorLayer(new Snail::SnailEditorLayer("SnailEditorLayer 层", true));
 	}
 	~SnailEditor() = default;
 };

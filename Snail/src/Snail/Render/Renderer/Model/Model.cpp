@@ -194,7 +194,7 @@ namespace Snail {
 			bool cacheFlag = false; // 将标志位定义移到这里，每次循环重置
 
 			for (uint32_t j = 0; j < m_LoadedTextures.size(); j++) {
-				if (std::strcmp(m_LoadedTextures[j].path.data(), filename.c_str()) == 0) {
+				if (m_LoadedTextures[j].path == filename) {
 					textures.push_back(m_LoadedTextures[j]);
 					cacheFlag = true;
 					break;
@@ -214,11 +214,16 @@ namespace Snail {
 				SNL_CORE_TRACE("Model: 加载纹理路径: '{0}' 中...", fullPath);
 
 				texture.texture = Texture2D::Create(fullPath);
-				texture.type = typeName;
-				texture.path = filename; // 保存相对路径或文件名用于缓存对比
+				if (texture.texture) {
+					texture.type = typeName;
+					texture.path = filename; // 保存相对路径或文件名用于缓存对比
 
-				textures.push_back(texture);
-				m_LoadedTextures.push_back(texture); // 添加到已加载缓存
+					textures.push_back(texture);
+					m_LoadedTextures.push_back(texture); // 添加到已加载缓存
+				}
+				else {
+					SNL_CORE_ERROR("Model: 纹理加载失败或路径无效: {0}", fullPath);
+				}
 			}
 		}
 		return textures;

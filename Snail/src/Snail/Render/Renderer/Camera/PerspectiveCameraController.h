@@ -19,7 +19,6 @@ namespace Snail {
 		PerspectiveCameraController(const float& fov, const float& aspect, const glm::vec3& position);
 		~PerspectiveCameraController() = default;
 
-		void RecalculateMatrix();
 		void RecalculateVectors();
 
 		void MoveCamera(const Camera::TranslationDirection& dir, const float& length);
@@ -30,13 +29,25 @@ namespace Snail {
 		void OnUpdate(const Timestep& ts);
 		void OnEvent(Event& e);
 	
-		inline const Uniptr<Camera>& GetCamera() const { return m_Camera; }
+		inline Camera& GetCamera() { return m_Camera; }
+		inline const Camera& GetCamera() const { return m_Camera; }
+		const glm::mat4& GetTransform() const;
 	private:
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnMouseMove(MouseMoveEvent& e);
 		bool OnMouseScroll(MouseScrollEvent& e);
 	private:
-		Uniptr<Camera> m_Camera;
+		Camera m_Camera;
+
+		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
+		float m_Yaw = -90.0f;
+		float m_Pitch = 0.0f;
+
+		glm::vec3 m_Front = { 0.0f, 0.0f, -1.0f };
+		glm::vec3 m_Right = { 1.0f, 0.0f, 0.0f };
+		glm::vec3 m_Up = { 0.0f, 1.0f, 0.0f };
+		glm::vec3 m_WorldUp = { 0.0f, 1.0f, 0.0f };
+
 		float m_CameraMoveSpeed = 150.0f;
 
 		float m_LastMouseX;

@@ -5,78 +5,65 @@
 namespace Snail {
 
 	PerspectiveCameraController::PerspectiveCameraController(const float& fov, const float& aspect, const glm::vec3& position)
+		: m_Camera(fov, aspect), m_Position(position)
 	{
-		m_Camera = std::make_unique<Camera>(fov, aspect, position);
+		m_Yaw = -90.0f;
+		m_Pitch = 0.0f;
+		m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 		this->RecalculateVectors();
-		this->RecalculateMatrix();
 	}
 
 	void PerspectiveCameraController::MoveCamera(const Camera::TranslationDirection& dir, const float& length) {
 
 		glm::vec3 vector = glm::vec3(0.0f);
-		if (dir == Camera::TranslationDirection::FRONT)			{ vector = m_Camera->m_Front * length; }
-		else if (dir == Camera::TranslationDirection::BACK)		{ vector = -m_Camera->m_Front * length; }
-		if (dir == Camera::TranslationDirection::RIGHT)			{ vector = m_Camera->m_Right * length; }
-		else if (dir == Camera::TranslationDirection::LEFT)		{ vector = -m_Camera->m_Right * length; }
-		if (dir == Camera::TranslationDirection::UP)			{ vector = m_Camera->m_WorldUp * length; }
-		else if (dir == Camera::TranslationDirection::DOWN)		{ vector = -m_Camera->m_WorldUp * length; }
+		if (dir == Camera::TranslationDirection::FRONT)			{ vector = m_Front * length; }
+		else if (dir == Camera::TranslationDirection::BACK)		{ vector = -m_Front * length; }
+		if (dir == Camera::TranslationDirection::RIGHT)			{ vector = m_Right * length; }
+		else if (dir == Camera::TranslationDirection::LEFT)		{ vector = -m_Right * length; }
+		if (dir == Camera::TranslationDirection::UP)			{ vector = m_WorldUp * length; }
+		else if (dir == Camera::TranslationDirection::DOWN)		{ vector = -m_WorldUp * length; }
 
-		m_Camera->m_Position = m_Camera->m_Position + vector;
-		this->RecalculateMatrix();
+		m_Position = m_Position + vector;
 	}
 
 	void PerspectiveCameraController::RotateCamera(const float& yaw, const float& pitch)
 	{
 		// 1. 累加偏移量到总角度
-		m_Camera->m_Yaw += yaw;
-		m_Camera->m_Pitch += pitch;
+		m_Yaw += yaw;
+		m_Pitch += pitch;
 
-		if (m_Camera->m_Pitch > 89.0f) m_Camera->m_Pitch = 89.0f;
-		if (m_Camera->m_Pitch < -89.0f) m_Camera->m_Pitch = -89.0f;
+		if (m_Pitch > 89.0f) m_Pitch = 89.0f;
+		if (m_Pitch < -89.0f) m_Pitch = -89.0f;
 
 		this->RecalculateVectors();
-		this->RecalculateMatrix();
 	}
 
 	// 处理 滚轮缩放
 	void PerspectiveCameraController::UpdateZoomFov(const float& fovOffset)
 	{
-		m_Camera->m_FOV -= fovOffset;
+		m_Camera.m_FOV -= fovOffset;
 
 		// 防止FOV过小或过大
-		if (m_Camera->m_FOV < 1.0f) m_Camera->m_FOV = 1.0f;
-		if (m_Camera->m_FOV > 90.0f) m_Camera->m_FOV = 90.0f;
-
-		this->RecalculateMatrix();
+		if (m_Camera.m_FOV < 1.0f) m_Camera.m_FOV = 1.0f;
+		if (m_Camera.m_FOV > 90.0f) m_Camera.m_FOV = 90.0f;
 	}
 	// 处理 Resize
 	void PerspectiveCameraController::UpdateAspect(const float& aspect)
 	{
-		m_Camera->m_Aspect = aspect;
-
-		this->RecalculateMatrix();
-	}
-
-	void PerspectiveCameraController::RecalculateMatrix() {
-		// 根据现有相机属性，对其矩阵进行重新计算
-
-		// 参数: 眼睛位置, 目标位置, 上向量
-		// -----------------------------------------------------------
-		m_Camera->m_ViewMatrix = glm::lookAt(m_Camera->m_Position, m_Camera->m_Front + m_Camera->m_Position, m_Camera->m_Up);
-		m_Camera->m_ProjectionMatrix = glm::perspective(glm::radians(m_Camera->m_FOV), m_Camera->m_Aspect, m_Camera->m_Near, m_Camera->m_Far);
+		m_Camera.m_Aspect = aspect;
 	}
 
 	void PerspectiveCameraController::RecalculateVectors() {
 		glm::vec3 front;
-		front.x = cos(glm::radians(m_Camera->m_Pitch)) * cos(glm::radians(m_Camera->m_Yaw));
-		front.y = sin(glm::radians(m_Camera->m_Pitch));
-		front.z = cos(glm::radians(m_Camera->m_Pitch)) * sin(glm::radians(m_Camera->m_Yaw));
-		m_Camera->m_Front = glm::normalize(front);
+		front.x = cos(glm::radians(m_Pitch)) * cos(glm::radians(m_Yaw));
+		front.y = sin(glm::radians(m_Pitch));
+		front.z = cos(glm::radians(m_Pitch)) * sin(glm::radians(m_Yaw));
+		m_Front = glm::normalize(front);
 
 		// 重新计算 Right 和 Up
-		m_Camera->m_Right = glm::normalize(glm::cross(m_Camera->m_Front, m_Camera->m_WorldUp));
-		m_Camera->m_Up = glm::normalize(glm::cross(m_Camera->m_Right, m_Camera->m_Front));
+		m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
+		m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 	}
 
 	void PerspectiveCameraController::OnUpdate(const Timestep& ts) {
@@ -109,6 +96,14 @@ namespace Snail {
 		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseMove));
 		dispatcher.Dispatch<MouseScrollEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseScroll));
 
+	}
+
+	const glm::mat4& PerspectiveCameraController::GetTransform() const {
+		// 根据现有相机属性，对其矩阵进行重新计算
+
+		// 参数: 眼睛位置, 目标位置, 上向量
+		// -----------------------------------------------------------
+		return glm::inverse(glm::lookAt(m_Position, m_Position + m_Front, m_Up));
 	}
 
 	bool PerspectiveCameraController::OnWindowResize(WindowResizeEvent& e)
