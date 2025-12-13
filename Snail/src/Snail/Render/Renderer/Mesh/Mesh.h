@@ -10,6 +10,11 @@
 
 namespace Snail {
 
+	struct AABB {
+		glm::vec3 min;
+		glm::vec3 max;
+	};
+
 	struct TextureData {
 		Refptr<Texture> texture;
 		std::string type;
@@ -45,6 +50,7 @@ namespace Snail {
 
 		inline const Refptr<VertexArray>& GetVAO() const { return m_VAO; }
 		inline const Refptr<Material>& GetMaterial() const { return m_Material; }
+		inline const glm::mat4& GetLocationTransform() const { return m_LocalTransform; }
 
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 

@@ -12,6 +12,7 @@ namespace Snail {
 		m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 		this->RecalculateVectors();
+		m_Camera.RecalculateProjection();
 	}
 
 	void PerspectiveCameraController::MoveCamera(const Camera::TranslationDirection& dir, const float& length) {
@@ -37,6 +38,7 @@ namespace Snail {
 		if (m_Pitch < -89.0f) m_Pitch = -89.0f;
 
 		this->RecalculateVectors();
+		m_Camera.RecalculateProjection();
 	}
 
 	// 处理 滚轮缩放
@@ -47,11 +49,14 @@ namespace Snail {
 		// 防止FOV过小或过大
 		if (m_Camera.m_FOV < 1.0f) m_Camera.m_FOV = 1.0f;
 		if (m_Camera.m_FOV > 90.0f) m_Camera.m_FOV = 90.0f;
+
+		m_Camera.RecalculateProjection();
 	}
 	// 处理 Resize
 	void PerspectiveCameraController::UpdateAspect(const float& aspect)
 	{
 		m_Camera.m_Aspect = aspect;
+		m_Camera.RecalculateProjection();
 	}
 
 	void PerspectiveCameraController::RecalculateVectors() {
@@ -92,24 +97,13 @@ namespace Snail {
 	void PerspectiveCameraController::OnEvent(Event& e) {
 
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnWindowResize));
 		dispatcher.Dispatch<MouseMoveEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseMove));
 		dispatcher.Dispatch<MouseScrollEvent>(BIND_NSTATIC_MEMBER_Fn(PerspectiveCameraController::OnMouseScroll));
 
 	}
 
-	const glm::mat4& PerspectiveCameraController::GetTransform() const {
-		// 根据现有相机属性，对其矩阵进行重新计算
-
-		// 参数: 眼睛位置, 目标位置, 上向量
-		// -----------------------------------------------------------
+	const glm::mat4 PerspectiveCameraController::GetTransform() const {
 		return glm::inverse(glm::lookAt(m_Position, m_Position + m_Front, m_Up));
-	}
-
-	bool PerspectiveCameraController::OnWindowResize(WindowResizeEvent& e)
-	{
-		UpdateAspect((float)e.GetWindowWidth() / (float)e.GetWindowHeight());
-		return false;
 	}
 
 	bool PerspectiveCameraController::OnMouseMove(MouseMoveEvent& e) {

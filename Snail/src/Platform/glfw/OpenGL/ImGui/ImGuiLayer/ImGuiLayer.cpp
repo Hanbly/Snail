@@ -121,14 +121,6 @@ namespace Snail {
 		// Rendering
 		ImGui::Render();
 
-		Application& app = Application::Get();
-		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetWindow());
-		int display_w = app.GetWindow().GetWindowWidth();
-		int display_h = app.GetWindow().GetWindowHeight();
-
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Update and Render additional Platform Windows

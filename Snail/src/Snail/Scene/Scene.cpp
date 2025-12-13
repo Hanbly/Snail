@@ -34,7 +34,7 @@ namespace Snail {
         }
     }
 
-	void Scene::OnUpdate(const Timestep& ts)
+	void Scene::OnUpdateRuntime(const Timestep& ts)
 	{
         // ------------------------------------------------
         // 寻找主相机 (System: Camera System)
@@ -57,10 +57,12 @@ namespace Snail {
 
         // 如果没有主相机，就不渲染
         if (!mainCamera) return;
+	}
 
-
+	void Scene::OnRenderEditor(const Camera& camera, const glm::mat4& cameraTransform)
+	{
         // ------------------------------------------------
-        // 2. 寻找光源 (System: Light System)
+        // 寻找光源 (System: Light System)
         // ------------------------------------------------
         // 这里简单处理：找第一个有点光源组件的实体，如果没有则用默认值
         glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
@@ -78,9 +80,9 @@ namespace Snail {
 
 
         // ------------------------------------------------
-        // 3. 渲染流程 (System: Render System)
+        // 渲染流程 (System: Render System)
         // ------------------------------------------------
-        Renderer3D::BeginScene(*mainCamera, cameraTransform, lightPos, lightColor);
+        Renderer3D::BeginScene(camera, cameraTransform, lightPos, lightColor);
 
 
         auto modelview = m_Registry.view<TransformComponent, ModelComponent>();
@@ -88,13 +90,6 @@ namespace Snail {
         {
             if (model.visible && model.model) {
                 Renderer3D::DrawModel(*model.model, model.edgeEnable, transform.transform);
-            }
-        }
-        auto meshview = m_Registry.view<TransformComponent, MeshComponent>();
-        for (auto [entity, transform, mesh] : meshview.each())
-        {
-            if (mesh.visible && mesh.mesh) {
-                Renderer3D::DrawMesh(*mesh.mesh, mesh.edgeEnable, transform.transform);
             }
         }
 

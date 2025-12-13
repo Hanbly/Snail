@@ -5,11 +5,13 @@
 
 #include "Snail/Basic/Timestep.h"
 
+#include "glm/glm.hpp"
 #include "entt.hpp"
 
 namespace Snail {
 	
 	class Entity;
+	class Camera;
 
 	class Scene {
 	private:
@@ -31,8 +33,11 @@ namespace Snail {
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
 
-		void OnUpdate(const Timestep& ts);
+		void OnUpdateRuntime(const Timestep& ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+
+		void OnRenderEditor(const Camera& camera, const glm::mat4& cameraTransform);
 
 		friend class Entity;
 	};

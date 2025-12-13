@@ -11,11 +11,6 @@
 
 namespace Snail {
 
-    struct AABB {
-        glm::vec3 min;
-        glm::vec3 max;
-    };
-
     struct MouseRay {
         glm::vec3 origin;    // 射线起点
         glm::vec3 direction; // 射线方向（单位向量）
@@ -44,24 +39,14 @@ namespace Snail {
             bool HasGeometry = false;
 
             if (entity.HasAllofComponent<ModelComponent>()) {
-                const auto& meshes = entity.GetComponent<ModelComponent>().model->GetMeshs();
-                if (!meshes.empty()) {
-                    // 先以第一个网格作为基准
-                    localMin = meshes[0]->m_MinVertex;
-                    localMax = meshes[0]->m_MaxVertex;
-                    for (size_t i = 1; i < meshes.size(); i++) {
-                        localMin = glm::min(localMin, meshes[i]->m_MinVertex);
-                        localMax = glm::max(localMax, meshes[i]->m_MaxVertex);
-                    }
+                const auto& model = entity.GetComponent<ModelComponent>().model;
 
+                if (!model->GetMeshs().empty()) {
+                    localMin = model->m_AABB.min;
+                    localMax = model->m_AABB.max;
                     HasGeometry = true;
                 }
-            }
-            else if (entity.HasAllofComponent<MeshComponent>()) {
-                localMin = entity.GetComponent<MeshComponent>().mesh->m_MinVertex;
-                localMax = entity.GetComponent<MeshComponent>().mesh->m_MaxVertex;
-
-                HasGeometry = true;
+                
             }
 
             if (!HasGeometry) return false;

@@ -23,7 +23,10 @@ namespace Snail {
 		Camera(const float& fov, const float& aspect);
 		Camera(const float& fov, const float& aspect, const float& cnear, const float& cfar);
 		~Camera() = default;
+
+		void RecalculateProjection();
 	public:
+
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 
 	private:

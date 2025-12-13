@@ -16,4 +16,9 @@ namespace Snail {
 		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_Aspect, m_Near, m_Far);
 	}
 
+	void Camera::RecalculateProjection()
+	{
+		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_Aspect, m_Near, m_Far);
+	}
+
 }

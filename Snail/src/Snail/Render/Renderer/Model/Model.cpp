@@ -6,6 +6,32 @@
 
 namespace Snail {
 
+	Model::Model(const Refptr<Mesh>& mesh)
+	{
+		if (mesh->GetVAO() && mesh->GetMaterial()) {
+
+			m_Shader = mesh->GetMaterial()->GetShader();
+
+			m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
+			m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
+			ConsiderMeshAABB(mesh);
+
+			m_Meshes.push_back(mesh);
+		}
+	}
+
+	Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+		: m_Shader(shader)
+	{
+		auto& mesh = std::make_shared<Mesh>(vertices, indices, shader, textures, localTransform);
+
+		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
+		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
+		ConsiderMeshAABB(mesh);
+
+		m_Meshes.push_back(mesh);
+	}
+
 	Model::Model(const Refptr<Shader>& shader, const std::string& path)
 		: m_Shader(shader)
 	{
@@ -47,6 +73,13 @@ namespace Snail {
 		m_Directory = path.substr(0, path.find_last_of('/'));
 
 		ProcessNode(scene->mRootNode, scene, glm::mat4(1.0f));
+
+		// 处理AABB
+		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
+		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
+		for (const auto& mesh : m_Meshes) {
+			ConsiderMeshAABB(mesh);
+		}
 	}
 
 	void Model::ProcessNode(aiNode* node, const aiScene* scene, const glm::mat4& parentTransformation)
@@ -58,7 +91,7 @@ namespace Snail {
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-			m_Meshs.push_back(ProcessMesh(mesh, scene, parentTransformation * nodeTransformation));
+			m_Meshes.push_back(ProcessMesh(mesh, scene, parentTransformation * nodeTransformation));
 		}
 		// 接下来对它的子节点重复这一过程
 		for (uint32_t i = 0; i < node->mNumChildren; i++)
@@ -236,13 +269,30 @@ namespace Snail {
 		// Assimp: Row-Major (a1, a2, a3, a4 是第一行)
 		// GLM: Column-Major
 		// 手动把 Assimp 的行，赋值给 GLM 的行 (GLM[col][row])
-
 		to[0][0] = static_cast<float>(matrix.a1); to[1][0] = static_cast<float>(matrix.a2); to[2][0] = static_cast<float>(matrix.a3); to[3][0] = static_cast<float>(matrix.a4);
 		to[0][1] = static_cast<float>(matrix.b1); to[1][1] = static_cast<float>(matrix.b2); to[2][1] = static_cast<float>(matrix.b3); to[3][1] = static_cast<float>(matrix.b4);
 		to[0][2] = static_cast<float>(matrix.c1); to[1][2] = static_cast<float>(matrix.c2); to[2][2] = static_cast<float>(matrix.c3); to[3][2] = static_cast<float>(matrix.c4);
 		to[0][3] = static_cast<float>(matrix.d1); to[1][3] = static_cast<float>(matrix.d2); to[2][3] = static_cast<float>(matrix.d3); to[3][3] = static_cast<float>(matrix.d4);
 
 		return to;
+	}
+
+	void Model::ConsiderMeshAABB(const Refptr<Mesh>& mesh)
+	{
+		glm::vec3 min = mesh->m_MinVertex;
+		glm::vec3 max = mesh->m_MaxVertex;
+		glm::mat4 transform = mesh->GetLocationTransform();
+		glm::vec3 corners[8] = {
+			{min.x, min.y, min.z}, {min.x, min.y, max.z},
+			{min.x, max.y, min.z}, {min.x, max.y, max.z},
+			{max.x, min.y, min.z}, {max.x, min.y, max.z},
+			{max.x, max.y, min.z}, {max.x, max.y, max.z}
+		};
+		for (int i = 0; i < 8; i++) {
+			glm::vec3 p = glm::vec3(transform * glm::vec4(corners[i], 1.0f));
+			m_AABB.min = glm::min(m_AABB.min, p);
+			m_AABB.max = glm::max(m_AABB.max, p);
+		}
 	}
 
 }

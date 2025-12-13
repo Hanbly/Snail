@@ -112,27 +112,27 @@ namespace Snail {
             td.push_back(TextureData(Texture2D::Create("assets/images/mayoli.png"), "texture_diffuse"));
             // --- 创建 Cube 实例 ---
             {
-                Refptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
+                Refptr<Model> singleMesh = std::make_shared<Model>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
 
                 glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 60.0f, 0.0f)) *
                     glm::rotate(glm::mat4(1.0f), glm::radians(50.0f), glm::vec3(25.0f, 25.0f, 25.0f)) *
                     glm::scale(glm::mat4(1.0f), glm::vec3(25.0f, 25.0f, 25.0f));
 
                 Entity e = m_Scene->CreateEntity("Cube");
-                e.AddComponent<MeshComponent>(mesh);
+                e.AddComponent<ModelComponent>(singleMesh);
 
                 e.GetComponent<TransformComponent>().transform = trans;
             }
             // --- 创建 Light 实例 ---
             {
-                Refptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, m_ShaderLibrary.Get("light_box"));
+                Refptr<Model> singleMesh = std::make_shared<Model>(vertices, indices, m_ShaderLibrary.Get("light_box"));
                 
                 glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 160.0f, 0.0f)) *
                     glm::rotate(glm::mat4(1.0f), glm::radians(50.0f), glm::vec3(25.0f, 25.0f, 25.0f)) *
                     glm::scale(glm::mat4(1.0f), glm::vec3(25.0f, 25.0f, 25.0f));
 
                 Entity e = m_Scene->CreateEntity("Light");
-                e.AddComponent<MeshComponent>(mesh);
+                e.AddComponent<ModelComponent>(singleMesh);
                 e.AddComponent<PointLightComponent>(u_LightColor, 1.0f);
 
                 e.GetComponent<TransformComponent>().transform = trans;
@@ -264,10 +264,6 @@ namespace Snail {
                     for (auto [entity, model] : modelview.each()) {
                         model.edgeEnable = false;
                     }
-                    auto meshview = m_Scene->GetRegistry().view<MeshComponent>();
-                    for (auto [entity, mesh] : meshview.each()) {
-                        mesh.edgeEnable = false;
-                    }
 
                     m_SelectedEntity = {};
                     return false;
@@ -278,8 +274,6 @@ namespace Snail {
                 SNL_CORE_INFO("选中物体: {0}", hitEntity.GetComponent<TagComponent>().name);
                 if (m_SelectedEntity.TryGetComponent<ModelComponent>())
                     m_SelectedEntity.TryGetComponent<ModelComponent>()->edgeEnable = true;
-                if (m_SelectedEntity.TryGetComponent<MeshComponent>())
-                    m_SelectedEntity.TryGetComponent<MeshComponent>()->edgeEnable = true;
             }
             return false;
         }
@@ -294,7 +288,7 @@ namespace Snail {
             RendererCommand::Clear();
 
             // 5. 渲染
-            m_Scene->OnUpdate(0.0f);
+            m_Scene->OnRenderEditor(m_CameraController->GetCamera(), m_CameraController->GetTransform());
 
             m_FBO->Unbind();
             //----------------------------------------------------------------
@@ -490,15 +484,6 @@ namespace Snail {
                     if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
                     {
                         auto& mc = m_SelectedEntity.GetComponent<ModelComponent>();
-                        ImGui::Checkbox("显示", &mc.visible);
-                        ImGui::Checkbox("物体轮廓", &mc.edgeEnable);
-                    }
-                }
-                else if (m_SelectedEntity.HasAllofComponent<MeshComponent>())
-                {
-                    if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
-                    {
-                        auto& mc = m_SelectedEntity.GetComponent<MeshComponent>();
                         ImGui::Checkbox("显示", &mc.visible);
                         ImGui::Checkbox("物体轮廓", &mc.edgeEnable);
                     }

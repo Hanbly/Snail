@@ -19,7 +19,7 @@ namespace Snail {
 	};
 
 	struct TransformComponent {
-		glm::mat4 transform;
+		glm::mat4 transform = glm::mat4(1.0f);
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::mat4& transform)
@@ -35,15 +35,6 @@ namespace Snail {
 
         ModelComponent() = default;
         ModelComponent(const Refptr<Model>& model) : model(model) {}
-    };
-
-    struct MeshComponent {
-        Refptr<Mesh> mesh;
-        bool visible = true;
-        bool edgeEnable = false;
-
-        MeshComponent() = default;
-        MeshComponent(const Refptr<Mesh>& mesh) : mesh(mesh) {}
     };
 
     struct CameraComponent {
