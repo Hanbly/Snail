@@ -4,6 +4,7 @@
 #include "Entity.h"
 
 #include "Component.h"
+#include "SceneUtils.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
 
 namespace Snail {
@@ -49,7 +50,7 @@ namespace Snail {
             {
                 if (camera.primary) {
                     mainCamera = &camera.camera;
-                    cameraTransform = transform.transform;
+                    cameraTransform = transform.GetTransform();
                     break; // 找到主相机就退出
                 }
             }
@@ -72,7 +73,7 @@ namespace Snail {
             auto view = m_Registry.view<TransformComponent, PointLightComponent>();
             for (auto [entity, transform, light] : view.each())
             {
-                lightPos = glm::vec3(transform.transform[3]);
+                lightPos = glm::vec3(transform.position);
                 lightColor = light.color;
                 break; // 暂时只支持单光源
             }
@@ -85,19 +86,59 @@ namespace Snail {
         Renderer3D::BeginScene(camera, cameraTransform, lightPos, lightColor);
 
 
-        auto modelview = m_Registry.view<TransformComponent, ModelComponent>();
-        for (auto [entity, transform, model] : modelview.each())
+        auto group = m_Registry.group<TransformComponent, ModelComponent>();
+        for (auto [entity, transform, model] : group.each())
         {
             if (model.visible && model.model) {
-                Renderer3D::DrawModel(*model.model, model.edgeEnable, transform.transform);
+                Renderer3D::DrawModel(*model.model, model.edgeEnable, transform.GetTransform());
             }
         }
 
         Renderer3D::EndScene();
 	}
 
-    void Scene::OnViewportResize(uint32_t width, uint32_t height)
+    Entity Scene::CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat)
     {
+        // 构建射线
+        MouseRay ray(x, y, width, height, viewMat, projMat);
+
+        float minDst = std::numeric_limits<float>::max();
+        Entity hitEntity = {}; // 空实体
+
+        // 遍历所有几何体
+        auto view = this->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
+        for (auto [entity, transform, model] : view.each())
+        {
+            float currentDst = 0.0f;
+            Entity e(entity, this);
+            // 传入引用获取距离
+            if (ray.Is_Cross(e, currentDst))
+            {
+                // 3. 寻找最近的物体 (处理遮挡)
+                if (currentDst < minDst)
+                {
+                    minDst = currentDst;
+                    hitEntity = e;
+                }
+            }
+        }
+        // 更新选中状态
+        // 点击空白取消选中
+        if (!hitEntity.IsValid()) {
+            auto modelview = this->GetAllofEntitiesWith<ModelComponent>();
+            for (auto [entity, model] : modelview.each()) {
+                model.edgeEnable = false;
+            }
+            hitEntity = {};
+            return hitEntity;
+        }
+
+        // 选中
+        SNL_CORE_INFO("选中物体: {0}", hitEntity.GetComponent<TagComponent>().name);
+        if (hitEntity.TryGetComponent<ModelComponent>())
+            hitEntity.TryGetComponent<ModelComponent>()->edgeEnable = true;
+
+        return hitEntity;
     }
 
 }

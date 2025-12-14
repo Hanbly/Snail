@@ -52,7 +52,7 @@ namespace Snail {
             if (!HasGeometry) return false;
 
             // 2. 将局部 AABB 的 8 个角点变换到世界空间
-            glm::mat4 transform = entity.GetComponent<TransformComponent>().transform;
+            glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
 
             glm::vec3 corners[8];
             corners[0] = glm::vec3(localMin.x, localMin.y, localMin.z);

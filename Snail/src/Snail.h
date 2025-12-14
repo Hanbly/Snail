@@ -1,16 +1,16 @@
 ﻿#pragma once
 
 //-------------Core-----------------
-#include "Snail/Input/Input.h"
 #include "Snail/Basic/InputCodes.h"
 #include "Snail/Basic/Timestep.h"
 #include "Snail/Basic/Timer.h"
+#include "Snail/Input/Input.h"
 //---------------------------------
 
 //----------------------------------
 #include "Snail/Logger/Log.h"
-#include "Snail/Layer/Layer.h"
 #include "Snail/Events/Event.h"
+#include "Snail/Layer/Layer.h"
 
 #include "Snail/Application/Application.h"
 //---------------------------------
@@ -33,7 +33,3 @@
 #include "Snail/Scene/Component.h"
 #include "Snail/Scene/SceneUtils.h"
 //--------------------------------
-
-// 程序入口 -------------------------
-#include "Snail/Basic/EntryPoint.h"
-//----------------------------------

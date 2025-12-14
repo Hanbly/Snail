@@ -32,6 +32,8 @@ namespace Snail {
 		inline Camera& GetCamera() { return m_Camera; }
 		inline const Camera& GetCamera() const { return m_Camera; }
 		const glm::mat4 GetTransform() const;
+		const glm::vec3 GetPostion() const;
+		const glm::vec3 GetRotation() const;
 	private:
 		bool OnMouseMove(MouseMoveEvent& e);
 		bool OnMouseScroll(MouseScrollEvent& e);

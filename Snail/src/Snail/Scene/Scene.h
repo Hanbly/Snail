@@ -16,7 +16,9 @@ namespace Snail {
 	class Scene {
 	private:
 		entt::registry m_Registry;
-		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+		glm::vec3 m_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
+		glm::vec4 m_LightColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	public:
 		Scene();
 		~Scene();
@@ -29,15 +31,18 @@ namespace Snail {
 		{
 			return m_Registry.view<T...>();
 		}
-
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
+		inline glm::vec3& GetLightPosition() { return m_LightPosition; }
+		inline glm::vec4& GetLightColor() { return m_LightColor; }
 
 		void OnUpdateRuntime(const Timestep& ts);
-		void OnViewportResize(uint32_t width, uint32_t height);
+		void OnUpdateEditor(const Timestep& ts);
 
-
+		void OnRenderRuntime();
 		void OnRenderEditor(const Camera& camera, const glm::mat4& cameraTransform);
+
+		Entity CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat);
 
 		friend class Entity;
 	};

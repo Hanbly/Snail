@@ -19,12 +19,24 @@ namespace Snail {
 	};
 
 	struct TransformComponent {
-		glm::mat4 transform = glm::mat4(1.0f);
+        glm::vec3 position =    { 0, 0, 0 };
+        glm::vec3 rotation =    { 0, 0, 0 };
+        glm::vec3 scale =       { 1, 1, 1 };
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& transform)
-			: transform(transform) {
-		}
+		TransformComponent(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+			: position(position), rotation(rotation), scale(scale) {}
+
+        const glm::mat4 GetTransform() const
+        {
+            glm::mat4 transform =   glm::translate(glm::mat4(1.0f), position);
+            transform =             glm::rotate(transform, glm::radians(rotation.x), { 1, 0, 0 });
+            transform =             glm::rotate(transform, glm::radians(rotation.y), { 0, 1, 0 });
+            transform =             glm::rotate(transform, glm::radians(rotation.z), { 0, 0, 1 });
+            transform =             glm::scale(transform, scale);
+
+            return transform;
+        }
 	};
 
     // 模型组件

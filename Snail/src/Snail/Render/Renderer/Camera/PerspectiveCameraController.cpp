@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Basic/InputCodes.h"
+
 #include "PerspectiveCameraController.h"
 
 namespace Snail {
@@ -104,6 +106,16 @@ namespace Snail {
 
 	const glm::mat4 PerspectiveCameraController::GetTransform() const {
 		return glm::inverse(glm::lookAt(m_Position, m_Position + m_Front, m_Up));
+	}
+
+	const glm::vec3 PerspectiveCameraController::GetPostion() const
+	{
+		return m_Position;
+	}
+
+	const glm::vec3 PerspectiveCameraController::GetRotation() const
+	{
+		return glm::vec3(m_Pitch, m_Yaw, 0.0f);
 	}
 
 	bool PerspectiveCameraController::OnMouseMove(MouseMoveEvent& e) {

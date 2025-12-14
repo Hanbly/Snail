@@ -30,6 +30,8 @@ namespace Snail {
 		void OnImGuiRender();
 		void EndImGui();
 
+		void BeginDockingSpace();
+
 		inline void BlockMouseEvents(const bool& status) { m_BlockMouseEvents = status; }
 		inline void BlockKeyEvents(const bool& status) { m_BlockKeyEvents = status; }
 

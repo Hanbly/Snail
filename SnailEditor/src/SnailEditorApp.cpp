@@ -1,7 +1,8 @@
-﻿#include "SNLpch.h"
+﻿#include "Layer/SnailEditorLayer.h"
 
-#include "Snail.h"
-#include "Layer/SnailEditorLayer.h"
+// 程序入口 -------------------------
+#include "Snail/Basic/EntryPoint.h"
+//----------------------------------
 
 class SnailEditor : public Snail::Application {
 public:

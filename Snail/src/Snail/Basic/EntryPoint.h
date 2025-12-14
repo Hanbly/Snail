@@ -1,6 +1,11 @@
 ﻿#pragma once
 
+#include "Snail/Basic/Core.h"
+#include "Snail/Basic/Macro.h"
+
 #ifdef SNL_PLATFORM_WINDOWS
+
+	#include <Windows.h>
 
 	extern Snail::Application* Snail::CreateApplication();
 
