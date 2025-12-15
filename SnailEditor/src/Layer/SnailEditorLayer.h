@@ -7,7 +7,6 @@
 #include "Panels/GlobalSettingsPanel.h"
 
 #include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
 namespace Snail {
 
@@ -30,10 +29,10 @@ namespace Snail {
 
         // ECS 核心
         Refptr<Scene> m_Scene;
-        Entity m_CameraEntity;   // 编辑器相机对应的实体
+        //Entity m_CameraEntity;   // 编辑器相机对应的实体
 
         // 编辑器特有
-        Refptr<PerspectiveCameraController> m_CameraController;
+        Refptr<EditorCamera> m_EditorCamera;
         ShaderLibrary m_ShaderLibrary;
 
         SceneHierarchyPanel m_SHpanel;
@@ -50,11 +49,9 @@ namespace Snail {
                 m_GSpanel(m_Scene.get())
         {
 
-            {
-                m_CameraController = std::make_shared<PerspectiveCameraController>(45.0f, 1920.0f / 1080.0f, glm::vec3(0.0f, 0.0f, 3.0f));
-                m_CameraEntity = m_Scene->CreateEntity("Main Camera");
-                m_CameraEntity.AddComponent<CameraComponent>(m_CameraController->GetCamera());
-            }
+            m_EditorCamera = std::make_shared<EditorCamera>(glm::vec3(0.0f, 0.0f, 1.0f), EditorCameraMode::Arcball);
+            //m_CameraEntity = m_Scene->CreateEntity("Main Camera");
+            //m_CameraEntity.AddComponent<CameraComponent>(/*TODO: 这里需要 SceneCamera */);
 
             FrameBufferSpecification spec(1920, 1080);
             m_FBO = FrameBuffer::Create(spec);
@@ -142,7 +139,7 @@ namespace Snail {
 
                 Entity e = m_Scene->CreateEntity("Light");
                 e.AddComponent<ModelComponent>(singleMesh);
-                e.AddComponent<PointLightComponent>(m_Scene->GetLightColor(), 1.0f);
+                e.AddComponent<PointLightComponent>(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), m_Scene->GetAmbientStrength());
 
                 e.GetComponent<TransformComponent>().position = { 0, 160, 0 };
                 e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
@@ -192,24 +189,24 @@ namespace Snail {
 
 
             if (m_EVpanel.IsFocused()) { // 只有聚焦在视口，才调用OnUpdate（目前只控制相机移动，视角控制在 OnEvent）
-                m_CameraController->OnUpdate(ts);
+                m_EditorCamera->OnUpdate(ts);
             }
 
-            if (m_CameraEntity)
-            {
-                // 同步 View 矩阵 (通过 Transform)
-                auto& trans = m_CameraEntity.GetComponent<TransformComponent>();
-                trans.position = m_CameraController->GetPostion();
-                trans.rotation = m_CameraController->GetRotation();
+            //if (m_CameraEntity)
+            //{
+            //    // 同步 View 矩阵 (通过 Transform)
+            //    auto& trans = m_CameraEntity.GetComponent<TransformComponent>();
+            //    trans.position = m_CameraController->GetPostion();
+            //    trans.rotation = m_CameraController->GetRotation();
 
-                // 同步 Projection (处理 Zoom)
-                auto& camComp = m_CameraEntity.GetComponent<CameraComponent>();
-            }
+            //    // 同步 Projection (处理 Zoom)
+            //    auto& camComp = m_CameraEntity.GetComponent<CameraComponent>();
+            //}
         }
 
         inline virtual void OnEvent(Event& e) {
             //SNL_TRACE("ExampleLayer 调用: OnEvent() {0}", e.ToString());
-            m_CameraController->OnEvent(e);
+            m_EditorCamera->OnEvent(e);
 
             EventDispatcher dispatcher(e);
             dispatcher.Dispatch<MousePressEvent>(BIND_NSTATIC_MEMBER_Fn(SnailEditorLayer::OnMousePressed));
@@ -232,7 +229,7 @@ namespace Snail {
                 float height = m_EVpanel.GetSize().y;
 
                m_SHpanel.SetSelectedEntity(
-                   m_Scene->CastRay(mx, my, width, height, glm::inverse(m_CameraController->GetTransform()), m_CameraController->GetCamera().GetProjectionMatrix())
+                   m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection())
                );
             }
             return false;
@@ -248,7 +245,7 @@ namespace Snail {
             RendererCommand::Clear();
 
             // 5. 渲染
-            m_Scene->OnRenderEditor(m_CameraController->GetCamera(), m_CameraController->GetTransform());
+            m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform());
 
             m_FBO->Unbind();
             //----------------------------------------------------------------
@@ -263,8 +260,8 @@ namespace Snail {
 
 
             m_SHpanel.Show();
-            m_EVpanel.Show(m_FBO, m_CameraController);
-            m_GSpanel.Show();
+            m_EVpanel.Show(m_FBO, m_EditorCamera);
+            m_GSpanel.Show(m_EditorCamera);
 
 
             // docking space 的 End

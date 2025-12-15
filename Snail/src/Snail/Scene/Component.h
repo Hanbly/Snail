@@ -3,7 +3,7 @@
 #include <string>
 
 #include "Snail/Render/Renderer/Model/Model.h"
-#include "Snail/Render/Renderer/Camera/Camera.h"
+#include "Snail/Render/Renderer/Camera/SceneCamera.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -50,11 +50,12 @@ namespace Snail {
     };
 
     struct CameraComponent {
-        Camera camera;
-        bool primary = true; // 标记是否为主相机
+        SceneCamera camera;
+        bool primary = true;            // 是否为主相机
+        bool fixedAspectRatio = false;  // 是否不更新投影矩阵
 
         CameraComponent() = default;
-        CameraComponent(const Camera& camera) 
+        CameraComponent(const SceneCamera& camera)
             : camera(camera) {}
     };
 

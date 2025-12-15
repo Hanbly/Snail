@@ -20,7 +20,7 @@ namespace Snail {
         }
 
 
-        void Show()
+        void Show(const Refptr<EditorCamera>& ec)
         {            
             ImGui::Begin(u8"全局设置");
 
@@ -31,23 +31,36 @@ namespace Snail {
             ImGui::Separator();
 
             // --- 相机设置 (Camera) ---
-            // 编辑器状态下，这里显示的可能是 EditorCamera 的信息
-            // 运行时状态下，显示的可能是 Main Camera Entity 的信息
-            // 这里暂时略过，因为通常这部分信息放在编辑器相机的 Component Inspector 或者专门的 Overlay 中更合适
-            /*if (ImGui::TreeNodeEx(u8"相机设置", ImGuiTreeNodeFlags_DefaultOpen))
-            {
-                if (m_CameraEntity && m_CameraEntity.HasAllofComponent<TransformComponent>())
+            if (ImGui::TreeNodeEx(u8"相机设置", ImGuiTreeNodeFlags_DefaultOpen))
+            {                
+                glm::vec3 pos = ec->GetPostion();
+                glm::vec3 rot = ec->GetRotation();
+
+                ImGui::Text(u8"位置: %.2f,  %.2f,  %.2f", pos.x, pos.y, pos.z);
+                ImGui::Text(u8"旋角: %.2f°, %.2f°, %.2f°", rot.x, rot.y, rot.z);
+
+                const char* modeTypeStrings[] = { "None", "FPS (Fly)", "Arcball (Orbit)" };
+                const char* currentModeString = modeTypeStrings[(int)ec->GetMode()];
+
+                if (ImGui::BeginCombo(u8"控制模式", currentModeString))
                 {
-                    auto& tc = m_CameraEntity.GetComponent<TransformComponent>();
+                    for (int i = 0; i < 3; i++) // 遍历所有模式
+                    {
+                        bool isSelected = (currentModeString == modeTypeStrings[i]);
+                        if (ImGui::Selectable(modeTypeStrings[i], isSelected))
+                        {
+                            currentModeString = modeTypeStrings[i];
+                            ec->SetMode((EditorCameraMode)i);
+                        }
 
-                    glm::vec3 pos = tc.position;
-                    glm::vec3 rot = tc.rotation;
-
-                    ImGui::Text(u8"位置: %.2f,  %.2f,  %.2f", pos.x, pos.y, pos.z);
-                    ImGui::Text(u8"旋角: %.2f°, %.2f°, %.2f°", rot.x, rot.y, rot.z);
+                        if (isSelected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
                 }
+
                 ImGui::TreePop();
-            }*/
+            }
 
             // --- 光源设置 (Lighting) ---
             if (m_Scene)
@@ -55,11 +68,9 @@ namespace Snail {
                 if (ImGui::TreeNodeEx(u8"场景光照", ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     // 获取引用的方式修改 Scene 中的数据
-                    auto& lightPos = m_Scene->GetLightPosition();
-                    auto& lightColor = m_Scene->GetLightColor();
-
-                    ImGui::DragFloat3(u8"光源位置", glm::value_ptr(lightPos), 0.5f);
-                    ImGui::ColorEdit4(u8"光源颜色", glm::value_ptr(lightColor));
+                    auto& ambient = m_Scene->GetAmbientStrength();
+                    
+                    ImGui::DragFloat(u8"环境光强度(Ambient)", &ambient, 0.001f, 0.0f, 1.0f, "%.2f");
 
                     ImGui::TreePop();
                 }

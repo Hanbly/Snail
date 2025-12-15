@@ -115,7 +115,7 @@ project "SnailEditor"
 
     files {
         "%{prj.name}/src/**.h", 
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
     }
 
     includedirs {
@@ -126,6 +126,7 @@ project "SnailEditor"
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.Assimp}",
         "%{IncludeDirs.EnTT}",
+        "%{prj.name}/src",
         "Snail/src"
     }
 

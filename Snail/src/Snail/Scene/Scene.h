@@ -5,6 +5,8 @@
 
 #include "Snail/Basic/Timestep.h"
 
+#include "Snail/Render/Renderer/Camera/EditorCamera.h"
+
 #include "glm/glm.hpp"
 #include "entt.hpp"
 
@@ -17,8 +19,7 @@ namespace Snail {
 	private:
 		entt::registry m_Registry;
 
-		glm::vec3 m_LightPosition = glm::vec3(0.0f, 100.0f, 0.0f);
-		glm::vec4 m_LightColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float m_AmbientStrength = 0.1f;
 	public:
 		Scene();
 		~Scene();
@@ -33,14 +34,13 @@ namespace Snail {
 		}
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
-		inline glm::vec3& GetLightPosition() { return m_LightPosition; }
-		inline glm::vec4& GetLightColor() { return m_LightColor; }
+		inline float& GetAmbientStrength() { return m_AmbientStrength; }
 
 		void OnUpdateRuntime(const Timestep& ts);
 		void OnUpdateEditor(const Timestep& ts);
 
 		void OnRenderRuntime();
-		void OnRenderEditor(const Camera& camera, const glm::mat4& cameraTransform);
+		void OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform);
 
 		Entity CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat);
 

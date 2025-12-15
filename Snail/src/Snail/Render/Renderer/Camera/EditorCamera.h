@@ -1,0 +1,98 @@
+﻿#pragma once
+
+#include "Snail/Basic/Core.h"
+#include "Snail/Basic/Macro.h"
+
+#include "Snail/Input/Input.h"
+#include "Snail/Basic/Timestep.h"
+
+#include "Snail/Events/Event.h"
+#include "Snail/Events/ApplicationEvent.h"
+#include "Snail/Events/MouseEvent.h"
+
+#include "Camera.h"
+
+namespace Snail {
+
+	enum class EditorCameraMode {
+		None = 0,
+		FPS, Arcball
+	};
+	enum class EditorCameraTranslateDirection { // 平移方向
+		None = 0,
+		UP, LEFT, DOWN, RIGHT, FRONT, BACK
+	};
+
+	class EditorCamera : public Camera {
+	public:
+		EditorCamera();
+		EditorCamera(const EditorCameraMode& mode);
+		EditorCamera(const glm::vec3& position, const EditorCameraMode& mode);
+		~EditorCamera() = default;
+
+		void RecalculateVectors();
+		void RecalculateViewMatrix();
+		void RecalculateProjectionMatrix();
+
+
+		void SetViewportSize(const float& width, const float& height);
+
+		void OnUpdate(const Timestep& ts);
+		void OnEvent(Event& e);
+	
+		const glm::mat4 GetTransform() const { return glm::inverse(m_ViewMatrix); }
+		const glm::vec3 GetPostion() const { return m_Position; }
+		const glm::vec3 GetRotation() const { return glm::vec3(m_Pitch, m_Yaw, 0.0f); }
+		const EditorCameraMode& GetMode() const { return m_Mode; }
+		void SetMode(const EditorCameraMode& mode) { m_Mode = mode; }
+	private:
+		void FPSMove(const EditorCameraTranslateDirection& dir, const float& length);
+		void FPSRotate(const float& yaw, const float& pitch);
+		void FPSZoom(const float& fovOffset);
+		void ArcballMove(const float& xoffset, const float& yoffset);
+		void ArcballRotate(const float& xoffset, const float& yoffset);
+		void ArcballZoom(const float& offset);
+		bool OnMouseScroll(MouseScrollEvent& e);
+		// --- Arcball 辅助函数 ---
+		glm::vec3 CalculatePosition() const;
+		glm::vec3 GetForwardDirection() const;	
+		glm::vec3 GetUpDirection() const;
+		glm::vec3 GetRightDirection() const;
+		glm::quat GetOrientation() const;
+		std::pair<float, float> PanSpeed() const;
+		float ZoomSpeed() const;
+	private:
+		EditorCameraMode m_Mode = EditorCameraMode::FPS;
+
+		// 投影属性
+		float m_FOV = 45.0f;
+		float m_Aspect = (float)1280 / 720;
+		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
+		float m_Near = 0.01f;
+		float m_Far = 5000.0f;
+		glm::mat4 m_ViewMatrix;
+		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
+
+		glm::vec3 m_Front;
+		glm::vec3 m_Right;
+		glm::vec3 m_Up;
+		glm::vec3 m_WorldUp = { 0.0f, 1.0f, 0.0f };
+		float m_Pitch = 0.0f, m_Yaw = 0.0f;
+
+		glm::vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f }; // 焦点（围绕旋转的点）
+		float m_Distance = 10.0f;
+
+		float m_LastMouseX;
+		float m_LastMouseY;
+		bool  m_FirstMouse = true; // 第一帧标志位
+		
+		// 只有按键状态持续的情况要乘以 timestep，如键盘持续输入
+		float m_RotateSensitivity = 20.0f; // 灵敏度
+		float m_MoveSensitivity = 200.0f;
+		// 鼠标操作的灵敏度，鼠标是每帧计算实际的屏幕偏移量，直接使用偏移量*speed即可
+		float m_RotateSpeed = 0.1f;
+		float m_MoveSpeed = 0.01f;
+		float m_ZoomSpeed = 0.5f;
+	};
+
+}

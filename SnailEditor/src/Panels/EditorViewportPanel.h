@@ -16,7 +16,7 @@ namespace Snail {
     public:
         EditorViewportPanel() {}
 
-        void Show(const Refptr<FrameBuffer>& fbo, const Refptr<PerspectiveCameraController>& cc)
+        void Show(const Refptr<FrameBuffer>& fbo, const Refptr<EditorCamera>& ec)
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
             ImGui::Begin(u8"离屏渲染视口");
@@ -46,7 +46,7 @@ namespace Snail {
                 m_ViewportSize.x = (uint32_t)ImguiViewportSize.x;
                 m_ViewportSize.y = (uint32_t)ImguiViewportSize.y;
 
-                cc->UpdateAspect((float)m_ViewportSize.x / m_ViewportSize.y);
+                ec->SetViewportSize((float)m_ViewportSize.x, (float)m_ViewportSize.y);
             }
 
             // 获取帧缓冲信息，绘制纹理

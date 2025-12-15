@@ -25,6 +25,7 @@ namespace Snail {
 			// 简单的单光源数据 (未来可以扩展为光源列表)
 			glm::vec3 LightPosition;
 			glm::vec4 LightColor;
+			float AmbientStrength;
 
 			ShaderLibrary ShaderLibrary;
 		};
@@ -36,7 +37,7 @@ namespace Snail {
 		static void Shutdown();
 
 		// BeginScene 升级：接收相机 + 光源信息
-		static void BeginScene(const Camera& camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor);
+		static void BeginScene(const Camera* camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor, const float& ambient);
 		static void EndScene();
 
 		static void DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));

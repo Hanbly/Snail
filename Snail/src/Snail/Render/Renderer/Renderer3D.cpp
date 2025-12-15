@@ -16,19 +16,20 @@ namespace Snail {
 	{
 	}
 
-	void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor)
+	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor, const float& ambient)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
 		// 计算 View * Projection
-		s_3DSceneData.ViewProjectionMatrix = camera.GetProjectionMatrix() * glm::inverse(transform);
+		s_3DSceneData.ViewProjectionMatrix = camera->GetProjection() * glm::inverse(transform);
 
 		// 获取相机位置
 		s_3DSceneData.CameraPosition = glm::vec3(transform[3]);
 
 		s_3DSceneData.LightPosition = lightPos;
 		s_3DSceneData.LightColor = lightColor;
+		s_3DSceneData.AmbientStrength = ambient;
 	}
 
 	void Renderer3D::EndScene()
@@ -54,6 +55,8 @@ namespace Snail {
 		shader->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
 		shader->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
 		shader->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		shader->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		shader->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
 
 		// 绘制几何体
 		mesh.GetVAO()->Bind();

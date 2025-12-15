@@ -60,7 +60,7 @@ namespace Snail {
         if (!mainCamera) return;
 	}
 
-	void Scene::OnRenderEditor(const Camera& camera, const glm::mat4& cameraTransform)
+    void Scene::OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform)
 	{
         // ------------------------------------------------
         // 寻找光源 (System: Light System)
@@ -83,7 +83,7 @@ namespace Snail {
         // ------------------------------------------------
         // 渲染流程 (System: Render System)
         // ------------------------------------------------
-        Renderer3D::BeginScene(camera, cameraTransform, lightPos, lightColor);
+        Renderer3D::BeginScene(camera.get(), cameraTransform, lightPos, lightColor, this->GetAmbientStrength());
 
 
         auto group = m_Registry.group<TransformComponent, ModelComponent>();
