@@ -160,6 +160,10 @@ namespace Snail {
 
 			std::vector<TextureData> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			// TODO: cube 纹理
+			//std::vector<TextureData> specularMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_specular");
+			//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
 		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(vertices, indices, m_Shader, textures, localTransformation);

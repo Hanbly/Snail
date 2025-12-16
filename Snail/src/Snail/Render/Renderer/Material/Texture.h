@@ -25,4 +25,11 @@ namespace Snail {
 		static Refptr<Texture2D> Create(const std::string& path);
 	};
 
+	class TextureCube : public Texture {
+	public:
+		virtual ~TextureCube() = default;
+
+		static Refptr<TextureCube> Create(const std::array<std::string, 6>& paths);
+	};
+
 }

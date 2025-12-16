@@ -97,8 +97,18 @@ namespace Snail {
         auto group = m_Registry.group<TransformComponent, ModelComponent>();
         for (auto [entity, transform, model] : group.each())
         {
+            
             if (model.visible && model.model) {
                 Renderer3D::DrawModel(*model.model, model.edgeEnable, transform.GetTransform());
+            }
+        }
+
+        auto skyboxView = m_Registry.view<SkyboxComponent, ModelComponent>();
+        for (auto [entity, skybox, model] : skyboxView.each())
+        {
+            if (model.visible && model.model) {
+                // 使用专门的 Skybox 绘制函数，传入相机用于计算“无位移View矩阵”
+                Renderer3D::DrawSkybox(*model.model, *camera);
             }
         }
 

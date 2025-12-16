@@ -52,6 +52,10 @@ namespace Snail {
         }
 	};
 
+    struct SkyboxComponent {
+        bool Active = true;
+    };
+
     // 模型组件
     struct ModelComponent {
         Refptr<Model> model;

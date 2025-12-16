@@ -63,6 +63,45 @@ namespace Snail {
 
 
             // -------------------临时------------------------------------------
+            std::vector<Vertex> skyboxVertices = {
+                // 只需要位置 (Position)，Normal 和 UV 在 Skybox shader 中通常用不到，设为 0
+                // ---------------------------------------------------------------------
+                // Positions          // Normals           // UVs (Unused)
+                { {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
+                { { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
+                { { 1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 2. 右上前
+                { {-1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 3. 左上前
+
+                { {-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 4. 左下后
+                { { 1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 5. 右下后
+                { { 1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 6. 右上后
+                { {-1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }  // 7. 左上后
+            };
+            std::vector<uint32_t> skyboxIndices = {
+                // Front face
+                0, 1, 2,
+                2, 3, 0,
+
+                // Right face
+                1, 5, 6,
+                6, 2, 1,
+
+                // Back face
+                5, 4, 7,
+                7, 6, 5,
+
+                // Left face
+                4, 0, 3,
+                3, 7, 4,
+
+                // Top face
+                3, 2, 6,
+                6, 7, 3,
+
+                // Bottom face
+                4, 5, 1,
+                1, 0, 4
+            };
             std::vector<Vertex> vertices = {
                 // 格式需对应 Vertex 结构体定义: { Position, Normal, TexCoord }
                 // 1. 前面 (Front Face) - Z = 0.5f
@@ -111,19 +150,36 @@ namespace Snail {
                 20, 21, 22, 22, 23, 20  // 下面
             };
 
+            m_ShaderLibrary.Load("sky", "assets/shaders/TextureCube_Shader.glsl");
             m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
             m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
             m_ShaderLibrary.Load("model", "assets/shaders/Model_Shader.glsl");
 
 
-
-
-            // 独属于Cube示例的纹理设置
-            std::vector<TextureData> td;
-            td.push_back(TextureData(Texture2D::Create("assets/images/kulisu.png"), "texture_diffuse"));
-            td.push_back(TextureData(Texture2D::Create("assets/images/mayoli.png"), "texture_diffuse"));
+         
+            {
+                std::vector<TextureData> td;
+                std::array<std::string, 6> skyAssets = {
+                    "assets/images/skybox/right.jpg",
+                    "assets/images/skybox/left.jpg",
+                    "assets/images/skybox/top.jpg",
+                    "assets/images/skybox/bottom.jpg",
+                    "assets/images/skybox/front.jpg",
+                    "assets/images/skybox/back.jpg",
+                };
+                td.push_back(TextureData(TextureCube::Create(skyAssets), "texture_cubemap"));
+                Refptr<Model> sky = std::make_shared<Model>(skyboxVertices, skyboxIndices, m_ShaderLibrary.Get("sky"), td);
+                Entity e = m_Scene->CreateEntity("Sky");
+                e.AddComponent<ModelComponent>(sky);
+                e.AddComponent<SkyboxComponent>();
+                e.RemoveComponent<TransformComponent>();
+            }            
             // --- 创建 Cube 实例 ---
             {
+                // 独属于Cube示例的纹理设置
+                std::vector<TextureData> td;
+                td.push_back(TextureData(Texture2D::Create("assets/images/kulisu.png"), "texture_diffuse"));
+                td.push_back(TextureData(Texture2D::Create("assets/images/mayoli.png"), "texture_diffuse"));
                 Refptr<Model> singleMesh = std::make_shared<Model>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
 
                 Entity e = m_Scene->CreateEntity("Cube");
@@ -149,15 +205,15 @@ namespace Snail {
             //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/bugatti/bugatti.obj");
             //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/dragon/dragon.obj");
             //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
-            // --- 创建 Sponza 模型实例 ---
-            {
-                Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
-                //sponzaObj.model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
+            //// --- 创建 Sponza 模型实例 ---
+            //{
+            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+            //    //sponzaObj.model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
 
-                Entity e = m_Scene->CreateEntity("Sponza Palace");
-                e.AddComponent<ModelComponent>(model);
+            //    Entity e = m_Scene->CreateEntity("Sponza Palace");
+            //    e.AddComponent<ModelComponent>(model);
 
-            }
+            //}
             {
                 Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
 

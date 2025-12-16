@@ -59,6 +59,7 @@ namespace Snail {
 			// 计数器，用于处理同类型的多张纹理 (diffuse1, diffuse2...)
 			unsigned int diffuseNr = 1;
 			unsigned int specularNr = 1;
+			unsigned int cubemapNr = 1;
 
 			for (const auto& texData : textures) {
 				std::string number;
@@ -68,6 +69,8 @@ namespace Snail {
 					number = std::to_string(diffuseNr++);
 				else if (name == "texture_specular")
 					number = std::to_string(specularNr++);
+				else if (name == "texture_cubemap")		
+					number = std::to_string(cubemapNr++);
 
 				// 拼接 Shader 中的 Uniform 名字
 				// 假设 Shader 里写的是: uniform sampler2D texture_diffuse1;
@@ -75,8 +78,9 @@ namespace Snail {
 				// 这里需要和你的 Shader 命名约定一致。
 				// 示例：将 "texture_diffuse" 映射为 "u_Diffuse" + "1"
 				std::string uniformName;
-				if (name == "texture_diffuse") uniformName = "u_Diffuse" + number;
-				else if (name == "texture_specular") uniformName = "u_Specular" + number;
+				if (name == "texture_diffuse")			uniformName = "u_Diffuse" + number;
+				else if (name == "texture_specular")	uniformName = "u_Specular" + number;
+				else if (name == "texture_cubemap")		uniformName = "u_Cubemap" + number;
 
 				// 将纹理对象传递给 Material
 				m_Material->SetTexture(uniformName, texData.texture);

@@ -37,6 +37,39 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 	}
 
+	void Renderer3D::DrawSkybox(const Model& model, const EditorCamera& camera)
+	{
+		SNL_PROFILE_FUNCTION();
+
+
+		// Skybox 的深度值通常是 1.0 (最远)，所以需要 GL_LEQUAL (小于等于) 让它通过深度测试
+		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::LEQUAL);
+		// 可选，取决于是否还要在其后渲染透明物体
+		// RenderCommand::DepthMask(false); 
+
+		auto& mesh = model.GetMeshs()[0];
+		auto& material = mesh->GetMaterial();
+		auto& shader = material->GetShader();
+
+		material->Bind(); // 绑定纹理
+
+		// 计算特殊的 ViewProjection 矩阵
+		// 移除 View 矩阵的平移分量，只保留旋转
+		glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+		glm::mat4 projection = camera.GetProjection();
+		glm::mat4 viewProj = projection * view;
+
+		shader->SetMat4("u_ViewProjection", viewProj);
+
+		// 绘制
+		mesh->GetVAO()->Bind();
+		RendererCommand::DrawIndexed(mesh->GetVAO());
+
+		// 恢复渲染状态 (非常重要！)
+		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::LESS); // 恢复默认 LESS
+		// RenderCommand::DepthMask(true);
+	}
+
 	void Renderer3D::DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform)
 	{
 		SNL_PROFILE_FUNCTION();

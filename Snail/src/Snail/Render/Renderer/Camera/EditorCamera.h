@@ -39,6 +39,7 @@ namespace Snail {
 		void OnUpdate(const Timestep& ts);
 		void OnEvent(Event& e);
 	
+		const glm::mat4 GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4 GetTransform() const { return glm::inverse(m_ViewMatrix); }
 		const glm::vec3 GetPostion() const { return m_Position; }
 		const glm::vec3 GetRotation() const { return glm::vec3(m_Pitch, m_Yaw, 0.0f); }

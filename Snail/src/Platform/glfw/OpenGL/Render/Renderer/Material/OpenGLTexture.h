@@ -7,8 +7,7 @@
 
 namespace Snail {
 
-	class OpenGLTexture2D : public Texture2D
-	{
+	class OpenGLTexture2D : public Texture2D {
 	private:
 		uint32_t m_RendererId;
 		uint32_t m_Width;
@@ -21,6 +20,24 @@ namespace Snail {
 		inline virtual uint32_t GetWidth() const override { return m_Width; }
 		inline virtual uint32_t GetHeight() const override { return m_Height; }
 		inline virtual std::string GetPath() const override { return m_Path; }
+
+		virtual void Bind(const uint32_t& slot = 0) const override;
+		virtual void Unbind(const uint32_t& slot = 0) const override;
+	};
+
+	class OpenGLTextureCube : public TextureCube {
+	private:
+		uint32_t m_RendererId;
+		uint32_t m_Width;
+		uint32_t m_Height;
+		std::array<std::string, 6> m_Paths;
+	public:
+		OpenGLTextureCube(const std::array<std::string, 6>& paths);
+		virtual ~OpenGLTextureCube();
+
+		inline virtual uint32_t GetWidth() const override { return m_Width; }
+		inline virtual uint32_t GetHeight() const override { return m_Height; }
+		inline virtual std::string GetPath() const override { return m_Paths[0]; }
 
 		virtual void Bind(const uint32_t& slot = 0) const override;
 		virtual void Unbind(const uint32_t& slot = 0) const override;

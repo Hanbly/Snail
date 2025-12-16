@@ -186,13 +186,21 @@ namespace Snail {
             );
 
             // --- Model 组件 ---
-            DrawComponent<ModelComponent>("Mesh Renderer", entity, [](auto& component) {
-                ImGui::Checkbox("Visible", &component.visible);
-                ImGui::Checkbox("Show Outline", &component.edgeEnable);
-                // 这里可以加更多，比如材质路径、模型路径的显示
-                ImGui::Text("Path: %s", component.model->GetFullPath().c_str());
-                }
-            );
+            if (entity.HasAllofComponent<SkyboxComponent, ModelComponent>()) {
+                DrawComponent<ModelComponent>("Skybox", entity, [](auto& component) {
+                    ImGui::Checkbox("Visible", &component.visible);
+                    }
+                );
+            }
+            else if (entity.HasAllofComponent<TransformComponent, ModelComponent>()) {
+                DrawComponent<ModelComponent>("Mesh Renderer", entity, [](auto& component) {
+                    ImGui::Checkbox("Visible", &component.visible);
+                    ImGui::Checkbox("Show Outline", &component.edgeEnable);
+                    // 这里可以加更多，比如材质路径、模型路径的显示
+                    ImGui::Text("Path: %s", component.model->GetFullPath().c_str());
+                    }
+                );
+            }
         }
 
         static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)

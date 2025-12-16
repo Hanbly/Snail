@@ -56,6 +56,7 @@ namespace Snail {
 			case StencilFuncType::NOTEQUAL:
 				// 去除中心
 				glStencilFunc(GL_NOTEQUAL, ref, mask);
+				break;
 		}
 	}
 
@@ -77,6 +78,18 @@ namespace Snail {
 		}
 		else {
 			glDisable(GL_DEPTH_TEST);
+		}
+	}
+
+	void OpenGLRendererCommand::SetDepthFuncImpl(const DepthFuncType& type) const
+	{
+		switch (type) {
+		case DepthFuncType::LESS: // (小于)
+			glDepthFunc(GL_LESS);
+			break;
+		case DepthFuncType::LEQUAL: // (小于等于)
+			glDepthFunc(GL_LEQUAL);
+			break;
 		}
 	}
 

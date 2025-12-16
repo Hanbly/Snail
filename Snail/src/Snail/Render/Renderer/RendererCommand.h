@@ -26,6 +26,11 @@ namespace Snail {
 			ALWAYS,
 			NOTEQUAL
 		};
+		enum class DepthFuncType {
+			None = 0,
+			LESS,
+			LEQUAL
+		};
 		virtual ~RendererCommand() = default;
 
 		inline static API GetAPI() { return s_API; }
@@ -46,6 +51,7 @@ namespace Snail {
 		virtual void StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const = 0;
 		virtual void StencilMaskImpl(const bool& status) const = 0;
 		virtual void DepthTestImpl(const bool& enable) const = 0;
+		virtual void SetDepthFuncImpl(const DepthFuncType& type) const = 0;
 
 	public:
 		inline static void Init() 
@@ -66,6 +72,8 @@ namespace Snail {
 		{ RC->StencilMaskImpl(status); }
 		inline static void DepthTest(const bool& enable) 
 		{ RC->DepthTestImpl(enable); }
+		inline static void SetDepthFunc(const DepthFuncType& type) 
+		{ RC->SetDepthFuncImpl(type); }
 
 		static Uniptr<RendererCommand> Create();
 	};
