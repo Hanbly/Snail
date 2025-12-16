@@ -7,6 +7,10 @@
 #include "SceneUtils.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/uuid_generators.hpp"
+#include "boost/uuid/uuid_io.hpp"
+
 namespace Snail {
 
 	Scene::Scene()
@@ -22,6 +26,10 @@ namespace Snail {
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity(m_Registry.create(), this);
+
+        boost::uuids::uuid uuid = boost::uuids::random_generator()();
+        entity.AddComponent<UUIDComponent>(uuid);
+
 		entity.AddComponent<TagComponent>(name.empty() ? "UnnamedEntity" : name);
 		entity.AddComponent<TransformComponent>();
 

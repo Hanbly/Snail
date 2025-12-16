@@ -83,17 +83,41 @@ namespace Snail {
 
 	void EditorCamera::OnUpdate(const Timestep& ts)
 	{
-		// 更新鼠标
-		if (m_FirstMouse) {
-			m_LastMouseX = Input::GetMouseX();
-			m_LastMouseY = Input::GetMouseY();
-			m_FirstMouse = false;
-			return;
+		m_MouseButtoned =	Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) ||
+							Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE) ||
+							Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT);
+
+		float currentMouseX = Input::GetMouseX();
+		float currentMouseY = Input::GetMouseY();
+
+		// 初始化偏移量为 0
+		float xoffset = 0.0f;
+		float yoffset = 0.0f;
+
+		if (m_MouseButtoned) {
+			if (!m_IsDragging) {
+				// --- 拖拽的第一帧 ---
+				m_IsDragging = true;
+				m_LastMouseX = currentMouseX;
+				m_LastMouseY = currentMouseY;
+			}
+			else {
+				// --- 拖拽的后续帧 ---
+				xoffset = currentMouseX - m_LastMouseX;
+				yoffset = m_LastMouseY - currentMouseY; // 反写适应OpenGL
+
+				m_LastMouseX = currentMouseX;
+				m_LastMouseY = currentMouseY;
+			}
 		}
-		float xoffset = Input::GetMouseX() - m_LastMouseX;
-		float yoffset = m_LastMouseY - Input::GetMouseY();
-		m_LastMouseX = Input::GetMouseX();
-		m_LastMouseY = Input::GetMouseY();
+		else {
+			m_IsDragging = false;
+		}
+
+		// 3. 应用视角移动 (仅当有实际位移时)
+		if (xoffset != 0.0f || yoffset != 0.0f) {
+			SNL_CORE_WARN("offset: {0},{1}", xoffset, yoffset);
+		}
 
 		if (m_Mode == EditorCameraMode::FPS) {
 			// 移动
@@ -123,19 +147,19 @@ namespace Snail {
 			}
 		}
 		else if (m_Mode == EditorCameraMode::Arcball) {
-			// Left Mouse = Rotate (轨道旋转)
-			if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
-				xoffset *= m_RotateSpeed;
-				yoffset *= m_RotateSpeed;
-
-				ArcballRotate(xoffset, yoffset);
-			}
 			// Alt + Middle Mouse = Pan (平移)
-			else if (Input::IsKeyPressed(SNL_KEY_LEFT_ALT) && Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
+			if (Input::IsKeyPressed(SNL_KEY_SPACE) && Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
 				xoffset *= m_MoveSpeed;
 				yoffset *= m_MoveSpeed;
 
 				ArcballMove(xoffset, yoffset);
+			}
+			// Left Mouse = Rotate (轨道旋转)
+			else if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
+				xoffset *= m_RotateSpeed;
+				yoffset *= m_RotateSpeed;
+
+				ArcballRotate(xoffset, yoffset);
 			}
 		}
 	}

@@ -35,6 +35,10 @@ namespace Snail {
 		inline void BlockMouseEvents(const bool& status) { m_BlockMouseEvents = status; }
 		inline void BlockKeyEvents(const bool& status) { m_BlockKeyEvents = status; }
 
+		void SetDarkThemeColors();
+		void SetLightThemeColors();
+		void SetCyberpunkThemeColors();
+
 	private:
 		/*bool OnWindowResize(WindowResizeEvent& e);
 		bool OnWindowClose(WindowCloseEvent& e);

@@ -9,12 +9,12 @@ namespace Snail {
     // ==========================================================
     class GlobalSettingsPanel : public Panel {
     private:
-        Scene* m_Scene;
+        Refptr<Scene> m_Scene;
     public:
-        GlobalSettingsPanel(Scene* scene)
+        GlobalSettingsPanel(const Refptr<Scene>& scene)
             : m_Scene(scene) {}
 
-        void SetScene(Scene* scene)
+        void SetScene(const Refptr<Scene>& scene)
         {
             m_Scene = scene;
         }
@@ -39,7 +39,7 @@ namespace Snail {
                 ImGui::Text(u8"位置: %.2f,  %.2f,  %.2f", pos.x, pos.y, pos.z);
                 ImGui::Text(u8"旋角: %.2f°, %.2f°, %.2f°", rot.x, rot.y, rot.z);
 
-                const char* modeTypeStrings[] = { "None", "FPS (Fly)", "Arcball (Orbit)" };
+                const char* modeTypeStrings[] = { "None", "自由漫游（FPS）模式", "轨道球（Arcball）模式" };
                 const char* currentModeString = modeTypeStrings[(int)ec->GetMode()];
 
                 if (ImGui::BeginCombo(u8"控制模式", currentModeString))
@@ -70,7 +70,7 @@ namespace Snail {
                     // 获取引用的方式修改 Scene 中的数据
                     auto& ambient = m_Scene->GetAmbientStrength();
                     
-                    ImGui::DragFloat(u8"环境光强度(Ambient)", &ambient, 0.001f, 0.0f, 1.0f, "%.2f");
+                    ImGui::DragFloat("Ambient", &ambient, 0.001f, 0.0f, 1.0f, "%.2f");
 
                     ImGui::TreePop();
                 }

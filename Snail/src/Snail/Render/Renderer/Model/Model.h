@@ -19,6 +19,7 @@ namespace Snail {
 		Refptr<Shader> m_Shader;
 		std::vector<Refptr<Mesh>> m_Meshes;
 		std::vector<TextureData> m_LoadedTextures;
+		std::string m_FullPath;
 		std::string m_Directory;
 	public:
 		AABB m_AABB;
@@ -32,6 +33,7 @@ namespace Snail {
 		~Model() = default;
 
 		inline const std::vector<Refptr<Mesh>>& GetMeshs() const { return m_Meshes; }
+		inline const std::string& GetFullPath() const { return m_FullPath; }
 
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 

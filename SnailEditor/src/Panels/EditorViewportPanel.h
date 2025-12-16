@@ -31,12 +31,27 @@ namespace Snail {
             m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
             // ---------------- 处理imgui事件 -------------------
-            m_ViewportHovered = ImGui::IsWindowHovered();
-            m_ViewportFocused = ImGui::IsWindowFocused();
+            bool isHovered = ImGui::IsWindowHovered();
+            bool isFocused = ImGui::IsWindowFocused();
+            bool isOperating = ImGui::IsMouseDown(ImGuiMouseButton_Right) || ImGui::IsMouseDown(ImGuiMouseButton_Middle);
+            if (isFocused && isOperating) {
+                isHovered = true; // 强制保持 Hover 状态，防止拦截开启
+            }
+            m_ViewportHovered = isHovered;
+            m_ViewportFocused = isFocused;
+            // 如果鼠标悬停，且点击了任意键，强制设置 ImGui 焦点到当前窗口
+            if (m_ViewportHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
+                m_ViewportHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right) ||
+                m_ViewportHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Middle)) {
+
+                ImGui::SetWindowFocus();
+            }
             // !(m_ViewportHovered || m_ViewportFocused) 与 !m_ViewportHovered && !m_ViewportFocused : (鼠标 悬浮在视口 || 聚焦在视口) 都会让imgui忽略鼠标事件，从而让视口内容接收鼠标事件；不知道为什么键盘事件始终无法被imgui捕获，不论视口是什么状态。
             // 目标是：鼠标 一旦悬浮在视口 imgui就忽略鼠标事件；一旦聚焦于视口 imgui就忽略键盘事件；当鼠标悬浮在视口以外其它部分时，imgui应该拦截鼠标事件；当聚焦于视口以外其它部分时，imgui应该拦截键盘事件。
             Application::Get().GetImGuiLayer()->BlockMouseEvents(!m_ViewportHovered);
             Application::Get().GetImGuiLayer()->BlockKeyEvents(!m_ViewportFocused);
+            //SNL_CORE_WARN("Hovered {0}", m_ViewportHovered);
+            //SNL_CORE_WARN("Focused {0}", m_ViewportFocused);
 
             // ---------------- 处理resize ------------------
             ImVec2 ImguiViewportSize = ImGui::GetContentRegionAvail();

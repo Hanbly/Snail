@@ -44,9 +44,9 @@ namespace Snail {
         SnailEditorLayer(const std::string& layerName, const bool& layerEnabled)
             :   Layer(layerName, layerEnabled),
                 m_Scene(std::make_shared<Scene>()),
-                m_SHpanel(m_Scene.get()),
+                m_SHpanel(m_Scene),
                 m_EVpanel(),
-                m_GSpanel(m_Scene.get())
+                m_GSpanel(m_Scene)
         {
 
             m_EditorCamera = std::make_shared<EditorCamera>(glm::vec3(0.0f, 0.0f, 1.0f), EditorCameraMode::Arcball);
@@ -188,7 +188,7 @@ namespace Snail {
             SNL_PROFILE_FUNCTION();
 
 
-            if (m_EVpanel.IsFocused()) { // 只有聚焦在视口，才调用OnUpdate（目前只控制相机移动，视角控制在 OnEvent）
+            if (m_EVpanel.IsFocused() || m_EVpanel.IsHovered()) {
                 m_EditorCamera->OnUpdate(ts);
             }
 

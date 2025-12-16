@@ -138,4 +138,9 @@ namespace Snail {
 			m_AppWindow->OnUpdate();
 		}
 	}
+
+	void Application::quit()
+	{
+		this->m_Running = false;
+	}
 }

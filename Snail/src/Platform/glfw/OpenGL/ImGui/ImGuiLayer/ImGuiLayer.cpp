@@ -28,9 +28,10 @@ namespace Snail {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
+		// Setup ImGui style
+		//ImGui::StyleColorsDark();
 		//ImGui::StyleColorsLight();
+		SetDarkThemeColors();
 
 		// 初始化平台后端 (GLFW)
 		Application& app = Application::Get();
@@ -40,7 +41,7 @@ namespace Snail {
 		// 初始化渲染器后端 (OpenGL3)
 		ImGui_ImplOpenGL3_Init("#version 410");
 
-		ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Snail/Snail/assets/fonts/cn.ttf", 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Snail/Snail/assets/fonts/cn.ttf", 22.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
 	}
 
@@ -137,17 +138,10 @@ namespace Snail {
 
 	void ImGuiLayer::BeginDockingSpace()
 	{
-		//############################################################################################################
-			// TL;DR; this demo is more complicated than what most users you would normally use.
-			// If we remove all options we are showcasing, this demo would become a simple call to ImGui::DockSpaceOverViewport() !!
-			// In this specific demo, we are not using DockSpaceOverViewport() because:
-
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		if (opt_fullscreen)
 		{
@@ -165,137 +159,258 @@ namespace Snail {
 			dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
 		}
 
-		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-		// and handle the pass-thru hole, so we ask Begin() to not render a background.
 		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 			window_flags |= ImGuiWindowFlags_NoBackground;
 
-		// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-		// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-		// all active windows docked into it will lose their parent and become undocked.
-		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 		if (!opt_padding)
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
 		bool p_open = true;
-		ImGui::Begin("DockSpace Demo", &p_open, window_flags);
+		ImGui::Begin("DockSpace", &p_open, window_flags);
 		if (!opt_padding)
 			ImGui::PopStyleVar();
 
 		if (opt_fullscreen)
 			ImGui::PopStyleVar(2);
 
-		// Submit the DockSpace
-		// REMINDER: THIS IS A DEMO FOR ADVANCED USAGE OF DockSpace()!
-		// MOST REGULAR APPLICATIONS WILL SIMPLY WANT TO CALL DockSpaceOverViewport(). READ COMMENTS ABOVE.
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("Options"))
+			if (ImGui::BeginMenu(u8"文件"))
+			{				
+				if (ImGui::MenuItem(u8"退出"))
+					Application::Get().quit();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu(u8"Themes"))
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-				ImGui::MenuItem("Padding", NULL, &opt_padding);
-				ImGui::Separator();
-
-				if (ImGui::MenuItem("Flag: NoDockingOverCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; }
-				if (ImGui::MenuItem("Flag: NoDockingSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; }
-				if (ImGui::MenuItem("Flag: NoUndocking", "", (dockspace_flags & ImGuiDockNodeFlags_NoUndocking) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; }
-				if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-				if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-				if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-				ImGui::Separator();
-
-				if (ImGui::MenuItem("Close", NULL, false, &p_open != NULL))
-					p_open = false;
+				if (ImGui::MenuItem(u8"深色(Dark)"))
+					SetDarkThemeColors();
+				if (ImGui::MenuItem(u8"浅色(Light)"))
+					SetLightThemeColors();
+				if (ImGui::MenuItem(u8"赛博朋克(Cyberpunk Neon)"))
+					SetCyberpunkThemeColors();
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
 		}
 	}
 
-	//bool ImGuiLayer::OnWindowResize(WindowResizeEvent& e) {
+	static ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs) {
+		return ImVec4(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z, lhs.w * rhs.w);
+	}
 
-	//	ImGuiIO& io = ImGui::GetIO();
+	static ImVec4 operator*(const ImVec4& lhs, float rhs) {
+		return ImVec4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
+	}
 
-	//	io.DisplaySize = ImVec2(e.GetWindowWidth(), e.GetWindowHeight());
-	//	// 不知道啥意思------------------------------------------
-	//	io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-	//	glViewport(0, 0, e.GetWindowWidth(), e.GetWindowHeight());
-	//	//-----------------------------------------------------
+	void ImGuiLayer::SetDarkThemeColors()
+	{
+		auto& style = ImGui::GetStyle();
+		auto& colors = style.Colors;
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnWindowClose(WindowCloseEvent& e) {
+		style.WindowBorderSize = 0.0f; // Dark 模式通常没有粗边框
+		style.FrameBorderSize = 0.0f;
+		style.PopupBorderSize = 0.0f; // 或者 1.0f 看你喜好
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnMouseButtonPress(MousePressEvent& e) {
+		// --- 样式调整 (增加质感的关键) ---
+		style.WindowRounding = 5.3f;    // 窗口圆角
+		style.FrameRounding = 2.3f;     // 输入框/按钮圆角
+		style.ScrollbarRounding = 0;    // 滚动条圆角
+		style.GrabRounding = 2.3f;      // 滑块圆角
+		style.TabRounding = 4.0f;       // 标签页圆角
+		style.PopupRounding = 4.0f;     // 弹窗圆角
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	io.MouseDown[e.GetMouseButton()] = true;
+		// --- 颜色定义 ---
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnMouseButtonRelease(MouseReleaseEvent& e) {
+		// 1. 窗口与背景 (基础色调：深灰)
+		colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.105f, 0.11f, 1.00f); // 主窗口背景
+		colors[ImGuiCol_ChildBg] = ImVec4(0.12f, 0.12f, 0.125f, 1.00f);  // 子窗口背景
+		colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);   // 弹窗背景
+		colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);    // 边框 (深色描边增加立体感)
+		colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	io.MouseDown[e.GetMouseButton()] = false;
+		// 2. 文字 (高对比度)
+		colors[ImGuiCol_Text] = ImVec4(0.95f, 0.95f, 0.95f, 1.00f);      // 主文字
+		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f); // 禁用文字
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnMouseMove(MouseMoveEvent& e) {
+		// 3. 标题栏 (顶部)
+		colors[ImGuiCol_TitleBg] = ImVec4(0.08f, 0.08f, 0.09f, 1.00f);
+		colors[ImGuiCol_TitleBgActive] = ImVec4(0.08f, 0.08f, 0.09f, 1.00f);
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	io.MousePos = ImVec2(e.GetMouseX(), e.GetMouseY());
+		// 4. 输入框与背景 (Frame) - 比如 InputFloat, Checkbox
+		// 让输入框比背景稍浅，形成凹陷或凸起感
+		colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.055f, 0.06f, 1.00f);
+		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.08f, 0.085f, 0.09f, 1.00f);
+		colors[ImGuiCol_FrameBgActive] = ImVec4(0.08f, 0.085f, 0.09f, 1.00f);
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnMouseScroll(MouseScrollEvent& e) {
+		// 5. 按钮 (Button)
+		colors[ImGuiCol_Button] = ImVec4(0.22f, 0.22f, 0.23f, 1.00f);        // 平常状态 (深灰色)
+		colors[ImGuiCol_ButtonHovered] = ImVec4(0.28f, 0.28f, 0.29f, 1.00f); // 悬停 (稍亮)
+		colors[ImGuiCol_ButtonActive] = ImVec4(0.18f, 0.18f, 0.19f, 1.00f);  // 按下 (稍暗)
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	io.MouseWheelH = e.GetMouseScrollOffsetX();
-	//	io.MouseWheel = e.GetMouseScrollOffsetY();
+		// 6. 标签页 (Tab) - 比如 Docking 的标签
+		colors[ImGuiCol_Tab] = ImVec4(0.10f, 0.10f, 0.11f, 1.00f);
+		colors[ImGuiCol_TabHovered] = ImVec4(0.22f, 0.225f, 0.235f, 1.00f);
+		colors[ImGuiCol_TabSelected] = ImVec4(0.20f, 0.205f, 0.21f, 1.00f);  // 选中状态 (稍微突出)
+		colors[ImGuiCol_TabSelectedOverline] = ImVec4(0.26f, 0.59f, 0.98f, 0.00f); // 去掉顶部的线，保持扁平
+		colors[ImGuiCol_TabDimmed] = ImVec4(0.10f, 0.10f, 0.11f, 1.00f);
+		colors[ImGuiCol_TabDimmedSelected] = ImVec4(0.16f, 0.165f, 0.17f, 1.00f);
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnKeyboardPress(KeyPressEvent& e) {
+		// 7. 强调色 (Header & Slider & Separator) - 这里使用经典的 ImGui 蓝，但饱和度降低一点更耐看
+		ImVec4 accentColor = ImVec4(0.20f, 0.45f, 0.70f, 1.00f); // 强调色基准
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	Application& app = Application::Get();
-	//	auto window = static_cast<GLFWwindow*>(app.GetWindow().GetWindow());
+		// 树形菜单选中项 / 菜单项
+		colors[ImGuiCol_Header] = accentColor * ImVec4(1.0f, 1.0f, 1.0f, 0.5f); // 选中但未悬停
+		colors[ImGuiCol_HeaderHovered] = accentColor * ImVec4(1.0f, 1.0f, 1.0f, 0.8f);
+		colors[ImGuiCol_HeaderActive] = accentColor;
 
-	//	io.AddKeyEvent(e.GetImGuiKey(), true);
+		// 分割线
+		colors[ImGuiCol_Separator] = colors[ImGuiCol_Border];
+		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
+		colors[ImGuiCol_SeparatorActive] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
 
-	//	io.AddKeyEvent(ImGuiMod_Ctrl, (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
-	//	io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS));
-	//	io.AddKeyEvent(ImGuiMod_Alt, (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS));
-	//	io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS));
+		// 滑块与滚动条
+		colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
+		colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+		colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnKeyboardRelease(KeyReleaseEvent& e) {
+		colors[ImGuiCol_SliderGrab] = accentColor * ImVec4(1.1f, 1.1f, 1.1f, 0.9f); // 比强调色稍亮
+		colors[ImGuiCol_SliderGrabActive] = accentColor * ImVec4(1.3f, 1.3f, 1.3f, 1.0f);
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	io.AddKeyEvent(e.GetImGuiKey(), false);
+		colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f); // 复选框打钩用白色，更清晰
 
-	//	return false;
-	//}
-	//bool ImGuiLayer::OnKeyboardType(KeyTypeEvent& e) {
+		// Docking 预览色
+		colors[ImGuiCol_DockingPreview] = accentColor * ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
+		colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
 
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	unsigned int keycode = e.GetKeyCode();
-	//	io.AddInputCharacter(keycode);
+		// 文本选中
+		colors[ImGuiCol_TextSelectedBg] = accentColor * ImVec4(1.0f, 1.0f, 1.0f, 0.35f);
+		colors[ImGuiCol_NavCursor] = accentColor;
+	}
 
-	//	return false;
-	//}
+	void ImGuiLayer::SetLightThemeColors()
+	{
+		auto& style = ImGui::GetStyle();
+		auto& colors = style.Colors;
+
+		style.WindowBorderSize = 0.0f; // Light 模式通常依靠颜色区分，或者设为 1.0f
+		style.FrameBorderSize = 0.0f;
+		style.PopupBorderSize = 0.0f;
+
+		style.WindowRounding = 4.0f;
+		style.FrameRounding = 2.0f;
+		style.GrabRounding = 2.0f;
+
+		// 1. 背景：灰白色，不是纯白
+		colors[ImGuiCol_WindowBg] = ImVec4(0.94f, 0.94f, 0.94f, 1.00f);
+		colors[ImGuiCol_ChildBg] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+		colors[ImGuiCol_PopupBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.98f);
+
+		// 2. 文字：深灰/黑
+		colors[ImGuiCol_Text] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+		colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
+
+		// 3. 边框：浅色主题必须有边框，否则分不清区域
+		colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.15f);
+		colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+
+		// 4. 输入框：纯白背景，深色边框
+		colors[ImGuiCol_FrameBg] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.95f, 0.95f, 0.95f, 1.00f);
+		colors[ImGuiCol_FrameBgActive] = ImVec4(0.85f, 0.85f, 0.85f, 1.00f);
+
+		// 5. 标题栏
+		colors[ImGuiCol_TitleBg] = ImVec4(0.94f, 0.94f, 0.94f, 1.00f);
+		colors[ImGuiCol_TitleBgActive] = ImVec4(0.94f, 0.94f, 0.94f, 1.00f); // 保持与背景一致
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 1.00f, 1.00f, 0.51f);
+
+		// 6. 按钮
+		colors[ImGuiCol_Button] = ImVec4(0.85f, 0.85f, 0.85f, 1.00f);
+		colors[ImGuiCol_ButtonHovered] = ImVec4(0.80f, 0.80f, 0.80f, 1.00f);
+		colors[ImGuiCol_ButtonActive] = ImVec4(0.75f, 0.75f, 0.75f, 1.00f);
+
+		// 7. 强调色：蓝紫色
+		ImVec4 accent = ImVec4(0.35f, 0.45f, 0.80f, 1.00f);
+
+		colors[ImGuiCol_Header] = accent * ImVec4(1, 1, 1, 0.3f);
+		colors[ImGuiCol_HeaderHovered] = accent * ImVec4(1, 1, 1, 0.5f);
+		colors[ImGuiCol_HeaderActive] = accent * ImVec4(1, 1, 1, 0.7f);
+
+		colors[ImGuiCol_Tab] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+		colors[ImGuiCol_TabHovered] = ImVec4(0.85f, 0.85f, 0.85f, 1.00f);
+		colors[ImGuiCol_TabSelected] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f); // 选中变白
+		colors[ImGuiCol_TabSelectedOverline] = accent; // 顶部加一条彩线
+
+		colors[ImGuiCol_SliderGrab] = accent;
+		colors[ImGuiCol_SliderGrabActive] = accent * ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
+		colors[ImGuiCol_CheckMark] = accent;
+	}
+
+	void ImGuiLayer::SetCyberpunkThemeColors()
+	{
+		auto& style = ImGui::GetStyle();
+		auto& colors = style.Colors;
+
+		style.WindowRounding = 0.0f; // 赛博朋克通常是硬朗的直角
+		style.FrameRounding = 0.0f;
+		style.GrabRounding = 0.0f;
+		style.FrameBorderSize = 1.0f; // 加上边框
+		style.WindowBorderSize = 1.0f;
+
+		ImVec4 bgDark = ImVec4(0.02f, 0.02f, 0.05f, 1.00f); // 近乎黑的深蓝
+		ImVec4 bgLight = ImVec4(0.1f, 0.1f, 0.15f, 1.00f);
+		ImVec4 neonPurple = ImVec4(0.80f, 0.00f, 1.00f, 1.00f);
+		ImVec4 neonCyan = ImVec4(0.00f, 0.90f, 0.90f, 1.00f);
+
+		colors[ImGuiCol_WindowBg] = bgDark;
+		colors[ImGuiCol_ChildBg] = bgDark;
+		colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.10f, 0.95f);
+
+		colors[ImGuiCol_Border] = neonPurple * ImVec4(1, 1, 1, 0.5f); // 紫色边框
+		colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+
+		colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.95f, 1.00f);
+		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+
+		// 输入框
+		colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.5f);
+		colors[ImGuiCol_FrameBgHovered] = neonCyan * ImVec4(1, 1, 1, 0.2f);
+		colors[ImGuiCol_FrameBgActive] = neonCyan * ImVec4(1, 1, 1, 0.4f);
+
+		// 标题栏
+		colors[ImGuiCol_TitleBg] = bgLight;
+		colors[ImGuiCol_TitleBgActive] = bgLight;
+		colors[ImGuiCol_TitleBgCollapsed] = bgDark;
+
+		// 按钮 (霓虹边框感)
+		colors[ImGuiCol_Button] = neonPurple * ImVec4(1, 1, 1, 0.2f);
+		colors[ImGuiCol_ButtonHovered] = neonPurple * ImVec4(1, 1, 1, 0.6f);
+		colors[ImGuiCol_ButtonActive] = neonPurple;
+
+		// 标签页
+		colors[ImGuiCol_Tab] = bgDark;
+		colors[ImGuiCol_TabHovered] = neonCyan * ImVec4(1, 1, 1, 0.5f);
+		colors[ImGuiCol_TabSelected] = neonCyan * ImVec4(1, 1, 1, 0.2f);
+		colors[ImGuiCol_TabSelectedOverline] = neonCyan; // 青色顶线
+
+		// 选中高亮
+		colors[ImGuiCol_Header] = neonPurple * ImVec4(1, 1, 1, 0.4f);
+		colors[ImGuiCol_HeaderHovered] = neonPurple * ImVec4(1, 1, 1, 0.7f);
+		colors[ImGuiCol_HeaderActive] = neonPurple;
+
+		colors[ImGuiCol_CheckMark] = neonCyan;
+		colors[ImGuiCol_SliderGrab] = neonCyan;
+		colors[ImGuiCol_SliderGrabActive] = neonCyan * ImVec4(1.2f, 1.2f, 1.2f, 1.0f);
+
+		colors[ImGuiCol_Separator] = neonPurple * ImVec4(1, 1, 1, 0.5f);
+	}
 
 }

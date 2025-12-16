@@ -5,6 +5,9 @@
 
 #include "Scene.h"
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/nil_generator.hpp"
+
 namespace Snail {
 
 	class Scene;
@@ -18,6 +21,8 @@ namespace Snail {
 		Entity(const entt::entity& entity, Scene* scene);
 		~Entity();
 
+		boost::uuids::uuid GetUUID() const;
+
 		template<typename... T>
 		bool HasAllofComponent() {
 			SNL_CORE_ASSERT(IsValid(), "Entity: Scene 不存在或 EntityId 无效!");
@@ -25,7 +30,19 @@ namespace Snail {
 		}
 
 		template<typename... T>
+		bool HasAllofComponent() const {
+			SNL_CORE_ASSERT(IsValid(), "Entity: Scene 不存在或 EntityId 无效!");
+			return m_Scene->m_Registry.all_of<T...>(m_EntityId);
+		}
+
+		template<typename... T>
 		bool HasAnyofComponent() {
+			SNL_CORE_ASSERT(IsValid(), "Entity: Scene 不存在或 EntityId 无效!");
+			return m_Scene->m_Registry.any_of<T...>(m_EntityId);
+		}
+
+		template<typename... T>
+		bool HasAnyofComponent() const {
 			SNL_CORE_ASSERT(IsValid(), "Entity: Scene 不存在或 EntityId 无效!");
 			return m_Scene->m_Registry.any_of<T...>(m_EntityId);
 		}
@@ -38,15 +55,32 @@ namespace Snail {
 		}
 
 		template<typename T>
-		T* TryGetComponent()
-		{
+		T& GetComponent() const {
+			SNL_CORE_ASSERT(IsValid(), "Entity: Scene 不存在或 EntityId 无效!");
+			SNL_CORE_ASSERT(HasAllofComponent<T>(), "Entity: 没有（任何）对应的组件!");
+			return m_Scene->m_Registry.get<T>(m_EntityId);
+		}
+
+		template<typename T>
+		T* TryGetComponent() {
+			if (!IsValid()) return nullptr;
+			return m_Scene->m_Registry.try_get<T>(m_EntityId);
+		}
+
+		template<typename T>
+		T* TryGetComponent() const {
 			if (!IsValid()) return nullptr;
 			return m_Scene->m_Registry.try_get<T>(m_EntityId);
 		}
 
 		template<typename... T>
-		auto TryGetAllofComponent()
-		{
+		auto TryGetAllofComponent() {
+			if (!IsValid()) return nullptr;
+			return m_Scene->m_Registry.try_get<T...>(m_EntityId);
+		}
+
+		template<typename... T>
+		auto TryGetAllofComponent() const {
 			if (!IsValid()) return nullptr;
 			return m_Scene->m_Registry.try_get<T...>(m_EntityId);
 		}

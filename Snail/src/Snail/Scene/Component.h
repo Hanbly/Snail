@@ -8,7 +8,19 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/uuid_io.hpp"
+
 namespace Snail {
+
+    struct UUIDComponent {
+        boost::uuids::uuid uuid;
+        UUIDComponent() = default;
+        UUIDComponent(const UUIDComponent&) = default;
+        UUIDComponent(const boost::uuids::uuid& uuid)
+            : uuid(uuid) {}
+        operator std::string() const { return boost::uuids::to_string(uuid); }
+    };
 
 	struct TagComponent {
 		std::string name;
@@ -16,6 +28,7 @@ namespace Snail {
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& name)
 			: name(name) {}
+        operator std::string() const { return name; }
 	};
 
 	struct TransformComponent {

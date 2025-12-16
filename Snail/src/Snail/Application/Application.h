@@ -45,6 +45,7 @@ namespace Snail {
 		inline Window& GetWindow() const { return *m_AppWindow; }
 
 		void run();
+		void quit();
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

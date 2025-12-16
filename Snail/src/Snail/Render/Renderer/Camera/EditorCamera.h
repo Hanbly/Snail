@@ -34,7 +34,6 @@ namespace Snail {
 		void RecalculateViewMatrix();
 		void RecalculateProjectionMatrix();
 
-
 		void SetViewportSize(const float& width, const float& height);
 
 		void OnUpdate(const Timestep& ts);
@@ -84,7 +83,8 @@ namespace Snail {
 
 		float m_LastMouseX;
 		float m_LastMouseY;
-		bool  m_FirstMouse = true; // 第一帧标志位
+		bool m_IsDragging = false; // 拖拽标识
+		bool m_MouseButtoned = false; // 鼠标是否按下
 		
 		// 只有按键状态持续的情况要乘以 timestep，如键盘持续输入
 		float m_RotateSensitivity = 20.0f; // 灵敏度

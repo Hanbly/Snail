@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Component.h"
+
 #include "Entity.h"
 
 namespace Snail {
@@ -14,6 +16,10 @@ namespace Snail {
 
 	}
 
-	
+	boost::uuids::uuid Entity::GetUUID() const
+	{
+		UUIDComponent* uuidComp = TryGetComponent<UUIDComponent>();
+		return uuidComp ? uuidComp->uuid : boost::uuids::nil_uuid();
+	}
 
 }
