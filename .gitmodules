@@ -17,3 +17,9 @@
 [submodule "Snail/vendor/Assimp"]
 	path = Snail/vendor/Assimp
 	url = https://github.com/Hanbly/assimp.git
+[submodule "Snail/vendor/yaml-cpp"]
+	path = Snail/vendor/yaml-cpp
+	url = https://github.com/Hanbly/yaml-cpp.git
+[submodule "Snail/vendor/boost-uuid"]
+	path = Snail/vendor/boost-uuid
+	url = https://github.com/Hanbly/uuid.git

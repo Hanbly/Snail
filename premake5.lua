@@ -7,7 +7,7 @@ workspace "Snail"
         "Dist"
     }
 
-    startproject "Example" -- 启动项目设置
+    startproject "SnailEditor" -- 启动项目设置
 
     filter "system:windows"
         cppdialect "C++17"
@@ -27,6 +27,8 @@ IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
 IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
 IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
+IncludeDirs["yaml"] = "Snail/vendor/yaml-cpp/include"
+IncludeDirs["BoostUuid"] = "Snail/vendor/boost-uuid/include"
 
 -- 引入需要编译项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是项目的premake5.lua文件
@@ -34,6 +36,7 @@ include "Snail/vendor/GLFW"
 include "Snail/vendor/GLAD"
 include "Snail/vendor/Imgui"
 include "Snail/vendor/Assimp"
+include "Snail/vendor/yaml-cpp"
 
 
 project "Snail"
@@ -64,6 +67,8 @@ project "Snail"
         "%{IncludeDirs.stb_image}",
         "%{IncludeDirs.Assimp}",
         "%{IncludeDirs.EnTT}",
+        "%{IncludeDirs.yaml}",
+        "%{IncludeDirs.BoostUuid}",
         "%{prj.name}/src"
     }
 
@@ -72,7 +77,8 @@ project "Snail"
         "opengl32.lib",
         "GLAD",
         "Imgui",
-        "Assimp"
+        "Assimp",
+        "yaml-cpp"
     }
 
     filter "system:windows"
@@ -126,6 +132,8 @@ project "SnailEditor"
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.Assimp}",
         "%{IncludeDirs.EnTT}",
+        "%{IncludeDirs.yaml}",
+        "%{IncludeDirs.BoostUuid}",
         "%{prj.name}/src",
         "Snail/src"
     }
@@ -178,6 +186,9 @@ project "Example"
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.Assimp}",
         "%{IncludeDirs.EnTT}",
+        "%{IncludeDirs.yaml}",
+        "%{IncludeDirs.BoostUuid}",
+        "%{prj.name}/src",
         "Snail/src"
     }
 
