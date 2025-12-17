@@ -86,6 +86,7 @@ project "Snail"
         defines {
             "_CRT_SECURE_NO_WARNINGS", -- 移除C库安全警告
             "IMGUI_IMPL_OPENGL_LOADER_CUSTOM", -- 禁止ImGui重定义OpenGL宏
+            "YAML_CPP_STATIC_DEFINE", --使用yaml的静态库
             "SNL_PLATFORM_WINDOWS",
             "SNL_BUILD_SLL"
             -- "SNL_BUILD_DLL"
