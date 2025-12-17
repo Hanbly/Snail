@@ -33,7 +33,7 @@ namespace Snail {
             // --- 相机设置 (Camera) ---
             if (ImGui::TreeNodeEx(u8"相机设置", ImGuiTreeNodeFlags_DefaultOpen))
             {                
-                glm::vec3 pos = ec->GetPostion();
+                glm::vec3 pos = ec->GetPosition();
                 glm::vec3 rot = ec->GetRotation();
 
                 ImGui::Text(u8"位置: %.2f,  %.2f,  %.2f", pos.x, pos.y, pos.z);

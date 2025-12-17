@@ -21,6 +21,16 @@ namespace Snail {
         ProjectionType GetProjectionType() const { return m_ProjectionType; }
         void SetProjectionType(ProjectionType type) { m_ProjectionType = type; RecalculateProjection(); }
 
+        inline const float& GetPerspectiveFOV() const       { return m_PerspectiveFOV; }
+        inline const float& GetPerspectiveNear() const      { return m_PerspectiveNear; }
+        inline const float& GetPerspectiveFar() const       { return m_PerspectiveFar; }
+        inline const float& GetOrthographicSize() const     { return m_OrthographicSize; }
+        inline const float& GetOrthographicNear() const     { return m_OrthographicNear; }
+        inline const float& GetOrthographicFar() const      { return m_OrthographicFar; }
+        inline const float& GetAspect() const               { return m_Aspect; }
+        inline const float& GetViewportWidth() const        { return m_ViewportWidth; }
+        inline const float& GetViewportHeight() const       { return m_ViewportHeight; }
+
     private:
         void RecalculateProjection();
     private:

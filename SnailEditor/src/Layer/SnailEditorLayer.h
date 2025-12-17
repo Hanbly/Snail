@@ -233,6 +233,8 @@ namespace Snail {
                 e.GetComponent<TransformComponent>().position = { 10, 10, -210 };
             }
 
+            SceneSerializer serializer(m_Scene, m_EditorCamera);
+            serializer.Serialize("Test Scene", "assets/scenes/test.snl");
             //------------------------------------------------------------------------------
         }
         virtual void OnDetach() override {

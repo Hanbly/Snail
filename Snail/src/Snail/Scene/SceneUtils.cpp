@@ -96,136 +96,179 @@ namespace Snail {
         return true;
     }
 
-    //// ------------------------------------------------------------------------------------------
-    //SceneSerializer::SceneSerializer(const Refptr<Scene>& scene)
-    //    : m_Scene(scene) {}
+     //------------------------------------------------------------------------------------------
+    SceneSerializer::SceneSerializer(const Refptr<Scene>& scene, const Refptr<EditorCamera>& ec)
+        : m_Scene(scene), m_EC(ec) {}
 
-    //// 序列化
-    //void SceneSerializer::Serialize(const std::string& filepath)
-    //{
-    //    SNL_PROFILE_FUNCTION();
+    // 序列化
+    void SceneSerializer::Serialize(const std::string& sceneName, const std::string& filepath)
+    {
+        SNL_PROFILE_FUNCTION();
 
-    //    YAML::Emitter out;
-    //    out << YAML::BeginMap; // 根节点 Map
-    //    out << YAML::Key << "Scene" << YAML::Value << "Untitled Scene"; // 场景名字，可动态设置
-    //    out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq; // Entity 列表 Seq
+        YAML::Emitter out;
+        out << YAML::BeginMap; // 根节点 Map
+        out << YAML::Key << "Scene" << YAML::Value << sceneName;
 
-    //    // 遍历 Registry 中的所有 Entity
-    //    m_Scene->GetRegistry().each([&](entt::entity entityID) {
-    //        Entity entity{ entityID, m_Scene.get() };
-    //        if (!entity.IsValid()) return; // 跳过无效实体
+		// --- 序列化 EditorCamera ---
+		if (m_EC) {
+			out << YAML::Key << "EditorCamera";
+			out << YAML::BeginMap;
+			out << YAML::Key << "EditorCameraMode" << YAML::Value << (int)m_EC->GetMode(); // 转换为 int
 
-    //        SerializeEntity(out, entity);
-    //        });
+			out << YAML::Key << "FOV" << YAML::Value << m_EC->GetFOV();
+			out << YAML::Key << "Near" << YAML::Value << m_EC->GetNear();
+			out << YAML::Key << "Far" << YAML::Value << m_EC->GetFar();
+			out << YAML::Key << "Aspect" << YAML::Value << m_EC->GetAspect();
+			out << YAML::Key << "ViewportWidth" << YAML::Value << m_EC->GetViewportWidth();
+			out << YAML::Key << "ViewportHeight" << YAML::Value << m_EC->GetViewportHeight();
+			out << YAML::Key << "ViewMatrix" << YAML::Value << m_EC->GetViewMatrix();
+			out << YAML::Key << "Position" << YAML::Value << m_EC->GetPosition();
 
-    //    out << YAML::EndSeq; // Entity Seq 结束
-    //    out << YAML::EndMap; // 根节点 Map 结束
+			out << YAML::Key << "DirvecFront" << YAML::Value << m_EC->GetFront();
+			out << YAML::Key << "DirvecRight" << YAML::Value << m_EC->GetRight();
+			out << YAML::Key << "DirvecUp" << YAML::Value << m_EC->GetUp();
+			out << YAML::Key << "DirvecWorldUp" << YAML::Value << m_EC->GetWorldUp();
+			out << YAML::Key << "EulerPitch" << YAML::Value << m_EC->GetPitch();
+			out << YAML::Key << "DirvecYaw" << YAML::Value << m_EC->GetYaw();
 
-    //    // 保存到文件
-    //    std::ofstream fout(filepath);
-    //    if (fout.is_open()) {
-    //        fout << out.c_str();
-    //        fout.close();
-    //        SNL_CORE_INFO("场景已成功保存到: {0}", filepath);
-    //    }
-    //    else {
-    //        SNL_CORE_ERROR("无法打开文件进行场景保存: {0}", filepath);
-    //    }
-    //}
+			out << YAML::Key << "FocalPoint" << YAML::Value << m_EC->GetFocalPoint();
+			out << YAML::Key << "Distance" << YAML::Value << m_EC->GetDistance();
+			out << YAML::Key << "RotateSensitivity" << YAML::Value << m_EC->GetRotateSensitivity();
+			out << YAML::Key << "MoveSensitivity" << YAML::Value << m_EC->GetMoveSensitivity();
+			out << YAML::Key << "RotateSpeed" << YAML::Value << m_EC->GetRotateSpeed();
+			out << YAML::Key << "MoveSpeed" << YAML::Value << m_EC->GetMoveSpeed();
+			out << YAML::Key << "ZoomSpeed" << YAML::Value << m_EC->GetZoomSpeed();
 
-    //// 序列化单个 Entity 的具体逻辑
-    //void SceneSerializer::SerializeEntity(YAML::Emitter& out, Entity entity)
-    //{
-    //    out << YAML::BeginMap; // Entity Map
-    //    out << YAML::Key << "Entity";
-    //    out << YAML::Value << (uint64_t)entity.GetUUID(); // 假设 Entity 有 UUID
+			out << YAML::EndMap; // EditorCamera Map 结束
+		}
 
-    //    // 序列化 TagComponent
-    //    if (entity.HasComponent<TagComponent>())
-    //    {
-    //        out << YAML::Key << "TagComponent";
-    //        out << YAML::BeginMap;
-    //        out << YAML::Key << "Tag" << YAML::Value << entity.GetComponent<TagComponent>().name;
-    //        out << YAML::EndMap;
-    //    }
+		// 遍历 Registry 中的所有 Entity
+		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
-    //    // --- 序列化 TransformComponent ---
-    //    if (entity.HasComponent<TransformComponent>())
-    //    {
-    //        out << YAML::Key << "TransformComponent";
-    //        out << YAML::BeginMap;
-    //        const auto& transform = entity.GetComponent<TransformComponent>();
-    //        out << YAML::Key << "Position" << YAML::Value << transform.position;
-    //        out << YAML::Key << "Rotation" << YAML::Value << transform.rotation;
-    //        out << YAML::Key << "Scale" << YAML::Value << transform.scale;
-    //        out << YAML::EndMap;
-    //    }
+        auto view = m_Scene->GetRegistry().view<entt::entity>();
+        for (auto& entityID : view) {
+			Entity entity{ entityID, m_Scene.get() };
+			if (!entity.IsValid()) continue; // 跳过无效实体
+			SerializeEntity(out, entity);
+        }
 
-    //    // --- 序列化 CameraComponent ---
-    //    if (entity.HasComponent<CameraComponent>())
-    //    {
-    //        out << YAML::Key << "CameraComponent";
-    //        out << YAML::BeginMap;
-    //        const auto& cameraComponent = entity.GetComponent<CameraComponent>();
-    //        out << YAML::Key << "Primary" << YAML::Value << cameraComponent.primary;
-    //        out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.fixedAspectRatio;
+        out << YAML::EndSeq; // Entity Seq 结束
+        out << YAML::EndMap; // 根节点 Map 结束
 
-    //        // 序列化 SceneCamera 内部参数
-    //        out << YAML::Key << "SceneCamera";
-    //        out << YAML::BeginMap;
-    //        const auto& sceneCamera = cameraComponent.camera;
-    //        out << YAML::Key << "ProjectionType" << YAML::Value << (int)sceneCamera.GetProjectionType(); // 转换为 int
+        // 保存到文件
+        std::ofstream fout(filepath);
+        if (fout.is_open()) {
+            fout << out.c_str();
+            fout.close();
+            SNL_CORE_INFO("场景已成功保存到: {0}", filepath);
+        }
+        else {
+            SNL_CORE_ERROR("无法打开文件进行场景保存: {0}", filepath);
+        }
+    }
 
-    //        // 根据类型序列化不同参数
-    //        if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective) {
-    //            // TODO: 需要 SceneCamera 提供 getter 方法来获取 FOV, Near, Far
-    //            // out << YAML::Key << "PerspectiveFOV" << YAML::Value << sceneCamera.GetPerspectiveFOV();
-    //            // out << YAML::Key << "PerspectiveNear" << YAML::Value << sceneCamera.GetPerspectiveNear();
-    //            // out << YAML::Key << "PerspectiveFar" << YAML::Value << sceneCamera.GetPerspectiveFar();
-    //        }
-    //        else {
-    //            // TODO: 需要 SceneCamera 提供 getter 方法来获取 Orthographic Size, Near, Far
-    //            // out << YAML::Key << "OrthographicSize" << YAML::Value << sceneCamera.GetOrthographicSize();
-    //            // out << YAML::Key << "OrthographicNear" << YAML::Value << sceneCamera.GetOrthographicNear();
-    //            // out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
-    //        }
-    //        out << YAML::EndMap; // SceneCamera Map 结束
-    //        out << YAML::EndMap; // CameraComponent Map 结束
-    //    }
+    // 序列化单个 Entity 的具体逻辑
+    void SceneSerializer::SerializeEntity(YAML::Emitter& out, Entity entity)
+    {
+        out << YAML::BeginMap; // Entity Map
+        out << YAML::Key << "Entity";
+        out << YAML::Value << entity.GetUUID();
 
-    //    // --- 序列化 PointLightComponent ---
-    //    if (entity.HasComponent<PointLightComponent>())
-    //    {
-    //        out << YAML::Key << "PointLightComponent";
-    //        out << YAML::BeginMap;
-    //        const auto& lightComponent = entity.GetComponent<PointLightComponent>();
-    //        out << YAML::Key << "Color" << YAML::Value << lightComponent.color;
-    //        out << YAML::Key << "Intensity" << YAML::Value << lightComponent.intensity;
-    //        out << YAML::EndMap;
-    //    }
+        // 序列化 TagComponent
+        if (entity.HasAllofComponent<TagComponent>())
+        {
+            out << YAML::Key << "TagComponent";
+            out << YAML::BeginMap;
+            out << YAML::Key << "Tag" << YAML::Value << entity.GetComponent<TagComponent>().name;
+            out << YAML::EndMap;
+        }
 
-    //    // --- 序列化 ModelComponent ---
-    //    if (entity.HasComponent<ModelComponent>())
-    //    {
-    //        out << YAML::Key << "ModelComponent";
-    //        out << YAML::BeginMap;
-    //        const auto& modelComponent = entity.GetComponent<ModelComponent>();
-    //        if (modelComponent.model) {
-    //            // TODO: 序列化模型路径 (string), 而不是 Refptr<Model>
-    //            // 假设 Model 类有一个 GetPath()
-    //            // out << YAML::Key << "Path" << YAML::Value << modelComponent.model->GetPath();
-    //            // 暂时跳过，因为 Asset System 还没建立
-    //            SNL_CORE_WARN("ModelComponent 路径暂未序列化.");
-    //        }
-    //        out << YAML::Key << "Visible" << YAML::Value << modelComponent.visible;
-    //        out << YAML::Key << "EdgeEnable" << YAML::Value << modelComponent.edgeEnable;
-    //        out << YAML::EndMap;
-    //    }
+        // --- 序列化 TransformComponent ---
+        if (entity.HasAllofComponent<TransformComponent>())
+        {
+            out << YAML::Key << "TransformComponent";
+            out << YAML::BeginMap;
+            const auto& transform = entity.GetComponent<TransformComponent>();
+            out << YAML::Key << "Position" << YAML::Value << transform.position;
+            out << YAML::Key << "Rotation" << YAML::Value << transform.rotation;
+            out << YAML::Key << "Scale" << YAML::Value << transform.scale;
+            out << YAML::EndMap;
+        }
 
-    //    // TODO: 以后继续添加其他 Component 的序列化
+		// 序列化 SkyboxComponent
+		if (entity.HasAllofComponent<SkyboxComponent>())
+		{
+			out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap;
+			out << YAML::Key << "Active" << YAML::Value << entity.GetComponent<SkyboxComponent>().Active;
+			out << YAML::EndMap;
+		}
 
-    //    out << YAML::EndMap; // Entity Map 结束
-    //}
+        // --- 序列化 CameraComponent ---
+        if (!m_EC && entity.HasAllofComponent<CameraComponent>())
+        {
+            out << YAML::Key << "CameraComponent";
+            out << YAML::BeginMap;
+            const auto& cameraComponent = entity.GetComponent<CameraComponent>();
+            out << YAML::Key << "Primary" << YAML::Value << cameraComponent.primary;
+            out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.fixedAspectRatio;
+
+            // 序列化 SceneCamera 内部参数
+            out << YAML::Key << "SceneCamera";
+            out << YAML::BeginMap;
+            const auto& sceneCamera = cameraComponent.camera;
+            out << YAML::Key << "ProjectionType" << YAML::Value << (int)sceneCamera.GetProjectionType(); // 转换为 int
+
+             // 根据类型序列化不同参数
+             if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective) {
+				 out << YAML::Key << "PerspectiveFOV" << YAML::Value << sceneCamera.GetPerspectiveFOV();
+				 out << YAML::Key << "PerspectiveNear" << YAML::Value << sceneCamera.GetPerspectiveNear();
+				 out << YAML::Key << "PerspectiveFar" << YAML::Value << sceneCamera.GetPerspectiveFar();
+             }
+             else if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic) {
+				 out << YAML::Key << "OrthographicSize" << YAML::Value << sceneCamera.GetOrthographicSize();
+				 out << YAML::Key << "OrthographicNear" << YAML::Value << sceneCamera.GetOrthographicNear();
+				 out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
+             }
+			 out << YAML::Key << "Aspect" << YAML::Value << sceneCamera.GetAspect();
+			 out << YAML::Key << "ViewportWidth" << YAML::Value << sceneCamera.GetViewportWidth();
+			 out << YAML::Key << "ViewportHeight" << YAML::Value << sceneCamera.GetViewportHeight();
+
+             out << YAML::EndMap; // SceneCamera Map 结束
+             out << YAML::EndMap; // CameraComponent Map 结束
+         }
+
+        // --- 序列化 PointLightComponent ---
+        if (entity.HasAllofComponent<PointLightComponent>())
+        {
+            out << YAML::Key << "PointLightComponent";
+            out << YAML::BeginMap;
+            const auto& lightComponent = entity.GetComponent<PointLightComponent>();
+            out << YAML::Key << "Color" << YAML::Value << lightComponent.color;
+            out << YAML::Key << "Intensity" << YAML::Value << lightComponent.intensity;
+            out << YAML::EndMap;
+        }
+
+        // --- 序列化 ModelComponent ---
+        if (entity.HasAllofComponent<ModelComponent>())
+        {
+            out << YAML::Key << "ModelComponent";
+            out << YAML::BeginMap;
+            const auto& modelComponent = entity.GetComponent<ModelComponent>();
+            if (modelComponent.model) {
+                 out << YAML::Key << "FilePath" << YAML::Value << modelComponent.model->GetFullPath();
+                // 暂时跳过，因为 Asset System 还没建立
+                SNL_CORE_WARN("ModelComponent 路径暂未序列化.");
+            }
+            out << YAML::Key << "Visible" << YAML::Value << modelComponent.visible;
+            out << YAML::Key << "EdgeEnable" << YAML::Value << modelComponent.edgeEnable;
+            out << YAML::EndMap;
+        }
+
+        // TODO: 以后继续添加其他 Component 的序列化
+
+        out << YAML::EndMap; // Entity Map 结束
+    }
 
     //// --- 反序列化 ---
     //bool SceneSerializer::Deserialize(const std::string& filepath)

@@ -39,12 +39,34 @@ namespace Snail {
 		void OnUpdate(const Timestep& ts);
 		void OnEvent(Event& e);
 	
-		const glm::mat4 GetViewMatrix() const { return m_ViewMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4 GetTransform() const { return glm::inverse(m_ViewMatrix); }
-		const glm::vec3 GetPostion() const { return m_Position; }
+		const glm::vec3& GetPosition() const { return m_Position; }
 		const glm::vec3 GetRotation() const { return glm::vec3(m_Pitch, m_Yaw, 0.0f); }
 		const EditorCameraMode& GetMode() const { return m_Mode; }
 		void SetMode(const EditorCameraMode& mode) { m_Mode = mode; }
+
+		const float& GetFOV() const					{ return m_FOV; }
+		const float& GetNear() const				{ return m_Near; }
+		const float& GetFar() const					{ return m_Far; }
+		const float& GetAspect() const				{ return m_Aspect; }
+		const float& GetViewportWidth() const		{ return m_ViewportWidth; }
+		const float& GetViewportHeight() const		{ return m_ViewportHeight; }
+
+		const glm::vec3& GetFront() const			{ return m_Front; }
+		const glm::vec3& GetRight() const			{ return m_Right; }
+		const glm::vec3& GetUp() const				{ return m_Up; }
+		const glm::vec3& GetWorldUp() const			{ return m_WorldUp; }
+		const float& GetPitch() const				{ return m_Pitch; }
+		const float& GetYaw() const					{ return m_Yaw; }
+
+		const glm::vec3 GetFocalPoint() const		{ return m_FocalPoint; }
+		const float& GetDistance() const			{ return m_Distance; }
+		const float& GetRotateSensitivity() const	{ return m_RotateSensitivity; }
+		const float& GetMoveSensitivity() const		{ return m_MoveSensitivity; }
+		const float& GetRotateSpeed() const			{ return m_RotateSpeed; }
+		const float& GetMoveSpeed() const			{ return m_MoveSpeed; }
+		const float& GetZoomSpeed() const			{ return m_ZoomSpeed; }
 	private:
 		void FPSMove(const EditorCameraTranslateDirection& dir, const float& length);
 		void FPSRotate(const float& yaw, const float& pitch);
@@ -66,10 +88,10 @@ namespace Snail {
 
 		// 投影属性
 		float m_FOV = 45.0f;
-		float m_Aspect = (float)1280 / 720;
-		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 		float m_Near = 0.01f;
 		float m_Far = 5000.0f;
+		float m_Aspect = (float)1280 / 720;
+		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 		glm::mat4 m_ViewMatrix;
 		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
 

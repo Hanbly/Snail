@@ -114,11 +114,6 @@ namespace Snail {
 			m_IsDragging = false;
 		}
 
-		// 3. 应用视角移动 (仅当有实际位移时)
-		if (xoffset != 0.0f || yoffset != 0.0f) {
-			SNL_CORE_WARN("offset: {0},{1}", xoffset, yoffset);
-		}
-
 		if (m_Mode == EditorCameraMode::FPS) {
 			// 移动
 			if (Input::IsKeyPressed(SNL_KEY_W)) {

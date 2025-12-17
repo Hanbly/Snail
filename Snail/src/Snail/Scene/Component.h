@@ -54,7 +54,31 @@ namespace Snail {
 
     struct SkyboxComponent {
         bool Active = true;
-    };
+	};
+
+	// 相机组件
+	struct CameraComponent {
+		SceneCamera camera;
+		bool primary = true;            // 是否为主相机
+		bool fixedAspectRatio = false;  // 是否不更新投影矩阵
+
+		CameraComponent() = default;
+		CameraComponent(const SceneCamera& camera)
+			: camera(camera) {
+		}
+	};
+
+	// 点光源组件
+	struct PointLightComponent {
+		glm::vec4 color = glm::vec4(1.0f);
+		float intensity = 1.0f;
+
+		PointLightComponent() = default;
+		PointLightComponent(const PointLightComponent&) = default;
+		PointLightComponent(const glm::vec4& color, const float& intensity)
+			: color(color), intensity(intensity) {
+		}
+	};
 
     // 模型组件
     struct ModelComponent {
@@ -64,27 +88,6 @@ namespace Snail {
 
         ModelComponent() = default;
         ModelComponent(const Refptr<Model>& model) : model(model) {}
-    };
-
-    struct CameraComponent {
-        SceneCamera camera;
-        bool primary = true;            // 是否为主相机
-        bool fixedAspectRatio = false;  // 是否不更新投影矩阵
-
-        CameraComponent() = default;
-        CameraComponent(const SceneCamera& camera)
-            : camera(camera) {}
-    };
-
-    // 点光源组件
-    struct PointLightComponent {
-        glm::vec4 color = glm::vec4(1.0f);
-        float intensity = 1.0f;
-
-        PointLightComponent() = default;
-        PointLightComponent(const PointLightComponent&) = default;
-        PointLightComponent(const glm::vec4& color, const float& intensity)
-            : color(color), intensity(intensity) {}
     };
 
 }
