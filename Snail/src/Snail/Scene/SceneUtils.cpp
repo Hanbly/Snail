@@ -152,12 +152,12 @@ namespace Snail {
 			out << YAML::EndMap; // EditorCamera Map 结束
 		}
 
-		// 遍历 Registry 中的所有 Entity
+		// 反向遍历 Registry 中的所有 Entity （正向遍历会导致读取实体的顺序颠倒）
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
         auto view = m_Scene->GetRegistry().view<entt::entity>();
-        for (auto& entityID : view) {
-			Entity entity{ entityID, m_Scene.get() };
+        for (auto it = view.rbegin(), last = view.rend(); it != last; ++it) {
+			Entity entity{ *it, m_Scene.get() };
 			if (!entity.IsValid()) continue; // 跳过无效实体
 			SerializeEntity(out, entity);
         }

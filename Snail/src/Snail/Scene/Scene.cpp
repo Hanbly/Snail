@@ -140,7 +140,7 @@ namespace Snail {
             // 传入引用获取距离
             if (ray.Is_Cross(e, currentDst))
             {
-                // 3. 寻找最近的物体 (处理遮挡)
+                // 寻找最近的物体 (处理遮挡)
                 if (currentDst < minDst)
                 {
                     minDst = currentDst;
@@ -161,8 +161,13 @@ namespace Snail {
 
         // 选中
         SNL_CORE_INFO("选中物体: {0}", hitEntity.GetComponent<TagComponent>().name);
-        if (hitEntity.TryGetComponent<ModelComponent>())
-            hitEntity.TryGetComponent<ModelComponent>()->edgeEnable = true;
+        // 先清除其它轮廓
+		auto modelview = this->GetAllofEntitiesWith<ModelComponent>();
+		for (auto [entity, model] : modelview.each()) {
+			model.edgeEnable = false;
+		}
+        if (hitEntity.HasAllofComponent<ModelComponent>())
+            hitEntity.GetComponent<ModelComponent>().edgeEnable = true;
 
         return hitEntity;
     }

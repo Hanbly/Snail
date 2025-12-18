@@ -25,49 +25,20 @@ EditorCamera:
   MoveSpeed: 0.00999999978
   ZoomSpeed: 0.5
 Entities:
-  - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
+  - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
     TagComponent:
-      Tag: Spider
-    TransformComponent:
-      Position: [10, 10, -210]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Model_Shader.glsl
-      FilePath: assets/models/spider-fbx/Spider.fbx
-      Visible: true
-      EdgeEnable: false
-  - Entity: d7da4ccf-4223-4bd2-a646-b81f729236aa
-    TagComponent:
-      Tag: SportsCar
-    TransformComponent:
-      Position: [0, 90, 0]
-      Rotation: [0, 0, 0]
-      Scale: [25, 25, 25]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Model_Shader.glsl
-      FilePath: assets/models/sportsCar/sportsCar.obj
-      Visible: true
-      EdgeEnable: false
-  - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f
-    TagComponent:
-      Tag: Light
-    TransformComponent:
-      Position: [0, 160, 0]
-      Rotation: [25, 25, 25]
-      Scale: [25, 25, 25]
-    PointLightComponent:
-      Color: [1, 1, 1, 1]
-      Intensity: 0.100000001
+      Tag: Sky
+    SkyboxComponent:
+      Active: true
     ModelComponent:
       IsImported: false
-      ShaderPath: assets/shaders/light_box.glsl
+      ShaderPath: assets/shaders/TextureCube_Shader.glsl
       Meshes:
-        - PrimitiveType: Cube
+        - PrimitiveType: Skybox
           Textures:
-            []
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/skybox/right.jpg, assets/images/skybox/left.jpg, assets/images/skybox/top.jpg, assets/images/skybox/bottom.jpg, assets/images/skybox/front.jpg, assets/images/skybox/back.jpg]
       Visible: true
       EdgeEnable: false
   - Entity: 34048efb-a663-43ac-9167-99bea6fb20fa
@@ -91,19 +62,48 @@ Entities:
               Path: assets/images/mayoli.png
       Visible: true
       EdgeEnable: false
-  - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
+  - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f
     TagComponent:
-      Tag: Sky
-    SkyboxComponent:
-      Active: true
+      Tag: Light
+    TransformComponent:
+      Position: [0, 160, 0]
+      Rotation: [25, 25, 25]
+      Scale: [25, 25, 25]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Intensity: 0.100000001
     ModelComponent:
       IsImported: false
-      ShaderPath: assets/shaders/TextureCube_Shader.glsl
+      ShaderPath: assets/shaders/light_box.glsl
       Meshes:
-        - PrimitiveType: Skybox
+        - PrimitiveType: Cube
           Textures:
-            - DimType: TextureCube
-              Usage: texture_cubemap
-              Paths: [assets/images/skybox/right.jpg, assets/images/skybox/left.jpg, assets/images/skybox/top.jpg, assets/images/skybox/bottom.jpg, assets/images/skybox/front.jpg, assets/images/skybox/back.jpg]
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: d7da4ccf-4223-4bd2-a646-b81f729236aa
+    TagComponent:
+      Tag: SportsCar
+    TransformComponent:
+      Position: [0, 90, 0]
+      Rotation: [0, 0, 0]
+      Scale: [25, 25, 25]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Model_Shader.glsl
+      FilePath: assets/models/sportsCar/sportsCar.obj
+      Visible: true
+      EdgeEnable: false
+  - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
+    TagComponent:
+      Tag: Spider
+    TransformComponent:
+      Position: [10, 10, -210]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Model_Shader.glsl
+      FilePath: assets/models/spider-fbx/Spider.fbx
       Visible: true
       EdgeEnable: false

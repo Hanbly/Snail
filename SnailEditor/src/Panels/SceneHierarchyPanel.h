@@ -47,10 +47,10 @@ namespace Snail {
             }
             ImGui::PopItemWidth();
 
-            // 遍历所有对象
+            // 遍历所有对象（反向遍历保证顺序相同，正向遍历顺序会颠倒，这是entt的特性
             auto view = m_Scene->GetRegistry().view<entt::entity>();
-            for (auto entityID : view) {
-                Entity entity{ entityID, m_Scene.get()};
+            for (auto it = view.rbegin(), last = view.rend(); it != last; ++it) {
+                Entity entity{ *it, m_Scene.get() };
 
                 // 获取名字
                 std::string name = "Unnamed Entity";
@@ -60,7 +60,7 @@ namespace Snail {
                 ImGuiTreeNodeFlags flags = ((m_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
                 flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
-                bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entityID, flags, name.c_str());
+                bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(*it), flags, name.c_str());
 
                 if (ImGui::IsItemClicked())
                 {
