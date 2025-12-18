@@ -10,6 +10,10 @@
 #include "glm/glm.hpp"
 #include "entt.hpp"
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/uuid_io.hpp"
+#include "boost/uuid/uuid_generators.hpp"
+
 namespace Snail {
 	
 	class Entity;
@@ -25,6 +29,7 @@ namespace Snail {
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "");
+		Entity CreateEntityWithUuid(const boost::uuids::uuid& uuid, const std::string& name = "");
 		void DestroyEntity(Entity entity);
 
 		template<typename... T>
@@ -35,6 +40,7 @@ namespace Snail {
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
 		inline float& GetAmbientStrength() { return m_AmbientStrength; }
+		inline void SetAmbientStrength(const float& ambient) { m_AmbientStrength = ambient; }
 
 		void OnUpdateRuntime(const Timestep& ts);
 		void OnUpdateEditor(const Timestep& ts);

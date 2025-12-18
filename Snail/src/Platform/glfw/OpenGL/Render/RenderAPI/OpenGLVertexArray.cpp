@@ -27,21 +27,19 @@ namespace Snail {
 	OpenGLVertexArray::OpenGLVertexArray()
 		: m_VertexBufferIndexOffset(0)
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glGenVertexArrays(1, &m_ArrayId);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glDeleteVertexArrays(1, &m_ArrayId);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Refptr<VertexBuffer>& vertexBuffer)
+	const std::vector<Vertex> OpenGLVertexArray::GetVertexBuffer() const {		
+		return m_VertexBuffer->GetVertices();
+	}
+
+	void OpenGLVertexArray::SetVertexBuffer(const Refptr<VertexBuffer>& vertexBuffer)
 	{
 		this->Bind();
 		vertexBuffer->Bind();
@@ -57,18 +55,13 @@ namespace Snail {
 				index,
 				e.GetComponentCount(),
 				GetOpenGLType(e.type),
-				e.enableNormalize ? GL_TRUE : GL_FALSE, // 显式转为 GL boolean
+				e.enableNormalize ? GL_TRUE : GL_FALSE,
 				layout->GetLayoutSize(),				// 重要！不要写成e.size
-				(const void*)(uintptr_t)e.offset);		// 规范的 Offset 转换
+				(const void*)(uintptr_t)e.offset);
 			index++;
 		}
 
-		m_VertexBuffers.push_back(vertexBuffer);
-	}
-
-	const Refptr<IndexBuffer> OpenGLVertexArray::GetIndexBuffer() const
-	{
-		return m_IndexBuffer;
+		m_VertexBuffer = vertexBuffer;
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const Refptr<IndexBuffer>& indexBuffer)
@@ -81,9 +74,6 @@ namespace Snail {
 
 	void OpenGLVertexArray::Bind() const
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glBindVertexArray(m_ArrayId);
 	}
 

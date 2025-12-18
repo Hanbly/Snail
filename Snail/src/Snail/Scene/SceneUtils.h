@@ -9,7 +9,11 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+
+#include "boost/uuid/uuid_io.hpp"
+#include "boost/lexical_cast.hpp"
 #include "boost/uuid/string_generator.hpp"
+
 #include "yaml-cpp/yaml.h"
 
 namespace Snail {
@@ -65,6 +69,24 @@ namespace YAML {
 		}
 	};
 
+	// glm::vec2 特化
+	template<>
+	struct convert<glm::vec2> {
+		static Node encode(const glm::vec2& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+		static bool decode(const Node& node, glm::vec2& rhs) {
+			if (!node.IsSequence() || node.size() != 2) return false;
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
+
 	// glm::vec3 特化
 	template<>
 	struct convert<glm::vec3> {
@@ -81,6 +103,28 @@ namespace YAML {
 			rhs.x = node[0].as<float>();
 			rhs.y = node[1].as<float>();
 			rhs.z = node[2].as<float>();
+			return true;
+		}
+	};
+
+	// glm::vec4 特化
+	template<>
+	struct convert<glm::vec4> {
+		static Node encode(const glm::vec4& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.push_back(rhs.z);
+			node.push_back(rhs.w);
+			node.SetStyle(EmitterStyle::Flow); // [x, y, z] 格式
+			return node;
+		}
+		static bool decode(const Node& node, glm::vec4& rhs) {
+			if (!node.IsSequence() || node.size() != 4) return false;
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			rhs.z = node[2].as<float>();
+			rhs.w = node[3].as<float>();
 			return true;
 		}
 	};
@@ -103,7 +147,29 @@ namespace YAML {
 		}
 	};
 
+	template<>
+	struct convert<std::vector<std::string>> {
+		static Node encode(const std::vector<std::string>& rhs) {
+			Node node;
+			for (const auto& s : rhs) node.push_back(s);
+			node.SetStyle(EmitterStyle::Flow); // 使用 [path1, path2] 格式
+			return node;
+		}
+		static bool decode(const Node& node, std::vector<std::string>& rhs) {
+			if (!node.IsSequence()) return false;
+			for (auto it = node.begin(); it != node.end(); ++it) {
+				rhs.push_back(it->as<std::string>());
+			}
+			return true;
+		}
+	};
+
 	static Emitter& operator<<(Emitter& out, const boost::uuids::uuid& v) {
+		out << Node(v);
+		return out;
+	}
+
+	static Emitter& operator<<(Emitter& out, const glm::vec2& v) {
 		out << Node(v);
 		return out;
 	}
@@ -113,8 +179,27 @@ namespace YAML {
 		return out;
 	}
 
+	static Emitter& operator<<(Emitter& out, const glm::vec4& v) {
+		out << Node(v);
+		return out;
+	}
+
 	static Emitter& operator<<(Emitter& out, const glm::mat4& v) {
 		out << Node(v);
+		return out;
+	}
+
+	static Emitter& operator<<(Emitter& out, const std::vector<std::string>& v) {
+		out << Node(v);
+		return out;
+	}
+
+	static Emitter& operator<<(Emitter& out, const Snail::Vertex& v) {
+		out << BeginMap; // 每个顶点是一个 Map
+		out << Key << "Position" << Value << v.position;
+		out << Key << "Normal" << Value << v.normal;
+		out << Key << "TexCoords" << Value << v.texCoords;
+		out << YAML::EndMap;
 		return out;
 	}
 

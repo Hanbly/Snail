@@ -37,7 +37,7 @@ namespace Snail {
     }
 
     OpenGLShader::OpenGLShader(const std::string& customName, const std::string& filePath)
-        : m_Name(customName)
+        : m_Name(customName), m_FilePath(filePath)
     {
         SNL_PROFILE_FUNCTION();
 

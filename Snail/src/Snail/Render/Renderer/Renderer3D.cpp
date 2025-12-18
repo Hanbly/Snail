@@ -47,7 +47,7 @@ namespace Snail {
 		// 可选，取决于是否还要在其后渲染透明物体
 		// RenderCommand::DepthMask(false); 
 
-		auto& mesh = model.GetMeshs()[0];
+		auto& mesh = model.GetMeshes()[0];
 		auto& material = mesh->GetMaterial();
 		auto& shader = material->GetShader();
 
@@ -129,7 +129,7 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 
 
-		for (const Refptr<Mesh> mesh : model.GetMeshs()) {
+		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
 			DrawMesh(*mesh, edgeEnable, transform);
 		}
 	}

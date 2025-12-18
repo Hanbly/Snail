@@ -11,16 +11,19 @@ namespace Snail {
 	class OpenGLVertexBuffer : public VertexBuffer {
 	private:
 		uint32_t m_BufferId;
+		std::vector<uint8_t> m_VerticesData;
+		size_t m_Size;
+
 		Refptr<BufferLayout> m_Layout;
 	public:
 		OpenGLVertexBuffer(const void* vertices, const uint32_t& size);
 		~OpenGLVertexBuffer();
 
-		inline virtual Refptr<BufferLayout> OpenGLVertexBuffer::GetLayout() const override {
-			return m_Layout;
-		}
+		inline virtual std::vector<Vertex> GetVertices() const override;
+		inline virtual Refptr<BufferLayout> OpenGLVertexBuffer::GetLayout() const override { return m_Layout; }
 		inline virtual void OpenGLVertexBuffer::SetLayout(const Refptr<BufferLayout>& layout) override {
-			SNL_CORE_ASSERT(layout->GetLayoutElements().data(), "OpenGLVertexBuffer: Layout数据为空, 保存布局失败!");
+			SNL_CORE_ASSERT(layout->GetLayoutElements().data(), 
+				"OpenGLVertexBuffer: Layout数据为空, 保存布局失败!");
 			m_Layout = layout;
 		}
 

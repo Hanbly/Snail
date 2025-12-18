@@ -18,6 +18,25 @@ namespace Snail {
 		None = 0,
 		FPS, Arcball
 	};
+
+	static std::string EditorCameraModeToString(const EditorCameraMode& mode)
+	{
+		switch (mode)
+		{
+			case EditorCameraMode::FPS: return "FPS";
+			case EditorCameraMode::Arcball: return "Arcball";
+			default: return "None";
+		}
+	}
+
+	static EditorCameraMode StringToEditorCameraMode(const std::string& modestr)
+	{
+		if (modestr == "FPS") { return EditorCameraMode::FPS; }
+		if (modestr == "Arcball") { return EditorCameraMode::Arcball; }
+		if (modestr == "None") { return EditorCameraMode::None; }
+		SNL_CORE_ASSERT(false, "EditorCamera::StringToEditorCameraMode: 未知编辑器相机模式! {0}", modestr.c_str());
+	}
+
 	enum class EditorCameraTranslateDirection { // 平移方向
 		None = 0,
 		UP, LEFT, DOWN, RIGHT, FRONT, BACK
@@ -34,11 +53,10 @@ namespace Snail {
 		void RecalculateViewMatrix();
 		void RecalculateProjectionMatrix();
 
-		void SetViewportSize(const float& width, const float& height);
-
 		void OnUpdate(const Timestep& ts);
 		void OnEvent(Event& e);
 	
+		// --- Get 方法 ---
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4 GetTransform() const { return glm::inverse(m_ViewMatrix); }
 		const glm::vec3& GetPosition() const { return m_Position; }
@@ -67,6 +85,15 @@ namespace Snail {
 		const float& GetRotateSpeed() const			{ return m_RotateSpeed; }
 		const float& GetMoveSpeed() const			{ return m_MoveSpeed; }
 		const float& GetZoomSpeed() const			{ return m_ZoomSpeed; }
+
+		// --- Set 方法 ---
+		void SetPitch(const float& pitch)				{ m_Pitch = pitch; }
+		void SetYaw(const float& yaw)					{ m_Yaw = yaw; }		
+		void SetPosition(const glm::vec3& pos)			{ m_Position = pos; }
+		void SetDistance(const float& dis)				{ m_Distance = dis; }
+		void SetFocalPoint(const glm::vec3& point)		{ m_FocalPoint = point; }
+
+		void SetViewportSize(const float& width, const float& height);
 	private:
 		void FPSMove(const EditorCameraTranslateDirection& dir, const float& length);
 		void FPSRotate(const float& yaw, const float& pitch);

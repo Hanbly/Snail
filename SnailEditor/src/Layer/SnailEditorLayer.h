@@ -63,178 +63,94 @@ namespace Snail {
 
 
             // -------------------临时------------------------------------------
-            std::vector<Vertex> skyboxVertices = {
-                // 只需要位置 (Position)，Normal 和 UV 在 Skybox shader 中通常用不到，设为 0
-                // ---------------------------------------------------------------------
-                // Positions          // Normals           // UVs (Unused)
-                { {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
-                { { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
-                { { 1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 2. 右上前
-                { {-1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 3. 左上前
+            
 
-                { {-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 4. 左下后
-                { { 1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 5. 右下后
-                { { 1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 6. 右上后
-                { {-1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }  // 7. 左上后
-            };
-            std::vector<uint32_t> skyboxIndices = {
-                // Front face
-                0, 1, 2,
-                2, 3, 0,
-
-                // Right face
-                1, 5, 6,
-                6, 2, 1,
-
-                // Back face
-                5, 4, 7,
-                7, 6, 5,
-
-                // Left face
-                4, 0, 3,
-                3, 7, 4,
-
-                // Top face
-                3, 2, 6,
-                6, 7, 3,
-
-                // Bottom face
-                4, 5, 1,
-                1, 0, 4
-            };
-            std::vector<Vertex> vertices = {
-                // 格式需对应 Vertex 结构体定义: { Position, Normal, TexCoord }
-                // 1. 前面 (Front Face) - Z = 0.5f
-                // Pos                          // Normal           // UV
-                { {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f} },
-                { { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f} },
-                { { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f} },
-                { {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f} },
-
-                // 2. 右面 (Right Face) - X = 0.5f
-                { { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f} },
-                { { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f} },
-                { { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f} },
-                { { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f} },
-
-                // 3. 后面 (Back Face) - Z = -0.5f
-                { { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f} },
-                { {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f} },
-                { {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f} },
-                { { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f} },
-
-                // 4. 左面 (Left Face) - X = -0.5f
-                { {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
-                { {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
-                { {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f} },
-                { {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f} },
-
-                // 5. 上面 (Top Face) - Y = 0.5f
-                { {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} },
-                { { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} },
-                { { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} },
-                { {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} },
-
-                // 6. 下面 (Bottom Face) - Y = -0.5f
-                { {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f} },
-                { { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f} },
-                { { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
-                { {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f} }
-            };
-            std::vector<uint32_t> indices = {
-                0, 1, 2, 2, 3, 0,       // 前面
-                4, 5, 6, 6, 7, 4,       // 右面
-                8, 9, 10, 10, 11, 8,    // 后面
-                12, 13, 14, 14, 15, 12, // 左面
-                16, 17, 18, 18, 19, 16, // 上面
-                20, 21, 22, 22, 23, 20  // 下面
-            };
-
-            m_ShaderLibrary.Load("sky", "assets/shaders/TextureCube_Shader.glsl");
-            m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
-            m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
-            m_ShaderLibrary.Load("model", "assets/shaders/Model_Shader.glsl");
+            //m_ShaderLibrary.Load("sky", "assets/shaders/TextureCube_Shader.glsl");
+            //m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
+            //m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
+            //m_ShaderLibrary.Load("model", "assets/shaders/Model_Shader.glsl");
 
 
          
-            {
-                std::vector<TextureData> td;
-                std::array<std::string, 6> skyAssets = {
-                    "assets/images/skybox/right.jpg",
-                    "assets/images/skybox/left.jpg",
-                    "assets/images/skybox/top.jpg",
-                    "assets/images/skybox/bottom.jpg",
-                    "assets/images/skybox/front.jpg",
-                    "assets/images/skybox/back.jpg",
-                };
-                td.push_back(TextureData(TextureCube::Create(skyAssets), "texture_cubemap"));
-                Refptr<Model> sky = std::make_shared<Model>(skyboxVertices, skyboxIndices, m_ShaderLibrary.Get("sky"), td);
-                Entity e = m_Scene->CreateEntity("Sky");
-                e.AddComponent<ModelComponent>(sky);
-                e.AddComponent<SkyboxComponent>();
-                e.RemoveComponent<TransformComponent>();
-            }            
-            // --- 创建 Cube 实例 ---
-            {
-                // 独属于Cube示例的纹理设置
-                std::vector<TextureData> td;
-                td.push_back(TextureData(Texture2D::Create("assets/images/kulisu.png"), "texture_diffuse"));
-                td.push_back(TextureData(Texture2D::Create("assets/images/mayoli.png"), "texture_diffuse"));
-                Refptr<Model> singleMesh = std::make_shared<Model>(vertices, indices, m_ShaderLibrary.Get("cube"), td);
-
-                Entity e = m_Scene->CreateEntity("Cube");
-                e.AddComponent<ModelComponent>(singleMesh);
-
-                e.GetComponent<TransformComponent>().position = { 0, 60, 0 };
-                e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
-                e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            }
-            // --- 创建 Light 实例 ---
-            {
-                Refptr<Model> singleMesh = std::make_shared<Model>(vertices, indices, m_ShaderLibrary.Get("light_box"));
-
-                Entity e = m_Scene->CreateEntity("Light");
-                e.AddComponent<ModelComponent>(singleMesh);
-                e.AddComponent<PointLightComponent>(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), m_Scene->GetAmbientStrength());
-
-                e.GetComponent<TransformComponent>().position = { 0, 160, 0 };
-                e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
-                e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            }
-
-            //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/bugatti/bugatti.obj");
-            //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/dragon/dragon.obj");
-            //m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
-            //// --- 创建 Sponza 模型实例 ---
             //{
-            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
-            //    //sponzaObj.model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
+            //    std::vector<TextureData> td;
+            //    std::vector<std::string> skyAssets = {
+            //        "assets/images/skybox/right.jpg",
+            //        "assets/images/skybox/left.jpg",
+            //        "assets/images/skybox/top.jpg",
+            //        "assets/images/skybox/bottom.jpg",
+            //        "assets/images/skybox/front.jpg",
+            //        "assets/images/skybox/back.jpg",
+            //    };
+            //    td.push_back(TextureData(TextureCube::Create(skyAssets), "texture_cubemap"));
+            //    Refptr<Model> sky = std::make_shared<Model>(PrimitiveType::Skybox, skyboxVertices, skyboxIndices, m_ShaderLibrary.Get("sky"),td);
+            //    Entity e = m_Scene->CreateEntity("Sky");
+            //    e.AddComponent<ModelComponent>(sky);
+            //    e.AddComponent<SkyboxComponent>();
+            //    e.RemoveComponent<TransformComponent>();
+            //}            
+            //// --- 创建 Cube 实例 ---
+            //{                
+            //    // 独属于Cube示例的纹理设置
+            //    std::vector<TextureData> td;
+            //    td.push_back(TextureData(Texture2D::Create(std::vector<std::string>({ "assets/images/kulisu.png" })), "texture_diffuse"));
+            //    td.push_back(TextureData(Texture2D::Create(std::vector<std::string>({ "assets/images/mayoli.png" })), "texture_diffuse"));
+            //    Refptr<Model> singleMesh = std::make_shared<Model>(PrimitiveType::Cube, vertices, indices, m_ShaderLibrary.Get("cube"), td);
 
-            //    Entity e = m_Scene->CreateEntity("Sponza Palace");
+            //    Entity e = m_Scene->CreateEntity("Cube");
+            //    e.AddComponent<ModelComponent>(singleMesh);
+
+            //    e.GetComponent<TransformComponent>().position = { 0, 60, 0 };
+            //    e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
+            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
+            //}
+            //// --- 创建 Light 实例 ---
+            //{
+            //    Refptr<Model> singleMesh = std::make_shared<Model>(PrimitiveType::Cube, vertices, indices, m_ShaderLibrary.Get("light_box"));
+
+            //    Entity e = m_Scene->CreateEntity("Light");
+            //    e.AddComponent<ModelComponent>(singleMesh);
+            //    e.AddComponent<PointLightComponent>(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), m_Scene->GetAmbientStrength());
+
+            //    e.GetComponent<TransformComponent>().position = { 0, 160, 0 };
+            //    e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
+            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
+            //}
+
+            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/bugatti/bugatti.obj");
+            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/dragon/dragon.obj");
+            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
+            ////// --- 创建 Sponza 模型实例 ---
+            ////{
+            ////    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
+            ////    //sponzaObj.model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
+
+            ////    Entity e = m_Scene->CreateEntity("Sponza Palace");
+            ////    e.AddComponent<ModelComponent>(model);
+
+            ////}
+            //{
+            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
+
+            //    Entity e = m_Scene->CreateEntity("SportsCar");
             //    e.AddComponent<ModelComponent>(model);
 
+            //    e.GetComponent<TransformComponent>().position = { 0, 90, 0 };
+            //    e.GetComponent<TransformComponent>().rotation = { 0, 0, 0 };
+            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
             //}
-            {
-                Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
+            //{
+            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider.fbx");
 
-                Entity e = m_Scene->CreateEntity("SportsCar");
-                e.AddComponent<ModelComponent>(model);
+            //    Entity e = m_Scene->CreateEntity("Spider");
+            //    e.AddComponent<ModelComponent>(model);
 
-                e.GetComponent<TransformComponent>().position = { 0, 90, 0 };
-                e.GetComponent<TransformComponent>().rotation = { 0, 0, 0 };
-                e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            }
-            {
-                Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider.fbx");
+            //    e.GetComponent<TransformComponent>().position = { 10, 10, -210 };
+            //}
 
-                Entity e = m_Scene->CreateEntity("Spider");
-                e.AddComponent<ModelComponent>(model);
-
-                e.GetComponent<TransformComponent>().position = { 10, 10, -210 };
-            }
-
-            SceneSerializer serializer(m_Scene, m_EditorCamera);
-            serializer.Serialize("Test Scene", "assets/scenes/test.snl");
+			SceneSerializer serializer(m_Scene, m_EditorCamera);
+			serializer.Deserialize("assets/scenes/LoadScene.snl");
+            serializer.Serialize("Test Scene", "assets/scenes/SaveScene.snl");
             //------------------------------------------------------------------------------
         }
         virtual void OnDetach() override {

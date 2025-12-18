@@ -6,15 +6,15 @@
 
 namespace Snail {
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-		: m_RendererId(0), m_Path(path)
+	OpenGLTexture2D::OpenGLTexture2D(const std::vector<std::string>& path)
+		: m_RendererId(0), m_Path(path), m_Type(TextureType::TWOD)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
 		stbi_set_flip_vertically_on_load(true);
 		int width, height, channels;
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load(path[0].c_str(), &width, &height, &channels, 0);
 		SNL_CORE_ASSERT(data, "OpenGLTexture2D: stbi_load加载纹理文件失败!")
 		m_Width = width;
 		m_Height = height;
@@ -93,8 +93,8 @@ namespace Snail {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	OpenGLTextureCube::OpenGLTextureCube(const std::array<std::string, 6>& paths)
-		: m_RendererId(0), m_Paths(paths)
+	OpenGLTextureCube::OpenGLTextureCube(const std::vector<std::string>& path)
+		: m_RendererId(0), m_Path(path), m_Type(TextureType::Cube)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -110,8 +110,8 @@ namespace Snail {
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererId);
 
 		for (int i = 0; i < 6; i++) {
-			data = stbi_load(paths[i].c_str(), &width, &height, &channels, 0);
-			SNL_CORE_ASSERT(data, "OpenGLTextureCube: stbi_load加载纹理文件失败! Path: {1}", paths[i].c_str())
+			data = stbi_load(path[i].c_str(), &width, &height, &channels, 0);
+			SNL_CORE_ASSERT(data, "OpenGLTextureCube: stbi_load加载纹理文件失败! Path: {1}", path[i].c_str())
 				m_Width = width;
 			m_Height = height;
 
@@ -133,12 +133,12 @@ namespace Snail {
 				dataFormat = GL_RED;
 			}
 			else {
-				SNL_CORE_ASSERT(false, "纹理通道数错误! Channels: {0}, Path: {1}", channels, paths[i].c_str());
+				SNL_CORE_ASSERT(false, "纹理通道数错误! Channels: {0}, Path: {1}", channels, path[i].c_str());
 			}
 
 			if (internalFormat == 0 || dataFormat == 0)
 			{
-				SNL_CORE_ASSERT(false, "纹理格式错误! Channels: {0}, Path: {1}", channels, paths[i].c_str());
+				SNL_CORE_ASSERT(false, "纹理格式错误! Channels: {0}, Path: {1}", channels, path[i].c_str());
 				stbi_image_free(data);
 				return; // 或者抛出异常
 			}

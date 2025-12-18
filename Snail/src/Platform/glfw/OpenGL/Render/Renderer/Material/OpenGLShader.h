@@ -19,12 +19,12 @@ namespace Snail {
         ~OpenGLShader();
 
         inline virtual uint32_t GetRendererId() const override { return m_RendererID; }
-        inline virtual const std::string& GetName() const override { return m_Name; }
+		inline virtual const std::string& GetFilePath() const override { return m_FilePath; }
+		inline virtual const std::string& GetName() const override { return m_Name; }
 
         void Bind() const;
         void Unbind() const;
 
-        // --- Uniform 设置工具 (向 Hazel 看齐，名字更短更好用) ---
         virtual void SetInt(const std::string& name, int value) override;
         virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
         virtual void SetFloat(const std::string& name, float value) override;

@@ -21,19 +21,30 @@ namespace Snail {
 		std::vector<TextureData> m_LoadedTextures;
 		std::string m_FullPath;
 		std::string m_Directory;
+
+		bool m_IsImported = false;
 	public:
 		AABB m_AABB;
 	public:
+		// 单个mesh构造
 		Model(const Refptr<Mesh>& mesh);
-		Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
+		// 单个mesh构造 注意传入图元类型 自动依据 type 生成数据
+		Model(const PrimitiveType& type,
 			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {},
 			const glm::mat4& localTransform = glm::mat4(1.0f));
-
-		Model(const Refptr<Shader>& shader, const std::string& path);
+		// 单个mesh构造 注意传入图元类型
+		Model(const PrimitiveType& type,
+			const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
+			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {},
+			const glm::mat4& localTransform = glm::mat4(1.0f));
+		// 多mesh构造 外部导入模型
+		Model(const Refptr<Shader>& shader, const std::string& objPath);
 		~Model() = default;
 
-		inline const std::vector<Refptr<Mesh>>& GetMeshs() const { return m_Meshes; }
+		inline const std::string& GetShaderPath() const { return m_Shader->GetFilePath(); }
+		inline const std::vector<Refptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 		inline const std::string& GetFullPath() const { return m_FullPath; }
+		inline bool IsImported() const { return m_IsImported; }
 
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 
@@ -46,6 +57,7 @@ namespace Snail {
 		//--------------Tools--------------------
 		glm::mat4 ConvertaiMat4ToglmMat4(const aiMatrix4x4& matrix) const;
 		void ConsiderMeshAABB(const Refptr<Mesh>& mesh);
+		std::pair<std::vector<Vertex>, std::vector<uint32_t>> GetPrimitiveDatas(const PrimitiveType& type);
 	};
 
 }

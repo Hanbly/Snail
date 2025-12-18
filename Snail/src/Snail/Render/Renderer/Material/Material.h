@@ -20,6 +20,9 @@ namespace Snail {
 
 		// 获取底层 Shader (供 Renderer3D 调用以设置全局 Uniform)
 		Refptr<Shader> GetShader() const { return m_Shader; }
+		std::vector<TextureType> GetTexturesDimensionsType() const; // Texture2D | TextureCube | ...
+		std::vector<std::string> GetTexturesUsageType() const;		// diffuse | specular | ...
+		std::vector<std::vector<std::string>> GetTexturesAssets() const;	// 文件路径
 
 		// --- 参数设置接口 ---
 		void SetInt(const std::string& name, int value) { m_Ints[name] = value; }

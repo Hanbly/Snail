@@ -29,7 +29,7 @@ namespace Snail {
 
         if (entity.HasAllofComponent<ModelComponent>()) {
             const auto& model = entity.GetComponent<ModelComponent>().model;
-            if (!model->GetMeshs().empty()) {
+            if (!model->GetMeshes().empty()) {
                 localMin = model->m_AABB.min;
                 localMax = model->m_AABB.max;
                 HasGeometry = true;
@@ -96,7 +96,8 @@ namespace Snail {
         return true;
     }
 
-     //------------------------------------------------------------------------------------------
+     //============================================================================================================================================
+
     SceneSerializer::SceneSerializer(const Refptr<Scene>& scene, const Refptr<EditorCamera>& ec)
         : m_Scene(scene), m_EC(ec) {}
 
@@ -105,15 +106,24 @@ namespace Snail {
     {
         SNL_PROFILE_FUNCTION();
 
+
         YAML::Emitter out;
         out << YAML::BeginMap; // 根节点 Map
         out << YAML::Key << "Scene" << YAML::Value << sceneName;
+
+        // --- 序列化 场景参数 ---
+		out << YAML::Key << "SceneSettings";
+		out << YAML::BeginMap;
+
+        out << YAML::Key << "AmbientStrength" << YAML::Value << m_Scene->GetAmbientStrength();
+
+		out << YAML::EndMap; // SceneSettings 结束
 
 		// --- 序列化 EditorCamera ---
 		if (m_EC) {
 			out << YAML::Key << "EditorCamera";
 			out << YAML::BeginMap;
-			out << YAML::Key << "EditorCameraMode" << YAML::Value << (int)m_EC->GetMode(); // 转换为 int
+			out << YAML::Key << "EditorCameraMode" << YAML::Value << EditorCameraModeToString(m_EC->GetMode());
 
 			out << YAML::Key << "FOV" << YAML::Value << m_EC->GetFOV();
 			out << YAML::Key << "Near" << YAML::Value << m_EC->GetNear();
@@ -217,15 +227,15 @@ namespace Snail {
             out << YAML::Key << "SceneCamera";
             out << YAML::BeginMap;
             const auto& sceneCamera = cameraComponent.camera;
-            out << YAML::Key << "ProjectionType" << YAML::Value << (int)sceneCamera.GetProjectionType(); // 转换为 int
+            out << YAML::Key << "ProjectionType" << YAML::Value << SceneCameraProjectionTypeToString(sceneCamera.GetProjectionType());
 
              // 根据类型序列化不同参数
-             if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective) {
+             if (sceneCamera.GetProjectionType() == SceneCameraProjectionType::Perspective) {
 				 out << YAML::Key << "PerspectiveFOV" << YAML::Value << sceneCamera.GetPerspectiveFOV();
 				 out << YAML::Key << "PerspectiveNear" << YAML::Value << sceneCamera.GetPerspectiveNear();
 				 out << YAML::Key << "PerspectiveFar" << YAML::Value << sceneCamera.GetPerspectiveFar();
              }
-             else if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic) {
+             else if (sceneCamera.GetProjectionType() == SceneCameraProjectionType::Orthographic) {
 				 out << YAML::Key << "OrthographicSize" << YAML::Value << sceneCamera.GetOrthographicSize();
 				 out << YAML::Key << "OrthographicNear" << YAML::Value << sceneCamera.GetOrthographicNear();
 				 out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
@@ -250,192 +260,275 @@ namespace Snail {
         }
 
         // --- 序列化 ModelComponent ---
-        if (entity.HasAllofComponent<ModelComponent>())
-        {
-            out << YAML::Key << "ModelComponent";
-            out << YAML::BeginMap;
-            const auto& modelComponent = entity.GetComponent<ModelComponent>();
-            if (modelComponent.model) {
-                 out << YAML::Key << "FilePath" << YAML::Value << modelComponent.model->GetFullPath();
-                // 暂时跳过，因为 Asset System 还没建立
-                SNL_CORE_WARN("ModelComponent 路径暂未序列化.");
-            }
-            out << YAML::Key << "Visible" << YAML::Value << modelComponent.visible;
-            out << YAML::Key << "EdgeEnable" << YAML::Value << modelComponent.edgeEnable;
-            out << YAML::EndMap;
-        }
+		if (entity.HasAllofComponent<ModelComponent>())
+		{
+			out << YAML::Key << "ModelComponent";
+			out << YAML::BeginMap;
+
+			const auto& modelComponent = entity.GetComponent<ModelComponent>();
+
+			// 处理模型资源
+			if (modelComponent.model) {
+				bool isImported = modelComponent.model->IsImported();
+				out << YAML::Key << "IsImported" << YAML::Value << isImported;
+				out << YAML::Key << "ShaderPath" << YAML::Value << modelComponent.model->GetShaderPath();
+				if (isImported) {
+					// --- 外部导入模型 (FBX/OBJ) ---
+					out << YAML::Key << "FilePath" << YAML::Value << modelComponent.model->GetFullPath();
+				}
+				else {
+					// --- 内部图元 (Cube/Sphere/Plane) ---
+					out << YAML::Key << "Meshes" << YAML::Value << YAML::BeginSeq; // 开始 Mesh 列表
+
+					for (auto& mesh : modelComponent.model->GetMeshes()) {
+						out << YAML::BeginMap; // 开始单个 Mesh
+
+						// 图元类型
+                        out << YAML::Key << "PrimitiveType" << YAML::Value << PrimitiveTypeToString(mesh->GetPrimitiveType());
+						// 纹理序列化
+						auto dimTypes = mesh->GetTexturesDimensionsType();
+						auto usageTypes = mesh->GetTexturesUsageType();
+						auto assetsPaths = mesh->GetTexturesAssets();
+
+						out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq; // 开始 Textures 列表
+						for (size_t i = 0; i < dimTypes.size(); i++) {
+							out << YAML::BeginMap;
+
+							out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(dimTypes[i]);
+							out << YAML::Key << "Usage" << YAML::Value << TextureUsageTypeToString(usageTypes[i]);
+
+							const auto& paths = assetsPaths[i];
+							if (paths.size() == 1)
+                                out << YAML::Key << "Path" << YAML::Value << paths[0];
+							else if (paths.size() == 6)
+                                out << YAML::Key << "Paths" << YAML::Value << paths;
+
+							out << YAML::EndMap;
+						}
+						out << YAML::EndSeq; // 结束 Textures
+
+						// 不序列化 Vertices 和 Indices
+						// 必须确保数据量极小，否则就会出现乱码
+						// out << YAML::Key << "VertexCount" << mesh->GetVertices().size();
+						// out << YAML::Key << "IndexCount" << mesh->GetIndices().size();
+
+						out << YAML::EndMap; // 结束单个 Mesh
+					}
+					out << YAML::EndSeq; // 结束 Mesh 列表
+				}
+			}
+			// 通用属性
+			out << YAML::Key << "Visible" << YAML::Value << modelComponent.visible;
+			out << YAML::Key << "EdgeEnable" << YAML::Value << modelComponent.edgeEnable;
+
+			out << YAML::EndMap; // 结束 ModelComponent
+		}
 
         // TODO: 以后继续添加其他 Component 的序列化
 
         out << YAML::EndMap; // Entity Map 结束
     }
 
-    //// --- 反序列化 ---
-    //bool SceneSerializer::Deserialize(const std::string& filepath)
-    //{
-    //    SNL_PROFILE_FUNCTION();
+	// --- 反序列化 ---
+	bool SceneSerializer::Deserialize(const std::string& filepath)
+	{
+		SNL_PROFILE_FUNCTION();
 
-    //    std::ifstream infile(filepath);
-    //    if (!infile.is_open()) {
-    //        SNL_CORE_ERROR("无法打开文件进行场景加载: {0}", filepath);
-    //        return false;
-    //    }
+		std::ifstream infile(filepath);
+		if (!infile.is_open()) {
+			SNL_CORE_ERROR("无法打开文件进行场景加载: {0}", filepath);
+			return false;
+		}
 
-    //    std::stringstream ss;
-    //    ss << infile.rdbuf();
-    //    infile.close();
+		std::stringstream ss;
+		ss << infile.rdbuf();
+		infile.close();
 
-    //    YAML::Node data = YAML::Parse(ss.str());
-    //    if (!data["Entities"]) {
-    //        SNL_CORE_ERROR("场景文件格式错误: 缺少 'Entities' 节点");
-    //        return false;
-    //    }
+		YAML::Node data = YAML::Load(ss.str());
+		if (!data["Scene"]) {
+			SNL_CORE_ERROR("场景文件格式错误或为空: {0}", filepath);
+			return false;
+		}
 
-    //    // 清空当前场景（为了重新加载）
-    //    // m_Scene->Clear(); // 需要 Scene 类提供 Clear() 方法
+		std::string sceneName = data["Scene"].as<std::string>();
+		// m_Scene->SetName(sceneName); // 如果 Scene 有 SetName 接口
 
-    //    auto entities = data["Entities"];
-    //    if (entities)
-    //    {
-    //        for (auto entityNode : entities)
-    //        {
-    //            // 1. 创建 Entity
-    //            // TODO: 这里需要先解析 Entity ID (UUID)
-    //            uint64_t uuid = entityNode["Entity"].as<uint64_t>();
-    //            Entity entity = m_Scene->CreateEntity("Deserialized"); // 临时名字，后面会被 TagComponent 覆盖
+		// 反序列化场景全局设置
+		auto settingsNode = data["SceneSettings"];
+		if (settingsNode) {
+			if (settingsNode["AmbientStrength"])
+				m_Scene->SetAmbientStrength(settingsNode["AmbientStrength"].as<float>());
+		}
 
-    //            // 2. 反序列化 Component
-    //            DeserializeEntity(entityNode, entity);
-    //        }
-    //    }
+		// 反序列化编辑器相机 (EditorCamera)
+		auto editorCameraNode = data["EditorCamera"];
+		if (m_EC && editorCameraNode) {
 
-    //    SNL_CORE_INFO("场景已成功加载: {0}", filepath);
-    //    return true;
-    //}
+			m_EC->SetMode(StringToEditorCameraMode(editorCameraNode["EditorCameraMode"].as<std::string>()));
 
-    //// 反序列化单个 Entity 的具体逻辑
-    //void SceneSerializer::DeserializeEntity(const YAML::Node& entityNode, Entity entity)
-    //{
-    //    // --- 反序列化 TagComponent ---
-    //    auto tagComponentNode = entityNode["TagComponent"];
-    //    if (tagComponentNode)
-    //    {
-    //        std::string tag = tagComponentNode["Tag"].as<std::string>();
-    //        // 如果 TagComponent 不存在，则添加，否则修改
-    //        if (entity.HasComponent<TagComponent>()) {
-    //            entity.GetComponent<TagComponent>().name = tag;
-    //        }
-    //        else {
-    //            entity.AddComponent<TagComponent>(tag);
-    //        }
-    //    }
+			m_EC->SetDistance(editorCameraNode["Distance"].as<float>());
+			m_EC->SetFocalPoint(editorCameraNode["FocalPoint"].as<glm::vec3>());
+			m_EC->SetPosition(editorCameraNode["Position"].as<glm::vec3>());
+			m_EC->SetPitch(editorCameraNode["EulerPitch"].as<float>());
+			m_EC->SetYaw(editorCameraNode["DirvecYaw"].as<float>());
 
-    //    // --- 反序列化 TransformComponent ---
-    //    auto transformComponentNode = entityNode["TransformComponent"];
-    //    if (transformComponentNode)
-    //    {
-    //        glm::vec3 position = transformComponentNode["Position"].as<glm::vec3>();
-    //        glm::vec3 rotation = transformComponentNode["Rotation"].as<glm::vec3>();
-    //        glm::vec3 scale = transformComponentNode["Scale"].as<glm::vec3>();
+			m_EC->SetViewportSize(editorCameraNode["ViewportWidth"].as<float>(), editorCameraNode["ViewportHeight"].as<float>());
+		}
 
-    //        if (entity.HasComponent<TransformComponent>()) {
-    //            auto& transform = entity.GetComponent<TransformComponent>();
-    //            transform.position = position;
-    //            transform.rotation = rotation;
-    //            transform.scale = scale;
-    //        }
-    //        else {
-    //            entity.AddComponent<TransformComponent>(position, rotation, scale);
-    //        }
-    //    }
+		// 反序列化实体 (Entities)
+		auto entities = data["Entities"];
+		if (entities)
+		{
+			for (auto entityNode : entities)
+			{
+				// 获取 UUID 和 Tag (Name)
+				std::string uuid_str = entityNode["Entity"].as<std::string>();
 
-    //    // --- 反序列化 CameraComponent ---
-    //    auto cameraComponentNode = entityNode["CameraComponent"];
-    //    if (cameraComponentNode)
-    //    {
-    //        bool primary = cameraComponentNode["Primary"].as<bool>();
-    //        bool fixedAspectRatio = cameraComponentNode["FixedAspectRatio"].as<bool>();
+				boost::uuids::uuid uuid = boost::lexical_cast<boost::uuids::uuid>(uuid_str);
 
-    //        auto& cameraComp = entity.AddComponent<CameraComponent>(); // 自动创建
-    //        cameraComp.primary = primary;
-    //        cameraComp.fixedAspectRatio = fixedAspectRatio;
+				std::string name;
+				auto tagComponent = entityNode["TagComponent"];
+				if (tagComponent) 
+					name = tagComponent["Tag"].as<std::string>();
 
-    //        auto sceneCameraNode = cameraComponentNode["SceneCamera"];
-    //        if (sceneCameraNode) {
-    //            SceneCamera::ProjectionType type = (SceneCamera::ProjectionType)sceneCameraNode["ProjectionType"].as<int>();
-    //            cameraComp.camera.SetProjectionType(type);
+				Entity deserializedEntity = m_Scene->CreateEntityWithUuid(uuid, name);
 
-    //            if (type == SceneCamera::ProjectionType::Perspective) {
-    //                // TODO: 获取参数并设置 SceneCamera
-    //                // cameraComp.camera.SetPerspective(
-    //                //     sceneCameraNode["PerspectiveFOV"].as<float>(),
-    //                //     sceneCameraNode["PerspectiveNear"].as<float>(),
-    //                //     sceneCameraNode["PerspectiveFar"].as<float>()
-    //                // );
-    //            }
-    //            else {
-    //                // TODO: 获取参数并设置 SceneCamera
-    //                // cameraComp.camera.SetOrthographic(
-    //                //     sceneCameraNode["OrthographicSize"].as<float>(),
-    //                //     sceneCameraNode["OrthographicNear"].as<float>(),
-    //                //     sceneCameraNode["OrthographicFar"].as<float>()
-    //                // );
-    //            }
-    //            // 场景加载后，需要根据当前视口更新 Aspect Ratio
-    //            // cameraComp.camera.SetViewportSize(...); // 这会在 SnailEditorLayer 的 OnUpdate/OnImGuiRender 中处理
-    //        }
-    //    }
+				// --- TransformComponent ---
+				auto transformComponent = entityNode["TransformComponent"];
+				if (transformComponent) {
+					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
+					tc.position = transformComponent["Position"].as<glm::vec3>();
+					tc.rotation = transformComponent["Rotation"].as<glm::vec3>();
+					tc.scale = transformComponent["Scale"].as<glm::vec3>();
+				}
+				else {
+					// 如果 YAML 中没有 Transform (例如 Skybox )，则移除 TransformComponent
+					deserializedEntity.RemoveComponent<TransformComponent>();
+				}
 
-    //    // --- 反序列化 PointLightComponent ---
-    //    auto pointLightComponentNode = entityNode["PointLightComponent"];
-    //    if (pointLightComponentNode)
-    //    {
-    //        glm::vec4 color = pointLightComponentNode["Color"].as<glm::vec4>();
-    //        float intensity = pointLightComponentNode["Intensity"].as<float>();
+				// --- SkyboxComponent ---
+				auto skyboxComponent = entityNode["SkyboxComponent"];
+				if (skyboxComponent) {
+					auto& sc = deserializedEntity.AddComponent<SkyboxComponent>();
+					sc.Active = skyboxComponent["Active"].as<bool>();
+				}
 
-    //        if (entity.HasComponent<PointLightComponent>()) {
-    //            auto& plc = entity.GetComponent<PointLightComponent>();
-    //            plc.color = color;
-    //            plc.intensity = intensity;
-    //        }
-    //        else {
-    //            entity.AddComponent<PointLightComponent>(color, intensity);
-    //        }
-    //    }
+				// --- CameraComponent ---
+				auto cameraComponent = entityNode["CameraComponent"];
+				if (!m_EC && cameraComponent)
+				{
+					//out << YAML::Key << "CameraComponent";
+					//out << YAML::BeginMap;
+					//const auto& cameraComponent = entity.GetComponent<CameraComponent>();
+					//out << YAML::Key << "Primary" << YAML::Value << cameraComponent.primary;
+					//out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.fixedAspectRatio;
 
-    //    // --- 反序列化 ModelComponent ---
-    //    auto modelComponentNode = entityNode["ModelComponent"];
-    //    if (modelComponentNode)
-    //    {
-    //        bool visible = modelComponentNode["Visible"].as<bool>(true); // 默认值
-    //        bool edgeEnable = modelComponentNode["EdgeEnable"].as<bool>(false); // 默认值
+					//// 序列化 SceneCamera 内部参数
+					//out << YAML::Key << "SceneCamera";
+					//out << YAML::BeginMap;
+					//const auto& sceneCamera = cameraComponent.camera;
+					//out << YAML::Key << "ProjectionType" << YAML::Value << SceneCameraProjectionTypeToString(sceneCamera.GetProjectionType());
 
-    //        auto modelPathNode = modelComponentNode["Path"];
-    //        if (modelPathNode) {
-    //            std::string modelPath = modelPathNode.as<std::string>();
-    //            // TODO: Asset System needed! How to load model based on path?
-    //            // For now, assume Model loading is handled elsewhere or manually.
-    //            // For demonstration, we'll just set the flags and expect model to be loaded manually.
-    //            SNL_CORE_WARN("ModelComponent Path '{0}' deserialization needs Asset System.", modelPath);
+					//// 根据类型序列化不同参数
+					//if (sceneCamera.GetProjectionType() == SceneCameraProjectionType::Perspective) {
+					//	out << YAML::Key << "PerspectiveFOV" << YAML::Value << sceneCamera.GetPerspectiveFOV();
+					//	out << YAML::Key << "PerspectiveNear" << YAML::Value << sceneCamera.GetPerspectiveNear();
+					//	out << YAML::Key << "PerspectiveFar" << YAML::Value << sceneCamera.GetPerspectiveFar();
+					//}
+					//else if (sceneCamera.GetProjectionType() == SceneCameraProjectionType::Orthographic) {
+					//	out << YAML::Key << "OrthographicSize" << YAML::Value << sceneCamera.GetOrthographicSize();
+					//	out << YAML::Key << "OrthographicNear" << YAML::Value << sceneCamera.GetOrthographicNear();
+					//	out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
+					//}
+					//out << YAML::Key << "Aspect" << YAML::Value << sceneCamera.GetAspect();
+					//out << YAML::Key << "ViewportWidth" << YAML::Value << sceneCamera.GetViewportWidth();
+					//out << YAML::Key << "ViewportHeight" << YAML::Value << sceneCamera.GetViewportHeight();
 
-    //            // 假设模型加载成功后，会创建 ModelComponent
-    //            // entity.AddComponent<ModelComponent>(AssetManager::LoadModel(modelPath));
-    //            // entity.GetComponent<ModelComponent>().visible = visible;
-    //            // entity.GetComponent<ModelComponent>().edgeEnable = edgeEnable;
-    //        }
-    //        else {
-    //            // 如果没有路径，只设置其他参数
-    //            if (entity.HasComponent<ModelComponent>()) {
-    //                auto& mc = entity.GetComponent<ModelComponent>();
-    //                mc.visible = visible;
-    //                mc.edgeEnable = edgeEnable;
-    //            }
-    //            else {
-    //                // 如果没有模型component，但有这些flag，可能意味着这个组件只是标记，没有实际模型
-    //                // 或者是一个占位符，暂时不创建。
-    //            }
-    //        }
-    //    }
-    //}
+					//out << YAML::EndMap; // SceneCamera Map 结束
+					//out << YAML::EndMap; // CameraComponent Map 结束
+				}
+
+				// --- PointLightComponent ---
+				auto pointLightComponent = entityNode["PointLightComponent"];
+				if (pointLightComponent) {
+					auto& plc = deserializedEntity.AddComponent<PointLightComponent>();
+					plc.color = pointLightComponent["Color"].as<glm::vec4>();
+					plc.intensity = pointLightComponent["Intensity"].as<float>();
+				}
+
+				// --- ModelComponent ---
+				auto modelComponent = entityNode["ModelComponent"];
+				if (modelComponent)
+				{
+					// 读取基础属性
+					bool visible = modelComponent["Visible"].as<bool>();
+					bool edgeEnable = modelComponent["EdgeEnable"].as<bool>();
+					bool isImported = modelComponent["IsImported"].as<bool>();
+					std::string shaderPath = modelComponent["ShaderPath"].as<std::string>();
+
+					// 加载 Shader (TODO: 资源缓存/管理)
+					Refptr<Shader> shader = Shader::Create(shaderPath); // TODO: 设置缓存，并先检查缓存
+
+					Refptr<Model> model = nullptr;
+
+					if (isImported)	{
+						// --- 导入的外部模型 (FBX/OBJ) ---
+						std::string filePath = modelComponent["FilePath"].as<std::string>();
+						// 调用 Model 构造函数加载文件
+						model = std::make_shared<Model>(shader, filePath); // TODO: 设置缓存，并先检查缓存
+					}
+					else {
+						// --- 图元 (Cube/Sphere) + 纹理重建 ---
+						auto meshesNode = modelComponent["Meshes"];
+						if (meshesNode && meshesNode.size() > 0) {
+							// 简化：目前 Light/Cube 只有一个 Mesh
+							auto meshNode = meshesNode[0];
+
+							std::string primStr = meshNode["PrimitiveType"].as<std::string>();
+							PrimitiveType primType = StringToPrimitiveType(primStr);
+
+							// 重建纹理列表
+							std::vector<TextureData> textureDataList;
+							auto texturesNode = meshNode["Textures"];
+							if (texturesNode) {
+								for (auto texNode : texturesNode) {
+									std::string usage = texNode["Usage"].as<std::string>(); // "texture_diffuse" ...
+
+									Refptr<Texture> texture = nullptr;
+
+									// 判断是单路径还是多路径 (比如 Texture2D vs CubeMap)
+									if (texNode["Path"]) {
+										std::string path = texNode["Path"].as<std::string>();
+										texture = Texture2D::Create(std::vector<std::string>{path}); // TODO: 全局资源管理
+									}
+									else if (texNode["Paths"]) {
+										std::vector<std::string> paths = texNode["Paths"].as<std::vector<std::string>>();
+										texture = TextureCube::Create(paths);
+									}
+
+									if (texture) {
+										textureDataList.emplace_back(texture, usage);
+									}
+								}
+							}
+
+							// 调用 Model 构造函数创建图元 
+							// (不需要传入 vertices/indices，内部根据 PrimitiveType 生成)
+							model = std::make_shared<Model>(primType, shader, textureDataList);
+						}
+					}
+
+					if (model) {
+						auto& mc = deserializedEntity.AddComponent<ModelComponent>(model);
+						mc.visible = visible;
+						mc.edgeEnable = edgeEnable;
+					}
+				}
+			}
+		}
+
+		SNL_CORE_INFO("场景已成功加载: {0}", filepath);
+		return true;
+	}
 
 }

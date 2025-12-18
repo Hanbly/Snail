@@ -31,4 +31,45 @@ namespace Snail {
 		}
 	}
 
+	std::vector<TextureType> Material::GetTexturesDimensionsType() const
+	{
+		std::vector<TextureType> dimensionsTypes;
+		dimensionsTypes.reserve(m_Textures.size());
+		for (auto& tex : m_Textures) {
+			dimensionsTypes.push_back(tex.second->GetType());
+		}
+		return dimensionsTypes;
+	}
+
+	std::vector<std::string> Material::GetTexturesUsageType() const
+	{
+		std::vector<std::string> usageTypes;
+		usageTypes.reserve(m_Textures.size());
+		for (auto& tex : m_Textures) {
+			usageTypes.push_back(tex.first);
+		}
+		return usageTypes;
+	}
+
+	std::vector<std::vector<std::string>> Material::GetTexturesAssets() const
+	{
+		std::vector<std::vector<std::string>> assetsList;
+		assetsList.reserve(m_Textures.size());
+		for (auto& tex : m_Textures) {
+			int assetsCount = tex.second->GetPath().size();
+			std::vector<std::string> assets;
+			if (assetsCount == 1) {
+				assets.push_back(tex.second->GetPath()[0]);
+			}
+			else if (assetsCount == 6) {
+				for(int i = 0; i < assetsCount; ++i) assets.push_back(tex.second->GetPath()[i]);
+			}
+			else {
+				SNL_CORE_ASSERT(false, "Material::GetTexturesAssets(): 纹理资源数量错误! count: {0}", assetsCount);
+			}
+			assetsList.push_back(assets);
+		}
+		return assetsList;
+	}
+
 }

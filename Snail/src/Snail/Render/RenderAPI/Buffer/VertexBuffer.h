@@ -19,6 +19,7 @@ namespace Snail {
 	public:
 		virtual ~VertexBuffer() {}
 
+		virtual std::vector<Vertex> GetVertices() const = 0;
 		virtual Refptr<BufferLayout> GetLayout() const = 0;
 		virtual void SetLayout(const Refptr<BufferLayout>& layout) = 0;
 

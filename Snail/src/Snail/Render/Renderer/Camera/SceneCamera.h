@@ -7,9 +7,19 @@
 
 namespace Snail {
 
+	enum class SceneCameraProjectionType { Perspective = 0, Orthographic = 1 };
+
+	static std::string SceneCameraProjectionTypeToString(const SceneCameraProjectionType& type)
+	{
+		switch (type)
+		{
+		    case SceneCameraProjectionType::Perspective: return "Perspective";
+		    case SceneCameraProjectionType::Orthographic: return "Orthographic";
+		    default: return "None";
+		}
+	}
+
 	class SceneCamera : public Camera {
-    public:
-        enum class ProjectionType { Perspective = 0, Orthographic = 1 };
     public:
         SceneCamera() = default;
         virtual ~SceneCamera() = default;
@@ -18,8 +28,8 @@ namespace Snail {
         void SetOrthographic(const float& size, const float& nearClip, const float& farClip);
         void SetViewportSize(const float& width, const float& height);
 
-        ProjectionType GetProjectionType() const { return m_ProjectionType; }
-        void SetProjectionType(ProjectionType type) { m_ProjectionType = type; RecalculateProjection(); }
+        SceneCameraProjectionType GetProjectionType() const { return m_ProjectionType; }
+        void SetProjectionType(SceneCameraProjectionType type) { m_ProjectionType = type; RecalculateProjection(); }
 
         inline const float& GetPerspectiveFOV() const       { return m_PerspectiveFOV; }
         inline const float& GetPerspectiveNear() const      { return m_PerspectiveNear; }
@@ -34,7 +44,7 @@ namespace Snail {
     private:
         void RecalculateProjection();
     private:
-        ProjectionType m_ProjectionType = ProjectionType::Perspective;
+        SceneCameraProjectionType m_ProjectionType = SceneCameraProjectionType::Perspective;
 
 		float m_PerspectiveFOV = 45.0f;
         float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 5000.0f;

@@ -13,8 +13,10 @@ namespace Snail {
 	public:
 		~VertexArray() {}
 
-		virtual void AddVertexBuffer(const Refptr<VertexBuffer>& vertexBuffer) = 0;
-		virtual const Refptr<IndexBuffer> GetIndexBuffer() const = 0;
+		virtual const std::vector<Vertex> GetVertexBuffer() const = 0;
+		virtual void SetVertexBuffer(const Refptr<VertexBuffer>& vertexBuffer) = 0;
+
+		virtual const Refptr<IndexBuffer>& GetIndexBuffer() const = 0;
 		virtual void SetIndexBuffer(const Refptr<IndexBuffer>& indexBuffer) = 0;
 
 		virtual void Bind() const = 0;

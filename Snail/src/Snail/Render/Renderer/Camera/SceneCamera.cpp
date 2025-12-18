@@ -34,10 +34,10 @@ namespace Snail {
 
 	void SceneCamera::RecalculateProjection()
 	{
-		if (m_ProjectionType == ProjectionType::Perspective) {
+		if (m_ProjectionType == SceneCameraProjectionType::Perspective) {
 			m_ProjectionMatrix = glm::perspective(glm::radians(m_PerspectiveFOV), m_Aspect, m_PerspectiveNear, m_PerspectiveFar);
 		}
-		else if (m_ProjectionType == ProjectionType::Orthographic) {
+		else if (m_ProjectionType == SceneCameraProjectionType::Orthographic) {
 			m_ProjectionMatrix = glm::ortho(0.0f, m_OrthographicSize, 0.0f, m_OrthographicSize, m_OrthographicNear, m_OrthographicFar);
 		}
 	}

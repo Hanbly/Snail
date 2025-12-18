@@ -7,6 +7,7 @@
 namespace Snail {
 
 	Model::Model(const Refptr<Mesh>& mesh)
+		: m_IsImported(false)
 	{
 		if (mesh->GetVAO() && mesh->GetMaterial()) {
 
@@ -20,10 +21,12 @@ namespace Snail {
 		}
 	}
 
-	Model::Model(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
-		: m_Shader(shader)
+	Model::Model(const PrimitiveType& type, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+		: m_Shader(shader), m_IsImported(false)
 	{
-		auto& mesh = std::make_shared<Mesh>(vertices, indices, shader, textures, localTransform);
+		auto [vertices, indices] = GetPrimitiveDatas(type);
+
+		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
 
 		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
 		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
@@ -32,13 +35,22 @@ namespace Snail {
 		m_Meshes.push_back(mesh);
 	}
 
-	Model::Model(const Refptr<Shader>& shader, const std::string& path)
-		: m_Shader(shader)
+	Model::Model(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+		: m_Shader(shader), m_IsImported(false)
 	{
-		SNL_PROFILE_FUNCTION();
+		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
 
+		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
+		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
+		ConsiderMeshAABB(mesh);
 
-		Load(path);
+		m_Meshes.push_back(mesh);
+	}
+
+	Model::Model(const Refptr<Shader>& shader, const std::string& objPath)
+		: m_Shader(shader), m_IsImported(true)
+	{
+		Load(objPath);
 	}
 
 	void Model::Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const
@@ -166,7 +178,7 @@ namespace Snail {
 			//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
-		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(vertices, indices, m_Shader, textures, localTransformation);
+		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(PrimitiveType::None, vertices, indices, m_Shader, textures, localTransformation);
 
 		// 处理材质（颜色）
 		if (mesh->mMaterialIndex >= 0)
@@ -232,7 +244,7 @@ namespace Snail {
 			bool cacheFlag = false; // 将标志位定义移到这里，每次循环重置
 
 			for (uint32_t j = 0; j < m_LoadedTextures.size(); j++) {
-				if (m_LoadedTextures[j].path == filename) {
+				if (!m_LoadedTextures[j].path.empty() && m_LoadedTextures[j].path[0] == filename) {
 					textures.push_back(m_LoadedTextures[j]);
 					cacheFlag = true;
 					break;
@@ -251,10 +263,10 @@ namespace Snail {
 
 				SNL_CORE_TRACE("Model: 加载纹理路径: '{0}' 中...", fullPath);
 
-				texture.texture = Texture2D::Create(fullPath);
+				texture.texture = Texture2D::Create(std::vector({ fullPath }));
 				if (texture.texture) {
 					texture.type = typeName;
-					texture.path = filename; // 保存相对路径或文件名用于缓存对比
+					texture.path.push_back(filename); // 保存相对路径或文件名用于缓存对比
 
 					textures.push_back(texture);
 					m_LoadedTextures.push_back(texture); // 添加到已加载缓存
@@ -298,6 +310,104 @@ namespace Snail {
 			m_AABB.min = glm::min(m_AABB.min, p);
 			m_AABB.max = glm::max(m_AABB.max, p);
 		}
+	}
+
+	std::pair<std::vector<Vertex>, std::vector<uint32_t>> Model::GetPrimitiveDatas(const PrimitiveType& type)
+	{
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
+		switch (type)
+		{
+			case PrimitiveType::Cube: // 六面分别定义的立方体（能更好地显示纹理）
+				vertices = {
+					// 格式需对应 Vertex 结构体定义: { Position, Normal, TexCoord }
+					// 1. 前面 (Front Face) - Z = 0.5f
+					// Pos                          // Normal           // UV
+					{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f} },
+					{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f} },
+					{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f} },
+					{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f} },
+
+					// 2. 右面 (Right Face) - X = 0.5f
+					{ { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f} },
+					{ { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f} },
+					{ { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f} },
+					{ { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f} },
+
+					// 3. 后面 (Back Face) - Z = -0.5f
+					{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f} },
+					{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f} },
+					{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f} },
+					{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f} },
+
+					// 4. 左面 (Left Face) - X = -0.5f
+					{ {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
+					{ {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
+					{ {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f} },
+					{ {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f} },
+
+					// 5. 上面 (Top Face) - Y = 0.5f
+					{ {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} },
+					{ { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} },
+					{ { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} },
+					{ {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} },
+
+					// 6. 下面 (Bottom Face) - Y = -0.5f
+					{ {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f} },
+					{ { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f} },
+					{ { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
+					{ {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f} }
+				};
+				indices = {
+					0, 1, 2, 2, 3, 0,       // 前面
+					4, 5, 6, 6, 7, 4,       // 右面
+					8, 9, 10, 10, 11, 8,    // 后面
+					12, 13, 14, 14, 15, 12, // 左面
+					16, 17, 18, 18, 19, 16, // 上面
+					20, 21, 22, 22, 23, 20  // 下面
+				};
+				break;
+			case PrimitiveType::Skybox: // 天空盒
+				vertices = {
+					// 只需要位置 (Position)，Normal 和 UV 在 Skybox shader 中通常用不到，设为 0
+					// ---------------------------------------------------------------------
+					// Positions          // Normals           // UVs (Unused)
+					{ {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
+					{ { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
+					{ { 1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 2. 右上前
+					{ {-1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 3. 左上前
+					{ {-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 4. 左下后
+					{ { 1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 5. 右下后
+					{ { 1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 6. 右上后
+					{ {-1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }  // 7. 左上后
+				};
+				indices = {
+					// Front face
+					0, 1, 2,
+					2, 3, 0,
+					// Right face
+					1, 5, 6,
+					6, 2, 1,
+					// Back face
+					5, 4, 7,
+					7, 6, 5,
+					// Left face
+					4, 0, 3,
+					3, 7, 4,
+					// Top face
+					3, 2, 6,
+					6, 7, 3,
+					// Bottom face
+					4, 5, 1,
+					1, 0, 4
+				};
+				break;
+			case PrimitiveType::Sphere: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 目前不支持 图元类型为 Sphere !"); break;
+			case PrimitiveType::Plane: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 目前不支持 图元类型为 Plane !"); break;
+			default: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 图元类型为 None 无法生成数据!");
+		}
+
+		return std::pair<std::vector<Vertex>, std::vector<uint32_t>>(vertices, indices);
 	}
 
 }

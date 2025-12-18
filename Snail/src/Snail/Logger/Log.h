@@ -3,6 +3,7 @@
 #include "Snail/Basic/Core.h"
 
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ranges.h"
 
 namespace Snail {
 

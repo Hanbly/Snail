@@ -9,6 +9,7 @@ namespace Snail {
 	public:
 		virtual ~IndexBuffer() {}
 
+		virtual std::vector<uint32_t> GetIndices() const = 0;
 		virtual uint32_t GetIndexBufferCount() const = 0;
 
 		virtual void Bind() const = 0;
