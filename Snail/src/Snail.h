@@ -19,6 +19,8 @@
 #include "Snail/Render/Renderer/Material/Shader.h"
 #include "Snail/Render/Renderer/Material/Texture.h"
 #include "Snail/Render/Renderer/Material/Material.h"
+#include "Snail/Render/Renderer/Material/ShaderLibrary.h"
+#include "Snail/Render/Renderer/Material/TextureLibrary.h"
 #include "Snail/Render/Renderer/Mesh/Mesh.h"
 #include "Snail/Render/Renderer/Model/Model.h"
 #include "Snail/Render/Renderer/Renderer.h"

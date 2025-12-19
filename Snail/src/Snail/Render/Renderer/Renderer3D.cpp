@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Material/ShaderLibrary.h"
+
 #include "Renderer3D.h"
 
 namespace Snail {
@@ -8,8 +10,8 @@ namespace Snail {
 
 	void Renderer3D::Init()
 	{
-		s_3DSceneData.ShaderLibrary.Load("single_color", "assets/shaders/single_color.glsl");
-		s_3DSceneData.ShaderLibrary.Load("edge_shader", "assets/shaders/edge_shader.glsl");
+		ShaderLibrary::Load("single_color", "assets/shaders/single_color.glsl");
+		ShaderLibrary::Load("edge_shader", "assets/shaders/edge_shader.glsl");
 	}
 
 	void Renderer3D::Shutdown()
@@ -105,7 +107,7 @@ namespace Snail {
 			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::NOTEQUAL, 1, 0xFF);
 
 			// 临时边框shader
-			auto edgeshader = s_3DSceneData.ShaderLibrary.Get("single_color");
+			auto edgeshader = ShaderLibrary::Get("single_color");
 			edgeshader->Bind();
 			edgeshader->SetMat4("u_Model", glm::scale(transform, glm::vec3(1.03f, 1.03f, 1.03f)));
 			edgeshader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);

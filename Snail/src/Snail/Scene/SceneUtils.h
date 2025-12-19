@@ -6,6 +6,9 @@
 #include "Snail/Scene/Entity.h"
 #include "Snail/Scene/Component.h"
 
+#include "Snail/Render/Renderer/Material/ShaderLibrary.h"
+#include "Snail/Render/Renderer/Material/TextureLibrary.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"

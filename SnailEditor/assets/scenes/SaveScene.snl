@@ -56,10 +56,10 @@ Entities:
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Path: assets/images/kulisu.png
+              Paths: [assets/images/kulisu.png]
             - DimType: Texture2D
               Usage: texture_diffuse
-              Path: assets/images/mayoli.png
+              Paths: [assets/images/mayoli.png]
       Visible: true
       EdgeEnable: false
   - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f

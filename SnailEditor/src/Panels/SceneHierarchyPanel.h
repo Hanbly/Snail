@@ -185,22 +185,89 @@ namespace Snail {
                 }
             );
 
-            // --- Model 组件 ---
-            if (entity.HasAllofComponent<SkyboxComponent, ModelComponent>()) {
-                DrawComponent<ModelComponent>("Skybox", entity, [](auto& component) {
-                    ImGui::Checkbox("Visible", &component.visible);
-                    }
+			// --- Model 组件 ---
+			if (entity.HasAllofComponent<SkyboxComponent, ModelComponent>()) {
+				DrawComponent<ModelComponent>("Skybox", entity, [](auto& component) {
+					ImGui::Checkbox("Visible", &component.visible);
+					}
+				);
+			}
+			else if (entity.HasAllofComponent<TransformComponent, ModelComponent>()) {
+				DrawComponent<ModelComponent>("Mesh Renderer", entity, [](auto& component) {
+					// 基础开关
+					ImGui::Checkbox("Visible", &component.visible);
+					ImGui::SameLine();
+					ImGui::Checkbox("Show Outline", &component.edgeEnable);
+
+					// Shader 区域 (使用灰色文本显示，暗示其重要但目前不可改)
+					// (TODO: 未来添加修改 shader 功能)
+					ImGui::TextDisabled("Shader:");
+					ImGui::SameLine();
+					ImGui::Text("%s", component.model->GetShaderPath().c_str());
+
+					ImGui::Separator();
+
+					// 模型来源信息
+					bool isImported = component.model->IsImported();
+					if (isImported) {
+						ImGui::TextColored({ 0.4f, 0.8f, 1.0f, 1.0f }, "来源: 外部导入");
+						ImGui::TextWrapped("Path: %s", component.model->GetFullPath().c_str());
+					}
+					else {
+						ImGui::TextColored({ 1.0f, 0.8f, 0.4f, 1.0f }, "来源: 内部图元");
+					}
+
+					ImGui::Spacing();
+
+					// Mesh 数据
+					if (ImGui::TreeNodeEx("网格 & 纹理", ImGuiTreeNodeFlags_DefaultOpen)) {
+						auto& meshes = component.model->GetMeshes();
+						for (size_t m = 0; m < meshes.size(); m++) {
+							auto& mesh = meshes[m];
+							std::string meshLabel = "Mesh " + std::to_string(m) + " (" + PrimitiveTypeToString(mesh->GetPrimitiveType()) + ")";
+
+							if (ImGui::TreeNode(meshLabel.c_str())) {
+								auto textures = mesh->GetTextures();
+								for (size_t t = 0; t < textures.size(); t++) {
+									const auto& texture = textures[t];
+									ImGui::PushID(t); // 防止同名 UI 冲突
+
+									// 布局：左侧图片，右侧参数
+									ImGui::BeginGroup();
+
+									// 绘制图片
+									uint32_t textureId = texture->GetRendererId();
+									ImGui::Image((void*)(intptr_t)textureId, { 64.0f, 64.0f }, ImVec2(0, 1), ImVec2(1, 0), { 1,1,1,1 }, { 1,1,1,0.5f });
+
+									ImGui::SameLine();
+
+									// 绘制右侧文本区域
+									ImGui::BeginGroup();
+									ImGui::Text("Type:  %s", TextureTypeToString(texture->GetType()).c_str());
+									ImGui::Text("Usage: %s", TextureUsageToString(texture->GetUsage()).c_str());
+
+									// 路径折叠 (因为路径通常很长)
+									if (ImGui::TreeNodeEx("Paths", ImGuiTreeNodeFlags_NoTreePushOnOpen)) {
+										auto& paths = texture->GetPath();
+										for (const auto& p : paths) {
+											ImGui::TextWrapped("- %s", p.c_str());
+										}
+									}
+									ImGui::EndGroup();
+
+									ImGui::EndGroup();
+
+									if (t < textures.size() - 1) ImGui::Separator(); // 纹理间分割线
+									ImGui::PopID();
+								}
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					}
                 );
-            }
-            else if (entity.HasAllofComponent<TransformComponent, ModelComponent>()) {
-                DrawComponent<ModelComponent>("Mesh Renderer", entity, [](auto& component) {
-                    ImGui::Checkbox("Visible", &component.visible);
-                    ImGui::Checkbox("Show Outline", &component.edgeEnable);
-                    // 这里可以加更多，比如材质路径、模型路径的显示
-                    ImGui::Text("Path: %s", component.model->GetFullPath().c_str());
-                    }
-                );
-            }
+			}
         }
 
         static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)

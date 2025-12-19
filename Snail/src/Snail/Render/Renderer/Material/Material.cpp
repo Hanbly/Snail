@@ -46,7 +46,7 @@ namespace Snail {
 		std::vector<std::string> usageTypes;
 		usageTypes.reserve(m_Textures.size());
 		for (auto& tex : m_Textures) {
-			usageTypes.push_back(tex.first);
+			usageTypes.push_back(TextureUsageToString(tex.second->GetUsage()));
 		}
 		return usageTypes;
 	}
@@ -61,7 +61,7 @@ namespace Snail {
 			if (assetsCount == 1) {
 				assets.push_back(tex.second->GetPath()[0]);
 			}
-			else if (assetsCount == 6) {
+			else if (assetsCount > 1) {
 				for(int i = 0; i < assetsCount; ++i) assets.push_back(tex.second->GetPath()[i]);
 			}
 			else {
@@ -70,6 +70,16 @@ namespace Snail {
 			assetsList.push_back(assets);
 		}
 		return assetsList;
+	}
+
+	std::vector<Refptr<Texture>> Material::GetTextures() const
+	{
+		std::vector<Refptr<Texture>> textures;
+		textures.reserve(m_Textures.size());
+		for (auto& tex : m_Textures) {
+			textures.push_back(tex.second);
+		}
+		return textures;
 	}
 
 }

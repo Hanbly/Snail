@@ -4,6 +4,7 @@
 #include "Snail/Basic/Macro.h"
 
 #include "Snail/Render/Renderer/Mesh/Mesh.h"
+#include "Snail/Render/Renderer/Material/TextureLibrary.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -18,7 +19,6 @@ namespace Snail {
 	private:
 		Refptr<Shader> m_Shader;
 		std::vector<Refptr<Mesh>> m_Meshes;
-		std::vector<TextureData> m_LoadedTextures;
 		std::string m_FullPath;
 		std::string m_Directory;
 
@@ -30,12 +30,12 @@ namespace Snail {
 		Model(const Refptr<Mesh>& mesh);
 		// 单个mesh构造 注意传入图元类型 自动依据 type 生成数据
 		Model(const PrimitiveType& type,
-			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {},
+			const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures = {},
 			const glm::mat4& localTransform = glm::mat4(1.0f));
 		// 单个mesh构造 注意传入图元类型
 		Model(const PrimitiveType& type,
 			const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
-			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {},
+			const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures = {},
 			const glm::mat4& localTransform = glm::mat4(1.0f));
 		// 多mesh构造 外部导入模型
 		Model(const Refptr<Shader>& shader, const std::string& objPath);
@@ -52,7 +52,7 @@ namespace Snail {
 		void Load(const std::string& path);
 		void ProcessNode(aiNode* node, const aiScene* scene, const glm::mat4& parentTransformation);
 		Refptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene, const glm::mat4& localTransformation);
-		std::vector<TextureData> LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const std::string& typeName);
+		std::vector<Refptr<Texture>> LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage);
 
 		//--------------Tools--------------------
 		glm::mat4 ConvertaiMat4ToglmMat4(const aiMatrix4x4& matrix) const;

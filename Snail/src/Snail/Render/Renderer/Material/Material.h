@@ -23,6 +23,7 @@ namespace Snail {
 		std::vector<TextureType> GetTexturesDimensionsType() const; // Texture2D | TextureCube | ...
 		std::vector<std::string> GetTexturesUsageType() const;		// diffuse | specular | ...
 		std::vector<std::vector<std::string>> GetTexturesAssets() const;	// 文件路径
+		std::vector<Refptr<Texture>> GetTextures() const;
 
 		// --- 参数设置接口 ---
 		void SetInt(const std::string& name, int value) { m_Ints[name] = value; }

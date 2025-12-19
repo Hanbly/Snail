@@ -6,8 +6,8 @@
 
 namespace Snail {
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::vector<std::string>& path)
-		: m_RendererId(0), m_Path(path), m_Type(TextureType::TWOD)
+	OpenGLTexture2D::OpenGLTexture2D(const std::vector<std::string>& path, const TextureUsage& usage)
+		: m_RendererId(0), m_Path(path), m_Type(TextureType::TWOD), m_Usage(usage)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -93,8 +93,8 @@ namespace Snail {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	OpenGLTextureCube::OpenGLTextureCube(const std::vector<std::string>& path)
-		: m_RendererId(0), m_Path(path), m_Type(TextureType::Cube)
+	OpenGLTextureCube::OpenGLTextureCube(const std::vector<std::string>& path, const TextureUsage& usage)
+		: m_RendererId(0), m_Path(path), m_Type(TextureType::Cube), m_Usage(usage)
 	{
 		SNL_PROFILE_FUNCTION();
 

@@ -12,6 +12,7 @@ namespace Snail {
 
 	class SNAIL_API Shader {
 	public:
+        friend class ShaderLibrary;
 		virtual ~Shader() {}
 
 		virtual uint32_t GetRendererId() const = 0;
@@ -29,11 +30,10 @@ namespace Snail {
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
-
-        static Refptr<Shader> Create(const std::string& filePath);
-        static Refptr<Shader> Create(const std::string& customName, const std::string& filePath);
-        static Refptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
-
+	private:
+		static Refptr<Shader> Create(const std::string& filePath);
+		static Refptr<Shader> Create(const std::string& customName, const std::string& filePath);
+		static Refptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	private:
         // 读取文件内容
         virtual std::string ReadFile(const std::string& filePath) = 0;
@@ -44,18 +44,5 @@ namespace Snail {
         // 获取 Uniform 位置 (带缓存)
         virtual GLint GetUniformLocation(const std::string& name) const = 0;
 	};
-
-    class ShaderLibrary {
-    public:
-        void Add(const Refptr<Shader>& shader);
-
-        Refptr<Shader> Load(const std::string& filePath);
-        Refptr<Shader> Load(const std::string& customName, const std::string& filePath);
-
-        Refptr<Shader> Get(const std::string& name);
-    private:
-        std::unordered_map<std::string, Refptr<Shader>> m_Shaders;
-
-    };
 
 }

@@ -15,25 +15,6 @@ namespace Snail {
 		glm::vec3 max;
 	};
 
-	struct TextureData {
-		Refptr<Texture> texture;
-		std::string type;
-		std::vector<std::string> path;
-
-		TextureData() = default;
-		TextureData(const Refptr<Texture>& tex, const std::string& type)
-			: texture(tex), type(type)
-		{
-			if (tex) {
-				path = tex->GetPath();
-			}
-			else {
-				path = {};
-				SNL_CORE_ERROR("TextureData initialized with null texture! Type: {0}", type);
-			}
-		}
-	};
-
 	enum class PrimitiveType {
 		None = 0, // 非图元
 		Cube, Sphere, Plane, Skybox
@@ -73,7 +54,7 @@ namespace Snail {
 	public:
 		Mesh(const PrimitiveType& type, 
 			const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,
-			const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {}, 
+			const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures = {}, 
 			const glm::mat4& localTransform = glm::mat4(1.0f));
 		~Mesh() = default;
 
@@ -89,7 +70,9 @@ namespace Snail {
 		// diffuse | specular | ...
 		inline std::vector<std::string> GetTexturesUsageType() const			{ return GetMaterial()->GetTexturesUsageType(); }
 		// 全部纹理 文件路径
-		inline std::vector<std::vector<std::string>> GetTexturesAssets() const	{ return GetMaterial()->GetTexturesAssets(); }
+		inline std::vector<std::vector<std::string>> GetTexturesAssets() const { return GetMaterial()->GetTexturesAssets(); }
+		// 全部纹理
+		inline std::vector<Refptr<Texture>> GetTextures() const { return GetMaterial()->GetTextures(); }
 		// 可选 非assimp加载的 mesh 数据
 		inline const std::vector<Vertex> GetVertices() const					{ return GetVAO()->GetVertexBuffer(); }
 		inline const std::vector<uint32_t> GetIndices() const					{ return GetVAO()->GetIndexBuffer()->GetIndices(); }
@@ -97,7 +80,7 @@ namespace Snail {
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 
 	private:
-		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,const Refptr<Shader>& shader, const std::vector<TextureData>& textures = {});
+		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures = {});
 		void CalculateBoundingBox(const std::vector<Vertex>& vertices);
 	};
 

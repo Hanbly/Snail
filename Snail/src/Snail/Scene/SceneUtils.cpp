@@ -285,23 +285,17 @@ namespace Snail {
 
 						// 图元类型
                         out << YAML::Key << "PrimitiveType" << YAML::Value << PrimitiveTypeToString(mesh->GetPrimitiveType());
-						// 纹理序列化
-						auto dimTypes = mesh->GetTexturesDimensionsType();
-						auto usageTypes = mesh->GetTexturesUsageType();
-						auto assetsPaths = mesh->GetTexturesAssets();
 
+						// 纹理序列化
 						out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq; // 开始 Textures 列表
-						for (size_t i = 0; i < dimTypes.size(); i++) {
+
+						auto textures = mesh->GetTextures();
+						for (const auto& texture : textures) {
 							out << YAML::BeginMap;
 
-							out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(dimTypes[i]);
-							out << YAML::Key << "Usage" << YAML::Value << TextureUsageTypeToString(usageTypes[i]);
-
-							const auto& paths = assetsPaths[i];
-							if (paths.size() == 1)
-                                out << YAML::Key << "Path" << YAML::Value << paths[0];
-							else if (paths.size() == 6)
-                                out << YAML::Key << "Paths" << YAML::Value << paths;
+							out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(texture->GetType());
+							out << YAML::Key << "Usage" << YAML::Value << TextureUsageToString(texture->GetUsage());							
+							out << YAML::Key << "Paths" << YAML::Value << texture->GetPath(); // 一律存入路径数组
 
 							out << YAML::EndMap;
 						}
@@ -466,8 +460,8 @@ namespace Snail {
 					bool isImported = modelComponent["IsImported"].as<bool>();
 					std::string shaderPath = modelComponent["ShaderPath"].as<std::string>();
 
-					// 加载 Shader (TODO: 资源缓存/管理)
-					Refptr<Shader> shader = Shader::Create(shaderPath); // TODO: 设置缓存，并先检查缓存
+					// 加载 Shader
+					Refptr<Shader> shader = ShaderLibrary::Load(shaderPath);
 
 					Refptr<Model> model = nullptr;
 
@@ -488,27 +482,19 @@ namespace Snail {
 							PrimitiveType primType = StringToPrimitiveType(primStr);
 
 							// 重建纹理列表
-							std::vector<TextureData> textureDataList;
+							std::vector<Refptr<Texture>> textureDataList;
 							auto texturesNode = meshNode["Textures"];
 							if (texturesNode) {
 								for (auto texNode : texturesNode) {
 									std::string usage = texNode["Usage"].as<std::string>(); // "texture_diffuse" ...
 
-									Refptr<Texture> texture = nullptr;
-
-									// 判断是单路径还是多路径 (比如 Texture2D vs CubeMap)
-									if (texNode["Path"]) {
-										std::string path = texNode["Path"].as<std::string>();
-										texture = Texture2D::Create(std::vector<std::string>{path}); // TODO: 全局资源管理
-									}
-									else if (texNode["Paths"]) {
-										std::vector<std::string> paths = texNode["Paths"].as<std::vector<std::string>>();
-										texture = TextureCube::Create(paths);
-									}
-
-									if (texture) {
-										textureDataList.emplace_back(texture, usage);
-									}
+									if (texNode["Paths"]) {
+										auto paths = texNode["Paths"].as<std::vector<std::string>>();
+										// 内部判断是单路径还是多路径 (比如 Texture2D vs CubeMap)
+										if (auto texture = TextureLibrary::Load(paths, StringToTextureUsage(usage))) {
+											textureDataList.push_back(texture);
+										}
+									}									
 								}
 							}
 

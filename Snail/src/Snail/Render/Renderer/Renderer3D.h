@@ -27,8 +27,6 @@ namespace Snail {
 			glm::vec3 LightPosition;
 			glm::vec4 LightColor;
 			float AmbientStrength;
-
-			ShaderLibrary ShaderLibrary;
 		};
 
 		static Renderer3DSceneData s_3DSceneData;

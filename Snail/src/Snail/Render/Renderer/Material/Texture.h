@@ -10,6 +10,11 @@ namespace Snail {
 		TWOD, Cube
 	};
 
+	enum class TextureUsage {
+		None = 0,
+		Diffuse, Specular, Cubemap
+	};
+
 	static std::string TextureTypeToString(const TextureType& type)
 	{
 		switch (type) {
@@ -19,21 +24,23 @@ namespace Snail {
 		}
 	}
 
-	static std::string TextureUsageTypeToString(const std::string& type)
+	static std::string TextureUsageToString(const TextureUsage& type)
 	{
-		if (type.find("u_Diffuse") != std::string::npos) {
-			return "texture_diffuse";
+		switch (type) {
+			case TextureUsage::Diffuse: return "texture_diffuse";
+			case TextureUsage::Specular: return "texture_specular";
+			case TextureUsage::Cubemap: return "texture_cubemap";
+			default: return "None";
 		}
+	}
 
-		if (type.find("u_Specular") != std::string::npos) {
-			return "texture_specular";
-		}
+	static TextureUsage StringToTextureUsage(const std::string& typestr)
+	{
+		if (typestr == "texture_diffuse") return TextureUsage::Diffuse;
+		if (typestr == "texture_specular") return TextureUsage::Specular;
+		if (typestr == "texture_cubemap") return TextureUsage::Cubemap;
 
-		if (type.find("u_Cubemap") != std::string::npos) {
-			return "texture_cubemap";
-		}
-
-		return type;
+		return TextureUsage::None;
 	}
 
 	class Texture
@@ -41,9 +48,11 @@ namespace Snail {
 	public:
 		virtual ~Texture() = default;
 
+		virtual uint32_t GetRendererId() const = 0;
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 		virtual const TextureType& GetType() const = 0;
+		virtual const TextureUsage& GetUsage() const = 0;
 		virtual const std::vector<std::string>& GetPath() const = 0;
 
 		virtual void Bind(const uint32_t& slot = 0) const = 0;
@@ -52,16 +61,18 @@ namespace Snail {
 
 	class Texture2D : public Texture {
 	public:
+		friend class TextureLibrary;
 		virtual ~Texture2D() = default;
-
-		static Refptr<Texture2D> Create(const std::vector<std::string>& path);
+	private:
+		static Refptr<Texture2D> Create(const std::vector<std::string>& path, const TextureUsage& usage);
 	};
 
 	class TextureCube : public Texture {
 	public:
+		friend class TextureLibrary;
 		virtual ~TextureCube() = default;
-
-		static Refptr<TextureCube> Create(const std::vector<std::string>& path);
+	private:
+		static Refptr<TextureCube> Create(const std::vector<std::string>& path, const TextureUsage& usage);
 	};
 
 }

@@ -44,38 +44,4 @@ namespace Snail {
 		return nullptr;
 	}
 
-	// ------------------------ Shader Library ------------------------------------------##################################
-
-	void ShaderLibrary::Add(const Refptr<Shader>& shader)
-	{
-		SNL_CORE_ASSERT(shader->GetName().size(), "ShaderLibrary: 着色器命名缺失，shaderId '{0}' ", shader->GetRendererId());
-
-		int status = m_Shaders.find(shader->GetName()) == m_Shaders.end(); // 1表示shader在映射表中不存在
-		SNL_CORE_ASSERT(status, "ShaderLibrary: 着色器库已经存在该 shader '{0}' ", shader->GetName());
-
-		m_Shaders[shader->GetName()] = shader;
-	}
-
-	Refptr<Shader> ShaderLibrary::Load(const std::string& filePath)
-	{
-		const Refptr<Shader>& shader = Shader::Create(filePath);
-		Add(shader);
-		return shader;
-	}
-
-	Refptr<Shader> ShaderLibrary::Load(const std::string& customName, const std::string& filePath)
-	{
-		const Refptr<Shader>& shader = Shader::Create(customName, filePath);
-		Add(shader);
-		return shader;
-	}
-
-	Refptr<Shader> ShaderLibrary::Get(const std::string& name)
-	{
-		int status = m_Shaders.find(name) != m_Shaders.end(); // 1表示name在映射表中已经存在
-		SNL_CORE_ASSERT(status, "ShaderLibrary: 着色器库不存在该 shader name '{0}' ", name);
-
-		return m_Shaders[name];
-	}
-
 }

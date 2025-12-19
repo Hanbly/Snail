@@ -14,26 +14,15 @@ namespace Snail {
     {
     private:
         // -------------------临时------------------------------------------
-        //Refptr<VertexArray> m_VertexArray;
-        //Refptr<VertexBuffer> m_VertexBuffer;
-        //Refptr<IndexBuffer> m_IndexBuffer;
-        //Refptr<Shader> m_Shader;
-        //Refptr<Texture> m_Texture1; // 纹理 1
-        //Refptr<Texture> m_Texture2; // 纹理 2
-        //Refptr<Material> m_CubeMaterial;
-        //Refptr<Material> m_LightMaterial;
-        //Refptr<Mesh> m_CubeMesh;
-        Refptr<Mesh> m_LightMesh;
 
         Refptr<FrameBuffer> m_FBO;
 
         // ECS 核心
         Refptr<Scene> m_Scene;
-        //Entity m_CameraEntity;   // 编辑器相机对应的实体
 
         // 编辑器特有
         Refptr<EditorCamera> m_EditorCamera;
-        ShaderLibrary m_ShaderLibrary;
+        //ShaderLibrary m_ShaderLibrary;
 
         SceneHierarchyPanel m_SHpanel;
         EditorViewportPanel m_EVpanel;
@@ -65,11 +54,27 @@ namespace Snail {
             // -------------------临时------------------------------------------
             
 
-            //m_ShaderLibrary.Load("sky", "assets/shaders/TextureCube_Shader.glsl");
-            //m_ShaderLibrary.Load("cube", "assets/shaders/cube.glsl");
-            //m_ShaderLibrary.Load("light_box", "assets/shaders/light_box.glsl");
-            //m_ShaderLibrary.Load("model", "assets/shaders/Model_Shader.glsl");
+			/*ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
+			ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
+			ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
+			ShaderLibrary::Load("cube", "assets/shaders/TextureCube_Shader.glsl");
+			ShaderLibrary::Load("cube", "assets/shaders/cube.glsl");
+			ShaderLibrary::Load("light_box", "assets/shaders/light_box.glsl");
+			ShaderLibrary::Load("model", "assets/shaders/Model_Shader.glsl");
 
+			std::vector<std::string> skyAssets = {
+				"assets/images/skybox/right.jpg",
+				"assets/images/skybox/left.jpg",
+				"assets/images/skybox/top.jpg",
+				"assets/images/skybox/bottom.jpg",
+				"assets/images/skybox/front.jpg",
+				"assets/images/skybox/back.jpg",
+			};
+			TextureLibrary::Load("sky", skyAssets, TextureUsage::Cubemap);
+			TextureLibrary::Load("sky", skyAssets, TextureUsage::Cubemap);
+			TextureLibrary::Load("cube", skyAssets, TextureUsage::Cubemap);
+			TextureLibrary::Load("cube", { "assets/images/kulisu.png" }, TextureUsage::Diffuse);
+			TextureLibrary::Load("light", { "assets/images/mayoli.png" }, TextureUsage::Diffuse);*/
 
          
             //{
@@ -93,8 +98,8 @@ namespace Snail {
             //{                
             //    // 独属于Cube示例的纹理设置
             //    std::vector<TextureData> td;
-            //    td.push_back(TextureData(Texture2D::Create(std::vector<std::string>({ "assets/images/kulisu.png" })), "texture_diffuse"));
-            //    td.push_back(TextureData(Texture2D::Create(std::vector<std::string>({ "assets/images/mayoli.png" })), "texture_diffuse"));
+			//    td.push_back(TextureData(Texture2D::Create({ "assets/images/kulisu.png" }), "texture_diffuse"));
+            //    td.push_back(TextureData(Texture2D::Create({ "assets/images/mayoli.png" }), "texture_diffuse"));
             //    Refptr<Model> singleMesh = std::make_shared<Model>(PrimitiveType::Cube, vertices, indices, m_ShaderLibrary.Get("cube"), td);
 
             //    Entity e = m_Scene->CreateEntity("Cube");

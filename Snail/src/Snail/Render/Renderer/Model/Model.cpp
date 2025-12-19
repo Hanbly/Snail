@@ -21,7 +21,7 @@ namespace Snail {
 		}
 	}
 
-	Model::Model(const PrimitiveType& type, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+	Model::Model(const PrimitiveType& type, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
 		: m_Shader(shader), m_IsImported(false)
 	{
 		auto [vertices, indices] = GetPrimitiveDatas(type);
@@ -35,7 +35,7 @@ namespace Snail {
 		m_Meshes.push_back(mesh);
 	}
 
-	Model::Model(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+	Model::Model(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
 		: m_Shader(shader), m_IsImported(false)
 	{
 		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
@@ -120,7 +120,7 @@ namespace Snail {
 
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
-		std::vector<TextureData> textures;
+		std::vector<Refptr<Texture>> textures;
 
 		// 处理顶点位置、法线和纹理坐标
 		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
@@ -167,15 +167,15 @@ namespace Snail {
 		{
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-			std::vector<TextureData> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+			std::vector<Refptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Diffuse);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-			std::vector<TextureData> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+			std::vector<Refptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureUsage::Specular);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 			// TODO: cube 纹理
-			//std::vector<TextureData> specularMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_specular");
-			//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			//std::vector<Refptr<Texture>> cubeMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Cubemap);
+			//textures.insert(textures.end(), cubeMaps.begin(), cubeMaps.end());
 		}
 
 		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(PrimitiveType::None, vertices, indices, m_Shader, textures, localTransformation);
@@ -218,19 +218,19 @@ namespace Snail {
 		return resultMesh;
 	}
 
-	std::vector<TextureData> Model::LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const std::string& typeName)
+	std::vector<Refptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage)
 	{
 		SNL_PROFILE_FUNCTION();
 
 
-		std::vector<TextureData> textures;
+		std::vector<Refptr<Texture>> textures;
 
 		for (uint32_t i = 0; i < mat->GetTextureCount(type); i++)
 		{
 			aiString str;
 			// 检查 Assimp 是否成功获取了路径
 			if (mat->GetTexture(type, i, &str) != AI_SUCCESS) {
-				SNL_CORE_WARN("Model: Assimp Failed to get texture path for type {0}, index {1}", typeName, i);
+				SNL_CORE_WARN("Model: Assimp Failed to get texture path for type {0}, index {1}", TextureUsageToString(usage), i);
 				continue;
 			}
 			// 防御空路径
@@ -240,41 +240,24 @@ namespace Snail {
 			}
 			std::string filename = std::string(str.C_Str());
 			std::replace(filename.begin(), filename.end(), '\\', '/');
+						
+			Refptr<Texture> texture;
 
-			bool cacheFlag = false; // 将标志位定义移到这里，每次循环重置
-
-			for (uint32_t j = 0; j < m_LoadedTextures.size(); j++) {
-				if (!m_LoadedTextures[j].path.empty() && m_LoadedTextures[j].path[0] == filename) {
-					textures.push_back(m_LoadedTextures[j]);
-					cacheFlag = true;
-					break;
-				}
+			std::filesystem::path filePath(filename);
+			if (filePath.extension() != ".png" && filePath.extension() != ".jpg") {
+				filename += ".png";
 			}
 
-			if (!cacheFlag)	{
-				TextureData texture;
+			std::string fullPath = m_Directory + '/' + filename;
 
-				std::filesystem::path filePath(filename);
-				if (filePath.extension() != ".png" && filePath.extension() != ".jpg") {
-					filename += ".png";
-				}
+			SNL_CORE_TRACE("Model: 加载纹理路径: '{0}' 中...", fullPath);
 
-				std::string fullPath = m_Directory + '/' + filename;
-
-				SNL_CORE_TRACE("Model: 加载纹理路径: '{0}' 中...", fullPath);
-
-				texture.texture = Texture2D::Create(std::vector({ fullPath }));
-				if (texture.texture) {
-					texture.type = typeName;
-					texture.path.push_back(filename); // 保存相对路径或文件名用于缓存对比
-
-					textures.push_back(texture);
-					m_LoadedTextures.push_back(texture); // 添加到已加载缓存
-				}
-				else {
-					SNL_CORE_ERROR("Model: 纹理加载失败或路径无效: {0}", fullPath);
-				}
-			}
+			// TextureLibrary有缓存，这里直接Load，在内部会判断缓存
+			texture = TextureLibrary::Load({ fullPath }, usage);
+			if (texture)
+				textures.push_back(texture);
+			else
+				SNL_CORE_ERROR("Model: 纹理加载失败或路径无效: {0}", fullPath);
 		}
 		return textures;
 	}

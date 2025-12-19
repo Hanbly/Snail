@@ -6,7 +6,7 @@
 
 namespace Snail {
 
-	Mesh::Mesh(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures, const glm::mat4& localTransform)
+	Mesh::Mesh(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
 		: m_PrimitiveType(type), m_LocalTransform(localTransform)
 	{
 		SNL_PROFILE_FUNCTION();
@@ -23,7 +23,7 @@ namespace Snail {
 		Renderer3D::DrawMesh(*this, edgeEnable, worldTransform * m_LocalTransform);
 	}
 
-	void Mesh::SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<TextureData>& textures)
+	void Mesh::SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -63,23 +63,23 @@ namespace Snail {
 
 			for (const auto& texData : textures) {
 				std::string number;
-				std::string name = texData.type; // e.g. "texture_diffuse"
+				std::string usage = TextureUsageToString(texData->GetUsage()); // e.g. "texture_diffuse"
 
-				if (name == "texture_diffuse")
+				if (usage == "texture_diffuse")
 					number = std::to_string(diffuseNr++);
-				else if (name == "texture_specular")
+				else if (usage == "texture_specular")
 					number = std::to_string(specularNr++);
-				else if (name == "texture_cubemap")		
+				else if (usage == "texture_cubemap")
 					number = std::to_string(cubemapNr++);
 
 				// 将 "texture_diffuse" 映射为 "u_Diffuse" + "1"
 				std::string uniformName;
-				if (name == "texture_diffuse")			uniformName = "u_Diffuse" + number;
-				else if (name == "texture_specular")	uniformName = "u_Specular" + number;
-				else if (name == "texture_cubemap")		uniformName = "u_Cubemap" + number;
+				if (usage == "texture_diffuse")			uniformName = "u_Diffuse" + number;
+				else if (usage == "texture_specular")	uniformName = "u_Specular" + number;
+				else if (usage == "texture_cubemap")		uniformName = "u_Cubemap" + number;
 
 				// 将纹理对象传递给 Material
-				m_Material->SetTexture(uniformName, texData.texture);
+				m_Material->SetTexture(uniformName, texData);
 			}
 			m_Material->SetInt("u_UseTexture", 1);
 		}
