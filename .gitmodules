@@ -23,3 +23,6 @@
 [submodule "Snail/vendor/boost-uuid"]
 	path = Snail/vendor/boost-uuid
 	url = https://github.com/Hanbly/uuid.git
+[submodule "Snail/vendor/ImGuiFileDialog"]
+	path = Snail/vendor/ImGuiFileDialog
+	url = https://github.com/Hanbly/ImGuiFileDialog.git

@@ -29,6 +29,7 @@ IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
 IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
 IncludeDirs["yaml"] = "Snail/vendor/yaml-cpp/include"
 IncludeDirs["BoostUuid"] = "Snail/vendor/boost-uuid/include"
+IncludeDirs["ImGuiFileDialog"] = "Snail/vendor/ImGuiFileDialog"
 
 -- 引入需要编译项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是项目的premake5.lua文件
@@ -55,7 +56,9 @@ project "Snail"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/stb_image/**.h",
-        "%{prj.name}/vendor/stb_image/**.cpp"
+        "%{prj.name}/vendor/stb_image/**.cpp",
+        "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.h",
+        "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.cpp"
     }
 
     includedirs {
@@ -69,6 +72,7 @@ project "Snail"
         "%{IncludeDirs.EnTT}",
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
+        "%{IncludeDirs.ImGuiFileDialog}",
         "%{prj.name}/src"
     }
 
@@ -86,7 +90,8 @@ project "Snail"
         defines {
             "_CRT_SECURE_NO_WARNINGS", -- 移除C库安全警告
             "IMGUI_IMPL_OPENGL_LOADER_CUSTOM", -- 禁止ImGui重定义OpenGL宏
-            "YAML_CPP_STATIC_DEFINE", --使用yaml的静态库
+            "YAML_CPP_STATIC_DEFINE", -- 使用yaml的静态库
+            "USE_STD_FILESYSTEM", -- ImGuiFileDialog 宏表示使用标准的 filesystem 而不是旧的 dirent.h
             "SNL_PLATFORM_WINDOWS",
             "SNL_BUILD_SLL"
             -- "SNL_BUILD_DLL"
@@ -135,6 +140,7 @@ project "SnailEditor"
         "%{IncludeDirs.EnTT}",
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
+        "%{IncludeDirs.ImGuiFileDialog}",
         "%{prj.name}/src",
         "Snail/src"
     }
@@ -189,6 +195,7 @@ project "Example"
         "%{IncludeDirs.EnTT}",
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
+        "%{IncludeDirs.ImGuiFileDialog}",
         "%{prj.name}/src",
         "Snail/src"
     }
