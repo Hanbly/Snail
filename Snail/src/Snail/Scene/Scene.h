@@ -28,6 +28,8 @@ namespace Snail {
 		Scene();
 		~Scene();
 
+		void Clear();
+
 		Entity CreateEntity(const std::string& name = "");
 		Entity CreateEntityWithUuid(const boost::uuids::uuid& uuid, const std::string& name = "");
 		void DestroyEntity(Entity entity);

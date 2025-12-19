@@ -2,10 +2,15 @@
 
 #include "Snail.h"
 
+#include "Snail/Utils/GenUI.h"
+#include "Snail/Utils/FileSelecter.h"
+#include "Snail/Scene/SceneUtils.h"
+
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/EditorViewportPanel.h"
 #include "Panels/GlobalSettingsPanel.h"
 
+#include <filesystem>
 #include "glm/glm.hpp"
 
 namespace Snail {
@@ -237,6 +242,54 @@ namespace Snail {
 
             Application::Get().GetImGuiLayer()->BeginDockingSpace();
 
+            // 编辑模式下菜单
+			if (ImGui::BeginMenuBar())
+			{
+				std::vector<MenuNode> mainMenu = {
+					{ u8"文件", {
+						{ u8"新建...", {
+							{ u8"新建文件", []() { /*TODO: 新建场景*/ }}
+						}},
+						{ u8"打开...", {
+							{ u8"打开场景", []() { FileSelecter::Open("OpenSceneDlg", u8"选择场景文件", ".snl"); } }
+						}},
+						{ u8"保存...", {
+							{ u8"保存文件", []() { FileSelecter::Open("SaveSceneDlg", u8"保存场景文件", ".snl"); } }
+						}},
+						{ u8"退出", []() { Application::Get().quit(); }, "Alt+F4" }
+					}},
+					{ u8"Themes", {
+						{ u8"深色(Dark)", []() { Application::Get().GetImGuiLayer()->SetDarkThemeColors(); } },
+						{ u8"浅色(Light)", []() { Application::Get().GetImGuiLayer()->SetLightThemeColors(); } },
+						{ u8"赛博朋克(Cyberpunk Neon)", []() { Application::Get().GetImGuiLayer()->SetCyberpunkThemeColors(); } }
+					}}
+				};
+				GenUI::MenuHierarchy(mainMenu);
+				ImGui::EndMenuBar();
+			}
+			// 处理“打开场景”
+			// 使用 [&] 捕获外部的 scene 和 ec 变量，使用 [this] 只能捕获类成员
+			FileSelecter::Handle("OpenSceneDlg", [&](const std::string& path) {
+				SceneSerializer serializer(m_Scene, m_EditorCamera);
+
+                m_Scene->Clear();
+				if (serializer.Deserialize(path)) {
+					SNL_CORE_INFO("成功加载场景: {0}", path);
+				}
+				else {
+					SNL_CORE_ERROR("加载场景失败: {0}", path);
+				}
+				});
+
+			// 处理“保存场景”
+			FileSelecter::Handle("SaveSceneDlg", [&](const std::string& path) {
+				SceneSerializer serializer(m_Scene, m_EditorCamera);
+
+				std::string sceneName = std::filesystem::path(path).stem().string();
+
+				serializer.Serialize(sceneName, path);
+				SNL_CORE_INFO("场景已保存至: {0}", path);
+				});
 
             m_SHpanel.Show();
             m_EVpanel.Show(m_FBO, m_EditorCamera);

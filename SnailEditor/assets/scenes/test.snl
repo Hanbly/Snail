@@ -1,0 +1,109 @@
+Scene: test
+SceneSettings:
+  AmbientStrength: 0.100000001
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 45
+  Near: 0.00999999978
+  Far: 5000
+  Aspect: 0.990234375
+  ViewportWidth: 1014
+  ViewportHeight: 1024
+  ViewMatrix: [-0.455389142, -0.541235685, 0.706883788, -0, -0, 0.793990552, 0.607930183, 0, -0.890292525, 0.2768448, -0.36157465, -0, -289.361023, 118.422188, -900.955322, 1]
+  Position: [569.193115, 453.691803, -616.163086]
+  DirvecFront: [-0.706883788, -0.607930183, 0.36157465]
+  DirvecRight: [-0.455389142, 0, -0.890292525]
+  DirvecUp: [-0.541235685, 0.793990552, 0.2768448]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: 37.439991
+  DirvecYaw: -117.089973
+  FocalPoint: [-24.8486996, -57.192646, -312.307678]
+  Distance: 840.367004
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  ZoomSpeed: 0.5
+Entities:
+  - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
+    TagComponent:
+      Tag: Sky
+    SkyboxComponent:
+      Active: true
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/TextureCube_Shader.glsl
+      Meshes:
+        - PrimitiveType: Skybox
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/skybox/right.jpg, assets/images/skybox/left.jpg, assets/images/skybox/top.jpg, assets/images/skybox/bottom.jpg, assets/images/skybox/front.jpg, assets/images/skybox/back.jpg]
+      Visible: true
+      EdgeEnable: false
+  - Entity: 34048efb-a663-43ac-9167-99bea6fb20fa
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Position: [0, 60, 0]
+      Rotation: [25, 25, 25]
+      Scale: [25, 25, 25]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/cube.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/images/kulisu.png]
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/images/mayoli.png]
+      Visible: true
+      EdgeEnable: false
+  - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Position: [0, 160, 0]
+      Rotation: [25, 25, 25]
+      Scale: [25, 25, 25]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Intensity: 0.100000001
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/light_box.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: d7da4ccf-4223-4bd2-a646-b81f729236aa
+    TagComponent:
+      Tag: SportsCar
+    TransformComponent:
+      Position: [0, 90, 0]
+      Rotation: [0, 0, 0]
+      Scale: [25, 25, 25]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Model_Shader.glsl
+      FilePath: assets/models/sportsCar/sportsCar.obj
+      Visible: true
+      EdgeEnable: false
+  - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
+    TagComponent:
+      Tag: Spider
+    TransformComponent:
+      Position: [10, 10, -210]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Model_Shader.glsl
+      FilePath: assets/models/spider-fbx/Spider.fbx
+      Visible: true
+      EdgeEnable: false

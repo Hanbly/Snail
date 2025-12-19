@@ -25,4 +25,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
+#define IMGUI_DEFINE_MATH_OPERATORS // For ImGuiFileDialog
 #include "imgui.h"
+#include "imgui_internal.h"
+#include "ImGuiFileDialog.h"

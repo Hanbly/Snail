@@ -16,8 +16,13 @@ namespace Snail {
 
 	Scene::~Scene()
 	{
-		
+        Clear();
 	}
+
+    void Scene::Clear()
+    {
+        m_Registry.clear();
+    }
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{

@@ -79,11 +79,12 @@ namespace Snail {
 			SNL_CORE_ASSERT(false, "Model Importer 读取模型错误");
 			return;
 		}
-		// 示例：assets/models/sponza/sponza.obj 
+		// 示例：assets/models/sponza/sponza.obj
+		std::filesystem::path stdPath = path;
 		m_FullPath = path;
-		//      0 - - - - - - - - - -/ 后面的剔除，取assets/models/sponza
-		// 只取 0 到 从后往前数第一个'/'位置 的字符串，find_last_of返回首次找到'/'的索引
-		m_Directory = path.substr(0, path.find_last_of('/'));
+
+		// parent_path() 自动提取目录
+	    m_Directory = stdPath.parent_path().string(); 
 
 		ProcessNode(scene->mRootNode, scene, glm::mat4(1.0f));
 

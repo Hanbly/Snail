@@ -179,35 +179,6 @@ namespace Snail {
 			ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu(u8"文件"))
-			{				
-				if (ImGui::MenuItem(u8"退出"))
-					Application::Get().quit();
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu(u8"Themes"))
-			{
-				if (ImGui::MenuItem(u8"深色(Dark)"))
-					SetDarkThemeColors();
-				if (ImGui::MenuItem(u8"浅色(Light)"))
-					SetLightThemeColors();
-				if (ImGui::MenuItem(u8"赛博朋克(Cyberpunk Neon)"))
-					SetCyberpunkThemeColors();
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-	}
-
-	static ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs) {
-		return ImVec4(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z, lhs.w * rhs.w);
-	}
-
-	static ImVec4 operator*(const ImVec4& lhs, float rhs) {
-		return ImVec4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
 	}
 
 	void ImGuiLayer::SetDarkThemeColors()

@@ -2,9 +2,6 @@
 
 #include "Panel.h"
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
 #include "glm/gtc/type_ptr.hpp"
 #include "boost/uuid/uuid.hpp"
 #include "boost/uuid/uuid_io.hpp"
@@ -84,9 +81,18 @@ namespace Snail {
             if (m_SelectedEntity)
             {
                 DrawComponents(m_SelectedEntity);
-            }
+            }			
 
             ImGui::End();
+
+            // 处理回调
+            FileSelecter::Handle("ModelImportKey", [this](const std::string& path) {
+				if (m_SelectedEntity) {
+					auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl");
+					auto model = std::make_shared<Model>(shader, path);
+					m_SelectedEntity.AddComponent<ModelComponent>(model);
+				}
+				});
         }
     public:
         //const Entity& GetSelectedEntity() const { return m_SelectedEntity; }
@@ -135,33 +141,55 @@ namespace Snail {
                 ImGui::OpenPopup("AddComponent");
             if (ImGui::BeginPopup("AddComponent"))
             {
-                if (ImGui::MenuItem("Model 现不支持添加，因为model没有数据")) {
-                    // TODO: 现不支持添加，因为model没有数据
-                    if (!m_SelectedEntity.HasAllofComponent<ModelComponent>())
-                        //m_SelectedEntity.AddComponent<ModelComponent>();
-                    ImGui::CloseCurrentPopup();
+                if (ImGui::BeginMenu("Model Renderer"))
+                {
+                    // 1. 基础图元子菜单
+                    if (ImGui::BeginMenu("基础图元"))
+                    {
+                        // 定义一个 lambda 方便复用创建逻辑
+                        auto AddPrimitive = [&](PrimitiveType type, const std::string& name) {
+                            if (!m_SelectedEntity.HasAllofComponent<ModelComponent>()) {
+                                // 加载一个默认着色器 (这里路径需根据你项目实际情况修改)
+                                auto defaultShader = ShaderLibrary::Load("assets/shaders/Standard.glsl");
+                                // 创建图元模型，初始纹理列表为空
+                                auto model = std::make_shared<Model>(type, defaultShader, std::vector<Refptr<Texture>>{});
+                                m_SelectedEntity.AddComponent<ModelComponent>(model);
+                            }
+                            ImGui::CloseCurrentPopup();
+                            };
+
+                        if (ImGui::MenuItem("Cube"))   AddPrimitive(PrimitiveType::Cube, "Cube");
+                        if (ImGui::MenuItem("Sphere")) AddPrimitive(PrimitiveType::Sphere, "Sphere");
+                        if (ImGui::MenuItem("Plane"))  AddPrimitive(PrimitiveType::Plane, "Plane");
+
+                        ImGui::EndMenu();
+                    }
+
+                    // 2. 导入外部模型
+					if (ImGui::MenuItem("导入外部模型..."))
+					{
+                        FileSelecter::Open("ModelImportKey", "导入模型", ".obj,.fbx,.gltf");
+					}
+                    ImGui::EndMenu();
                 }
-                if (ImGui::MenuItem("Point Light")) {
-                    if (!m_SelectedEntity.HasAllofComponent<PointLightComponent>())
-                        m_SelectedEntity.AddComponent<PointLightComponent>();
-                    ImGui::CloseCurrentPopup();
-                }
-                
                 ImGui::EndPopup();
             }
             ImGui::SameLine();
             if (ImGui::Button("Delete Entity"))
                 ImGui::OpenPopup("DeleteEntity");
 
+            bool deleteFlag = false;
             if (ImGui::BeginPopup("DeleteEntity"))
             {
                 m_Scene->DestroyEntity(entity);
 
                 ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
-                return;
+
+                deleteFlag = true;
             }
             ImGui::PopItemWidth();
+            if (deleteFlag) return;
 
             // --- UUID 组件 (只读) ---
             DrawComponent<UUIDComponent>("UUID", entity, [](auto& component) {

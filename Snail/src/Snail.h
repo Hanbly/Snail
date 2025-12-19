@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+#define IMGUI_DEFINE_MATH_OPERATORS // For ImGuiFileDialog
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "ImGuiFileDialog.h"
+
 //-------------Core-----------------
 #include "Snail/Basic/InputCodes.h"
 #include "Snail/Basic/Timestep.h"
@@ -7,7 +12,7 @@
 #include "Snail/Input/Input.h"
 //---------------------------------
 
-//----------------------------------
+//------------ 内部结构 ---------------
 #include "Snail/Logger/Log.h"
 #include "Snail/Events/Event.h"
 #include "Snail/Layer/Layer.h"
@@ -36,3 +41,7 @@
 #include "Snail/Scene/Component.h"
 #include "Snail/Scene/SceneUtils.h"
 //--------------------------------
+
+// ----------- Utils ---------------
+#include "Snail/Utils/FileSelecter.h"
+// ---------------------------------
