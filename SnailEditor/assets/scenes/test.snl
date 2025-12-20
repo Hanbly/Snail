@@ -9,16 +9,16 @@ EditorCamera:
   Aspect: 0.990234375
   ViewportWidth: 1014
   ViewportHeight: 1024
-  ViewMatrix: [-0.455389142, -0.541235685, 0.706883788, -0, -0, 0.793990552, 0.607930183, 0, -0.890292525, 0.2768448, -0.36157465, -0, -289.361023, 118.422188, -900.955322, 1]
-  Position: [569.193115, 453.691803, -616.163086]
-  DirvecFront: [-0.706883788, -0.607930183, 0.36157465]
-  DirvecRight: [-0.455389142, 0, -0.890292525]
-  DirvecUp: [-0.541235685, 0.793990552, 0.2768448]
+  ViewMatrix: [0.911391973, -0.17229265, 0.373737842, -0, -1.49011612e-08, 0.908145845, 0.418653995, 0, -0.411539465, -0.381557912, 0.827676833, -0, 11.4147816, 53.5315933, -723.735474, 1]
+  Position: [269.307068, 254.380249, 624.142029]
+  DirvecFront: [-0.373737842, -0.418654025, -0.827676773]
+  DirvecRight: [0.911391973, 0, -0.411539465]
+  DirvecUp: [-0.17229265, 0.908145845, -0.381557912]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 37.439991
-  DirvecYaw: -117.089973
-  FocalPoint: [-24.8486996, -57.192646, -312.307678]
-  Distance: 840.367004
+  EulerPitch: 24.7496357
+  DirvecYaw: -384.301575
+  FocalPoint: [-16.739542, -66.0437241, -9.33448601]
+  Distance: 765.367004
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -66,7 +66,7 @@ Entities:
     TagComponent:
       Tag: Light
     TransformComponent:
-      Position: [0, 160, 0]
+      Position: [41.2000008, 170.199997, 170]
       Rotation: [25, 25, 25]
       Scale: [25, 25, 25]
     PointLightComponent:
@@ -81,19 +81,6 @@ Entities:
             []
       Visible: true
       EdgeEnable: false
-  - Entity: d7da4ccf-4223-4bd2-a646-b81f729236aa
-    TagComponent:
-      Tag: SportsCar
-    TransformComponent:
-      Position: [0, 90, 0]
-      Rotation: [0, 0, 0]
-      Scale: [25, 25, 25]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Model_Shader.glsl
-      FilePath: assets/models/sportsCar/sportsCar.obj
-      Visible: true
-      EdgeEnable: false
   - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
     TagComponent:
       Tag: Spider
@@ -105,5 +92,57 @@ Entities:
       IsImported: true
       ShaderPath: assets/shaders/Model_Shader.glsl
       FilePath: assets/models/spider-fbx/Spider.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 7acb17e4-c17a-4399-bece-5380d9f95bac
+    TagComponent:
+      Tag: 球
+    TransformComponent:
+      Position: [76.4000015, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [100, 100, 100]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Sphere.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: d084f868-e7e2-4744-8dda-b7a3ff05091c
+    TagComponent:
+      Tag: 立方体
+    TransformComponent:
+      Position: [-2.29999995, 0, 173.699997]
+      Rotation: [0, 0, 0]
+      Scale: [25, 25, 25]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Cube.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 03c375ba-8704-42c8-a55e-bfa5468c30be
+    TagComponent:
+      Tag: 半锥体
+    TransformComponent:
+      Position: [-167.899994, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [100, 100, 100]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Tapered Cylinder.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 4faa9a71-76eb-436f-91a0-6dd0e8624a18
+    TagComponent:
+      Tag: 圆环
+    TransformComponent:
+      Position: [87.6999969, -10.8000002, 237.399994]
+      Rotation: [0, 0, 0]
+      Scale: [40, 40, 40]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Torus.fbx
       Visible: true
       EdgeEnable: false

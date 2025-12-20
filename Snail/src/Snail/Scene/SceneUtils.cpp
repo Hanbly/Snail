@@ -328,6 +328,11 @@ namespace Snail {
 	{
 		SNL_PROFILE_FUNCTION();
 
+
+		// 单次加载场景内，设置模型缓存，防止相同模型创建多个实体（对应实例化批量渲染功能）
+		static std::map<std::string, Refptr<Model>> s_ModelCache;
+		s_ModelCache.clear();
+
 		std::ifstream infile(filepath);
 		if (!infile.is_open()) {
 			SNL_CORE_ERROR("无法打开文件进行场景加载: {0}", filepath);
@@ -464,18 +469,28 @@ namespace Snail {
 					Refptr<Shader> shader = ShaderLibrary::Load(shaderPath);
 
 					Refptr<Model> model = nullptr;
+					std::string cacheKey;
 
 					if (isImported)	{
-						// --- 导入的外部模型 (FBX/OBJ) ---
+						cacheKey = modelComponent["FilePath"].as<std::string>();
 						std::string filePath = modelComponent["FilePath"].as<std::string>();
-						// 调用 Model 构造函数加载文件
-						model = std::make_shared<Model>(shader, filePath); // TODO: 设置缓存，并先检查缓存
+
+						if (!cacheKey.empty() && s_ModelCache.find(cacheKey) != s_ModelCache.end()) {
+							model = s_ModelCache[cacheKey];
+						}
+						else {
+							// 调用 Model 构造函数加载文件
+							model = std::make_shared<Model>(shader, filePath);
+							s_ModelCache[cacheKey] = model;
+						}
 					}
 					else {
 						// --- 图元 (Cube/Sphere) + 纹理重建 ---
 						auto meshesNode = modelComponent["Meshes"];
 						if (meshesNode && meshesNode.size() > 0) {
 							// 简化：目前 Light/Cube 只有一个 Mesh
+							cacheKey = "Primitive:" + meshesNode[0]["PrimitiveType"].as<std::string>() + "|" + shaderPath;
+
 							auto meshNode = meshesNode[0];
 
 							std::string primStr = meshNode["PrimitiveType"].as<std::string>();
@@ -494,13 +509,21 @@ namespace Snail {
 										if (auto texture = TextureLibrary::Load(paths, StringToTextureUsage(usage))) {
 											textureDataList.push_back(texture);
 										}
+
+										for (const auto& path : paths) cacheKey += "|" + path; // 把纹理也附加作为缓存的键
 									}									
 								}
 							}
 
-							// 调用 Model 构造函数创建图元 
-							// (不需要传入 vertices/indices，内部根据 PrimitiveType 生成)
-							model = std::make_shared<Model>(primType, shader, textureDataList);
+							if (!cacheKey.empty() && s_ModelCache.find(cacheKey) != s_ModelCache.end()) {
+								model = s_ModelCache[cacheKey];
+							}
+							else {
+								// 调用 Model 构造函数创建图元 
+								// (不需要传入 vertices/indices，内部根据 PrimitiveType 生成)
+								model = std::make_shared<Model>(primType, shader, textureDataList);
+								s_ModelCache[cacheKey] = model;
+							}
 						}
 					}
 

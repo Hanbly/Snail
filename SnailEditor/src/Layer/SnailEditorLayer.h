@@ -159,8 +159,8 @@ namespace Snail {
             //}
 
 			SceneSerializer serializer(m_Scene, m_EditorCamera);
-			serializer.Deserialize("assets/scenes/LoadScene.snl");
-            serializer.Serialize("Test Scene", "assets/scenes/SaveScene.snl");
+			serializer.Deserialize("assets/scenes/test.snl");
+            //serializer.Serialize("Test Scene", "assets/scenes/SaveScene.snl");
             //------------------------------------------------------------------------------
         }
         virtual void OnDetach() override {

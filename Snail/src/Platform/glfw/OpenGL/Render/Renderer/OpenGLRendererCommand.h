@@ -20,6 +20,8 @@ namespace Snail {
 		virtual void ClearImpl() const override;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const override;
 
+		virtual void DrawIndexedInstancedImpl(const Refptr<VertexArray>& vertexArray, uint32_t indexCount) const override;
+
 		virtual void StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const override;
 		virtual void StencilMaskImpl(const bool& status) const override;
 		virtual void DepthTestImpl(const bool& enable) const override;

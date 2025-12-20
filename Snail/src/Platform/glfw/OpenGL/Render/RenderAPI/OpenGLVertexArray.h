@@ -13,6 +13,7 @@ namespace Snail {
 		uint32_t m_VertexBufferIndexOffset;
 		Refptr<VertexBuffer> m_VertexBuffer;
 		Refptr<IndexBuffer> m_IndexBuffer;
+		bool m_SettedInstanceBuffer = false;
 	public:
 		OpenGLVertexArray();
 		~OpenGLVertexArray();
@@ -22,6 +23,8 @@ namespace Snail {
 
 		virtual const Refptr<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 		virtual void SetIndexBuffer(const Refptr<IndexBuffer>& indexBuffer) override;
+
+		virtual void SetInstanceBuffer(const Refptr<VertexBuffer>& vertexBuffer) override;
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;

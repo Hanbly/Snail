@@ -48,6 +48,8 @@ namespace Snail {
 		virtual void ClearImpl() const = 0;
 		virtual void DrawIndexedImpl(const Refptr<VertexArray>& vertexArray) const = 0;
 
+		virtual void DrawIndexedInstancedImpl(const Refptr<VertexArray>& vertexArray, uint32_t indexCount) const = 0;
+
 		virtual void StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const = 0;
 		virtual void StencilMaskImpl(const bool& status) const = 0;
 		virtual void DepthTestImpl(const bool& enable) const = 0;
@@ -65,6 +67,9 @@ namespace Snail {
 		{ RC->ClearImpl(); }
 		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) 
 		{ RC->DrawIndexedImpl(vertexArray); }
+
+		inline static void DrawIndexedInstanced(const Refptr<VertexArray>& vertexArray, uint32_t indexCount)
+		{ RC->DrawIndexedInstancedImpl(vertexArray, indexCount); }
 
 		inline static void StencilFunc(const StencilFuncType& type, const int& ref, const int& mask)
 		{ RC->StencilFuncImpl(type, ref, mask); }

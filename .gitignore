@@ -37,3 +37,5 @@ CMakeSettings.json
 **/models/**/*.blend
 
 **/models/**/**/*.txt
+
+**/models/**/**/**

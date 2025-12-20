@@ -4,12 +4,23 @@
 
 #include "Renderer3D.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/norm.hpp"
+
 namespace Snail {
 
 	Renderer3D::Renderer3DSceneData Renderer3D::s_3DSceneData;
 
 	void Renderer3D::Init()
 	{
+		// 创建实例 VBO，大小为 MaxInstances * (sizeof(glm::mat4) + sizeof(glm::mat3))
+		s_3DSceneData.InstanceVBO = VertexBuffer::Create(MAX_INSTANCES_PER_BATCH * sizeof(InstanceData));
+		// 设置布局
+		s_3DSceneData.InstanceVBO->SetLayout(BufferLayout::Create({ 
+			{ "a_Model", VertexDataType::Mat4 },
+			{ "a_NormalMatrix", VertexDataType::Mat3 } // 法线矩阵
+			}));
+
 		ShaderLibrary::Load("single_color", "assets/shaders/single_color.glsl");
 		ShaderLibrary::Load("edge_shader", "assets/shaders/edge_shader.glsl");
 	}
@@ -37,6 +48,8 @@ namespace Snail {
 	void Renderer3D::EndScene()
 	{
 		SNL_PROFILE_FUNCTION();
+
+		FlushMeshes();
 	}
 
 	void Renderer3D::DrawSkybox(const Model& model, const EditorCamera& camera)
@@ -78,20 +91,20 @@ namespace Snail {
 
 
 		// 绑定 Shader，绑定纹理，上传材质特有的 Uniform
-		mesh.GetMaterial()->Bind();
+		auto material = mesh.GetMaterial();
+		material->GetShader()->Bind();
 
-		// 这些是所有物体共用的，但在 Draw 时需要设置给当前绑定的 Shader
-		auto shader = mesh.GetMaterial()->GetShader();
+		material->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
+		material->SetMat4("u_Model", transform);
+		material->SetMat3("u_NormalMatrix", glm::transpose(glm::inverse(glm::mat3(transform))));
 
-		shader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
-		shader->SetMat4("u_Model", transform);
-		shader->SetMat3("u_NormalMatrix", glm::transpose(glm::inverse(glm::mat3(transform))));
+		material->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
+		material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
+		material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
 
-		shader->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
-		shader->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
-		shader->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		shader->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		shader->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
+		material->Bind();
 
 		// 绘制几何体
 		mesh.GetVAO()->Bind();
@@ -132,8 +145,85 @@ namespace Snail {
 
 
 		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
-			DrawMesh(*mesh, edgeEnable, transform);
+			//DrawMesh(*mesh, edgeEnable, transform);
+			SubmitMesh(mesh, transform);
 		}
+	}
+
+	void Renderer3D::SubmitMesh(const Refptr<Mesh>& mesh, const glm::mat4& transform)
+	{
+		s_3DSceneData.MeshInstanceQueue[mesh].push_back(transform);
+	}
+
+	void Renderer3D::FlushMeshes()
+	{
+		SNL_PROFILE_FUNCTION();
+
+
+		static std::vector<InstanceData> s_InstanceBufferData;
+
+		// 遍历所有不同的 Mesh
+		for (auto& [mesh, transforms] : s_3DSceneData.MeshInstanceQueue)
+		{
+			if (transforms.empty()) continue;
+
+			// 绑定材质
+			auto material = mesh->GetMaterial();
+			material->GetShader()->Bind();
+
+			// 设置全局 Uniform (VP矩阵, 光照等)
+			// 注意：u_Model 不再通过 Uniform 设置，而是通过 InstanceVBO 传递
+			material->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
+			material->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
+			material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
+			material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+			material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
+
+			material->Bind();
+
+			// -------- 计算法线矩阵 -------------
+			s_InstanceBufferData.clear();
+			s_InstanceBufferData.reserve(transforms.size());
+
+			for (const auto& transform : transforms)
+			{
+				InstanceData data;				
+				data.ModelMatrix = transform;
+				// --- 检查矩阵是不是等比缩放 ---
+				float sx2 = glm::length2(glm::vec3(transform[0]));
+				float sy2 = glm::length2(glm::vec3(transform[1]));
+				float sz2 = glm::length2(glm::vec3(transform[2]));
+				// 允许一点点误差
+				bool isUniform = glm::abs(sx2 - sy2) < 1e-4 && glm::abs(sy2 - sz2) < 1e-4;
+				if (isUniform) { // 如果是统一缩放（或者没有缩放），直接取 3x3
+					data.NormalMatrix = glm::mat3(transform);
+				}
+				else { // 需要求逆转置
+					data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
+				}
+				data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
+
+				s_InstanceBufferData.push_back(data);
+			}
+
+			// 上传 ModelMatrix + NormalMatrix
+			uint32_t dataSize = (uint32_t)s_InstanceBufferData.size() * sizeof(InstanceData);
+			s_3DSceneData.InstanceVBO->SetData(s_InstanceBufferData.data(), dataSize);
+
+			// 绑定 Mesh 的 VAO 并挂载 Instance Buffer
+			auto vao = mesh->GetVAO();
+			vao->Bind();
+
+			// 这一步将 InstanceVBO 绑定到该 VAO 的属性位置上 (例如 location 3,4,5,6)
+			// 注意：如果这行代码开销大，可以只在第一次绘制该 Mesh 时做一次，但需要 VAO 记录状态
+			vao->SetInstanceBuffer(s_3DSceneData.InstanceVBO);
+
+			// 4. 执行实例化绘制命令
+			RendererCommand::DrawIndexedInstanced(vao, (uint32_t)transforms.size());
+		}
+
+		// 清空队列，准备下一帧
+		s_3DSceneData.MeshInstanceQueue.clear();
 	}
 
 }

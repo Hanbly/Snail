@@ -19,6 +19,7 @@ namespace Snail {
 	public:
 		virtual ~VertexBuffer() {}
 
+		virtual void SetData(const void* data, uint32_t size) = 0;
 		virtual std::vector<Vertex> GetVertices() const = 0;
 		virtual Refptr<BufferLayout> GetLayout() const = 0;
 		virtual void SetLayout(const Refptr<BufferLayout>& layout) = 0;
@@ -26,6 +27,7 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		static Refptr<VertexBuffer> VertexBuffer::Create(const uint32_t& size); // 预分配内存
 		static Refptr<VertexBuffer> Create(const void* vertices, const uint32_t& size);
 	};
 

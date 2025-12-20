@@ -4,21 +4,33 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 TextureCoords;
+// mat4 自动占用 location 3, 4, 5, 6
+layout(location = 3) in mat4 a_Model; 
+// 法线矩阵 (loc 7,8,9) - 直接从 CPU 传
+layout(location = 7) in mat3 a_NormalMatrix;
 
 out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 
-uniform mat4 u_Model;
+// uniform mat4 u_Model;
 uniform mat4 u_ViewProjection;
 uniform mat3 u_NormalMatrix;
 
 void main()
 {
-    gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
+    // ------------ 临时 ----------------
+    vec4 worldPos = a_Model * vec4(position, 1.0);
+
+    v_Normal = normalize(a_NormalMatrix * a_Normal);
+    v_FragPos = vec3(worldPos);
+    gl_Position = u_ViewProjection * worldPos;
+    // ---------------------------------
+
+    //gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
     v_TextureCoords = TextureCoords;
-    v_Normal = normalize(u_NormalMatrix * a_Normal);
-    v_FragPos = vec3(u_Model * vec4(position, 1.0));
+    //v_Normal = normalize(u_NormalMatrix * a_Normal);
+    //v_FragPos = vec3(u_Model * vec4(position, 1.0));
 }
 
 #type fragment

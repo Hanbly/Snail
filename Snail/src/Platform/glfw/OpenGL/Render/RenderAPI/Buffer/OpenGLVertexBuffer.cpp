@@ -4,6 +4,16 @@
 
 namespace Snail {
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const uint32_t& size)
+		: m_Size(size)
+	{
+		glGenBuffers(1, &m_BufferId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+
+		m_VerticesData.reserve(size);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* vertices, const uint32_t& size)
 		: m_Size(size)
 	{
@@ -21,6 +31,14 @@ namespace Snail {
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
 		glDeleteBuffers(1, &m_BufferId);
+	}
+
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+		// 使用 glBufferSubData 更新部分或全部缓冲数据
+		// 注意：size 不能超过创建时的容量
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	std::vector<Vertex> OpenGLVertexBuffer::GetVertices() const

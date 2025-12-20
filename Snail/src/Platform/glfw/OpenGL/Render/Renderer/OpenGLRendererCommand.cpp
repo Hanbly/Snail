@@ -46,6 +46,13 @@ namespace Snail {
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
+	void OpenGLRendererCommand::DrawIndexedInstancedImpl(const Refptr<VertexArray>& vertexArray, uint32_t instanceCount) const
+	{
+		const uint32_t& count = vertexArray->GetIndexBuffer()->GetIndexBufferCount();
+		// 使用 glDrawElementsInstanced 进行批量渲染
+		glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr, instanceCount);
+	}
+
 	void OpenGLRendererCommand::StencilFuncImpl(const StencilFuncType& type, const int& ref, const int& mask) const
 	{
 		switch (type) {

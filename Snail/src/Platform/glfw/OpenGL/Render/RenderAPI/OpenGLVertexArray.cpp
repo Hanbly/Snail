@@ -72,6 +72,80 @@ namespace Snail {
 		m_IndexBuffer = indexBuffer;
 	}
 
+	void OpenGLVertexArray::SetInstanceBuffer(const Refptr<VertexBuffer>& vertexBuffer)
+	{
+		if (m_SettedInstanceBuffer) return;
+
+		Bind();
+		vertexBuffer->Bind();
+
+		// 复用 m_VertexBufferIndexOffset，这样实例属性的 index 会紧接在顶点属性之后
+		// 例如：Pos(0), Normal(1), Tex(2) -> ModelMatrix 会从 3 开始
+		uint32_t& index = m_VertexBufferIndexOffset;
+
+		auto& layout = vertexBuffer->GetLayout();
+		auto& elements = layout->GetLayoutElements();
+
+		for (const auto& element : elements)
+		{
+			// 这里的逻辑需要特殊处理 Matrix 类型
+			// OpenGL 中 mat4 实际上占用 4 个连续的 vec4 属性位置
+			if (element.type == VertexDataType::Mat4) {
+				uint8_t count = 4; // mat4 有 4 列
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(
+						index,
+						4, // 每一列是 vec4，也就是4个float
+						GL_FLOAT,
+						element.enableNormalize ? GL_TRUE : GL_FALSE,
+						layout->GetLayoutSize(),
+						(const void*)(element.offset + sizeof(float) * 4 * i)
+					);
+					// 关键点：设置属性除数为 1，表示每 1 个实例更新一次数据
+					glVertexAttribDivisor(index, 1);
+					index++;
+				}
+			}
+			else if (element.type == VertexDataType::Mat3) {
+				uint8_t count = 3; // mat3 有 3 列
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(
+						index,
+						3, // 注意：这里是 3 (vec3)
+						GL_FLOAT,
+						element.enableNormalize ? GL_TRUE : GL_FALSE,
+						layout->GetLayoutSize(),
+						// 偏移量计算：基础偏移 + 第 i 列 * 每列 3 个 float * float大小
+						(const void*)(element.offset + sizeof(float) * 3 * i)
+					);
+					glVertexAttribDivisor(index, 1);
+					index++;
+				}
+			}
+			else {
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(
+					index,
+					element.GetComponentCount(),
+					GetOpenGLType(element.type),
+					element.enableNormalize ? GL_TRUE : GL_FALSE,
+					layout->GetLayoutSize(),
+					(const void*)(uintptr_t)element.offset
+				);
+				glVertexAttribDivisor(index, 1);
+				index++;
+			}
+			m_SettedInstanceBuffer = true;
+		}
+
+		// 我们不需要像 m_VertexBuffer 那样存起来，因为通常实例 Buffer 是外部每一帧传入的通用Buffer
+		// 但为了生命周期安全，如果需要也可以存一个 list
+	}
+
 	void OpenGLVertexArray::Bind() const
 	{
 		glBindVertexArray(m_ArrayId);

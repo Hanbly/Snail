@@ -16,9 +16,11 @@ namespace Snail {
 
 		Refptr<BufferLayout> m_Layout;
 	public:
+		OpenGLVertexBuffer(const uint32_t& size);
 		OpenGLVertexBuffer(const void* vertices, const uint32_t& size);
 		~OpenGLVertexBuffer();
 
+		virtual void SetData(const void* data, uint32_t size) override;
 		inline virtual std::vector<Vertex> GetVertices() const override;
 		inline virtual Refptr<BufferLayout> OpenGLVertexBuffer::GetLayout() const override { return m_Layout; }
 		inline virtual void OpenGLVertexBuffer::SetLayout(const Refptr<BufferLayout>& layout) override {
