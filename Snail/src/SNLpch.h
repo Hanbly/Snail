@@ -15,17 +15,16 @@
 #include <string>
 #include <vector>
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/fmt/ostr.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/fmt/ostr.h>
 
 #include "Snail/Logger/Log.h"
 #include "Snail/Events/Event.h"
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-#define IMGUI_DEFINE_MATH_OPERATORS // For ImGuiFileDialog
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "ImGuiFileDialog.h"
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <ImGuiFileDialog.h>

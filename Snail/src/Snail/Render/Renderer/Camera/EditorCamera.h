@@ -27,6 +27,7 @@ namespace Snail {
 			case EditorCameraMode::Arcball: return "Arcball";
 			default: return "None";
 		}
+		return "";
 	}
 
 	static EditorCameraMode StringToEditorCameraMode(const std::string& modestr)
@@ -35,6 +36,8 @@ namespace Snail {
 		if (modestr == "Arcball") { return EditorCameraMode::Arcball; }
 		if (modestr == "None") { return EditorCameraMode::None; }
 		SNL_CORE_ASSERT(false, "EditorCamera::StringToEditorCameraMode: 未知编辑器相机模式! {0}", modestr.c_str());
+
+		return EditorCameraMode::None;
 	}
 
 	enum class EditorCameraTranslateDirection { // 平移方向

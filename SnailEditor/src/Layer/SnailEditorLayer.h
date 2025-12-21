@@ -11,7 +11,7 @@
 #include "Panels/GlobalSettingsPanel.h"
 
 #include <filesystem>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 namespace Snail {
 

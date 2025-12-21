@@ -33,7 +33,7 @@ namespace Snail {
 		m_VAO = VertexArray::Create();
 		m_VAO->Bind();
 
-		uint32_t dataSize = vertices.size() * sizeof(Vertex);
+		uint32_t dataSize = static_cast<uint32_t>(vertices.size() * sizeof(Vertex));
 		Refptr<VertexBuffer> vbo = VertexBuffer::Create(vertices.data(), dataSize);
 		vbo->Bind();
 
@@ -48,7 +48,7 @@ namespace Snail {
 		vbo->SetLayout(layout);
 		m_VAO->SetVertexBuffer(vbo);
 
-		dataSize = indices.size() * sizeof(uint32_t);
+		dataSize = static_cast<uint32_t>(indices.size() * sizeof(uint32_t));
 		Refptr<IndexBuffer> ibo = IndexBuffer::Create(indices.data(), dataSize);
 		m_VAO->SetIndexBuffer(ibo);
 

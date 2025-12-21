@@ -1,6 +1,6 @@
 ﻿#include "SNLpch.h"
 
-#include "stb_image.h"
+#include <stb_image.h>
 
 #include "OpenGLTexture.h"
 

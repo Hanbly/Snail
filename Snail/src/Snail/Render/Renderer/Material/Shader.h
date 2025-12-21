@@ -3,7 +3,7 @@
 #include "Snail/Basic/Core.h"
 #include "Snail/Basic/Macro.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 typedef unsigned int GLenum;
 typedef int GLint;

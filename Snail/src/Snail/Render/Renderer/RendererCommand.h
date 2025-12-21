@@ -5,7 +5,7 @@
 
 #include "Snail/Render/RenderAPI/VertexArray.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 namespace Snail {
 

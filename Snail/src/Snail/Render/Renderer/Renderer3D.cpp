@@ -4,8 +4,7 @@
 
 #include "Renderer3D.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtx/norm.hpp"
+#include <glm/gtx/norm.hpp>
 
 namespace Snail {
 

@@ -5,8 +5,8 @@
 
 #include "Scene.h"
 
-#include "boost/uuid/uuid.hpp"
-#include "boost/uuid/nil_generator.hpp"
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/nil_generator.hpp>
 
 namespace Snail {
 

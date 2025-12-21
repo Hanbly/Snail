@@ -17,6 +17,7 @@ namespace Snail {
 		    case SceneCameraProjectionType::Orthographic: return "Orthographic";
 		    default: return "None";
 		}
+		return "";
 	}
 
 	class SceneCamera : public Camera {

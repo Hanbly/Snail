@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Snail/Basic/Core.h"
 #include "Snail/Basic/Macro.h"
@@ -24,6 +24,7 @@ namespace Snail {
 		virtual const Refptr<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 		virtual void SetIndexBuffer(const Refptr<IndexBuffer>& indexBuffer) override;
 
+		// 设置某个 实例化属性数组 到 this（vao）的布局属性之中，之后在shader通过顶点属性（location = n）获取
 		virtual void SetInstanceBuffer(const Refptr<VertexBuffer>& vertexBuffer) override;
 
 		virtual void Bind() const override;

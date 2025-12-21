@@ -39,6 +39,8 @@ namespace Snail {
 		if (typestr == "Skybox") { return PrimitiveType::Skybox; }
 		if (typestr == "None") { return PrimitiveType::None; }
 		SNL_CORE_ASSERT(false, "Mesh::StringToPrimitiveType: 未知图元类型! {0}", typestr.c_str());
+
+		return PrimitiveType::None;
 	}
 
 	class Mesh {

@@ -2,9 +2,9 @@
 
 #include "Panel.h"
 
-#include "glm/gtc/type_ptr.hpp"
-#include "boost/uuid/uuid.hpp"
-#include "boost/uuid/uuid_io.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 namespace Snail {
 
@@ -258,7 +258,7 @@ namespace Snail {
 								auto textures = mesh->GetTextures();
 								for (size_t t = 0; t < textures.size(); t++) {
 									const auto& texture = textures[t];
-									ImGui::PushID(t); // 防止同名 UI 冲突
+									ImGui::PushID(static_cast<int>(t)); // 防止同名 UI 冲突
 
 									// 布局：左侧图片，右侧参数
 									ImGui::BeginGroup();

@@ -9,15 +9,19 @@
 #include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Material/TextureLibrary.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include "boost/uuid/uuid_io.hpp"
-#include "boost/lexical_cast.hpp"
-#include "boost/uuid/string_generator.hpp"
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/string_generator.hpp>
 
-#include "yaml-cpp/yaml.h"
+#pragma warning(push)
+#pragma warning(disable : 4251) // 抑制 "needs to have dll-interface"
+#pragma warning(disable : 4275) // 抑制 "non dll-interface class used as base"
+#include <yaml-cpp/yaml.h>
+#pragma warning(pop)
 
 namespace Snail {
     // ------------------------------------ 鼠标射线 -----------------------------------------------------

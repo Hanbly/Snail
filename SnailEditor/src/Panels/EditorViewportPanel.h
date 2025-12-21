@@ -58,8 +58,8 @@ namespace Snail {
             ImGui::Text("视口大小: %.0f x %.0f", ImguiViewportSize.x, ImguiViewportSize.y);
             if ((m_ViewportSize != *(glm::vec2*)&ImguiViewportSize) && ImguiViewportSize.x > 0 && ImguiViewportSize.y > 0) {
                 fbo->Resize((uint32_t)ImguiViewportSize.x, (uint32_t)ImguiViewportSize.y);
-                m_ViewportSize.x = (uint32_t)ImguiViewportSize.x;
-                m_ViewportSize.y = (uint32_t)ImguiViewportSize.y;
+                m_ViewportSize.x = ImguiViewportSize.x;
+                m_ViewportSize.y = ImguiViewportSize.y;
 
                 ec->SetViewportSize((float)m_ViewportSize.x, (float)m_ViewportSize.y);
             }

@@ -6,12 +6,15 @@
 #include "Snail/Render/Renderer/Mesh/Mesh.h"
 #include "Snail/Render/Renderer/Material/TextureLibrary.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
+#pragma warning(push)
+#pragma warning(disable : 4244)// 禁用 C4244 警告 (从 'type1' 转换到 'type2'，可能丢失数据)
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#pragma warning(pop)// 恢复之前的警告状态
 
 namespace Snail {
 

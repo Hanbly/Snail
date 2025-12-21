@@ -3,10 +3,9 @@
 #include "Snail/Basic/Core.h"
 #include "Snail/Basic/Macro.h"
 
-#define IMGUI_DEFINE_MATH_OPERATORS // For ImGuiFileDialog
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "ImGuiFileDialog.h"
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <ImGuiFileDialog.h>
 
 namespace Snail {
 

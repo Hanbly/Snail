@@ -5,7 +5,7 @@
 
 #include "Snail/Render/RenderAPI/Buffer/BufferLayout.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 namespace Snail {
 

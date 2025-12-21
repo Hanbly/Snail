@@ -92,6 +92,8 @@ project "Snail"
             "IMGUI_IMPL_OPENGL_LOADER_CUSTOM", -- 禁止ImGui重定义OpenGL宏
             "YAML_CPP_STATIC_DEFINE", -- 使用yaml的静态库
             "USE_STD_FILESYSTEM", -- ImGuiFileDialog 宏表示使用标准的 filesystem 而不是旧的 dirent.h
+            "IMGUI_DEFINE_MATH_OPERATORS", -- ImGuiFileDialog 的要求
+            "GLM_ENABLE_EXPERIMENTAL", -- 启用glm的四元数、norm等等
             "SNL_PLATFORM_WINDOWS",
             "SNL_BUILD_SLL"
             -- "SNL_BUILD_DLL"

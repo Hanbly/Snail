@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#define IMGUI_DEFINE_MATH_OPERATORS // For ImGuiFileDialog
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "ImGuiFileDialog.h"
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <ImGuiFileDialog.h>
 
 //-------------Core-----------------
 #include "Snail/Basic/InputCodes.h"

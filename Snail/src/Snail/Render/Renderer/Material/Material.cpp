@@ -56,7 +56,7 @@ namespace Snail {
 		std::vector<std::vector<std::string>> assetsList;
 		assetsList.reserve(m_Textures.size());
 		for (auto& tex : m_Textures) {
-			int assetsCount = tex.second->GetPath().size();
+			int assetsCount = static_cast<int>(tex.second->GetPath().size());
 			std::vector<std::string> assets;
 			if (assetsCount == 1) {
 				assets.push_back(tex.second->GetPath()[0]);
