@@ -147,7 +147,7 @@ namespace Snail {
 			out << YAML::Key << "MoveSensitivity" << YAML::Value << m_EC->GetMoveSensitivity();
 			out << YAML::Key << "RotateSpeed" << YAML::Value << m_EC->GetRotateSpeed();
 			out << YAML::Key << "MoveSpeed" << YAML::Value << m_EC->GetMoveSpeed();
-			out << YAML::Key << "ZoomSpeed" << YAML::Value << m_EC->GetZoomSpeed();
+			out << YAML::Key << "DollySpeed" << YAML::Value << m_EC->GetDollySpeed();
 
 			out << YAML::EndMap; // EditorCamera Map 结束
 		}

@@ -23,7 +23,7 @@ EditorCamera:
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
-  ZoomSpeed: 0.5
+  DollySpeed: 0.5
 Entities:
   - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
     TagComponent:

@@ -84,7 +84,7 @@ namespace Snail {
 		const float& GetMoveSensitivity() const		{ return m_MoveSensitivity; }
 		const float& GetRotateSpeed() const			{ return m_RotateSpeed; }
 		const float& GetMoveSpeed() const			{ return m_MoveSpeed; }
-		const float& GetZoomSpeed() const			{ return m_ZoomSpeed; }
+		const float& GetDollySpeed() const			{ return m_DollySpeed; }
 
 		// --- Set 方法 ---
 		void SetPitch(const float& pitch)				{ m_Pitch = pitch; }
@@ -100,7 +100,7 @@ namespace Snail {
 		void FPSZoom(const float& fovOffset);
 		void ArcballMove(const float& xoffset, const float& yoffset);
 		void ArcballRotate(const float& xoffset, const float& yoffset);
-		void ArcballZoom(const float& offset);
+		void ArcballDolly(const float& offset);
 		bool OnMouseScroll(MouseScrollEvent& e);
 		// --- Arcball 辅助函数 ---
 		glm::vec3 CalculatePosition() const;
@@ -109,14 +109,14 @@ namespace Snail {
 		glm::vec3 GetRightDirection() const;
 		glm::quat GetOrientation() const;
 		std::pair<float, float> PanSpeed() const;
-		float ZoomSpeed() const;
+		float DollySpeed() const;
 	private:
 		EditorCameraMode m_Mode = EditorCameraMode::FPS;
 
 		// 投影属性
 		float m_FOV = 45.0f;
 		float m_Near = 0.01f;
-		float m_Far = 5000.0f;
+		float m_Far = 50000.0f;
 		float m_Aspect = (float)1280 / 720;
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 		glm::mat4 m_ViewMatrix;
@@ -142,7 +142,7 @@ namespace Snail {
 		// 鼠标操作的灵敏度，鼠标是每帧计算实际的屏幕偏移量，直接使用偏移量*speed即可
 		float m_RotateSpeed = 0.1f;
 		float m_MoveSpeed = 0.01f;
-		float m_ZoomSpeed = 0.5f;
+		float m_DollySpeed = 0.5f;
 	};
 
 }

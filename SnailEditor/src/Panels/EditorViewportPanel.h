@@ -34,7 +34,7 @@ namespace Snail {
             bool isHovered = ImGui::IsWindowHovered();
             bool isFocused = ImGui::IsWindowFocused();
             bool isOperating = ImGui::IsMouseDown(ImGuiMouseButton_Right) || ImGui::IsMouseDown(ImGuiMouseButton_Middle);
-            if (isFocused && isOperating) {
+            if (isFocused && isOperating) { // 从视口内拖拽鼠标到视口外的情况
                 isHovered = true; // 强制保持 Hover 状态，防止拦截开启
             }
             m_ViewportHovered = isHovered;

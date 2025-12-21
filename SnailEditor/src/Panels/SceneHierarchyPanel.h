@@ -85,7 +85,7 @@ namespace Snail {
 
             ImGui::End();
 
-            // 处理回调
+            // 处理ModelImport回调
             FileSelecter::Handle("ModelImportKey", [this](const std::string& path) {
 				if (m_SelectedEntity) {
 					auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl");

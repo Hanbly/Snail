@@ -181,35 +181,6 @@ namespace Snail {
 
 			material->Bind();
 
-			// -------- 计算法线矩阵 -------------
-			s_InstanceBufferData.clear();
-			s_InstanceBufferData.reserve(transforms.size());
-
-			for (const auto& transform : transforms)
-			{
-				InstanceData data;				
-				data.ModelMatrix = transform;
-				// --- 检查矩阵是不是等比缩放 ---
-				float sx2 = glm::length2(glm::vec3(transform[0]));
-				float sy2 = glm::length2(glm::vec3(transform[1]));
-				float sz2 = glm::length2(glm::vec3(transform[2]));
-				// 允许一点点误差
-				bool isUniform = glm::abs(sx2 - sy2) < 1e-4 && glm::abs(sy2 - sz2) < 1e-4;
-				if (isUniform) { // 如果是统一缩放（或者没有缩放），直接取 3x3
-					data.NormalMatrix = glm::mat3(transform);
-				}
-				else { // 需要求逆转置
-					data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
-				}
-				data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
-
-				s_InstanceBufferData.push_back(data);
-			}
-
-			// 上传 ModelMatrix + NormalMatrix
-			uint32_t dataSize = (uint32_t)s_InstanceBufferData.size() * sizeof(InstanceData);
-			s_3DSceneData.InstanceVBO->SetData(s_InstanceBufferData.data(), dataSize);
-
 			// 绑定 Mesh 的 VAO 并挂载 Instance Buffer
 			auto vao = mesh->GetVAO();
 			vao->Bind();
@@ -218,8 +189,50 @@ namespace Snail {
 			// 注意：如果这行代码开销大，可以只在第一次绘制该 Mesh 时做一次，但需要 VAO 记录状态
 			vao->SetInstanceBuffer(s_3DSceneData.InstanceVBO);
 
-			// 4. 执行实例化绘制命令
-			RendererCommand::DrawIndexedInstanced(vao, (uint32_t)transforms.size());
+			size_t totalInstances = transforms.size();
+			size_t offset = 0;
+			while (offset < totalInstances) {
+
+				// 确保不比 MAX_INSTANCES_PER_BATCH 大
+				size_t batchCount = std::min((size_t)MAX_INSTANCES_PER_BATCH, totalInstances - offset);
+
+				// -------- 计算实例数据 -------------
+				s_InstanceBufferData.clear();
+				s_InstanceBufferData.reserve(batchCount);
+
+				for (size_t i = 0; i < batchCount; i++)
+				{
+					auto& transform = transforms[offset + i];
+
+					InstanceData data;
+					data.ModelMatrix = transform;
+					// --- 检查矩阵是不是等比缩放 ---
+					float sx2 = glm::length2(glm::vec3(transform[0]));
+					float sy2 = glm::length2(glm::vec3(transform[1]));
+					float sz2 = glm::length2(glm::vec3(transform[2]));
+					// 允许一点点误差
+					bool isUniform = glm::abs(sx2 - sy2) < 1e-4 && glm::abs(sy2 - sz2) < 1e-4;
+					if (isUniform) { // 如果是统一缩放（或者没有缩放），直接取 3x3
+						data.NormalMatrix = glm::mat3(transform);
+					}
+					else { // 需要求逆转置
+						data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
+					}
+
+					s_InstanceBufferData.push_back(data);
+				}
+
+				// 上传 ModelMatrix + NormalMatrix
+				uint32_t dataSize = (uint32_t)s_InstanceBufferData.size() * sizeof(InstanceData);
+				s_3DSceneData.InstanceVBO->SetData(s_InstanceBufferData.data(), dataSize);
+
+				// 执行实例化绘制命令
+				RendererCommand::DrawIndexedInstanced(vao, (uint32_t)batchCount);
+
+				// 推进偏移量
+				offset += batchCount;
+
+			}
 		}
 
 		// 清空队列，准备下一帧

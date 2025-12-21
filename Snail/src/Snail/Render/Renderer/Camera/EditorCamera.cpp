@@ -223,9 +223,9 @@ namespace Snail {
 		RecalculateViewMatrix();
 	}
 
-	void EditorCamera::ArcballZoom(const float& offset)
+	void EditorCamera::ArcballDolly(const float& offset)
 	{
-		m_Distance -= offset * ZoomSpeed();
+		m_Distance -= offset * DollySpeed();
 		if (m_Distance < 10.0f)
 		{
 			m_Distance = 10.0f;
@@ -243,7 +243,7 @@ namespace Snail {
 		}
 		else if (m_Mode == EditorCameraMode::Arcball) {
 			const float& offset = e.GetMouseScrollOffsetY() * 3;
-			ArcballZoom(offset);
+			ArcballDolly(offset);
 			return false;
 		}
 		return false;
@@ -285,13 +285,13 @@ namespace Snail {
 		return { xFactor, yFactor };
 	}
 
-	float EditorCamera::ZoomSpeed() const
+	float EditorCamera::DollySpeed() const
 	{
 		float distance = m_Distance * 0.2f;
 		distance = std::max(distance, 0.0f);
 		float speed = distance * distance;
 		speed = std::min(speed, 50.0f); // 限制最大速度
-		return speed * m_ZoomSpeed;
+		return speed * m_DollySpeed;
 	}
 
 }

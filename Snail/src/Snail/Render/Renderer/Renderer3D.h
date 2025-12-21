@@ -39,7 +39,7 @@ namespace Snail {
 		};
 
 		static Renderer3DSceneData s_3DSceneData;
-		static const uint32_t MAX_INSTANCES_PER_BATCH = 10000; // 批量渲染限制
+		static const uint32_t MAX_INSTANCES_PER_BATCH = 50000; // 批量渲染限制
 
 	public:
 		static void Init();
