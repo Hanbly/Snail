@@ -26,6 +26,7 @@ namespace Snail {
 		virtual void StencilMaskImpl(const bool& status) const override;
 		virtual void DepthTestImpl(const bool& enable) const override;
 		virtual void SetDepthFuncImpl(const DepthFuncType& type) const override;
+		virtual void EnableBlendImpl(const bool& enable) const override;
 	};
 
 }

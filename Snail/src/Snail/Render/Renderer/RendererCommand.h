@@ -29,7 +29,8 @@ namespace Snail {
 		enum class DepthFuncType {
 			None = 0,
 			LESS,
-			LEQUAL
+			LEQUAL,
+			ALWAYS
 		};
 		virtual ~RendererCommand() = default;
 
@@ -54,6 +55,7 @@ namespace Snail {
 		virtual void StencilMaskImpl(const bool& status) const = 0;
 		virtual void DepthTestImpl(const bool& enable) const = 0;
 		virtual void SetDepthFuncImpl(const DepthFuncType& type) const = 0;
+		virtual void EnableBlendImpl(const bool& enable) const = 0;
 
 	public:
 		inline static void Init() 
@@ -67,7 +69,6 @@ namespace Snail {
 		{ RC->ClearImpl(); }
 		inline static void DrawIndexed(const Refptr<VertexArray>& vertexArray) 
 		{ RC->DrawIndexedImpl(vertexArray); }
-
 		inline static void DrawIndexedInstanced(const Refptr<VertexArray>& vertexArray, uint32_t indexCount)
 		{ RC->DrawIndexedInstancedImpl(vertexArray, indexCount); }
 
@@ -79,6 +80,8 @@ namespace Snail {
 		{ RC->DepthTestImpl(enable); }
 		inline static void SetDepthFunc(const DepthFuncType& type) 
 		{ RC->SetDepthFuncImpl(type); }
+		inline static void EnableBlend(const bool& enable)
+		{ RC->EnableBlendImpl(enable); }
 
 		static Uniptr<RendererCommand> Create();
 	};

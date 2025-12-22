@@ -8,10 +8,14 @@ layout(location = 2) in vec2 TextureCoords;
 layout(location = 3) in mat4 a_Model; 
 // 法线矩阵 (loc 7,8,9) - 直接从 CPU 传
 layout(location = 7) in mat3 a_NormalMatrix;
+// 选中状态 0未选中 1选中
+layout(location = 10) in int a_EntityID;
 
 out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
+// 使用 flat 插值，避免整数被插值
+flat out int v_EntityID;
 
 // uniform mat4 u_Model;
 uniform mat4 u_ViewProjection;
@@ -31,16 +35,21 @@ void main()
     v_TextureCoords = TextureCoords;
     //v_Normal = normalize(u_NormalMatrix * a_Normal);
     //v_FragPos = vec3(u_Model * vec4(position, 1.0));
+
+    v_EntityID = a_EntityID;
 }
 
 #type fragment
 #version 330 core
 
-out vec4 FinalColor;
+// MRT 输出
+layout(location = 0) out vec4 FinalColor;      // 输出到 GL_COLOR_ATTACHMENT0
+layout(location = 1) out int EntityIDBuffer;   // 输出到 GL_COLOR_ATTACHMENT1 (GL_R8/GL_RED_INTEGER)
 
 in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
+flat in int v_EntityID;
 
 uniform vec4 u_LightColor;
 uniform sampler2D u_Diffuse1;
@@ -105,4 +114,7 @@ void main()
     vec3 result = (ambient + diffuse + specular) * objectColor.rgb;
 
     FinalColor = vec4(result, 1.0);
+
+    // 将选中状态写入第二个附件 (Red通道)
+    EntityIDBuffer = v_EntityID; 
 }

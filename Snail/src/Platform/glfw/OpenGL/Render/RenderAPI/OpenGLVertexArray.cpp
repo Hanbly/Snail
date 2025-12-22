@@ -126,6 +126,21 @@ namespace Snail {
 					index++;
 				}
 			}
+			else if (element.type == VertexDataType::Int ||
+					element.type == VertexDataType::Int2 ||
+					element.type == VertexDataType::Int3 ||
+					element.type == VertexDataType::Int4 ||
+					element.type == VertexDataType::Bool) {
+				glEnableVertexAttribArray(index);
+				glVertexAttribIPointer(
+					index,
+					element.GetComponentCount(),
+					GetOpenGLType(element.type),
+					layout->GetLayoutSize(),
+					(const void*)(uintptr_t)element.offset);
+				glVertexAttribDivisor(index, 1);
+				index++;
+			}
 			else {
 				glEnableVertexAttribArray(index);
 				glVertexAttribPointer(
@@ -141,9 +156,6 @@ namespace Snail {
 			}
 			m_SettedInstanceBuffer = true;
 		}
-
-		// 我们不需要像 m_VertexBuffer 那样存起来，因为通常实例 Buffer 是外部每一帧传入的通用Buffer
-		// 但为了生命周期安全，如果需要也可以存一个 list
 	}
 
 	void OpenGLVertexArray::Bind() const

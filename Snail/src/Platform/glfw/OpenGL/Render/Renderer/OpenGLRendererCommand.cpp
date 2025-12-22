@@ -81,7 +81,6 @@ namespace Snail {
 	{
 		if (enable) {
 			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LESS);
 		}
 		else {
 			glDisable(GL_DEPTH_TEST);
@@ -91,12 +90,27 @@ namespace Snail {
 	void OpenGLRendererCommand::SetDepthFuncImpl(const DepthFuncType& type) const
 	{
 		switch (type) {
-		case DepthFuncType::LESS: // (小于)
-			glDepthFunc(GL_LESS);
-			break;
-		case DepthFuncType::LEQUAL: // (小于等于)
-			glDepthFunc(GL_LEQUAL);
-			break;
+			case DepthFuncType::LESS: // (小于)
+				glDepthFunc(GL_LESS);
+				break;
+			case DepthFuncType::LEQUAL: // (小于等于)
+				glDepthFunc(GL_LEQUAL);
+				break;
+			case DepthFuncType::ALWAYS: // 始终通过
+				glDepthFunc(GL_ALWAYS);
+				break;
+			default:
+				glDepthFunc(GL_LESS);
+		}
+	}
+
+	void OpenGLRendererCommand::EnableBlendImpl(const bool& enable) const
+	{
+		if (enable) {
+			glEnable(GL_BLEND);
+		}
+		else {
+			glDisable(GL_BLEND);
 		}
 	}
 

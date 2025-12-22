@@ -17,11 +17,11 @@ namespace Snail {
 		// 设置布局
 		s_3DSceneData.InstanceVBO->SetLayout(BufferLayout::Create({ 
 			{ "a_Model", VertexDataType::Mat4 },
-			{ "a_NormalMatrix", VertexDataType::Mat3 } // 法线矩阵
+			{ "a_NormalMatrix", VertexDataType::Mat3 }, // 法线矩阵
+			{ "a_EntityID", VertexDataType::Int } // location 10
 			}));
 
-		ShaderLibrary::Load("single_color", "assets/shaders/single_color.glsl");
-		ShaderLibrary::Load("edge_shader", "assets/shaders/edge_shader.glsl");
+		ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl");
 	}
 
 	void Renderer3D::Shutdown()
@@ -113,29 +113,29 @@ namespace Snail {
 
 		RendererCommand::DrawIndexed(mesh.GetVAO());
 
-		if (edgeEnable) {
-			//RendererCommand::DepthTest(false);
-			RendererCommand::StencilMask(false); // 不再写入模板，只读取模板信息
-			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::NOTEQUAL, 1, 0xFF);
+		//if (edgeEnable) {
+		//	//RendererCommand::DepthTest(false);
+		//	RendererCommand::StencilMask(false); // 不再写入模板，只读取模板信息
+		//	RendererCommand::StencilFunc(RendererCommand::StencilFuncType::NOTEQUAL, 1, 0xFF);
 
-			// 临时边框shader
-			auto edgeshader = ShaderLibrary::Get("single_color");
-			edgeshader->Bind();
-			edgeshader->SetMat4("u_Model", glm::scale(transform, glm::vec3(1.03f, 1.03f, 1.03f)));
-			edgeshader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
-			//edgeshader->SetFloat("u_Edge", 0.05f); // 边框厚度 (法线外扩方法再使用)
-			edgeshader->SetFloat4("u_Color", { 1.0f, 0.5f, 0.0f, 1.0f }); // 橙色边框
+		//	// 临时边框shader
+		//	auto edgeshader = ShaderLibrary::Get("single_color");
+		//	edgeshader->Bind();
+		//	edgeshader->SetMat4("u_Model", glm::scale(transform, glm::vec3(1.03f, 1.03f, 1.03f)));
+		//	edgeshader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
+		//	//edgeshader->SetFloat("u_Edge", 0.05f); // 边框厚度 (法线外扩方法再使用)
+		//	edgeshader->SetFloat4("u_Color", { 1.0f, 0.5f, 0.0f, 1.0f }); // 橙色边框
 
-			// 绘制放大后的物体
-			// 注意：这里需要再次调用 Draw，但是用新的 Shader 和 放大后的 Matrix
-			mesh.GetVAO()->Bind();
-			RendererCommand::DrawIndexed(mesh.GetVAO());
+		//	// 绘制放大后的物体
+		//	// 注意：这里需要再次调用 Draw，但是用新的 Shader 和 放大后的 Matrix
+		//	mesh.GetVAO()->Bind();
+		//	RendererCommand::DrawIndexed(mesh.GetVAO());
 
-			// 恢复状态 (非常重要，否则后续渲染会乱)
-			RendererCommand::DepthTest(true);
-			RendererCommand::StencilMask(true);
-			RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
-		}
+		//	// 恢复状态 (非常重要，否则后续渲染会乱)
+		//	RendererCommand::DepthTest(true);
+		//	RendererCommand::StencilMask(true);
+		//	RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
+		//}
 	}
 
 	void Renderer3D::DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform)
@@ -145,13 +145,13 @@ namespace Snail {
 
 		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
 			//DrawMesh(*mesh, edgeEnable, transform);
-			SubmitMesh(mesh, transform);
+			SubmitMesh(mesh, edgeEnable, transform);
 		}
 	}
 
-	void Renderer3D::SubmitMesh(const Refptr<Mesh>& mesh, const glm::mat4& transform)
+	void Renderer3D::SubmitMesh(const Refptr<Mesh>& mesh, const bool& edgeEnable, const glm::mat4& transform)
 	{
-		s_3DSceneData.MeshInstanceQueue[mesh].push_back(transform);
+		s_3DSceneData.MeshInstanceQueue[mesh].push_back({transform, (int)edgeEnable});
 	}
 
 	void Renderer3D::FlushMeshes()
@@ -162,9 +162,9 @@ namespace Snail {
 		static std::vector<InstanceData> s_InstanceBufferData;
 
 		// 遍历所有不同的 Mesh
-		for (auto& [mesh, transforms] : s_3DSceneData.MeshInstanceQueue)
+		for (auto& [mesh, meshData] : s_3DSceneData.MeshInstanceQueue)
 		{
-			if (transforms.empty()) continue;
+			if (meshData.empty()) continue;
 
 			// 绑定材质
 			auto material = mesh->GetMaterial();
@@ -188,7 +188,7 @@ namespace Snail {
 			// 注意：如果这行代码开销大，可以只在第一次绘制该 Mesh 时做一次，但需要 VAO 记录状态
 			vao->SetInstanceBuffer(s_3DSceneData.InstanceVBO);
 
-			size_t totalInstances = transforms.size();
+			size_t totalInstances = meshData.size();
 			size_t offset = 0;
 			while (offset < totalInstances) {
 
@@ -201,7 +201,8 @@ namespace Snail {
 
 				for (size_t i = 0; i < batchCount; i++)
 				{
-					auto& transform = transforms[offset + i];
+					auto& transform = meshData[offset + i].Transform;
+					auto& entityId = meshData[offset + i].EntityID;
 
 					InstanceData data;
 					data.ModelMatrix = transform;
@@ -218,10 +219,12 @@ namespace Snail {
 						data.NormalMatrix = glm::transpose(glm::inverse(glm::mat3(transform)));
 					}
 
+					data.EntityID = entityId;
+
 					s_InstanceBufferData.push_back(data);
 				}
 
-				// 上传 ModelMatrix + NormalMatrix
+				// 上传 ModelMatrix + NormalMatrix + EntityID
 				uint32_t dataSize = (uint32_t)s_InstanceBufferData.size() * sizeof(InstanceData);
 				s_3DSceneData.InstanceVBO->SetData(s_InstanceBufferData.data(), dataSize);
 

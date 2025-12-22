@@ -25,6 +25,8 @@ namespace Snail {
 		virtual void Unbind() const = 0;
 
 		virtual const uint32_t& GetColorAttachment() const = 0;
+		virtual const uint32_t& GetMaskAttachment() const = 0;
+		virtual const uint32_t& GetDepthAttachment() const = 0;
 		virtual const FrameBufferSpecification& GetSpecification() const = 0;
 
 		virtual void ReGenerate() = 0;

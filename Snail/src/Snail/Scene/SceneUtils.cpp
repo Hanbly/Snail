@@ -129,8 +129,6 @@ namespace Snail {
 			out << YAML::Key << "Near" << YAML::Value << m_EC->GetNear();
 			out << YAML::Key << "Far" << YAML::Value << m_EC->GetFar();
 			out << YAML::Key << "Aspect" << YAML::Value << m_EC->GetAspect();
-			out << YAML::Key << "ViewportWidth" << YAML::Value << m_EC->GetViewportWidth();
-			out << YAML::Key << "ViewportHeight" << YAML::Value << m_EC->GetViewportHeight();
 			out << YAML::Key << "ViewMatrix" << YAML::Value << m_EC->GetViewMatrix();
 			out << YAML::Key << "Position" << YAML::Value << m_EC->GetPosition();
 
@@ -241,7 +239,6 @@ namespace Snail {
 				 out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
              }
 			 out << YAML::Key << "Aspect" << YAML::Value << sceneCamera.GetAspect();
-			 out << YAML::Key << "ViewportWidth" << YAML::Value << sceneCamera.GetViewportWidth();
 			 out << YAML::Key << "ViewportHeight" << YAML::Value << sceneCamera.GetViewportHeight();
 
              out << YAML::EndMap; // SceneCamera Map 结束
@@ -371,7 +368,8 @@ namespace Snail {
 			m_EC->SetPitch(editorCameraNode["EulerPitch"].as<float>());
 			m_EC->SetYaw(editorCameraNode["DirvecYaw"].as<float>());
 
-			m_EC->SetViewportSize(editorCameraNode["ViewportWidth"].as<float>(), editorCameraNode["ViewportHeight"].as<float>());
+			m_EC->RecalculateViewMatrix(); // 计算view，确保第一帧能正确更新画面
+
 		}
 
 		// 反序列化实体 (Entities)
@@ -440,7 +438,6 @@ namespace Snail {
 					//	out << YAML::Key << "OrthographicFar" << YAML::Value << sceneCamera.GetOrthographicFar();
 					//}
 					//out << YAML::Key << "Aspect" << YAML::Value << sceneCamera.GetAspect();
-					//out << YAML::Key << "ViewportWidth" << YAML::Value << sceneCamera.GetViewportWidth();
 					//out << YAML::Key << "ViewportHeight" << YAML::Value << sceneCamera.GetViewportHeight();
 
 					//out << YAML::EndMap; // SceneCamera Map 结束

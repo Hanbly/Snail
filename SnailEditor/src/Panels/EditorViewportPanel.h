@@ -57,15 +57,16 @@ namespace Snail {
             ImVec2 ImguiViewportSize = ImGui::GetContentRegionAvail();
             ImGui::Text("视口大小: %.0f x %.0f", ImguiViewportSize.x, ImguiViewportSize.y);
             if ((m_ViewportSize != *(glm::vec2*)&ImguiViewportSize) && ImguiViewportSize.x > 0 && ImguiViewportSize.y > 0) {
-                fbo->Resize((uint32_t)ImguiViewportSize.x, (uint32_t)ImguiViewportSize.y);
                 m_ViewportSize.x = ImguiViewportSize.x;
                 m_ViewportSize.y = ImguiViewportSize.y;
 
+				fbo->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
                 ec->SetViewportSize((float)m_ViewportSize.x, (float)m_ViewportSize.y);
             }
 
             // 获取帧缓冲信息，绘制纹理
-            uint32_t textureId = fbo->GetColorAttachment();
+			uint32_t textureId = fbo->GetColorAttachment();
+			//uint32_t textureId = fbo->GetMaskAttachment();
             ImGui::Image(
                 (void*)(intptr_t)textureId, ImGui::GetContentRegionAvail(),
                 ImVec2(0, 1), // UV0: 纹理的(0,1) -> 对应 OpenGL 左上

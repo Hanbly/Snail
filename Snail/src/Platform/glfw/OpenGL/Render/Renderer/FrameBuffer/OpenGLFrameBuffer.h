@@ -8,6 +8,7 @@ namespace Snail {
 	private:
 		uint32_t m_RendererId;
 		uint32_t m_ColorAttachment;
+		uint32_t m_MaskAttachment;
 		uint32_t m_DepthAttachment;
 		uint32_t m_RenderbufferObjectAttachment;
 
@@ -21,6 +22,8 @@ namespace Snail {
 		virtual void Unbind() const override;
 
 		inline virtual const uint32_t& GetColorAttachment() const override { return m_ColorAttachment; }
+		inline virtual const uint32_t& GetMaskAttachment() const override { return m_MaskAttachment; }
+		inline virtual const uint32_t& GetDepthAttachment() const override { return m_DepthAttachment; }
 		inline virtual const FrameBufferSpecification& GetSpecification() const override { return m_Specification; }
 
 		virtual void ReGenerate() override;

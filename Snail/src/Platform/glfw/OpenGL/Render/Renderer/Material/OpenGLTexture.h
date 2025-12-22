@@ -29,6 +29,8 @@ namespace Snail {
 
 		virtual void Bind(const uint32_t& slot = 0) const override;
 		virtual void Unbind(const uint32_t& slot = 0) const override;
+
+		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
 	};
 
 	class OpenGLTextureCube : public TextureCube {

@@ -63,6 +63,8 @@ namespace Snail {
 	public:
 		friend class TextureLibrary;
 		virtual ~Texture2D() = default;
+
+		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
 	private:
 		static Refptr<Texture2D> Create(const std::vector<std::string>& path, const TextureUsage& usage);
 	};

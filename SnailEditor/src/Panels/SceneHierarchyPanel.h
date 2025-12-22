@@ -61,6 +61,7 @@ namespace Snail {
 
                 if (ImGui::IsItemClicked())
                 {
+                    // 处理点击实体栏目时的选中和边框
                     // 处理切换选中：旧的取消描边，新的开启描边
                     if (m_SelectedEntity && m_SelectedEntity.HasAllofComponent<ModelComponent>())
                         m_SelectedEntity.GetComponent<ModelComponent>().edgeEnable = false;
@@ -95,8 +96,31 @@ namespace Snail {
 				});
         }
     public:
-        //const Entity& GetSelectedEntity() const { return m_SelectedEntity; }
-        void SetSelectedEntity(const Entity& selectedEntity) { m_SelectedEntity = selectedEntity; }
+        const Entity& GetSelectedEntity() const { return m_SelectedEntity; }
+        void ResetSelectedEntity(const Entity& selectedEntity) {
+			// 先清除其它轮廓
+			auto modelview = m_Scene->GetAllofEntitiesWith<ModelComponent>();
+			for (auto [entity, model] : modelview.each())
+				model.edgeEnable = false;
+
+            // 设置新的实体，如果为空就代表取消选取
+			m_SelectedEntity = selectedEntity;
+
+			if (m_SelectedEntity && m_SelectedEntity.IsValid()) {
+				if (m_SelectedEntity.HasAllofComponent<ModelComponent>()) {
+					m_SelectedEntity.GetComponent<ModelComponent>().edgeEnable = true;
+				}
+			}
+        }
+		void AddSelectedEntity(const Entity& selectedEntity) {
+            m_SelectedEntity = {};
+
+			if (selectedEntity && selectedEntity.IsValid()) {
+				if (selectedEntity.HasAllofComponent<ModelComponent>()) {
+                    selectedEntity.GetComponent<ModelComponent>().edgeEnable = true;
+				}
+			}
+		}
 
     private: // -------------------- UI ------------------------
         void DrawEntityNode(Entity entity)

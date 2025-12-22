@@ -47,20 +47,40 @@ namespace Snail {
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
 
-		//// --------------------- DepthAttachment -----------------------
-		//glGenTextures(1, &m_DepthAttachment);
-		//glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
+		// --------------------- MaskAttachment -----------------------
+		glGenTextures(1, &m_MaskAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_MaskAttachment);
 
-		//glTexImage2D(
-		//	GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_Specification.width, m_Specification.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_R32I, m_Specification.width, m_Specification.height, 0, GL_RED_INTEGER, GL_INT, nullptr);
 
+		// 整数纹理不能使用线性过滤，必须是 NEAREST
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_MaskAttachment, 0);
+
+		// --------------------- DepthAttachment -----------------------
+		glGenTextures(1, &m_DepthAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
+
+		glTexImage2D(
+			GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_Specification.width, m_Specification.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		// --------------------- RenderbufferObjectAttachment -----------------------
 		glGenRenderbuffers(1, &m_RenderbufferObjectAttachment);
@@ -70,6 +90,11 @@ namespace Snail {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderbufferObjectAttachment);
 
 
+		// 告诉 OpenGL 我们要同时输出到两个附件
+		GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+		glDrawBuffers(2, buffers);
+
+		// ------- 检查完整性和解绑 --------
 		SNL_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "OpenGLFrameBuffer: 帧缓冲附件不完整!");
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -89,7 +114,7 @@ namespace Snail {
 	void OpenGLFrameBuffer::Delete()
 	{
 		glDeleteTextures(1, &m_ColorAttachment);
-		//glDeleteTextures(1, &m_DepthAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 		glDeleteRenderbuffers(1, &m_RenderbufferObjectAttachment);
 
 		glDeleteFramebuffers(1, &m_RendererId);

@@ -21,17 +21,41 @@ namespace Snail {
         // -------------------临时------------------------------------------
 
         Refptr<FrameBuffer> m_FBO;
+		Refptr<VertexArray> m_ScreenQuadVAO; // 屏幕四边形
+		glm::vec3 m_OutlineColor = { 1.0f, 0.5f, 0.0f }; // 默认橙色
+		int m_OutlineWidth = 3;
 
         // ECS 核心
         Refptr<Scene> m_Scene;
 
         // 编辑器特有
         Refptr<EditorCamera> m_EditorCamera;
-        //ShaderLibrary m_ShaderLibrary;
 
         SceneHierarchyPanel m_SHpanel;
         EditorViewportPanel m_EVpanel;
         GlobalSettingsPanel m_GSpanel;
+
+		// 初始化一个覆盖 -1 到 1 范围的平面
+		void InitScreenQuad()
+		{
+			float quadVertices[] = {
+				// 坐标(x,y)   // 纹理坐标(u,v)
+				-1.0f,  1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f,  0.0f, 0.0f,
+				 1.0f, -1.0f,  1.0f, 0.0f,
+				 1.0f,  1.0f,  1.0f, 1.0f
+			};
+			uint32_t quadIndices[] = { 0, 1, 2, 2, 3, 0 };
+
+			m_ScreenQuadVAO = VertexArray::Create();
+			auto vbo = VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+			vbo->SetLayout(BufferLayout::Create({
+				{ "a_Pos",       VertexDataType::Float2 },
+				{ "a_TexCoords", VertexDataType::Float2 }
+				}));
+			m_ScreenQuadVAO->SetVertexBuffer(vbo);
+			m_ScreenQuadVAO->SetIndexBuffer(IndexBuffer::Create(quadIndices, sizeof(quadIndices)));
+		}
 
         //------------------------------------------------------------------
     public:
@@ -43,7 +67,7 @@ namespace Snail {
                 m_GSpanel(m_Scene)
         {
 
-            m_EditorCamera = std::make_shared<EditorCamera>(glm::vec3(0.0f, 0.0f, 1.0f), EditorCameraMode::Arcball);
+            m_EditorCamera = std::make_shared<EditorCamera>();
             //m_CameraEntity = m_Scene->CreateEntity("Main Camera");
             //m_CameraEntity.AddComponent<CameraComponent>(/*TODO: 这里需要 SceneCamera */);
 
@@ -55,113 +79,12 @@ namespace Snail {
         virtual void OnAttach() override {
             SNL_PROFILE_FUNCTION();
 
-
-            // -------------------临时------------------------------------------
             
-
-			/*ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
-			ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
-			ShaderLibrary::Load("sky", "assets/shaders/TextureCube_Shader.glsl");
-			ShaderLibrary::Load("cube", "assets/shaders/TextureCube_Shader.glsl");
-			ShaderLibrary::Load("cube", "assets/shaders/cube.glsl");
-			ShaderLibrary::Load("light_box", "assets/shaders/light_box.glsl");
-			ShaderLibrary::Load("model", "assets/shaders/Model_Shader.glsl");
-
-			std::vector<std::string> skyAssets = {
-				"assets/images/skybox/right.jpg",
-				"assets/images/skybox/left.jpg",
-				"assets/images/skybox/top.jpg",
-				"assets/images/skybox/bottom.jpg",
-				"assets/images/skybox/front.jpg",
-				"assets/images/skybox/back.jpg",
-			};
-			TextureLibrary::Load("sky", skyAssets, TextureUsage::Cubemap);
-			TextureLibrary::Load("sky", skyAssets, TextureUsage::Cubemap);
-			TextureLibrary::Load("cube", skyAssets, TextureUsage::Cubemap);
-			TextureLibrary::Load("cube", { "assets/images/kulisu.png" }, TextureUsage::Diffuse);
-			TextureLibrary::Load("light", { "assets/images/mayoli.png" }, TextureUsage::Diffuse);*/
-
-         
-            //{
-            //    std::vector<TextureData> td;
-            //    std::vector<std::string> skyAssets = {
-            //        "assets/images/skybox/right.jpg",
-            //        "assets/images/skybox/left.jpg",
-            //        "assets/images/skybox/top.jpg",
-            //        "assets/images/skybox/bottom.jpg",
-            //        "assets/images/skybox/front.jpg",
-            //        "assets/images/skybox/back.jpg",
-            //    };
-            //    td.push_back(TextureData(TextureCube::Create(skyAssets), "texture_cubemap"));
-            //    Refptr<Model> sky = std::make_shared<Model>(PrimitiveType::Skybox, skyboxVertices, skyboxIndices, m_ShaderLibrary.Get("sky"),td);
-            //    Entity e = m_Scene->CreateEntity("Sky");
-            //    e.AddComponent<ModelComponent>(sky);
-            //    e.AddComponent<SkyboxComponent>();
-            //    e.RemoveComponent<TransformComponent>();
-            //}            
-            //// --- 创建 Cube 实例 ---
-            //{                
-            //    // 独属于Cube示例的纹理设置
-            //    std::vector<TextureData> td;
-			//    td.push_back(TextureData(Texture2D::Create({ "assets/images/kulisu.png" }), "texture_diffuse"));
-            //    td.push_back(TextureData(Texture2D::Create({ "assets/images/mayoli.png" }), "texture_diffuse"));
-            //    Refptr<Model> singleMesh = std::make_shared<Model>(PrimitiveType::Cube, vertices, indices, m_ShaderLibrary.Get("cube"), td);
-
-            //    Entity e = m_Scene->CreateEntity("Cube");
-            //    e.AddComponent<ModelComponent>(singleMesh);
-
-            //    e.GetComponent<TransformComponent>().position = { 0, 60, 0 };
-            //    e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
-            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            //}
-            //// --- 创建 Light 实例 ---
-            //{
-            //    Refptr<Model> singleMesh = std::make_shared<Model>(PrimitiveType::Cube, vertices, indices, m_ShaderLibrary.Get("light_box"));
-
-            //    Entity e = m_Scene->CreateEntity("Light");
-            //    e.AddComponent<ModelComponent>(singleMesh);
-            //    e.AddComponent<PointLightComponent>(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), m_Scene->GetAmbientStrength());
-
-            //    e.GetComponent<TransformComponent>().position = { 0, 160, 0 };
-            //    e.GetComponent<TransformComponent>().rotation = { 25, 25, 25 };
-            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            //}
-
-            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/bugatti/bugatti.obj");
-            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/dragon/dragon.obj");
-            ////m_Model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
-            ////// --- 创建 Sponza 模型实例 ---
-            ////{
-            ////    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sponza/sponza.obj");
-            ////    //sponzaObj.model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/AmazonLumberyard/Interior/Interior.obj");
-
-            ////    Entity e = m_Scene->CreateEntity("Sponza Palace");
-            ////    e.AddComponent<ModelComponent>(model);
-
-            ////}
-            //{
-            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/sportsCar/sportsCar.obj");
-
-            //    Entity e = m_Scene->CreateEntity("SportsCar");
-            //    e.AddComponent<ModelComponent>(model);
-
-            //    e.GetComponent<TransformComponent>().position = { 0, 90, 0 };
-            //    e.GetComponent<TransformComponent>().rotation = { 0, 0, 0 };
-            //    e.GetComponent<TransformComponent>().scale =    { 25, 25, 25 };
-            //}
-            //{
-            //    Refptr<Model> model = std::make_shared<Model>(m_ShaderLibrary.Get("model"), "assets/models/spider-fbx/Spider.fbx");
-
-            //    Entity e = m_Scene->CreateEntity("Spider");
-            //    e.AddComponent<ModelComponent>(model);
-
-            //    e.GetComponent<TransformComponent>().position = { 10, 10, -210 };
-            //}
-
 			SceneSerializer serializer(m_Scene, m_EditorCamera);
 			serializer.Deserialize("assets/scenes/test.snl");
             //serializer.Serialize("Test Scene", "assets/scenes/SaveScene.snl");
-            //------------------------------------------------------------------------------
+
+            InitScreenQuad(); // 初始化屏幕vao，用于附加后处理轮廓
         }
         virtual void OnDetach() override {
 
@@ -175,17 +98,6 @@ namespace Snail {
             if (m_EVpanel.IsFocused() || m_EVpanel.IsHovered()) {
                 m_EditorCamera->OnUpdate(ts);
             }
-
-            //if (m_CameraEntity)
-            //{
-            //    // 同步 View 矩阵 (通过 Transform)
-            //    auto& trans = m_CameraEntity.GetComponent<TransformComponent>();
-            //    trans.position = m_CameraController->GetPostion();
-            //    trans.rotation = m_CameraController->GetRotation();
-
-            //    // 同步 Projection (处理 Zoom)
-            //    auto& camComp = m_CameraEntity.GetComponent<CameraComponent>();
-            //}
         }
 
         inline virtual void OnEvent(Event& e) {
@@ -198,7 +110,11 @@ namespace Snail {
 
         inline bool OnMousePressed(MousePressEvent& e)
         {
-            if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) // 鼠标左键
+            if (
+                Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) || 
+                Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT) ||
+                Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)
+                ) // 鼠标左键 或右键是取消选中 或ctrl+左鍵是复选
             {
                 if (!m_EVpanel.IsHovered()) // 没有悬浮就不作反应
                     return false;
@@ -211,10 +127,17 @@ namespace Snail {
                 float my = my_global - m_EVpanel.GetBoundMin().y;
                 float width = m_EVpanel.GetSize().x;
                 float height = m_EVpanel.GetSize().y;
-
-               m_SHpanel.SetSelectedEntity(
-                   m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection())
-               );
+                
+                Entity hit = m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection());
+                if (Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT)) {
+                    m_SHpanel.ResetSelectedEntity({}); // 右键无条件取消选中
+                }
+				else if (hit.IsValid() && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
+                    m_SHpanel.AddSelectedEntity(hit); // 左键判断结果，如果有效就叠加或更换
+                }
+                else if (hit.IsValid()) {
+                    m_SHpanel.ResetSelectedEntity(hit);
+                } // else 如果无效不做处理  PS: 有效是指castray成功判定到一个物体
             }
             return false;
         }
@@ -228,8 +151,43 @@ namespace Snail {
             m_FBO->Bind();
             RendererCommand::Clear();
 
-            // 5. 渲染
+            // 渲染
             m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform());
+
+			// 1. 关闭深度测试 + func:Always
+			RendererCommand::DepthTest(false);
+            RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::ALWAYS);
+			// 2. 开启混合 (Blending)，因为描边 Shader 大部分区域是透明的(discard)，只显示边缘
+            RendererCommand::EnableBlend(true);
+
+			auto outlineShader = ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl");
+			if (outlineShader)
+			{
+				outlineShader->Bind();
+				// 告诉 Shader 去哪个纹理单元读 Mask
+				outlineShader->SetInt("u_MaskTexture", 0);
+                outlineShader->SetInt("u_DepthTexture", 1); // 对应 GL_TEXTURE1
+
+				Texture2D::BindExternal(0, m_FBO->GetMaskAttachment());     // 激活纹理单元0，并绑定 FBO 里的 Mask 附件
+				Texture2D::BindExternal(1, m_FBO->GetDepthAttachment());    // 深度附件
+
+				outlineShader->SetFloat3("u_OutlineColor", m_OutlineColor);
+                outlineShader->SetInt("u_OutlineWidth", m_OutlineWidth);
+				outlineShader->SetFloat("u_Width", (float)m_FBO->GetSpecification().width);
+				outlineShader->SetFloat("u_Height", (float)m_FBO->GetSpecification().height);
+
+				// 【重点来了】为什么要画 Quad？
+				// 因为我们需要激活 Shader 对每一个像素进行计算。
+				// 只有画了这个覆盖全屏的 Quad，GPU 才会对 FBO 上的每个像素运行 Fragment Shader，
+				// 从而通过边缘检测算法算出哪里该亮，哪里该透明，并叠加到 Color Attachment 上。
+				m_ScreenQuadVAO->Bind();
+				RendererCommand::DrawIndexed(m_ScreenQuadVAO);
+			}
+
+			// 恢复状态
+			RendererCommand::DepthTest(true);
+            RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::LESS);
+			RendererCommand::EnableBlend(false);
 
             m_FBO->Unbind();
             //----------------------------------------------------------------

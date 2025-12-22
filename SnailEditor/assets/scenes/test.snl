@@ -5,18 +5,16 @@ EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
   Near: 0.00999999978
-  Far: 5000
-  Aspect: 0.990234375
-  ViewportWidth: 1014
-  ViewportHeight: 1024
-  ViewMatrix: [0.911391973, -0.17229265, 0.373737842, -0, -1.49011612e-08, 0.908145845, 0.418653995, 0, -0.411539465, -0.381557912, 0.827676833, -0, 11.4147816, 53.5315933, -723.735474, 1]
-  Position: [269.307068, 254.380249, 624.142029]
-  DirvecFront: [-0.373737842, -0.418654025, -0.827676773]
-  DirvecRight: [0.911391973, 0, -0.411539465]
-  DirvecUp: [-0.17229265, 0.908145845, -0.381557912]
+  Far: 50000
+  Aspect: 1
+  ViewMatrix: [0.835791469, -0.246950939, 0.49037534, -0, -0, 0.893138885, 0.449780971, 0, -0.549047112, -0.375923067, 0.746477783, -0, 8.86570454, 51.343338, -720.485168, 1]
+  Position: [358.577545, 278.203796, 561.995056]
+  DirvecFront: [-0.49037531, -0.449780971, -0.746477842]
+  DirvecRight: [0.835791409, 0, -0.549047053]
+  DirvecUp: [-0.246950939, 0.893139005, -0.375923127]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 24.7496357
-  DirvecYaw: -384.301575
+  EulerPitch: 26.7296314
+  DirvecYaw: -393.301666
   FocalPoint: [-16.739542, -66.0437241, -9.33448601]
   Distance: 765.367004
   RotateSensitivity: 20
@@ -50,7 +48,7 @@ Entities:
       Scale: [25, 25, 25]
     ModelComponent:
       IsImported: false
-      ShaderPath: assets/shaders/cube.glsl
+      ShaderPath: assets/shaders/Standard.glsl
       Meshes:
         - PrimitiveType: Cube
           Textures:
@@ -90,7 +88,7 @@ Entities:
       Scale: [1, 1, 1]
     ModelComponent:
       IsImported: true
-      ShaderPath: assets/shaders/Model_Shader.glsl
+      ShaderPath: assets/shaders/Standard.glsl
       FilePath: assets/models/spider-fbx/Spider.fbx
       Visible: true
       EdgeEnable: false

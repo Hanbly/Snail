@@ -156,23 +156,12 @@ namespace Snail {
         // 更新选中状态
         // 点击空白取消选中
         if (!hitEntity.IsValid()) {
-            auto modelview = this->GetAllofEntitiesWith<ModelComponent>();
-            for (auto [entity, model] : modelview.each()) {
-                model.edgeEnable = false;
-            }
             hitEntity = {};
             return hitEntity;
         }
 
         // 选中
         SNL_CORE_INFO("选中物体: {0}", hitEntity.GetComponent<TagComponent>().name);
-        // 先清除其它轮廓
-		auto modelview = this->GetAllofEntitiesWith<ModelComponent>();
-		for (auto [entity, model] : modelview.each()) {
-			model.edgeEnable = false;
-		}
-        if (hitEntity.HasAllofComponent<ModelComponent>())
-            hitEntity.GetComponent<ModelComponent>().edgeEnable = true;
 
         return hitEntity;
     }

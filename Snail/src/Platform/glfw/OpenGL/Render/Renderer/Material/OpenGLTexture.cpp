@@ -9,9 +9,6 @@ namespace Snail {
 	OpenGLTexture2D::OpenGLTexture2D(const std::vector<std::string>& path, const TextureUsage& usage)
 		: m_RendererId(0), m_Path(path), m_Type(TextureType::TWOD), m_Usage(usage)
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		stbi_set_flip_vertically_on_load(true);
 		int width, height, channels;
 		stbi_uc* data = stbi_load(path[0].c_str(), &width, &height, &channels, 0);
@@ -70,27 +67,24 @@ namespace Snail {
 
 	OpenGLTexture2D::~OpenGLTexture2D() 
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glDeleteTextures(1, &m_RendererId);
 	}
 
 	void OpenGLTexture2D::Bind(const uint32_t& slot) const 
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_RendererId);
 	}
 
 	void OpenGLTexture2D::Unbind(const uint32_t& slot) const 
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void OpenGLTexture2D::BindExternal(const uint32_t& slot, const uint32_t& rendererId)
+	{
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D, rendererId);
 	}
 
 	OpenGLTextureCube::OpenGLTextureCube(const std::vector<std::string>& path, const TextureUsage& usage)
