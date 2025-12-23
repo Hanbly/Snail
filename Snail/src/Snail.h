@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <ImGuiFileDialog.h>
+#include <ImGuizmo.h>
 
 //-------------Core-----------------
 #include "Snail/Basic/InputCodes.h"

@@ -38,8 +38,6 @@ namespace Snail {
 			case RendererCommand::API::OpenGL:		OpenGLTexture2D::BindExternal(slot, rendererId); break;
 			case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!"); break;
 		}
-
-		SNL_CORE_ASSERT(false, "RenderAPI: switch无法取值!");
 	}
 
 }

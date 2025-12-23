@@ -300,95 +300,158 @@ namespace Snail {
 	{
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
+		const float PI = 3.14159265359f;
+
 		switch (type)
 		{
-			case PrimitiveType::Cube: // 六面分别定义的立方体（能更好地显示纹理）
-				vertices = {
-					// 格式需对应 Vertex 结构体定义: { Position, Normal, TexCoord }
-					// 1. 前面 (Front Face) - Z = 0.5f
-					// Pos                          // Normal           // UV
-					{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f} },
-					{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f} },
-					{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f} },
-					{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f} },
+		case PrimitiveType::Cube: // 六面分别定义的立方体
+			vertices = {
+				// 1. 前面 (Front Face) - Z = 0.5f
+				{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f} },
+				{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f} },
+				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f} },
+				// 2. 右面 (Right Face) - X = 0.5f
+				{ { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f} },
+				{ { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f} },
+				// 3. 后面 (Back Face) - Z = -0.5f
+				{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f} },
+				{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f} },
+				// 4. 左面 (Left Face) - X = -0.5f
+				{ {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
+				{ {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
+				{ {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f} },
+				// 5. 上面 (Top Face) - Y = 0.5f
+				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} },
+				// 6. 下面 (Bottom Face) - Y = -0.5f
+				{ {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f} },
+				{ { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f} },
+				{ { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
+				{ {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f} }
+			};
+			indices = {
+				0, 1, 2, 2, 3, 0,       // 前面
+				4, 5, 6, 6, 7, 4,       // 右面
+				8, 9, 10, 10, 11, 8,    // 后面
+				12, 13, 14, 14, 15, 12, // 左面
+				16, 17, 18, 18, 19, 16, // 上面
+				20, 21, 22, 22, 23, 20  // 下面
+			};
+			break;
 
-					// 2. 右面 (Right Face) - X = 0.5f
-					{ { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f} },
-					{ { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f} },
-					{ { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f} },
-					{ { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f} },
+		case PrimitiveType::Skybox: // 天空盒
+			vertices = {
+				// ... (你原本的代码保持不变) ...
+				// Positions          // Normals           // UVs (Unused)
+				{ {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
+				{ { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
+				{ { 1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 2. 右上前
+				{ {-1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 3. 左上前
+				{ {-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 4. 左下后
+				{ { 1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 5. 右下后
+				{ { 1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 6. 右上后
+				{ {-1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }  // 7. 左上后
+			};
+			indices = {
+				0, 1, 2, 2, 3, 0,
+				1, 5, 6, 6, 2, 1,
+				5, 4, 7, 7, 6, 5,
+				4, 0, 3, 3, 7, 4,
+				3, 2, 6, 6, 7, 3,
+				4, 5, 1, 1, 0, 4
+			};
+			break;
 
-					// 3. 后面 (Back Face) - Z = -0.5f
-					{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f} },
-					{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f} },
-					{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f} },
-					{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f} },
+		case PrimitiveType::Sphere:
+		{
+			// 生成 UV Sphere
+			const int X_SEGMENTS = 64; // 经度切分 (Sectors)
+			const int Y_SEGMENTS = 64; // 纬度切分 (Stacks)
+			const float radius = 0.5f; // 半径 0.5，直径 1.0，匹配 Cube 大小
 
-					// 4. 左面 (Left Face) - X = -0.5f
-					{ {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
-					{ {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
-					{ {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f} },
-					{ {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f} },
+			for (int y = 0; y <= Y_SEGMENTS; ++y)
+			{
+				for (int x = 0; x <= X_SEGMENTS; ++x)
+				{
+					float xSegment = (float)x / (float)X_SEGMENTS;
+					float ySegment = (float)y / (float)Y_SEGMENTS;
 
-					// 5. 上面 (Top Face) - Y = 0.5f
-					{ {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} },
-					{ { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} },
-					{ { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} },
-					{ {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} },
+					// 使用球坐标系计算位置
+					// ySegment * PI 从 0 (顶) 到 PI (底)
+					// xSegment * 2PI 从 0 到 2PI (绕圈)
+					float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+					float yPos = std::cos(ySegment * PI);
+					float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
-					// 6. 下面 (Bottom Face) - Y = -0.5f
-					{ {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f} },
-					{ { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f} },
-					{ { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
-					{ {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f} }
-				};
-				indices = {
-					0, 1, 2, 2, 3, 0,       // 前面
-					4, 5, 6, 6, 7, 4,       // 右面
-					8, 9, 10, 10, 11, 8,    // 后面
-					12, 13, 14, 14, 15, 12, // 左面
-					16, 17, 18, 18, 19, 16, // 上面
-					20, 21, 22, 22, 23, 20  // 下面
-				};
-				break;
-			case PrimitiveType::Skybox: // 天空盒
-				vertices = {
-					// 只需要位置 (Position)，Normal 和 UV 在 Skybox shader 中通常用不到，设为 0
-					// ---------------------------------------------------------------------
-					// Positions          // Normals           // UVs (Unused)
-					{ {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
-					{ { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
-					{ { 1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 2. 右上前
-					{ {-1.0f,  1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 3. 左上前
-					{ {-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 4. 左下后
-					{ { 1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 5. 右下后
-					{ { 1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 6. 右上后
-					{ {-1.0f,  1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }  // 7. 左上后
-				};
-				indices = {
-					// Front face
-					0, 1, 2,
-					2, 3, 0,
-					// Right face
-					1, 5, 6,
-					6, 2, 1,
-					// Back face
-					5, 4, 7,
-					7, 6, 5,
-					// Left face
-					4, 0, 3,
-					3, 7, 4,
-					// Top face
-					3, 2, 6,
-					6, 7, 3,
-					// Bottom face
-					4, 5, 1,
-					1, 0, 4
-				};
-				break;
-			case PrimitiveType::Sphere: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 目前不支持 图元类型为 Sphere !"); break;
-			case PrimitiveType::Plane: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 目前不支持 图元类型为 Plane !"); break;
-			default: SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 图元类型为 None 无法生成数据!");
+					// 法线就是归一化的位置向量 (对于单位球)
+					glm::vec3 normal = glm::vec3(xPos, yPos, zPos);
+
+					// 应用半径
+					glm::vec3 pos = normal * radius;
+
+					// UV 坐标 (简单映射)
+					glm::vec2 uv = glm::vec2(xSegment, ySegment);
+
+					vertices.push_back({ pos, normal, uv });
+				}
+			}
+
+			// 生成索引
+			bool oddRow = false;
+			for (int y = 0; y < Y_SEGMENTS; ++y)
+			{
+				// 如果处理极点可能需要优化（顶部和底部三角形），但通用逻辑如下：
+				for (int x = 0; x < X_SEGMENTS; ++x)
+				{
+					// 每一格由两个三角形组成
+					uint32_t k1 = y * (X_SEGMENTS + 1) + x;
+					uint32_t k2 = k1 + X_SEGMENTS + 1;
+
+					indices.push_back(k1);
+					indices.push_back(k2);
+					indices.push_back(k1 + 1);
+
+					indices.push_back(k1 + 1);
+					indices.push_back(k2);
+					indices.push_back(k2 + 1);
+				}
+			}
+			break;
+		}
+
+		case PrimitiveType::Plane:
+		{
+			// XZ 平面，Y 轴朝上，中心在原点，大小 1x1
+			// 与 Cube 的面大小保持一致
+			float size = 0.5f;
+			vertices = {
+				// Pos                        // Normal           // UV
+				// 左上 (Top Left) -> Z是负的还是正的取决于你的坐标系习惯，通常OpenGL里 Z+是屏幕外
+				// 对应 Cube 的 Top Face
+				{ {-size, 0.0f, -size},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} }, // 0
+				{ {-size, 0.0f,  size},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} }, // 1
+				{ { size, 0.0f,  size},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} }, // 2
+				{ { size, 0.0f, -size},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} }  // 3
+			};
+
+			indices = {
+				0, 1, 2,
+				2, 3, 0
+			};
+			break;
+		}
+
+		default:
+			SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 图元类型为 None 无法生成数据!");
+			break;
 		}
 
 		return std::pair<std::vector<Vertex>, std::vector<uint32_t>>(vertices, indices);

@@ -6,17 +6,17 @@ EditorCamera:
   FOV: 45
   Near: 0.00999999978
   Far: 50000
-  Aspect: 1
-  ViewMatrix: [0.835791469, -0.246950939, 0.49037534, -0, -0, 0.893138885, 0.449780971, 0, -0.549047112, -0.375923067, 0.746477783, -0, 8.86570454, 51.343338, -720.485168, 1]
-  Position: [358.577545, 278.203796, 561.995056]
-  DirvecFront: [-0.49037531, -0.449780971, -0.746477842]
-  DirvecRight: [0.835791409, 0, -0.549047053]
-  DirvecUp: [-0.246950939, 0.893139005, -0.375923127]
+  Aspect: 0.961914062
+  ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.613327, 0.414948076, -1055.85779, 1]
+  Position: [5.77682114, 438.311981, 961.052612]
+  DirvecFront: [-0.0344380438, -0.415481567, -0.908949494]
+  DirvecRight: [0.999283075, 0, -0.0378605798]
+  DirvecUp: [-0.0157303736, 0.909601688, -0.415183693]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 26.7296314
-  DirvecYaw: -393.301666
-  FocalPoint: [-16.739542, -66.0437241, -9.33448601]
-  Distance: 765.367004
+  EulerPitch: 24.5496426
+  DirvecYaw: -362.169769
+  FocalPoint: [-25.7466259, 57.9938965, 129.030258]
+  Distance: 915.366943
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -109,9 +109,9 @@ Entities:
     TagComponent:
       Tag: 立方体
     TransformComponent:
-      Position: [-2.29999995, 0, 173.699997]
+      Position: [194.100006, 0, 173.699997]
       Rotation: [0, 0, 0]
-      Scale: [25, 25, 25]
+      Scale: [100, 100, 100]
     ModelComponent:
       IsImported: true
       ShaderPath: assets/shaders/Standard.glsl
@@ -122,20 +122,20 @@ Entities:
     TagComponent:
       Tag: 半锥体
     TransformComponent:
-      Position: [-167.899994, 0, 0]
-      Rotation: [0, 0, 0]
+      Position: [-166.316895, 84.2097931, 55.0279999]
+      Rotation: [0, -0, 0]
       Scale: [100, 100, 100]
     ModelComponent:
       IsImported: true
       ShaderPath: assets/shaders/Standard.glsl
       FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Tapered Cylinder.fbx
       Visible: true
-      EdgeEnable: false
+      EdgeEnable: true
   - Entity: 4faa9a71-76eb-436f-91a0-6dd0e8624a18
     TagComponent:
       Tag: 圆环
     TransformComponent:
-      Position: [87.6999969, -10.8000002, 237.399994]
+      Position: [13.3999996, -10.8000002, 237.399994]
       Rotation: [0, 0, 0]
       Scale: [40, 40, 40]
     ModelComponent:
@@ -144,3 +144,51 @@ Entities:
       FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Torus.fbx
       Visible: true
       EdgeEnable: false
+  - Entity: be29d899-817c-4e9d-86d3-1e491c50d9d7
+    TagComponent:
+      Tag: 图元立方体
+    TransformComponent:
+      Position: [-354.600006, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [100, 100, 100]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 38773621-047d-46dd-a57e-3284deb7d4b0
+    TagComponent:
+      Tag: 图元球体
+    TransformComponent:
+      Position: [-175.516907, 221.709824, 266.02832]
+      Rotation: [0, -0, 0]
+      Scale: [100, 100, 100]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Sphere
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true
+  - Entity: fb6a7153-9d76-4c79-86b0-90f1748f267c
+    TagComponent:
+      Tag: 图元平面
+    TransformComponent:
+      Position: [1.58310151, 339.715393, 201.228409]
+      Rotation: [126.199966, -2.19999981, 1.23373127e-07]
+      Scale: [99.9999695, 99.9999619, 100.000023]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Plane
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true

@@ -107,6 +107,9 @@ namespace Snail {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+
+		// 开始 ImGuizmo 帧
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::OnImGuiRender()

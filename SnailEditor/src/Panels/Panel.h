@@ -10,9 +10,7 @@ namespace Snail {
 		uint32_t m_Width;
 		uint32_t m_Height;
 	public:
-		virtual ~Panel() = default;
-
-		
+		virtual ~Panel() = default;		
 	};
 
 }

@@ -42,11 +42,11 @@ namespace Snail {
 
         const glm::mat4 GetTransform() const
         {
-            glm::mat4 transform =   glm::translate(glm::mat4(1.0f), position);
-            transform =             glm::rotate(transform, glm::radians(rotation.x), { 1, 0, 0 });
-            transform =             glm::rotate(transform, glm::radians(rotation.y), { 0, 1, 0 });
-            transform =             glm::rotate(transform, glm::radians(rotation.z), { 0, 0, 1 });
-            transform =             glm::scale(transform, scale);
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
+			transform = glm::rotate(transform, glm::radians(rotation.z), { 0, 0, 1 });
+			transform = glm::rotate(transform, glm::radians(rotation.y), { 0, 1, 0 });
+			transform = glm::rotate(transform, glm::radians(rotation.x), { 1, 0, 0 });
+			transform = glm::scale(transform, scale);
 
             return transform;
         }
