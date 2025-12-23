@@ -26,3 +26,6 @@
 [submodule "Snail/vendor/ImGuiFileDialog"]
 	path = Snail/vendor/ImGuiFileDialog
 	url = https://github.com/Hanbly/ImGuiFileDialog.git
+[submodule "Snail/vendor/ImGuizmo"]
+	path = Snail/vendor/ImGuizmo
+	url = https://github.com/Hanbly/ImGuizmo.git

@@ -30,6 +30,7 @@ IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
 IncludeDirs["yaml"] = "Snail/vendor/yaml-cpp/include"
 IncludeDirs["BoostUuid"] = "Snail/vendor/boost-uuid/include"
 IncludeDirs["ImGuiFileDialog"] = "Snail/vendor/ImGuiFileDialog"
+IncludeDirs["ImGuizmo"] = "Snail/vendor/ImGuizmo"
 
 -- 引入需要编译项目（该项目需要编译，所以引入premake配置文件）
 -- 实际引入的是项目的premake5.lua文件
@@ -58,7 +59,9 @@ project "Snail"
         "%{prj.name}/vendor/stb_image/**.h",
         "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.h",
-        "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.cpp"
+        "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.cpp",
+        "%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+        "%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
     }
 
     includedirs {
@@ -73,6 +76,7 @@ project "Snail"
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
         "%{IncludeDirs.ImGuiFileDialog}",
+        "%{IncludeDirs.ImGuizmo}",
         "%{prj.name}/src"
     }
 
@@ -88,6 +92,7 @@ project "Snail"
     filter "system:windows"
 
         defines {
+            "NOMINMAX", -- 禁用Windows.h的 min 和 max 的预处理宏（导致ImGuizmo编译出错）
             "_CRT_SECURE_NO_WARNINGS", -- 移除C库安全警告
             "IMGUI_IMPL_OPENGL_LOADER_CUSTOM", -- 禁止ImGui重定义OpenGL宏
             "YAML_CPP_STATIC_DEFINE", -- 使用yaml的静态库
@@ -143,6 +148,7 @@ project "SnailEditor"
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
         "%{IncludeDirs.ImGuiFileDialog}",
+        "%{IncludeDirs.ImGuizmo}",
         "%{prj.name}/src",
         "Snail/src"
     }
@@ -198,6 +204,7 @@ project "Example"
         "%{IncludeDirs.yaml}",
         "%{IncludeDirs.BoostUuid}",
         "%{IncludeDirs.ImGuiFileDialog}",
+        "%{IncludeDirs.ImGuizmo}",
         "%{prj.name}/src",
         "Snail/src"
     }
