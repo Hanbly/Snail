@@ -116,12 +116,13 @@ namespace Snail {
             }
         }
 
-        auto skyboxView = m_Registry.view<SkyboxComponent, ModelComponent>();
-        for (auto [entity, skybox, model] : skyboxView.each())
+        auto skyboxView = m_Registry.view<ModelComponent>();
+        for (auto [entity, model] : skyboxView.each())
         {
-            if (model.visible && model.model) {
+            if (!model.model->IsImported() && model.model->GetPrimitiveType() == PrimitiveType::Skybox && model.visible && model.model) {
                 // 使用专门的 Skybox 绘制函数，传入相机用于计算“无位移View矩阵”
                 Renderer3D::DrawSkybox(*model.model, *camera);
+                break;
             }
         }
 

@@ -15,6 +15,43 @@ namespace Snail {
 		SetupMesh(vertices, indices, shader, textures);
 	}
 
+	void Mesh::AddTexture(const Refptr<Texture>& texture, const TextureUsage& usage)
+	{
+		// --------------------- 获取原有材质 + 添加新的材质 -------------------------------
+		auto textures = GetTextures();
+		textures.push_back(texture);
+
+		// 重新映射材质的纹理缓存
+		RemapMaterialTextures(textures);
+	}
+
+	void Mesh::EditTexture(size_t index, const std::string& assetPath) const
+	{
+		auto textures = GetTextures(); // 获取当前纹理列表
+
+		TextureUsage usage = textures[index]->GetUsage(); // 保持原有的 Usage
+		auto newTexture = TextureLibrary::Load({ assetPath }, usage);
+
+		auto& toEdit = textures[index];
+
+		if (index < textures.size()) {
+			std::string uniformName = GetMaterial()->GetTextureUniformName(toEdit);
+			GetMaterial()->SetTexture(uniformName, newTexture);
+		}
+	}
+
+	void Mesh::RemoveTexture(size_t index)
+	{
+		// --------------------- 获取原有材质 + 删除对应的材质 -------------------------------
+		auto textures = GetTextures();
+		if (index >= textures.size()) return;
+
+		textures.erase(textures.begin() + index);
+
+		// 重新映射材质的纹理缓存
+		RemapMaterialTextures(textures);
+	}
+
 	void Mesh::Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const
 	{
 		SNL_PROFILE_FUNCTION();
@@ -54,9 +91,40 @@ namespace Snail {
 
 		// ---------------------初始化材质-------------------------------
 		m_Material = Snail::Material::Create(shader);
-		if (textures.size()) {
+		RemapMaterialTextures(textures); // 映射纹理的同一变量名称
 
-			// 计数器，用于处理同类型的多张纹理 (diffuse1, diffuse2...)
+		// 暂时用默认值代替
+		//m_Material->SetFloat("u_AmbientStrength", 0.1f);  // 默认一点点环境光 // 现在依据Scene类的属性来设置了
+		m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
+		m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
+		m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度
+
+		CalculateBoundingBox(vertices);
+	}
+
+	void Mesh::CalculateBoundingBox(const std::vector<Vertex>& vertices)
+	{
+		if (vertices.empty()) return;
+
+		m_MinVertex = vertices[0].position;
+		m_MaxVertex = vertices[0].position;
+
+		for (const auto& v : vertices) {
+			m_MinVertex.x = std::min(m_MinVertex.x, v.position.x);
+			m_MinVertex.y = std::min(m_MinVertex.y, v.position.y);
+			m_MinVertex.z = std::min(m_MinVertex.z, v.position.z);
+
+			m_MaxVertex.x = std::max(m_MaxVertex.x, v.position.x);
+			m_MaxVertex.y = std::max(m_MaxVertex.y, v.position.y);
+			m_MaxVertex.z = std::max(m_MaxVertex.z, v.position.z);
+		}
+	}
+
+	void Mesh::RemapMaterialTextures(const std::vector<Refptr<Texture>>& textures)
+	{
+		GetMaterial()->ClearTexture();
+
+		if (textures.size()) {
 			unsigned int diffuseNr = 1;
 			unsigned int specularNr = 1;
 			unsigned int cubemapNr = 1;
@@ -85,32 +153,6 @@ namespace Snail {
 		}
 		else if (textures.size() == 0) {
 			m_Material->SetInt("u_UseTexture", 0);
-		}
-
-		// 暂时用默认值代替
-		//m_Material->SetFloat("u_AmbientStrength", 0.1f);  // 默认一点点环境光 // 现在依据Scene类的属性来设置了
-		m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
-		m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
-		m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度
-
-		CalculateBoundingBox(vertices);
-	}
-
-	void Mesh::CalculateBoundingBox(const std::vector<Vertex>& vertices)
-	{
-		if (vertices.empty()) return;
-
-		m_MinVertex = vertices[0].position;
-		m_MaxVertex = vertices[0].position;
-
-		for (const auto& v : vertices) {
-			m_MinVertex.x = std::min(m_MinVertex.x, v.position.x);
-			m_MinVertex.y = std::min(m_MinVertex.y, v.position.y);
-			m_MinVertex.z = std::min(m_MinVertex.z, v.position.z);
-
-			m_MaxVertex.x = std::max(m_MaxVertex.x, v.position.x);
-			m_MaxVertex.y = std::max(m_MaxVertex.y, v.position.y);
-			m_MaxVertex.z = std::max(m_MaxVertex.z, v.position.z);
 		}
 	}
 

@@ -52,10 +52,6 @@ namespace Snail {
         }
 	};
 
-    struct SkyboxComponent {
-        bool Active = true;
-	};
-
 	// 相机组件
 	struct CameraComponent {
 		SceneCamera camera;

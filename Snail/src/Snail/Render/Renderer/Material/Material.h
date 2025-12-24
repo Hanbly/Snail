@@ -35,6 +35,9 @@ namespace Snail {
 
 		// 纹理设置：需要指定 Shader 中的 sampler 名字和对应的纹理资源
 		void SetTexture(const std::string& name, const Refptr<Texture>& texture) { m_Textures[name] = texture; }
+		std::string GetTextureUniformName(const Refptr<Texture>& texture);
+		// 清空纹理（用于添加新纹理）
+		void ClearTexture() { m_Textures.clear(); }
 
 		static Refptr<Material> Create(const Refptr<Shader>& shader) { return std::make_shared<Material>(shader); }
 
@@ -48,6 +51,7 @@ namespace Snail {
 		std::unordered_map<std::string, glm::vec4> m_Float4s;
 		std::unordered_map<std::string, glm::mat3> m_Mat3s;
 		std::unordered_map<std::string, glm::mat4> m_Mat4s;
+		// uniformName + texture引用
 		std::unordered_map<std::string, Refptr<Texture>> m_Textures;
 	};
 

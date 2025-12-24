@@ -26,6 +26,7 @@ namespace Snail {
 		std::string m_Directory;
 
 		bool m_IsImported = false;
+		PrimitiveType m_PrimitiveType = PrimitiveType::None;
 	public:
 		AABB m_AABB;
 	public:
@@ -48,6 +49,7 @@ namespace Snail {
 		inline const std::vector<Refptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 		inline const std::string& GetFullPath() const { return m_FullPath; }
 		inline bool IsImported() const { return m_IsImported; }
+		inline const PrimitiveType& GetPrimitiveType() const { return m_PrimitiveType; }
 
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 

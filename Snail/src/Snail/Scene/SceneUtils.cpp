@@ -203,15 +203,6 @@ namespace Snail {
             out << YAML::EndMap;
         }
 
-		// 序列化 SkyboxComponent
-		if (entity.HasAllofComponent<SkyboxComponent>())
-		{
-			out << YAML::Key << "SkyboxComponent";
-			out << YAML::BeginMap;
-			out << YAML::Key << "Active" << YAML::Value << entity.GetComponent<SkyboxComponent>().Active;
-			out << YAML::EndMap;
-		}
-
         // --- 序列化 CameraComponent ---
         if (!m_EC && entity.HasAllofComponent<CameraComponent>())
         {
@@ -401,13 +392,6 @@ namespace Snail {
 				else {
 					// 如果 YAML 中没有 Transform (例如 Skybox )，则移除 TransformComponent
 					deserializedEntity.RemoveComponent<TransformComponent>();
-				}
-
-				// --- SkyboxComponent ---
-				auto skyboxComponent = entityNode["SkyboxComponent"];
-				if (skyboxComponent) {
-					auto& sc = deserializedEntity.AddComponent<SkyboxComponent>();
-					sc.Active = skyboxComponent["Active"].as<bool>();
 				}
 
 				// --- CameraComponent ---

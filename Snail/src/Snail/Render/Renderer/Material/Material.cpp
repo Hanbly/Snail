@@ -82,4 +82,14 @@ namespace Snail {
 		return textures;
 	}
 
+	std::string Material::GetTextureUniformName(const Refptr<Texture>& texture)
+	{
+		for (auto& tex : m_Textures) {
+			if (tex.second == texture) {
+				return tex.first;
+			}
+		}
+		return std::string();
+	}
+
 }
