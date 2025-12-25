@@ -89,6 +89,11 @@ namespace Snail{
 
 		// 计算中心位置
 		avgPosition /= (float)count; // 坐标总和除以数量就是中心坐标
+		// 将计算出的中心点和共有属性同步到 Context
+		m_Context->entitiesPosition = avgPosition;
+		// 旋转和缩放取第一个物体的作为基准显示
+		m_Context->entitiesRotation = selectedEntities[0].GetComponent<TransformComponent>().rotation;
+		m_Context->entitiesScale = selectedEntities[0].GetComponent<TransformComponent>().scale;
 
 		// ImGuizmo::RecomposeMatrixFromComponents 构建 Gizmo 矩阵 ref
 		glm::mat4 ref;
@@ -106,9 +111,9 @@ namespace Snail{
 		else {
 			// 多选模式：位置在中心
 			ImGuizmo::RecomposeMatrixFromComponents(
-				glm::value_ptr(avgPosition),
-				glm::value_ptr(glm::mat4(0.0f)),
-				glm::value_ptr(glm::vec3(1.0f)),
+				glm::value_ptr(m_Context->entitiesPosition),
+				glm::value_ptr(m_Context->entitiesRotation),
+				glm::value_ptr(m_Context->entitiesScale),
 				glm::value_ptr(ref)
 			);
 		}

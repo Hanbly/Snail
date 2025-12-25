@@ -8,6 +8,7 @@
 
 #include "Panels/EditorContext.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/InspectorPanel.h"
 #include "Panels/EditorViewportPanel.h"
 #include "Panels/GlobalSettingsPanel.h"
 
@@ -16,26 +17,27 @@
 
 namespace Snail {
 
-    class SnailEditorLayer : public Layer
-    {
-    private:
-        // -------------------临时------------------------------------------
-
-        Refptr<FrameBuffer> m_FBO;
+	class SnailEditorLayer : public Layer
+	{
+	private:
+		// -------------------临时------------------------------------------
+		Refptr<FrameBuffer> m_FBO;
 		Refptr<VertexArray> m_ScreenQuadVAO; // 屏幕四边形
 		glm::vec3 m_OutlineColor = { 1.0f, 0.5f, 0.0f }; // 默认橙色
 		int m_OutlineWidth = 3;
 
-        // ECS 核心
-        Refptr<Scene> m_Scene;
+		// ECS 核心
+		Refptr<Scene> m_Scene;
 
-        // 编辑器特有
-        Refptr<EditorCamera> m_EditorCamera;
-        Refptr<EditorContext> m_EditorContext;
+		// 编辑器特有
+		Refptr<EditorCamera> m_EditorCamera;
+		Refptr<EditorContext> m_EditorContext;
 
-        SceneHierarchyPanel m_SHpanel;
-        EditorViewportPanel m_EVpanel;
-        GlobalSettingsPanel m_GSpanel;
+		// -------------------- 面板系统 --------------------
+		SceneHierarchyPanel m_SHpanel;   // 场景列表
+		InspectorPanel      m_Inspector; // [新增] 属性面板
+		EditorViewportPanel m_EVpanel;   // 视口
+		GlobalSettingsPanel m_GSpanel;   // 全局设置
 
 		// 初始化一个覆盖 -1 到 1 范围的平面
 		void InitScreenQuad()
@@ -59,21 +61,17 @@ namespace Snail {
 			m_ScreenQuadVAO->SetIndexBuffer(IndexBuffer::Create(quadIndices, sizeof(quadIndices)));
 		}
 
-        //------------------------------------------------------------------
-    public:
+	public:
 		SnailEditorLayer(const std::string& layerName, const bool& layerEnabled);
 
-        virtual void OnAttach() override;
-        virtual void OnDetach() override {}
-
-        virtual void OnUpdate(const Timestep& ts) override;
-
-        virtual void OnEvent(Event& e) override;
-
-        virtual void OnRender() override;
-        virtual void OnImGuiRender() override;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override {}
+		virtual void OnUpdate(const Timestep& ts) override;
+		virtual void OnEvent(Event& e) override;
+		virtual void OnRender() override;
+		virtual void OnImGuiRender() override;
 	private:
 		bool OnMousePressed(MousePressEvent& e);
-    };
+	};
 
 }
