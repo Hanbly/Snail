@@ -101,7 +101,7 @@ namespace Snail {
 		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::ALWAYS);
 		RendererCommand::EnableBlend(true);
 
-		auto outlineShader = ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl");
+		auto outlineShader = ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl", {});
 		if (outlineShader)
 		{
 			outlineShader->Bind();

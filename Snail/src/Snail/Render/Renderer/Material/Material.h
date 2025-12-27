@@ -17,9 +17,11 @@ namespace Snail {
 
 		// 绑定 Shader 并上传材质所有的特有参数
 		void Bind() const;
+		void BindToShader(const Refptr<Shader>& shader);
 
-		// 获取底层 Shader (供 Renderer3D 调用以设置全局 Uniform)
+		void SetShader(const Refptr<Shader>& shader) { m_Shader = shader; }
 		Refptr<Shader> GetShader() const { return m_Shader; }
+
 		std::vector<TextureType> GetTexturesDimensionsType() const; // Texture2D | TextureCube | ...
 		std::vector<std::string> GetTexturesUsageType() const;		// diffuse | specular | ...
 		std::vector<std::vector<std::string>> GetTexturesAssets() const;	// 文件路径

@@ -5,10 +5,17 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 TextureCoords;
 
-// 实例化数据
-layout(location = 3) in mat4 a_Model; 
-layout(location = 7) in mat3 a_NormalMatrix;
-layout(location = 10) in int a_EntityID;
+#ifdef INSTANCING
+    // 实例化模式：矩阵来自顶点属性 (VBO)
+    layout(location = 3) in mat4 a_Model; 
+    layout(location = 7) in mat3 a_NormalMatrix;
+    layout(location = 10) in int a_EntityID;
+#else
+    // 普通模式：矩阵来自 Uniform
+    uniform mat4 u_Model;
+    uniform mat3 u_NormalMatrix;
+    uniform int u_EntityID;
+#endif
 
 out vec2 v_TextureCoords;
 out vec3 v_Normal;
@@ -19,17 +26,31 @@ uniform mat4 u_ViewProjection;
 
 void main()
 {
+    mat4 modelMatrix;
+    mat3 normalMatrix;
+    int entityID;
+
+#ifdef INSTANCING
+    modelMatrix = a_Model;
+    normalMatrix = a_NormalMatrix;
+    entityID = a_EntityID;
+#else
+    modelMatrix = u_Model;
+    normalMatrix = u_NormalMatrix;
+    entityID = u_EntityID;
+#endif
+
     // 计算世界坐标
-    vec4 worldPos = a_Model * vec4(position, 1.0);
+    vec4 worldPos = modelMatrix * vec4(position, 1.0);
 
     // 计算法线 (已在CPU端计算好 NormalMatrix)
-    v_Normal = normalize(a_NormalMatrix * a_Normal);
+    v_Normal = normalize(normalMatrix * a_Normal);
     
     // 传递世界坐标给片元着色器用于光照计算
     v_FragPos = vec3(worldPos);
     
     v_TextureCoords = TextureCoords;
-    v_EntityID = a_EntityID;
+    v_EntityID = entityID;
     
     gl_Position = u_ViewProjection * worldPos;
 }

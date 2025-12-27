@@ -11,9 +11,9 @@ namespace Snail {
     {
     public:
         // 构造函数：读取文件并编译
-        OpenGLShader(const std::string& filePath);
+        OpenGLShader(const std::string& filePath, const std::vector<std::string>& macros);
         // 构造函数：读取文件并编译 (允许自定义命名)
-        OpenGLShader(const std::string& customName, const std::string& filePath);
+        OpenGLShader(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros);
         // 构造函数：直接传入源码（调试用）
         OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
         ~OpenGLShader();
@@ -38,7 +38,7 @@ namespace Snail {
         // 读取文件内容
         virtual std::string ReadFile(const std::string& filePath) override;
         // 分割源码
-        virtual std::unordered_map<GLenum, std::string> PreProcess(const std::string& source) override;
+        virtual std::unordered_map<GLenum, std::string> PreProcess(const std::string& source, const std::vector<std::string>& macros) override;
         // 编译核心
         virtual void Compile(const std::unordered_map<GLenum, std::string>& shaderSources) override;
         // 获取 Uniform 位置 (带缓存)

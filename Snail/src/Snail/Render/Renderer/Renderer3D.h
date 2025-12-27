@@ -60,6 +60,8 @@ namespace Snail {
 			glm::mat4 ModelMatrix;
 			glm::mat3 NormalMatrix;
 			int EntityID; // 用于 MRT 输出物体轮廓
+
+			float Padding[2];
 		};
 
 		struct MeshRenderData {
@@ -69,6 +71,7 @@ namespace Snail {
 
 		// 3D 场景所需的全局数据
 		struct Renderer3DSceneData {
+			bool EnableInstancing = false;												// 是否批量渲染
 			std::map<Refptr<Mesh>, std::vector<MeshRenderData>> MeshInstanceQueue;	// 用于批量渲染
 			Refptr<VertexBuffer> InstanceVBO;									// 实例的额外vbo
 
@@ -93,12 +96,15 @@ namespace Snail {
 
 		static void DrawSkybox(const Model& model, const EditorCamera& camera);
 		static void DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
-		static void DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 
 		static void SubmitMesh(const Refptr<Mesh>& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 		static void FlushMeshes();
+
+		static void SetEnableInstancing(const bool& status) { s_3DSceneData.EnableInstancing = status; }
+		static bool& GetEnableInstancing() { return s_3DSceneData.EnableInstancing; }
+		static void DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 	private:
-		static void UploadLightsUniforms(const Refptr<Material>& material);
+		static void UploadLightsUniforms(const Refptr<Shader>& shader);
 	};
 
 }

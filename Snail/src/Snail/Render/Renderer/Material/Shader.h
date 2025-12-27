@@ -31,14 +31,14 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 	private:
-		static Refptr<Shader> Create(const std::string& filePath);
-		static Refptr<Shader> Create(const std::string& customName, const std::string& filePath);
+		static Refptr<Shader> Create(const std::string& filePath, const std::vector<std::string>& macros);
+		static Refptr<Shader> Create(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros);
 		static Refptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	private:
         // 读取文件内容
         virtual std::string ReadFile(const std::string& filePath) = 0;
         // 分割源码
-        virtual std::unordered_map<GLenum, std::string> PreProcess(const std::string& source) = 0;
+        virtual std::unordered_map<GLenum, std::string> PreProcess(const std::string& source, const std::vector<std::string>& macros) = 0;
         // 编译核心
         virtual void Compile(const std::unordered_map<GLenum, std::string>& shaderSources) = 0;
         // 获取 Uniform 位置 (带缓存)

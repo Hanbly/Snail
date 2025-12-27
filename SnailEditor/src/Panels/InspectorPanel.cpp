@@ -340,7 +340,7 @@ namespace Snail {
 		// 1. 导入新模型到实体
 		FileSelecter::Handle("ModelImportKey", [this](const std::string& path) {
 			if (m_Context->selectedEntity) {
-				auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl");
+				auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl", {});
 				auto model = std::make_shared<Model>(shader, path);
 				m_Context->selectedEntity.AddComponent<ModelComponent>(model);
 			}
@@ -399,13 +399,13 @@ namespace Snail {
 						if (m_Context->selectedEntity.HasAllofComponent<ModelComponent>()) return;
 
 						if (type != PrimitiveType::Skybox) {
-							auto defaultShader = ShaderLibrary::Load("assets/shaders/Standard.glsl");
+							auto defaultShader = ShaderLibrary::Load("assets/shaders/Standard.glsl", {});
 							auto model = std::make_shared<Model>(type, defaultShader, std::vector<Refptr<Texture>>{});
 							m_Context->selectedEntity.AddComponent<ModelComponent>(model);
 						}
 						else {
 							// Skybox 特殊处理
-							auto skyShader = ShaderLibrary::Load("assets/shaders/TextureCube_Shader.glsl");
+							auto skyShader = ShaderLibrary::Load("assets/shaders/TextureCube_Shader.glsl", {});
 							std::vector<std::string> paths = {
 								"assets/images/defaultSky/right.jpg", "assets/images/defaultSky/left.jpg",
 								"assets/images/defaultSky/top.jpg",   "assets/images/defaultSky/bottom.jpg",

@@ -31,6 +31,33 @@ namespace Snail {
 		}
 	}
 
+	void Material::BindToShader(const Refptr<Shader>& shader)
+	{
+		shader->Bind();
+
+		// 上传所有缓存的 Uniform 数据
+		for (const auto& [name, value] : m_Ints) shader->SetInt(name, value);
+		for (const auto& [name, value] : m_Floats) shader->SetFloat(name, value);
+		for (const auto& [name, value] : m_Float3s) shader->SetFloat3(name, value);
+		for (const auto& [name, value] : m_Float4s) shader->SetFloat4(name, value);
+		for (const auto& [name, value] : m_Mat3s) shader->SetMat3(name, value);
+		for (const auto& [name, value] : m_Mat4s) shader->SetMat4(name, value);
+
+		// 绑定纹理
+		int slot = 0;
+		for (const auto& [name, texture] : m_Textures)
+		{
+			if (texture) {
+				texture->Bind(slot);
+				shader->SetInt(name, slot);
+				slot++;
+			}
+			else {
+				SNL_CORE_WARN("Material: 尝试绑定名为 '{0}' 的空纹理!", name);
+			}
+		}
+	}
+
 	std::vector<TextureType> Material::GetTexturesDimensionsType() const
 	{
 		std::vector<TextureType> dimensionsTypes;

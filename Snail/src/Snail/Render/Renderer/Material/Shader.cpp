@@ -8,11 +8,11 @@
 
 namespace Snail {
 
-	Refptr<Shader> Shader::Create(const std::string& filePath)
+	Refptr<Shader> Shader::Create(const std::string& filePath, const std::vector<std::string>& macros)
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
-		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(filePath);
+		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(filePath, macros);
 		case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!") return nullptr;
 		}
 
@@ -20,11 +20,11 @@ namespace Snail {
 		return nullptr;
 	}
 
-	Refptr<Shader> Shader::Create(const std::string& customName, const std::string& filePath)
+	Refptr<Shader> Shader::Create(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros)
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
-		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(customName, filePath);
+		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLShader>(customName, filePath, macros);
 		case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!") return nullptr;
 		}
 

@@ -504,7 +504,7 @@ namespace Snail {
 					std::string shaderPath = modelComponent["ShaderPath"].as<std::string>();
 
 					// 加载 Shader
-					Refptr<Shader> shader = ShaderLibrary::Load(shaderPath);
+					Refptr<Shader> shader = ShaderLibrary::Load(shaderPath, {});
 
 					Refptr<Model> model = nullptr;
 					std::string cacheKey;

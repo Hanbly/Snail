@@ -1,23 +1,38 @@
 ﻿#type vertex
 #version 330 core
 
+
 layout(location = 0) in vec3 position;
-// mat4 自动占用 location 1, 2, 3, 4
-layout(location = 3) in mat4 a_Model; 
-// 选中状态 0未选中 1选中
-layout(location = 10) in int a_EntityID;
+#ifdef INSTANCING
+    // 实例化模式：矩阵来自顶点属性 (VBO)
+    layout(location = 3) in mat4 a_Model; 
+    layout(location = 10) in int a_EntityID;
+#else
+    // 普通模式：矩阵来自 Uniform
+    uniform mat4 u_Model;
+    uniform int u_EntityID;
+#endif
 
 flat out int v_EntityID;
 
-uniform mat4 u_Model;
 uniform mat4 u_ViewProjection;
 
 void main()
 {
-    
-    v_EntityID = a_EntityID;
+    mat4 modelMatrix;
+    int entityID;
 
-    vec4 worldPos = a_Model * vec4(position, 1.0);
+#ifdef INSTANCING
+    modelMatrix = a_Model;
+    entityID = a_EntityID;
+#else
+    modelMatrix = u_Model;
+    entityID = u_EntityID;
+#endif
+
+    v_EntityID = entityID;
+
+    vec4 worldPos = modelMatrix * vec4(position, 1.0);
     gl_Position = u_ViewProjection * worldPos;
 }
 

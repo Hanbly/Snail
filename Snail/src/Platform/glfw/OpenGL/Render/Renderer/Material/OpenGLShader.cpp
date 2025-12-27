@@ -18,7 +18,7 @@ namespace Snail {
         return 0;
     }
 
-    OpenGLShader::OpenGLShader(const std::string& filePath)
+    OpenGLShader::OpenGLShader(const std::string& filePath, const std::vector<std::string>& macros)
         : m_FilePath(filePath)
     {
         SNL_PROFILE_FUNCTION();
@@ -27,7 +27,7 @@ namespace Snail {
         // 1. 读取文件
         std::string source = ReadFile(filePath);
         // 2. 预处理分割
-        auto shaderSources = PreProcess(source);
+        auto shaderSources = PreProcess(source, macros);
         // 3. 编译
         Compile(shaderSources);
 
@@ -36,14 +36,14 @@ namespace Snail {
         m_Name = path.stem().string();          // 返回除去扩展名的文件名
     }
 
-    OpenGLShader::OpenGLShader(const std::string& customName, const std::string& filePath)
+    OpenGLShader::OpenGLShader(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros)
         : m_Name(customName), m_FilePath(filePath)
     {
         SNL_PROFILE_FUNCTION();
 
 
         std::string source = ReadFile(filePath);
-        auto shaderSources = PreProcess(source);
+        auto shaderSources = PreProcess(source, macros);
         Compile(shaderSources);
     }
 
@@ -94,8 +94,7 @@ namespace Snail {
         return result;
     }
 
-    // --- 借用 Hazel 的解析逻辑，非常标准 ---
-    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source, const std::vector<std::string>& macros)
     {
         SNL_PROFILE_FUNCTION();
 
@@ -119,6 +118,45 @@ namespace Snail {
 
             shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
         }
+
+		// 没有宏需要定义，直接返回
+		if (macros.empty())
+			return shaderSources;
+
+		// 构建例如: 
+        // #define INSTANCED\n
+        // #define TEST\n
+		std::string macroBlock;
+		for (const auto& macro : macros)
+		{
+			macroBlock += "#define " + macro + "\n";
+		}
+
+		for (auto& kv : shaderSources)
+		{
+			std::string& src = kv.second; // 获取引用，直接修改
+
+			// 查找 #version 语句
+			// 宏定义必须位于 #version 之后，其他代码之前
+			size_t versionPos = src.find("#version");
+
+			if (versionPos != std::string::npos)
+			{
+				// 找到 #version 这一行的结束位置 (跳过换行符)
+				size_t eol = src.find_first_of("\r\n", versionPos);
+				// 找到下一行的起始位置
+				size_t nextLine = src.find_first_not_of("\r\n", eol);
+
+				// 在 #version 行之后插入宏定义
+				src.insert(nextLine, macroBlock);
+			}
+			else
+			{
+				// 如果源码里没写 #version，直接插在最前面
+				src.insert(0, macroBlock);
+			}
+		}
+
         return shaderSources;
     }
 
