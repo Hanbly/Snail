@@ -15,6 +15,43 @@
 
 namespace Snail {
 
+	// --- 平行光数据 ---
+	struct DirectionLight {
+		glm::vec3 direction;
+		glm::vec4 color;
+
+		float ambient;
+		float diffuse;
+		float specular;
+		DirectionLight(const glm::vec3& dir, const glm::vec4& color, const float& ambient, const float& diffuse, const float& specular)
+			:
+			direction(dir),
+			color(color),
+			ambient(ambient), diffuse(diffuse), specular(specular)
+		{}
+	};
+
+	// --- 点光源数据 ---
+	struct PointLight {
+		glm::vec3 position;
+		glm::vec4 color;
+
+		float constant;
+		float linear;
+		float quadratic;
+
+		float ambient;
+		float diffuse;
+		float specular;
+		PointLight(const glm::vec3& pos, const glm::vec4& color, const float& constant, const float& linear, const float& quadratic, const float& ambient, const float& diffuse, const float& specular)
+			:
+			position(pos),
+			color(color),
+			constant(constant), linear(linear), quadratic(quadratic),
+			ambient(ambient), diffuse(diffuse), specular(specular)
+		{}
+	};
+
 	class Renderer3D
 	{
 	private:
@@ -38,10 +75,9 @@ namespace Snail {
 			glm::mat4 ViewProjectionMatrix; // VP 矩阵
 			glm::vec3 CameraPosition;       // 相机位置 (用于镜面光计算)
 
-			// 简单的单光源数据 (未来可以扩展为光源列表)
-			glm::vec3 LightPosition;
-			glm::vec4 LightColor;
-			float AmbientStrength;
+			// 光源列表
+			std::vector<DirectionLight> DirLights;
+			std::vector<PointLight> PoiLights;
 		};
 
 		static Renderer3DSceneData s_3DSceneData;
@@ -52,7 +88,7 @@ namespace Snail {
 		static void Shutdown();
 
 		// BeginScene 升级：接收相机 + 光源信息
-		static void BeginScene(const Camera* camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor, const float& ambient);
+		static void BeginScene(const Camera* camera, const glm::mat4& transform, std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights);
 		static void EndScene();
 
 		static void DrawSkybox(const Model& model, const EditorCamera& camera);
@@ -61,6 +97,8 @@ namespace Snail {
 
 		static void SubmitMesh(const Refptr<Mesh>& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 		static void FlushMeshes();
+	private:
+		static void UploadLightsUniforms(const Refptr<Material>& material);
 	};
 
 }

@@ -95,8 +95,8 @@ namespace Snail {
 
 		// 暂时用默认值代替
 		//m_Material->SetFloat("u_AmbientStrength", 0.1f);  // 默认一点点环境光 // 现在依据Scene类的属性来设置了
-		m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
-		m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
+		//m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
+		//m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
 		m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度
 
 		CalculateBoundingBox(vertices);

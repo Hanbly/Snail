@@ -236,16 +236,45 @@ namespace Snail {
              out << YAML::EndMap; // CameraComponent Map 结束
          }
 
-        // --- 序列化 PointLightComponent ---
-        if (entity.HasAllofComponent<PointLightComponent>())
-        {
-            out << YAML::Key << "PointLightComponent";
-            out << YAML::BeginMap;
-            const auto& lightComponent = entity.GetComponent<PointLightComponent>();
-            out << YAML::Key << "Color" << YAML::Value << lightComponent.color;
-            out << YAML::Key << "Intensity" << YAML::Value << lightComponent.intensity;
-            out << YAML::EndMap;
-        }
+		// --- 序列化 DirectionalLightComponent ---
+		if (entity.HasAllofComponent<DirectionalLightComponent>())
+		{
+			out << YAML::Key << "DirectionalLightComponent";
+			out << YAML::BeginMap;
+
+			const auto& dlc = entity.GetComponent<DirectionalLightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << dlc.color;
+			out << YAML::Key << "Direction" << YAML::Value << dlc.direction;
+
+			// 光照强度分量
+			out << YAML::Key << "Ambient" << YAML::Value << dlc.ambient;
+			out << YAML::Key << "Diffuse" << YAML::Value << dlc.diffuse;
+			out << YAML::Key << "Specular" << YAML::Value << dlc.specular;
+
+			out << YAML::EndMap;
+		}
+
+		// --- 序列化 PointLightComponent ---
+		if (entity.HasAllofComponent<PointLightComponent>())
+		{
+			out << YAML::Key << "PointLightComponent";
+			out << YAML::BeginMap;
+
+			const auto& plc = entity.GetComponent<PointLightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << plc.color;
+
+			// 衰减系数
+			out << YAML::Key << "Constant" << YAML::Value << plc.constant;
+			out << YAML::Key << "Linear" << YAML::Value << plc.linear;
+			out << YAML::Key << "Quadratic" << YAML::Value << plc.quadratic;
+
+			// 光照强度分量
+			out << YAML::Key << "Ambient" << YAML::Value << plc.ambient;
+			out << YAML::Key << "Diffuse" << YAML::Value << plc.diffuse;
+			out << YAML::Key << "Specular" << YAML::Value << plc.specular;
+
+			out << YAML::EndMap;
+		}
 
         // --- 序列化 ModelComponent ---
 		if (entity.HasAllofComponent<ModelComponent>())
@@ -428,12 +457,40 @@ namespace Snail {
 					//out << YAML::EndMap; // CameraComponent Map 结束
 				}
 
-				// --- PointLightComponent ---
+				// --- 反序列化 DirectionalLightComponent ---
+				auto dirLightComponent = entityNode["DirectionalLightComponent"];
+				if (dirLightComponent)
+				{
+					auto& dlc = deserializedEntity.AddComponent<DirectionalLightComponent>();
+
+					dlc.direction = dirLightComponent["Direction"].as<glm::vec3>();
+					dlc.color = dirLightComponent["Color"].as<glm::vec4>();
+
+					// 光照强度
+					if (dirLightComponent["Ambient"]) dlc.ambient = dirLightComponent["Ambient"].as<float>();
+					if (dirLightComponent["Diffuse"]) dlc.diffuse = dirLightComponent["Diffuse"].as<float>();
+					if (dirLightComponent["Specular"]) dlc.specular = dirLightComponent["Specular"].as<float>();
+				}
+
+				// --- 反序列化 PointLightComponent ---
 				auto pointLightComponent = entityNode["PointLightComponent"];
-				if (pointLightComponent) {
+				if (pointLightComponent)
+				{
 					auto& plc = deserializedEntity.AddComponent<PointLightComponent>();
+
 					plc.color = pointLightComponent["Color"].as<glm::vec4>();
-					plc.intensity = pointLightComponent["Intensity"].as<float>();
+
+					// 衰减系数
+					if (pointLightComponent["Constant"]) plc.constant = pointLightComponent["Constant"].as<float>();
+					if (pointLightComponent["Linear"]) plc.linear = pointLightComponent["Linear"].as<float>();
+					if (pointLightComponent["Quadratic"]) plc.quadratic = pointLightComponent["Quadratic"].as<float>();
+
+					// 光照强度
+					if (pointLightComponent["Ambient"]) plc.ambient = pointLightComponent["Ambient"].as<float>();
+					if (pointLightComponent["Diffuse"]) plc.diffuse = pointLightComponent["Diffuse"].as<float>();
+					if (pointLightComponent["Specular"]) plc.specular = pointLightComponent["Specular"].as<float>();
+
+					// 注意：旧代码中的 Intensity 字段已被移除，不需要再读取
 				}
 
 				// --- ModelComponent ---

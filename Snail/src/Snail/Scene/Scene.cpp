@@ -86,17 +86,41 @@ namespace Snail {
         // ------------------------------------------------
         // 寻找光源 (System: Light System)
         // ------------------------------------------------
-        // 这里简单处理：找第一个有点光源组件的实体，如果没有则用默认值
-        glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-        glm::vec4 lightColor(1.0f);
+        std::vector<DirectionLight> dirLights;
+        std::vector<PointLight> poiLights;
+        
+		// // --- 平行光源组件 ---
+		{
+			auto view = m_Registry.view<DirectionalLightComponent>();
+			for (auto [entity, light] : view.each())
+			{
+				glm::vec3 lightDir = light.direction;
+				glm::vec4 lightColor = light.color;
+				float ambient = light.ambient;
+				float diffuse = light.diffuse;
+				float specular = light.specular;
+				DirectionLight directionLight(lightDir, lightColor, ambient, diffuse, specular);
 
+				dirLights.push_back(directionLight);
+			}
+		}
+
+        // --- 点光源组件 ---
         {
             auto view = m_Registry.view<TransformComponent, PointLightComponent>();
             for (auto [entity, transform, light] : view.each())
             {
-                lightPos = glm::vec3(transform.position);
-                lightColor = light.color;
-                break; // 暂时只支持单光源
+                glm::vec3 lightPos = transform.position;
+                glm::vec4 lightColor = light.color;
+				float constant = light.constant;
+				float linear = light.linear;
+				float quadratic = light.quadratic;
+				float ambient = light.ambient;
+				float diffuse = light.diffuse;
+				float specular = light.specular;
+                PointLight pointLight(lightPos, lightColor, constant, linear, quadratic, ambient, diffuse, specular);
+                
+                poiLights.push_back(pointLight);
             }
         }
 
@@ -104,7 +128,7 @@ namespace Snail {
         // ------------------------------------------------
         // 渲染流程 (System: Render System)
         // ------------------------------------------------
-        Renderer3D::BeginScene(camera.get(), cameraTransform, lightPos, lightColor, this->GetAmbientStrength());
+        Renderer3D::BeginScene(camera.get(), cameraTransform, dirLights, poiLights);
 
 
         auto group = m_Registry.group<TransformComponent, ModelComponent>();

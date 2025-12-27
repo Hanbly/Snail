@@ -46,7 +46,8 @@ namespace Snail {
 			});
 
 		DrawTransformComponent(entity);
-		DrawLightComponent(entity);
+		DrawDirectionalLightComponent(entity);
+		DrawPointLightComponent(entity);
 		DrawModelComponent(entity);
 	}
 
@@ -69,7 +70,7 @@ namespace Snail {
 
 			DrawVec3Control("Position", uiPos);
 			DrawVec3Control("Rotation", uiRot);
-			DrawVec3Control("Scale", uiScale, 1.0f);
+			DrawVec3Control("Scale", uiScale, glm::vec3(1.0f));
 
 			// 应用变化
 			if (uiPos != oldPos || uiRot != oldRot || uiScale != oldScale)
@@ -140,11 +141,37 @@ namespace Snail {
 		DrawComponentWrapper<TransformComponent>("Transform", entity, [this](auto& component) {
 			DrawVec3Control("Position", component.position);
 			DrawVec3Control("Rotation", component.rotation);
-			DrawVec3Control("Scale", component.scale, 1.0f);
+			DrawVec3Control("Scale", component.scale, glm::vec3(1.0f));
 			});
 	}
 
-	void InspectorPanel::DrawLightComponent(Entity entity)
+	void InspectorPanel::DrawDirectionalLightComponent(Entity entity)
+	{
+		DrawComponentWrapper<DirectionalLightComponent>("Directional Light", entity, [](auto& component) {
+			if (ImGui::BeginTable("LightProps", 2, ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp)) {
+				ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
+				ImGui::TableSetupColumn("Control");
+
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Color");
+				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
+
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Direction");
+				ImGui::TableSetColumnIndex(1);
+				DrawVec3Control("Direction", component.direction, glm::vec3(0.0f, -1.0f, 0.0f));
+
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Ambient");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Ambient", &component.ambient, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Diffuse");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Diffuse", &component.diffuse, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Specular");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Specular", &component.specular, 0.01f, 0.0f, 1.0f);
+
+				ImGui::EndTable();
+			}
+			});
+	}
+
+	void InspectorPanel::DrawPointLightComponent(Entity entity)
 	{
 		DrawComponentWrapper<PointLightComponent>("Point Light", entity, [](auto& component) {
 			if (ImGui::BeginTable("LightProps", 2, ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp)) {
@@ -154,8 +181,12 @@ namespace Snail {
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Color");
 				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
 
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 0.1f, 0.0f, 100.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Ambient");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Ambient", &component.ambient, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Diffuse");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Diffuse", &component.diffuse, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Specular");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Specular", &component.specular, 0.01f, 0.0f, 1.0f);
 
 				ImGui::EndTable();
 			}
@@ -407,15 +438,71 @@ namespace Snail {
 			// ------------ 添加光源组件 -----------
 			if (ImGui::BeginMenu("光源组件"))
 			{
+				// ### 平行光源组件
+				if (ImGui::BeginMenu("平行光源组件"))
+				{
+					static glm::vec4 s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+					static glm::vec3 s_InitDir = { 0.0f, -1.0f, 0.0f }; // 竖直向下
+					static float s_InitAmbient = 0.1f;
+					static float s_InitDiffuse = 0.8f;
+					static float s_InitSpecular = 0.5f;
+					ImGui::TextDisabled("初始参数设置");
+
+					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
+					DrawVec3Control("方向", s_InitDir, glm::vec3(0.0f, -1.0f, 0.0f));
+					ImGui::TextDisabled("光强参数");
+					ImGui::DragFloat("环境光强度", &s_InitAmbient, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("漫反射光强度", &s_InitDiffuse, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("镜面光强度", &s_InitSpecular, 0.01f, 0.0f, 1.0f);
+
+					ImGui::Separator();
+
+					// 实际执行添加的按钮
+					if (ImGui::MenuItem("确认添加"))
+					{
+						if (m_Context->selectedEntity && !m_Context->selectedEntity.HasAllofComponent<DirectionalLightComponent>())
+						{
+							auto& dlc = m_Context->selectedEntity.AddComponent<DirectionalLightComponent>();
+
+							// 删除transform组件和model组件
+							if(m_Context->selectedEntity.HasAllofComponent<TransformComponent>()) 
+								m_Context->selectedEntity.RemoveComponent<TransformComponent>();
+							if (m_Context->selectedEntity.HasAllofComponent<ModelComponent>())
+								m_Context->selectedEntity.RemoveComponent<ModelComponent>();
+
+							dlc.color = s_InitColor;
+							dlc.direction = s_InitDir;
+
+							dlc.ambient = s_InitAmbient;
+							dlc.diffuse = s_InitDiffuse;
+							dlc.specular = s_InitSpecular;
+
+							s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+							s_InitDir = { 0.0f, -1.0f, 0.0f };
+							static float s_InitAmbient = 0.1f;
+							static float s_InitDiffuse = 0.8f;
+							static float s_InitSpecular = 0.5f;
+						}
+						ImGui::CloseCurrentPopup(); // 关闭整个 "AddComponent" 菜单
+					}
+
+					ImGui::EndMenu();
+				}
+
+				// ### 点光源组件 
 				if (ImGui::BeginMenu("点光源组件"))
 				{
-					// 暂存参数
 					static glm::vec4 s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-					static float s_InitIntensity = 1.0f;
+					static float s_InitAmbient = 0.1f;
+					static float s_InitDiffuse = 0.8f;
+					static float s_InitSpecular = 0.5f;
 					ImGui::TextDisabled("初始参数设置");
 					// 颜色选择面板
 					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
-					ImGui::DragFloat("强度", &s_InitIntensity, 0.1f, 0.0f, 100.0f);
+					ImGui::TextDisabled("光强参数");
+					ImGui::DragFloat("环境光强度", &s_InitAmbient, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("漫反射光强度", &s_InitDiffuse, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("镜面光强度", &s_InitSpecular, 0.01f, 0.0f, 1.0f);
 
 					ImGui::Separator();
 
@@ -426,15 +513,23 @@ namespace Snail {
 						{
 							auto& plc = m_Context->selectedEntity.AddComponent<PointLightComponent>();
 							plc.color = s_InitColor;
-							plc.intensity = s_InitIntensity;
+							
+							plc.ambient = s_InitAmbient;
+							plc.diffuse = s_InitDiffuse;
+							plc.specular = s_InitSpecular;
+
 							s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-							s_InitIntensity = 1.0f;
+							static float s_InitAmbient = 0.1f;
+							static float s_InitDiffuse = 0.8f;
+							static float s_InitSpecular = 0.5f;
 						}
 						ImGui::CloseCurrentPopup(); // 关闭整个 "AddComponent" 菜单
 					}
 
 					ImGui::EndMenu();
 				}
+
+				
 				ImGui::EndMenu();
 			}
 
@@ -445,7 +540,7 @@ namespace Snail {
 		ImGui::PopItemWidth();
 	}
 
-	void InspectorPanel::DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue, float columnWidth)
+	void InspectorPanel::DrawVec3Control(const std::string& label, glm::vec3& values, glm::vec3& resetValue, float columnWidth)
 	{
 		ImGui::PushID(label.c_str());
 
@@ -463,7 +558,7 @@ namespace Snail {
 		// X Button
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
-		if (ImGui::Button("X", buttonSize)) values.x = resetValue;
+		if (ImGui::Button("X", buttonSize)) values.x = resetValue.x;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
 		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
@@ -473,7 +568,7 @@ namespace Snail {
 		// Y Button
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
-		if (ImGui::Button("Y", buttonSize)) values.y = resetValue;
+		if (ImGui::Button("Y", buttonSize)) values.y = resetValue.y;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
 		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
@@ -483,7 +578,7 @@ namespace Snail {
 		// Z Button
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
-		if (ImGui::Button("Z", buttonSize)) values.z = resetValue;
+		if (ImGui::Button("Z", buttonSize)) values.z = resetValue.z;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
 		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");

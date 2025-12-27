@@ -4,117 +4,186 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 TextureCoords;
-// mat4 自动占用 location 3, 4, 5, 6
+
+// 实例化数据
 layout(location = 3) in mat4 a_Model; 
-// 法线矩阵 (loc 7,8,9) - 直接从 CPU 传
 layout(location = 7) in mat3 a_NormalMatrix;
-// 选中状态 0未选中 1选中
 layout(location = 10) in int a_EntityID;
 
 out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
-// 使用 flat 插值，避免整数被插值
 flat out int v_EntityID;
 
-// uniform mat4 u_Model;
 uniform mat4 u_ViewProjection;
-uniform mat3 u_NormalMatrix;
 
 void main()
 {
-    // ------------ 临时 ----------------
+    // 计算世界坐标
     vec4 worldPos = a_Model * vec4(position, 1.0);
 
+    // 计算法线 (已在CPU端计算好 NormalMatrix)
     v_Normal = normalize(a_NormalMatrix * a_Normal);
+    
+    // 传递世界坐标给片元着色器用于光照计算
     v_FragPos = vec3(worldPos);
-    gl_Position = u_ViewProjection * worldPos;
-    // ---------------------------------
-
-    //gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
+    
     v_TextureCoords = TextureCoords;
-    //v_Normal = normalize(u_NormalMatrix * a_Normal);
-    //v_FragPos = vec3(u_Model * vec4(position, 1.0));
-
     v_EntityID = a_EntityID;
+    
+    gl_Position = u_ViewProjection * worldPos;
 }
 
 #type fragment
 #version 330 core
 
-// MRT 输出
-layout(location = 0) out vec4 FinalColor;      // 输出到 GL_COLOR_ATTACHMENT0
-layout(location = 1) out int EntityIDBuffer;   // 输出到 GL_COLOR_ATTACHMENT1 (GL_R8/GL_RED_INTEGER)
+#define MAX_DIR_LIGHTS 4
+#define MAX_POINT_LIGHTS 16
+
+layout(location = 0) out vec4 FinalColor;
+layout(location = 1) out int EntityIDBuffer;
 
 in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
 flat in int v_EntityID;
 
-uniform vec4 u_LightColor;
+// 材质
 uniform sampler2D u_Diffuse1;
 uniform sampler2D u_Specular1;
 uniform bool u_UseTexture;
-uniform vec3 u_LightPosition;
+
+uniform vec3 u_ColorDiffuse;
+uniform vec3 u_ColorSpecular;
+uniform vec3 u_ColorAmbient;
+uniform float u_Shininess; // 建议值: 32.0 ~ 256.0
+
 uniform vec3 u_ViewPosition;
 
-uniform float u_AmbientStrength;     // 环境光照系数
-uniform float u_DiffuseStrength;     // 漫反射系数
-uniform float u_SpecularStrength;    // 镜面反射系数
+struct DirLight {
+    vec3 direction;
+    vec3 color; // rgb
+    float ambient;
+    float diffuse;
+    float specular;
+};
 
-// MTL 的颜色变量
-uniform vec3 u_ColorDiffuse;  // Kd
-uniform vec3 u_ColorSpecular; // Ks
-uniform vec3 u_ColorAmbient;  // Ka
-uniform float u_Shininess;    // Ns
+struct PointLight {
+    vec3 position;
+    vec3 color; // rgb
+    float constant;
+    float linear;
+    float quadratic;
+    float ambient;
+    float diffuse;
+    float specular;
+};
+
+uniform DirLight u_DirLights[MAX_DIR_LIGHTS];
+uniform int u_DirLightCount;
+
+uniform PointLight u_PointLights[MAX_POINT_LIGHTS];
+uniform int u_PointLightCount;
+
+// 函数声明
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask);
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask);
 
 void main()
 {
-    // 1. 获取基础颜色 (有纹理用纹理，没纹理用 Kd)
-    vec4 objectColor;
-    if(u_UseTexture)
-        objectColor = texture(u_Diffuse1, v_TextureCoords);
-    else
-        objectColor = vec4(u_ColorDiffuse, 1.0);
+    // 1. 纹理/材质颜色采样
+    vec4 texColor = texture(u_Diffuse1, v_TextureCoords);
+    vec3 diffMapColor;
+    if(u_UseTexture) {
+        if(texColor.a < 0.1) discard;
+        diffMapColor = texColor.rgb;
+    } else {
+        diffMapColor = u_ColorDiffuse;
+    }
 
-    if(objectColor.a < 0.1)
-        discard;
-
-
-
-
-    // 2. 环境光 (Ambient = Ka * LightColor)
-    vec3 ambient = u_ColorAmbient * u_LightColor.rgb * vec3(u_AmbientStrength);
-
-    // 3. 漫反射 (Diffuse = Diff * LightColor)
-    vec3 norm = normalize(v_Normal);
-    vec3 lightDir = normalize(u_LightPosition - v_FragPos);
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * u_LightColor.rgb * vec3(u_DiffuseStrength);
-
-    // 4. 镜面反射 (Specular = Spec * Ks * LightColor)
-    vec3 viewDir = normalize(u_ViewPosition - v_FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
-    
-    float specMask = 1.0; // 默认全反光
+    // 2. 高光遮罩采样
+    float specMask = 1.0;
     if (u_UseTexture) {
-        // 从纹理采样。因为高光图通常是黑白的，取红色通道 r 即可
-        // 这决定了“哪里该亮，哪里不该亮”
         specMask = texture(u_Specular1, v_TextureCoords).r;
     }
-    // 原始高光 * 材质高光色(Ks) * 光源颜色 * 全局强度系数 * 贴图遮罩(specMask)
-    vec3 specular = spec * u_ColorSpecular * u_LightColor.rgb * vec3(u_SpecularStrength) * specMask;
 
+    // 必须在 Fragment Shader 中再次归一化，插值会导致长度变化
+    vec3 norm = normalize(v_Normal);
+    vec3 viewDir = normalize(u_ViewPosition - v_FragPos);
+    
+    vec3 result = vec3(0.0);
 
+    // 3. 计算平行光
+    int dirCount = min(u_DirLightCount, MAX_DIR_LIGHTS);
+    for(int i = 0; i < dirCount; i++)
+    {
+        result += CalcDirLight(u_DirLights[i], norm, viewDir, diffMapColor, specMask);
+    }
 
+    // 4. 计算点光源
+    int pointCount = min(u_PointLightCount, MAX_POINT_LIGHTS);
+    for(int i = 0; i < pointCount; i++)
+    {
+        result += CalcPointLight(u_PointLights[i], norm, v_FragPos, viewDir, diffMapColor, specMask);
+    }
 
-    // 5. 组合结果
-    // (环境光 + 漫反射) * 物体颜色 + 镜面高光
-    vec3 result = (ambient + diffuse + specular) * objectColor.rgb;
-
+    // 简单的色调映射或钳制，防止过曝成纯白
+    result = result / (result + vec3(1.0)); // Reinhard tone mapping
+    
     FinalColor = vec4(result, 1.0);
+    EntityIDBuffer = v_EntityID;
+}
 
-    // 将选中状态写入第二个附件 (Red通道)
-    EntityIDBuffer = v_EntityID; 
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask)
+{
+    // 这里的 direction 是光线传播方向，所以取反指向光源
+    vec3 lightDir = normalize(-light.direction);
+    
+    // Diffuse
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // Specular
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
+    
+    // 如果漫反射为0（光源在背面），强制取消高光
+    if(diff <= 0.0) spec = 0.0;
+
+    // 合并
+    vec3 ambient  = light.ambient  * light.color * diffColor; // 注意：多光源时环境光会累加变白，调低 light.ambient
+    vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
+    vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
+    
+    return (ambient + diffuse + specular);
+}
+
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask)
+{
+    vec3 lightDir = normalize(light.position - fragPos);
+    
+    // Diffuse
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // Specular
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
+    
+    // 背面剔除高光
+    if(diff <= 0.0) spec = 0.0;
+
+    // 衰减计算
+    float distance = length(light.position - fragPos);
+    // 衰减公式: 1 / (Kc + Kl*d + Kq*d^2)
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    
+    // 组合
+    vec3 ambient  = light.ambient  * light.color * diffColor;
+    vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
+    vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
+    
+    ambient  *= attenuation;
+    diffuse  *= attenuation;
+    specular *= attenuation;
+    
+    return (ambient + diffuse + specular);
 }

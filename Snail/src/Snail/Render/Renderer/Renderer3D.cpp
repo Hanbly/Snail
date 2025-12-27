@@ -28,7 +28,7 @@ namespace Snail {
 	{
 	}
 
-	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform, const glm::vec3& lightPos, const glm::vec4& lightColor, const float& ambient)
+	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform, std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -39,9 +39,9 @@ namespace Snail {
 		// 获取相机位置
 		s_3DSceneData.CameraPosition = glm::vec3(transform[3]);
 
-		s_3DSceneData.LightPosition = lightPos;
-		s_3DSceneData.LightColor = lightColor;
-		s_3DSceneData.AmbientStrength = ambient;
+		// 复制光源列表
+		s_3DSceneData.DirLights.assign(dirLights.begin(), dirLights.end());
+		s_3DSceneData.PoiLights.assign(poiLights.begin(), poiLights.end());
 	}
 
 	void Renderer3D::EndScene()
@@ -98,18 +98,21 @@ namespace Snail {
 		material->SetMat3("u_NormalMatrix", glm::transpose(glm::inverse(glm::mat3(transform))));
 
 		material->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
-		material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
-		material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
+
+		// 上传光源列表的 uniforms 
+		UploadLightsUniforms(material);
+		//material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
+		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
+		//material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
 
 		material->Bind();
 
 		// 绘制几何体
 		mesh.GetVAO()->Bind();
 
-		RendererCommand::StencilMask(edgeEnable);
-		RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
+		//RendererCommand::StencilMask(edgeEnable);
+		//RendererCommand::StencilFunc(RendererCommand::StencilFuncType::ALWAYS, 1, 0xFF);
 
 		RendererCommand::DrawIndexed(mesh.GetVAO());
 
@@ -167,25 +170,26 @@ namespace Snail {
 			if (meshData.empty()) continue;
 
 			// 绑定材质
-			auto material = mesh->GetMaterial();
+			auto& material = mesh->GetMaterial();
 			material->GetShader()->Bind();
 
 			// 设置全局 Uniform (VP矩阵, 光照等)
 			// 注意：u_Model 不再通过 Uniform 设置，而是通过 InstanceVBO 传递
 			material->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
-			material->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
-			material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
-			material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-			material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
 
+			material->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
+
+			// 上传光源列表的 uniforms 
+			UploadLightsUniforms(material);
+
+			// 真正上传 uniforms
 			material->Bind();
 
 			// 绑定 Mesh 的 VAO 并挂载 Instance Buffer
-			auto vao = mesh->GetVAO();
+			auto& vao = mesh->GetVAO();
 			vao->Bind();
 
 			// 这一步将 InstanceVBO 绑定到该 VAO 的属性位置上 (例如 location 3,4,5,6)
-			// 注意：如果这行代码开销大，可以只在第一次绘制该 Mesh 时做一次，但需要 VAO 记录状态
 			vao->SetInstanceBuffer(s_3DSceneData.InstanceVBO);
 
 			size_t totalInstances = meshData.size();
@@ -239,6 +243,49 @@ namespace Snail {
 
 		// 清空队列，准备下一帧
 		s_3DSceneData.MeshInstanceQueue.clear();
+	}
+
+	void Renderer3D::UploadLightsUniforms(const Refptr<Material>& material)
+	{
+		// --- 上传平行光 ---
+		int dirLightIndex = 0;
+		for (auto& dl : s_3DSceneData.DirLights) {
+			// 限制最大光源数量，防止越界（需与 Shader 中的 #define 保持一致）
+			if (dirLightIndex >= 4) break;
+
+			std::string baseName = "u_DirLights[" + std::to_string(dirLightIndex) + "]";
+
+			material->SetFloat3(baseName + ".direction", dl.direction);
+			material->SetFloat3(baseName + ".color", dl.color);
+			material->SetFloat(baseName + ".ambient", dl.ambient);
+			material->SetFloat(baseName + ".diffuse", dl.diffuse);
+			material->SetFloat(baseName + ".specular", dl.specular);
+
+			dirLightIndex++;
+		}
+		// 告诉 Shader 实际有多少个平行光
+		material->SetInt("u_DirLightCount", dirLightIndex);
+
+		// --- 上传点光源 ---
+		int pointLightIndex = 0;
+		for (auto& pl : s_3DSceneData.PoiLights) {
+			if (pointLightIndex >= 16) break; // Shader 中最大定义为 16
+
+			std::string baseName = "u_PointLights[" + std::to_string(pointLightIndex) + "]";
+
+			material->SetFloat3(baseName + ".position", pl.position);
+			material->SetFloat3(baseName + ".color", pl.color);
+			material->SetFloat(baseName + ".constant", pl.constant);
+			material->SetFloat(baseName + ".linear", pl.linear);
+			material->SetFloat(baseName + ".quadratic", pl.quadratic);
+			material->SetFloat(baseName + ".ambient", pl.ambient);
+			material->SetFloat(baseName + ".diffuse", pl.diffuse);
+			material->SetFloat(baseName + ".specular", pl.specular);
+
+			pointLightIndex++;
+		}
+		// 告诉 Shader 实际有多少个点光源
+		material->SetInt("u_PointLightCount", pointLightIndex);
 	}
 
 }

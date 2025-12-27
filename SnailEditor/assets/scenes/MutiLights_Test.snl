@@ -1,0 +1,275 @@
+Scene: MutiLights_Test
+SceneSettings:
+  AmbientStrength: 0.100000001
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 48
+  Near: 1
+  Far: 10000
+  Aspect: 1
+  ViewMatrix: [-0.279524893, 0.283445984, 0.917346358, -0, 2.98023224e-08, 0.955431342, -0.29521364, 0, -0.96013844, -0.0825195536, -0.267066866, 0, 327.961853, -899.779785, -1961.20642, 1]
+  Position: [2145.81763, 280.702881, -283.133728]
+  DirvecFront: [-0.917346299, 0.29521364, 0.267066836]
+  DirvecRight: [-0.279524922, 0, -0.9601385]
+  DirvecUp: [0.283445954, 0.955431223, -0.0825195611]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: -17.1703491
+  DirvecYaw: -1186.23181
+  FocalPoint: [1346.14856, 538.046509, -50.3262177]
+  Distance: 871.719971
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  DollySpeed: 0.5
+Entities:
+  - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
+    TagComponent:
+      Tag: Sky
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/TextureCube_Shader.glsl
+      Meshes:
+        - PrimitiveType: Skybox
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/skybox/right.jpg, assets/images/skybox/left.jpg, assets/images/skybox/top.jpg, assets/images/skybox/bottom.jpg, assets/images/skybox/front.jpg, assets/images/skybox/back.jpg]
+      Visible: true
+      EdgeEnable: false
+  - Entity: 34048efb-a663-43ac-9167-99bea6fb20fa
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Position: [284.361755, 290.881439, -8.95636767e-05]
+      Rotation: [24.999979, 24.9999866, 25.0000038]
+      Scale: [24.9999886, 25, 24.9999847]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/images/kulisu.png]
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/images/mayoli.png]
+      Visible: true
+      EdgeEnable: false
+  - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Position: [180.85141, 469.872223, -332.721039]
+      Rotation: [24.9999237, 24.9998856, 24.9999619]
+      Scale: [16.5000057, 16.5000076, 16.499979]
+    PointLightComponent:
+      Color: [0.0792078972, 1, 0, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.769999981
+      Diffuse: 0.349999994
+      Specular: 0.409999996
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/light_box.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
+    TagComponent:
+      Tag: Spider
+    TransformComponent:
+      Position: [337.291473, 287.025696, -142.132919]
+      Rotation: [-0.00063236471, 5.01690977e-07, 2.91082893e-06]
+      Scale: [0.360000074, 0.360000193, 0.360000312]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: assets/models/spider-fbx/Spider.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 7acb17e4-c17a-4399-bece-5380d9f95bac
+    TagComponent:
+      Tag: 球
+    TransformComponent:
+      Position: [123.3554, 320.402832, -94.8246765]
+      Rotation: [-0.000632366224, 5.0171343e-07, 2.91083279e-06]
+      Scale: [35.9999886, 36.0000267, 36.0000114]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Sphere.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: d084f868-e7e2-4744-8dda-b7a3ff05091c
+    TagComponent:
+      Tag: 立方体
+    TransformComponent:
+      Position: [221.646698, 255.419281, 9.7124548]
+      Rotation: [-0.000632364943, 5.01704051e-07, 2.91083074e-06]
+      Scale: [35.9999847, 36.0000229, 36.0000038]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Cube.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 03c375ba-8704-42c8-a55e-bfa5468c30be
+    TagComponent:
+      Tag: 半锥体
+    TransformComponent:
+      Position: [171.69223, 288.362854, 54.9477234]
+      Rotation: [-0.000632366224, 5.0171343e-07, 2.91083279e-06]
+      Scale: [35.9999886, 36.0000267, 36.0000114]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Tapered Cylinder.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: 4faa9a71-76eb-436f-91a0-6dd0e8624a18
+    TagComponent:
+      Tag: 圆环
+    TransformComponent:
+      Position: [297.761902, 220.081467, 237.399902]
+      Rotation: [0, -0, 0]
+      Scale: [40, 40, 40]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Torus.fbx
+      Visible: true
+      EdgeEnable: false
+  - Entity: be29d899-817c-4e9d-86d3-1e491c50d9d7
+    TagComponent:
+      Tag: 图元立方体
+    TransformComponent:
+      Position: [103.910309, 255.41925, 33.3317642]
+      Rotation: [-0.000632366224, 5.0171343e-07, 2.91083279e-06]
+      Scale: [35.9999886, 36.0000267, 36.0000114]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 38773621-047d-46dd-a57e-3284deb7d4b0
+    TagComponent:
+      Tag: 点光源2
+    TransformComponent:
+      Position: [177.253937, 465.655609, 353.866211]
+      Rotation: [0, -0, 0]
+      Scale: [19.7999992, 19.7999992, 19.7999992]
+    PointLightComponent:
+      Color: [0.927392721, 0.0979424566, 0.0979424566, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.589999974
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Sphere
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: fb6a7153-9d76-4c79-86b0-90f1748f267c
+    TagComponent:
+      Tag: 图元平面
+    TransformComponent:
+      Position: [232.136581, 429.867188, 23.3996887]
+      Rotation: [126.199966, -2.19998169, 2.46866102e-06]
+      Scale: [33.4799843, 33.4799843, 33.4799995]
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Plane
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 6b6b2bdf-2bf2-49c0-9708-13576ec09564
+    TagComponent:
+      Tag: 宫殿室内
+    TransformComponent:
+      Position: [-170.891815, 195.108078, 71.8565521]
+      Rotation: [0, -0, 0]
+      Scale: [1.9038533, 1.9038533, 1.9038533]
+    ModelComponent:
+      IsImported: true
+      ShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\sponza\sponza.obj
+      Visible: true
+      EdgeEnable: false
+  - Entity: c73d2836-332c-458e-be1c-3df8c1ab1e88
+    TagComponent:
+      Tag: 点光源3
+    TransformComponent:
+      Position: [799.263611, 948.106812, -5.92705393]
+      Rotation: [0, -0, 0]
+      Scale: [6.60000038, 6.60000038, 6.60000038]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Sphere
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 59eb6b72-5b88-413d-9361-f87c573b8e06
+    TagComponent:
+      Tag: 点光源4
+    TransformComponent:
+      Position: [-219.989273, 834.391907, -30.9806633]
+      Rotation: [0, -0, 0]
+      Scale: [19.7999973, 19.7999973, 19.7999973]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      ShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Plane
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 1c972982-5585-4dd0-8bca-f034608a8fd4
+    TagComponent:
+      Tag: 平行光源
+    DirectionalLightComponent:
+      Color: [1, 1, 1, 1]
+      Direction: [4.4000001, -1, -0.699999988]
+      Ambient: 0.0900000036
+      Diffuse: 1
+      Specular: 1

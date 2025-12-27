@@ -32,7 +32,8 @@ namespace Snail {
 		// -------------------- 具体组件绘制 --------------------
 		void DrawTagComponent(Entity entity);
 		void DrawTransformComponent(Entity entity);
-		void DrawLightComponent(Entity entity);
+		void DrawDirectionalLightComponent(Entity entity);
+		void DrawPointLightComponent(Entity entity);
 		void DrawModelComponent(Entity entity);
 
 		// -------------------- 模型组件辅助 --------------------
@@ -42,7 +43,7 @@ namespace Snail {
 		void DrawTextureTable(size_t meshIndex, const std::vector<Refptr<Texture>>& textures, Refptr<Mesh>& mesh);
 
 		// -------------------- 通用 UI 控件 --------------------
-		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawVec3Control(const std::string& label, glm::vec3& values, glm::vec3& resetValue = glm::vec3(0.0f), float columnWidth = 100.0f);
 
 		template<typename T, typename UIFunction>
 		void DrawComponentWrapper(const std::string& name, Entity entity, UIFunction uiFunction);

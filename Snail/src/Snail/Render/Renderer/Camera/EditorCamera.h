@@ -118,8 +118,8 @@ namespace Snail {
 
 		// 投影属性
 		float m_FOV = 45.0f;
-		float m_Near = 0.01f;
-		float m_Far = 50000.0f;
+		float m_Near = 1.0f;
+		float m_Far = 10000.0f;
 		float m_Aspect = (float)1280 / 720;
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 		glm::mat4 m_ViewMatrix;
