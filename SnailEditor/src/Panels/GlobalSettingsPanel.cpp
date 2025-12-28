@@ -1,11 +1,10 @@
-﻿
-#include "GlobalSettingsPanel.h"
+﻿#include "GlobalSettingsPanel.h"
 
 namespace Snail{
 
 	void GlobalSettingsPanel::Show(const Refptr<EditorCamera>& ec)
 	{
-		ImGui::Begin(u8"全局设置");
+		ImGui::Begin(u8"全局参数");
 
 		// --- 性能监控 (Stats) ---
 		ImGui::Text(u8"帧率:");

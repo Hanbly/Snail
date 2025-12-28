@@ -12,7 +12,7 @@ namespace Snail {
 		stbi_set_flip_vertically_on_load(true);
 		int width, height, channels;
 		stbi_uc* data = stbi_load(path[0].c_str(), &width, &height, &channels, 0);
-		SNL_CORE_ASSERT(data, "OpenGLTexture2D: stbi_load加载纹理文件失败!")
+		SNL_CORE_ASSERT(data, "OpenGLTexture2D: stbi_load加载纹理文件失败!");
 		m_Width = width;
 		m_Height = height;
 

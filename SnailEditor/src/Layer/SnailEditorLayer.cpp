@@ -5,13 +5,16 @@ namespace Snail {
 	SnailEditorLayer::SnailEditorLayer(const std::string& layerName, const bool& layerEnabled)
 		: Layer(layerName, layerEnabled),
 		m_Scene(std::make_shared<Scene>()),
+		m_EditorCamera(std::make_shared<EditorCamera>()),
 		m_EditorContext(std::make_shared<EditorContext>()),
-		m_SHpanel(m_Scene, m_EditorContext),
-		m_Inspector(m_Scene, m_EditorContext), // 属性面板
-		m_EVpanel(m_Scene, m_EditorContext),
-		m_GSpanel(m_Scene, m_EditorContext)
+		m_GlobalSettingsPanel(m_Scene, m_EditorContext),
+		m_EditorViewportPanel(m_Scene, m_EditorCamera, m_EditorContext),
+		m_SceneHierarchyPanel(m_Scene, m_EditorContext),
+		m_InspectorPanel(m_Scene, m_EditorContext),
+		m_AssetsBrowserPanel()
 	{
-		m_EditorCamera = std::make_shared<EditorCamera>();
+		m_AssetsBrowserPanel.LoadIcons();
+
 		FrameBufferSpecification spec(1920, 1080);
 		m_FBO = FrameBuffer::Create(spec);
 	}
@@ -19,8 +22,7 @@ namespace Snail {
 	void SnailEditorLayer::OnAttach() {
 		SNL_PROFILE_FUNCTION();
 
-		SceneSerializer serializer(m_Scene, m_EditorCamera);
-		serializer.Deserialize("assets/scenes/test.snl");
+		LoadScene("assets/scenes/test.snl");
 
 		// ----- 初始化面板的上下文 EditorContext ------
 		int count = 0;
@@ -45,7 +47,7 @@ namespace Snail {
 	void SnailEditorLayer::OnUpdate(const Timestep& ts) {
 		SNL_PROFILE_FUNCTION();
 
-		if (!ImGuizmo::IsUsing() && (m_EVpanel.IsFocused() || m_EVpanel.IsHovered())) {
+		if (!ImGuizmo::IsUsing() && (m_EditorViewportPanel.IsFocused() || m_EditorViewportPanel.IsHovered())) {
 			m_EditorCamera->OnUpdate(ts);
 		}
 	}
@@ -63,25 +65,25 @@ namespace Snail {
 			Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT) ||
 			Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL))
 		{
-			if (!m_EVpanel.IsHovered())
+			if (!m_EditorViewportPanel.IsHovered())
 				return false;
 
 			auto [mx_global, my_global] = ImGui::GetMousePos();
-			float mx = mx_global - m_EVpanel.GetBoundMin().x;
-			float my = my_global - m_EVpanel.GetBoundMin().y;
-			float width = m_EVpanel.GetSize().x;
-			float height = m_EVpanel.GetSize().y;
+			float mx = mx_global - m_EditorViewportPanel.GetBoundMin().x;
+			float my = my_global - m_EditorViewportPanel.GetBoundMin().y;
+			float width = m_EditorViewportPanel.GetSize().x;
+			float height = m_EditorViewportPanel.GetSize().y;
 
 			Entity hit = m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection());
 
 			if (Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT)) {
-				m_SHpanel.ResetSelectedEntity({});
+				m_SceneHierarchyPanel.ResetSelectedEntity({});
 			}
 			else if (hit.IsValid() && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
-				m_SHpanel.AddSelectedEntity(hit);
+				m_SceneHierarchyPanel.AddSelectedEntity(hit);
 			}
 			else if (hit.IsValid()) {
-				m_SHpanel.ResetSelectedEntity(hit);
+				m_SceneHierarchyPanel.ResetSelectedEntity(hit);
 			}
 		}
 		return false;
@@ -154,30 +156,46 @@ namespace Snail {
 
 		// -------------------- 文件操作处理 --------------------
 		FileSelecter::Handle("OpenSceneDlg", [&](const std::string& path) {
-			SceneSerializer serializer(m_Scene, m_EditorCamera);
-			m_Scene->Clear();
-			if (serializer.Deserialize(path)) {
-				SNL_CORE_INFO("成功加载场景: {0}", path);
-			}
-			else {
-				SNL_CORE_ERROR("加载场景失败: {0}", path);
-			}
+			LoadScene(path);
 			});
 
 		FileSelecter::Handle("SaveSceneDlg", [&](const std::string& path) {
-			SceneSerializer serializer(m_Scene, m_EditorCamera);
-			std::string sceneName = std::filesystem::path(path).stem().string();
-			serializer.Serialize(sceneName, path);
-			SNL_CORE_INFO("场景已保存至: {0}", path);
+			SaveScene(path);
+			});
+
+		// --------------- 其它面板的回调函数绑定 -----------------
+		m_AssetsBrowserPanel.SetOnSceneFileOpenCallback([this](const std::string& path) {
+			LoadScene(path);
 			});
 
 		// -------------------- 面板显示 --------------------
-		m_SHpanel.Show();
-		m_Inspector.Show();
-		m_EVpanel.Show(m_FBO, m_EditorCamera);
-		m_GSpanel.Show(m_EditorCamera);
+		m_GlobalSettingsPanel.Show(m_EditorCamera);
+		m_EditorViewportPanel.Show(m_FBO);
+		m_SceneHierarchyPanel.Show();
+		m_InspectorPanel.Show();
+		m_AssetsBrowserPanel.show();
 
 		ImGui::End();
+	}
+
+	void SnailEditorLayer::LoadScene(const std::string& path)
+	{
+		SceneSerializer serializer(m_Scene, m_EditorCamera);
+		m_Scene->Clear();
+		if (serializer.Deserialize(path)) {
+			SNL_CORE_INFO("成功加载场景: {0}", path);
+		}
+		else {
+			SNL_CORE_ERROR("加载场景失败: {0}", path);
+		}
+	}
+
+	void SnailEditorLayer::SaveScene(const std::string& path) const
+	{
+		SceneSerializer serializer(m_Scene, m_EditorCamera);
+		std::string sceneName = std::filesystem::path(path).stem().u8string();
+		serializer.Serialize(sceneName, path);
+		SNL_CORE_INFO("场景已保存至: {0}", path);
 	}
 
 }

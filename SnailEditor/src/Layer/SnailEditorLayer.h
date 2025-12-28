@@ -7,10 +7,11 @@
 #include "Snail/Scene/SceneUtils.h"
 
 #include "Panels/EditorContext.h"
+#include "Panels/GlobalSettingsPanel.h"
+#include "Panels/EditorViewportPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/InspectorPanel.h"
-#include "Panels/EditorViewportPanel.h"
-#include "Panels/GlobalSettingsPanel.h"
+#include "Panels/AssetsBrowserPanel.h"
 
 #include <filesystem>
 #include <glm/glm.hpp>
@@ -34,10 +35,11 @@ namespace Snail {
 		Refptr<EditorContext> m_EditorContext;
 
 		// -------------------- 面板系统 --------------------
-		SceneHierarchyPanel m_SHpanel;   // 场景列表
-		InspectorPanel      m_Inspector; // [新增] 属性面板
-		EditorViewportPanel m_EVpanel;   // 视口
-		GlobalSettingsPanel m_GSpanel;   // 全局设置
+		GlobalSettingsPanel m_GlobalSettingsPanel;		// 全局设置
+		EditorViewportPanel m_EditorViewportPanel;		// 视口
+		SceneHierarchyPanel m_SceneHierarchyPanel;		// 场景列表
+		InspectorPanel      m_InspectorPanel;			// 属性面板
+		AssetsBrowserPanel	m_AssetsBrowserPanel;		// 资源浏览器
 
 		// 初始化一个覆盖 -1 到 1 范围的平面
 		void InitScreenQuad()
@@ -70,6 +72,9 @@ namespace Snail {
 		virtual void OnEvent(Event& e) override;
 		virtual void OnRender() override;
 		virtual void OnImGuiRender() override;
+
+		void LoadScene(const std::string& path);
+		void SaveScene(const std::string& path) const;
 	private:
 		bool OnMousePressed(MousePressEvent& e);
 	};

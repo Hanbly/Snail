@@ -84,7 +84,7 @@ namespace Snail {
 		m_FullPath = path;
 
 		// parent_path() 自动提取目录
-	    m_Directory = stdPath.parent_path().string(); 
+	    m_Directory = stdPath.parent_path().u8string(); 
 
 		ProcessNode(scene->mRootNode, scene, glm::mat4(1.0f));
 

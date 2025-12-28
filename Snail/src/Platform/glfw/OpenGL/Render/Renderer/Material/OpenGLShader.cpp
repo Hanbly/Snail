@@ -33,7 +33,7 @@ namespace Snail {
 
         // 从路径提取名字 (例如 assets/shaders/Texture.glsl -> Texture)
         std::filesystem::path path = filePath; 
-        m_Name = path.stem().string();          // 返回除去扩展名的文件名
+        m_Name = path.stem().u8string();          // 返回除去扩展名的文件名
     }
 
     OpenGLShader::OpenGLShader(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros)

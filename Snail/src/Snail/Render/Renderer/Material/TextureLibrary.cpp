@@ -12,7 +12,7 @@ namespace Snail {
 	{
 		// 从路径提取名字 (例如 assets/images/color.png -> color)
 		std::filesystem::path path = filePath[0];		// 默认首个
-		std::string name = path.stem().string();		// 除去扩展名的文件名
+		std::string name = path.stem().u8string();		// 除去扩展名的文件名
 
 		std::string pathKey = PathsToKey(filePath);
 		

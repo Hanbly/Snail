@@ -11,7 +11,7 @@ namespace Snail {
 	{
 		// 从路径提取名字 (例如 assets/shaders/Cube.glsl -> Cube)
 		std::filesystem::path path = filePath;
-		std::string name = path.stem().string();          // 除去扩展名的文件名
+		std::string name = path.stem().u8string();          // 除去扩展名的文件名
 
 		std::string pathKey = PathsMacrosToKey(std::string(filePath), macros);
 

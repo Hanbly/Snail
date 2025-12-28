@@ -1,11 +1,11 @@
-﻿
-#include "EditorViewportPanel.h"
+﻿#include "EditorViewportPanel.h"
 
+#include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Snail{
 
-	void EditorViewportPanel::Show(const Refptr<FrameBuffer>& fbo, const Refptr<EditorCamera>& ec)
+	void EditorViewportPanel::Show(const Refptr<FrameBuffer>& fbo)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin(u8"离屏渲染视口");
@@ -50,7 +50,7 @@ namespace Snail{
 			m_ViewportSize.y = ImguiViewportSize.y;
 
 			fbo->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			ec->SetViewportSize((float)m_ViewportSize.x, (float)m_ViewportSize.y);
+			m_EditorCamera->SetViewportSize((float)m_ViewportSize.x, (float)m_ViewportSize.y);
 		}
 
 		// ----------------- 获取帧缓冲信息，绘制纹理 -----------------------
@@ -125,8 +125,8 @@ namespace Snail{
 		glm::mat4 oldRef = ref;
 
 		ImGuizmo::Manipulate(
-			glm::value_ptr(ec->GetViewMatrix()),
-			glm::value_ptr(ec->GetProjection()),
+			glm::value_ptr(m_EditorCamera->GetViewMatrix()),
+			glm::value_ptr(m_EditorCamera->GetProjection()),
 			m_Context->mCurrentGizmoOperation,
 			m_Context->mCurrentGizmoMode,
 			glm::value_ptr(ref)
@@ -173,6 +173,5 @@ namespace Snail{
 		ImGui::End();
 		ImGui::PopStyleVar();
 	}
-
 
 }

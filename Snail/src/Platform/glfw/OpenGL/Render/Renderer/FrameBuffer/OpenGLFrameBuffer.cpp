@@ -7,7 +7,7 @@ namespace Snail {
 	static const uint32_t MaxFrameBufferSize = 8162;
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
-		: m_RendererId(0), m_ColorAttachment(0), m_DepthAttachment(0), m_RenderbufferObjectAttachment(0), m_Specification(spec)
+		: m_RendererId(0), m_ColorAttachment(0), m_MaskAttachment(0), m_DepthAttachment(0), m_RenderbufferObjectAttachment(0), m_Specification(spec)
 	{
 		ReGenerate();
 	}
@@ -83,11 +83,11 @@ namespace Snail {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		// --------------------- RenderbufferObjectAttachment -----------------------
-		glGenRenderbuffers(1, &m_RenderbufferObjectAttachment);
+		/*glGenRenderbuffers(1, &m_RenderbufferObjectAttachment);
 		glBindRenderbuffer(GL_RENDERBUFFER, m_RenderbufferObjectAttachment);
 
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_Specification.width, m_Specification.height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderbufferObjectAttachment);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderbufferObjectAttachment);*/
 
 
 		// 告诉 OpenGL 我们要同时输出到两个附件
@@ -114,8 +114,9 @@ namespace Snail {
 	void OpenGLFrameBuffer::Delete()
 	{
 		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_MaskAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
-		glDeleteRenderbuffers(1, &m_RenderbufferObjectAttachment);
+		//glDeleteRenderbuffers(1, &m_RenderbufferObjectAttachment);
 
 		glDeleteFramebuffers(1, &m_RendererId);
 	}

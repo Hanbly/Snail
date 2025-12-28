@@ -18,6 +18,9 @@ namespace Snail {
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);
 		virtual ~OpenGLFrameBuffer();
 
+		OpenGLFrameBuffer(const OpenGLFrameBuffer&) = delete;
+		OpenGLFrameBuffer& operator=(const OpenGLFrameBuffer&) = delete;
+
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
