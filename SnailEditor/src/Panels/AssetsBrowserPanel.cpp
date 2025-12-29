@@ -115,27 +115,22 @@ namespace Snail {
 			ImGui::ImageButton("##browserBtn", (ImTextureID)(uint64_t)textureId, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 
 			// 拖拽源 (Drag Source)
-			if (ImGui::BeginDragDropSource())
-			{
-				const wchar_t* itemPathStr = path.c_str();
-				size_t payloadSize = (wcslen(itemPathStr) + 1) * sizeof(wchar_t);
-				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPathStr, payloadSize);
-
-				ImGui::ImageButton("##dragImg", (ImTextureID)(uint64_t)textureId, { 64, 64 }, { 0, 1 }, { 1, 0 });
-				ImGui::Text(filenameString.c_str());
-				ImGui::EndDragDropSource();
-			}
+			DragDrop::DrawPathDragDropSource("ASSETS_BROWSER_ITEM", path, [&]()	{
+					// 预览图逻辑
+					ImGui::ImageButton("##dragImg", (ImTextureID)(uint64_t)textureId, { 64, 64 }, { 0, 1 }, { 1, 0 });
+					ImGui::Text(filenameString.c_str());
+				});
 
 			ImGui::PopStyleColor();
 
-			// 双击交互
+			// -------------- 双击交互 ---------------------
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 				if (isDirectory)
 					m_CurrentDirectory /= path.filename();
 				else
 				{
-					// TODO: 打开文件逻辑
+					// 打开文件逻辑
 					std::string extension = path.extension().string();
 
 					// --- 场景文件 ---
@@ -143,6 +138,11 @@ namespace Snail {
 					{
 						// 注意：这里传出去的是绝对路径或相对路径的 string
 						m_OnSceneFileOpenCallback(path.string());
+					}
+					// --- 模型文件 ---
+					else if (extension == ".obj" || extension == ".fbx")
+					{
+						m_OnEntityFileOpenCallback(path.string());
 					}
 
 				}

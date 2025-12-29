@@ -105,12 +105,12 @@ namespace Snail{
 		}
 
 		// --- 光源设置 (Lighting) ---
-		if (m_Scene)
+		if (m_Context->scene)
 		{
 			if (ImGui::TreeNodeEx(u8"场景光照", ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				// 获取引用的方式修改 Scene 中的数据
-				auto& ambient = m_Scene->GetAmbientStrength();
+				auto& ambient = m_Context->scene->GetAmbientStrength();
 
 				ImGui::DragFloat("Ambient", &ambient, 0.001f, 0.0f, 1.0f, "%.2f");
 

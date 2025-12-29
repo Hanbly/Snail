@@ -7,16 +7,18 @@ namespace Snail {
 		m_Scene(std::make_shared<Scene>()),
 		m_EditorCamera(std::make_shared<EditorCamera>()),
 		m_EditorContext(std::make_shared<EditorContext>()),
-		m_GlobalSettingsPanel(m_Scene, m_EditorContext),
-		m_EditorViewportPanel(m_Scene, m_EditorCamera, m_EditorContext),
-		m_SceneHierarchyPanel(m_Scene, m_EditorContext),
-		m_InspectorPanel(m_Scene, m_EditorContext),
+		m_GlobalSettingsPanel(m_EditorContext),
+		m_EditorViewportPanel(m_EditorCamera, m_EditorContext),
+		m_SceneHierarchyPanel(m_EditorContext),
+		m_InspectorPanel(m_EditorContext),
 		m_AssetsBrowserPanel()
 	{
-		m_AssetsBrowserPanel.LoadIcons();
+		m_EditorContext->scene = m_Scene;
 
 		FrameBufferSpecification spec(1920, 1080);
 		m_FBO = FrameBuffer::Create(spec);
+
+		m_AssetsBrowserPanel.LoadIcons();
 	}
 
 	void SnailEditorLayer::OnAttach() {
@@ -24,7 +26,8 @@ namespace Snail {
 
 		LoadScene("assets/scenes/test.snl");
 
-		// ----- 初始化面板的上下文 EditorContext ------
+		// ----- 初始化面板的上下文 EditorContext 的选中实体 ------
+		// 如果选中只有一个实体就设置 selectedEntity ，如果超过一个就置空
 		int count = 0;
 		auto modelview = m_Scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
 		for (auto [entity, transform, model] : modelview.each()) {
@@ -38,9 +41,33 @@ namespace Snail {
 			}
 		}
 
-		m_EditorContext->mCurrentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-		m_EditorContext->mCurrentGizmoMode = ImGuizmo::MODE::WORLD;
 
+		// --------------- UI面板的回调函数绑定 -----------------
+		// 视口面板：
+		// 1.接收拖动.snl文件
+		// 2.接收拖动.obj .fbx ... 文件
+		m_EditorViewportPanel.SetOnSceneFileOpenCallback([this](const std::string& path) {
+			LoadScene(path);
+			});
+		m_EditorViewportPanel.SetOnEntityFileOpenCallback([this](const std::string& path) {
+			m_EditorContext->scene->CreateModelEntity(path);
+			});
+		// 场景面板：
+		// 1.接收拖动.obj .fbx ... 文件
+		m_SceneHierarchyPanel.SetOnEntityFileOpenCallback([this](const std::string& path) {
+			m_EditorContext->scene->CreateModelEntity(path);
+			});
+		// 资源浏览器面板：（拖动发起方）
+		// 1.双击.snl文件
+		// 2.双击.obj .fbx ... 文件
+		m_AssetsBrowserPanel.SetOnSceneFileOpenCallback([this](const std::string& path) {
+			LoadScene(path);
+			});
+		m_AssetsBrowserPanel.SetOnEntityFileOpenCallback([this](const std::string& path) {
+			m_EditorContext->scene->CreateModelEntity(path);
+			});
+
+		// --- 初始化用于fbo后处理的矩形 ---
 		InitScreenQuad();
 	}
 
@@ -77,13 +104,13 @@ namespace Snail {
 			Entity hit = m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection());
 
 			if (Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT)) {
-				m_SceneHierarchyPanel.ResetSelectedEntity({});
+				m_EditorContext->ResetSelectedEntity({});
 			}
 			else if (hit.IsValid() && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
-				m_SceneHierarchyPanel.AddSelectedEntity(hit);
+				m_EditorContext->AddSelectedEntity(hit);
 			}
 			else if (hit.IsValid()) {
-				m_SceneHierarchyPanel.ResetSelectedEntity(hit);
+				m_EditorContext->ResetSelectedEntity(hit);
 			}
 		}
 		return false;
@@ -117,6 +144,9 @@ namespace Snail {
 			outlineShader->SetInt("u_OutlineWidth", m_OutlineWidth);
 			outlineShader->SetFloat("u_Width", (float)m_FBO->GetSpecification().width);
 			outlineShader->SetFloat("u_Height", (float)m_FBO->GetSpecification().height);
+
+			outlineShader->SetFloat("u_Near", m_EditorCamera->GetNear());
+			outlineShader->SetFloat("u_Far", m_EditorCamera->GetFar());
 
 			m_ScreenQuadVAO->Bind();
 			RendererCommand::DrawIndexed(m_ScreenQuadVAO);
@@ -154,18 +184,13 @@ namespace Snail {
 			ImGui::EndMenuBar();
 		}
 
-		// -------------------- 文件操作处理 --------------------
+		// -------------------- 文件选择器操作处理 --------------------
 		FileSelecter::Handle("OpenSceneDlg", [&](const std::string& path) {
 			LoadScene(path);
 			});
 
 		FileSelecter::Handle("SaveSceneDlg", [&](const std::string& path) {
 			SaveScene(path);
-			});
-
-		// --------------- 其它面板的回调函数绑定 -----------------
-		m_AssetsBrowserPanel.SetOnSceneFileOpenCallback([this](const std::string& path) {
-			LoadScene(path);
 			});
 
 		// -------------------- 面板显示 --------------------
@@ -180,8 +205,10 @@ namespace Snail {
 
 	void SnailEditorLayer::LoadScene(const std::string& path)
 	{
-		SceneSerializer serializer(m_Scene, m_EditorCamera);
+		m_EditorContext->selectedEntity = {};
 		m_Scene->Clear();
+
+		SceneSerializer serializer(m_Scene, m_EditorCamera);
 		if (serializer.Deserialize(path)) {
 			SNL_CORE_INFO("成功加载场景: {0}", path);
 		}

@@ -56,6 +56,14 @@ namespace Snail {
         }
     }
 
+    void Scene::CreateModelEntity(const std::string& path)
+    {
+        auto entity = CreateEntity("New Model");
+		auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl", {});
+		auto model = std::make_shared<Model>(shader, path);
+        entity.AddComponent<ModelComponent>(model);
+    }
+
 	void Scene::OnUpdateRuntime(const Timestep& ts)
 	{
         // ------------------------------------------------

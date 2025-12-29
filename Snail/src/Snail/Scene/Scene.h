@@ -34,6 +34,8 @@ namespace Snail {
 		Entity CreateEntityWithUuid(const boost::uuids::uuid& uuid, const std::string& name = "");
 		void DestroyEntity(Entity entity);
 
+		void CreateModelEntity(const std::string& path);
+
 		template<typename... T>
 		auto GetAllofEntitiesWith()
 		{

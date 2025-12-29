@@ -12,12 +12,11 @@ namespace Snail {
 	// ---------------------------------------------------------
 	class InspectorPanel : public Panel {
 	private:
-		Refptr<Scene> m_Scene;
 		Refptr<EditorContext> m_Context;
 
 	public:
-		InspectorPanel(const Refptr<Scene>& scene, const Refptr<EditorContext>& context)
-			: m_Scene(scene), m_Context(context) {
+		InspectorPanel(const Refptr<EditorContext>& context)
+			: m_Context(context) {
 		}
 
 		void Show();

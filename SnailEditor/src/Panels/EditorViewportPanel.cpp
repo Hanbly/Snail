@@ -62,6 +62,21 @@ namespace Snail{
 			ImVec2(1, 0)  // UV1: 纹理的(1,0) -> 对应 OpenGL 右下
 		);
 
+		// ---------------- 处理作为拖拽目标的逻辑 -------------------
+		DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+				std::string extension = path.extension().string();
+
+				if (extension == ".snl")
+				{
+					// 加载场景
+					m_OnSceneFileOpenCallback(path.string());
+				}
+				else if (extension == ".obj" || extension == ".fbx")
+				{
+					m_OnEntityFileOpenCallback(path.string());
+				}
+			});
+
 		// --------------- 绘制gizmo ------------------
 		ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportSize.x, m_ViewportSize.y);
 
@@ -71,10 +86,10 @@ namespace Snail{
 		std::vector<Entity> selectedEntities;
 		glm::vec3 avgPosition = { 0.0f, 0.0f, 0.0f };
 		int count = 0;
-		auto modelview = m_Scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
+		auto modelview = m_Context->scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
 		for (auto [entity, transform, model] : modelview.each()) {
 			if (model.edgeEnable) {
-				selectedEntities.push_back({ entity, m_Scene.get() });
+				selectedEntities.push_back({ entity, m_Context->scene.get() });
 				avgPosition += transform.position;
 				count++;
 			}

@@ -4,15 +4,15 @@ namespace Snail {
 
 	void SceneHierarchyPanel::Show()
 	{
-		if (!m_Scene) { SNL_CORE_ERROR("SceneHierarchyPanel: 未定义的场景信息!"); return; };
+		if (!m_Context->scene) { SNL_CORE_ERROR("SceneHierarchyPanel: 未定义的场景信息!"); return; };
 
 		ImGui::Begin(u8"场景列表");
 
 		// -------------------- 绘制实体列表 --------------------
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0.0f, 4.0f });
-		auto view = m_Scene->GetRegistry().view<entt::entity>();
+		auto view = m_Context->scene->GetRegistry().view<entt::entity>();
 		for (auto it = view.rbegin(), last = view.rend(); it != last; ++it) {
-			Entity entity{ *it, m_Scene.get() };
+			Entity entity{ *it, m_Context->scene.get() };
 			DrawEntityNode(entity);
 		}
 		ImGui::PopStyleVar();
@@ -29,13 +29,23 @@ namespace Snail {
 		DrawAddEntityPopup();
 		ImGui::PopItemWidth();
 
+		// ---------------- 处理作为拖拽目标的逻辑 -------------------
+		DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+			std::string extension = path.extension().string();
+
+			if (extension == ".obj" || extension == ".fbx")
+			{
+				m_OnEntityFileOpenCallback(path.string());
+			}
+			});
+
 		// -------------------- 空白处点击取消选中 --------------------
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-			ResetSelectedEntity({});
+			m_Context->ResetSelectedEntity({});
 
 		// ----------------- 在此延迟删除实体 --------------------
 		if (m_Context->entityToDelete.IsValid())
-			m_Scene->DestroyEntity(m_Context->entityToDelete);		
+			m_Context->scene->DestroyEntity(m_Context->entityToDelete);
 
 		ImGui::End();
 	}
@@ -44,38 +54,9 @@ namespace Snail {
 	{
 		if (ImGui::BeginPopup("AddEntity"))
 		{
-			m_Scene->CreateEntity();
+			m_Context->scene->CreateEntity();
 			ImGui::CloseCurrentPopup();
 			ImGui::EndPopup();
-		}
-	}
-
-	void SceneHierarchyPanel::ResetSelectedEntity(const Entity& entity) {
-		// 清除所有实体的描边状态
-		auto modelview = m_Scene->GetAllofEntitiesWith<ModelComponent>();
-		for (auto [e, model] : modelview.each())
-			model.edgeEnable = false;
-
-		m_Context->selectedEntity = entity;
-
-		// 如果新选中的实体有模型，开启描边
-		if (m_Context->selectedEntity && m_Context->selectedEntity.IsValid()) {
-			if (m_Context->selectedEntity.HasAllofComponent<ModelComponent>()) {
-				m_Context->selectedEntity.GetComponent<ModelComponent>().edgeEnable = true;
-			}
-		}
-	}
-
-	void SceneHierarchyPanel::AddSelectedEntity(const Entity& entity) {
-		if (m_Context->selectedEntity == entity) return;
-
-		// 这里目前的逻辑是替换选中，如果未来支持多选可修改此处
-		m_Context->selectedEntity = {};
-
-		if (entity && entity.IsValid()) {
-			if (entity.HasAllofComponent<ModelComponent>()) {
-				entity.GetComponent<ModelComponent>().edgeEnable = true;
-			}
 		}
 	}
 
@@ -94,7 +75,7 @@ namespace Snail {
 
 		if (ImGui::IsItemClicked())
 		{
-			ResetSelectedEntity(entity);
+			m_Context->ResetSelectedEntity(entity);
 		}
 
 		bool entityDeleted = false;

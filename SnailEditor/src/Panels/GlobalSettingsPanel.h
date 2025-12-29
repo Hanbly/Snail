@@ -10,11 +10,10 @@ namespace Snail {
     // ==========================================================
     class GlobalSettingsPanel : public Panel {
     private:
-        Refptr<Scene> m_Scene;
         Refptr<EditorContext> m_Context;
     public:
-        GlobalSettingsPanel(const Refptr<Scene>& scene, const Refptr<EditorContext>& context)
-            : m_Scene(scene), m_Context(context) {}
+        GlobalSettingsPanel(const Refptr<EditorContext>& context)
+            : m_Context(context) {}
 
         void Show(const Refptr<EditorCamera>& ec);
     };

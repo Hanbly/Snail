@@ -18,10 +18,10 @@ namespace Snail {
 		{
 			// 检测多选实体
 			std::vector<Entity> multiSelected;
-			auto view = m_Scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
+			auto view = m_Context->scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
 			for (auto [e, trans, model] : view.each()) {
 				if (model.edgeEnable)
-					multiSelected.emplace_back(e, m_Scene.get());
+					multiSelected.emplace_back(e, m_Context->scene.get());
 			}
 
 			if (!multiSelected.empty())

@@ -1,4 +1,4 @@
-#type vertex
+ï»¿#type vertex
 #version 330 core
 layout (location = 0) in vec2 a_Pos;
 layout (location = 1) in vec2 a_TexCoords;
@@ -14,59 +14,76 @@ void main() {
 out vec4 FragColor;
 in vec2 v_TexCoords;
 
-uniform isampler2D u_MaskTexture; // Mask ID
-uniform sampler2D u_DepthTexture; // Éî¶ÈÍ¼
+uniform isampler2D u_MaskTexture;
+uniform sampler2D u_DepthTexture;
 uniform vec3 u_OutlineColor;
 uniform int u_OutlineWidth;
 uniform float u_Width;
 uniform float u_Height;
 
+// å¿…é¡»ä¸ C++ ç›¸æœºè®¾ç½®å®Œå…¨ä¸€è‡´
+uniform float u_Near;
+uniform float u_Far;
+
+// å°†æ·±åº¦å€¼è½¬æ¢ä¸ºçº¿æ€§è·ç¦» (View Space Z)
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (2.0 * u_Near * u_Far) / (u_Far + u_Near - z * (u_Far - u_Near));	
+}
+
 void main()
 {
-    // 1. Èç¹û×Ô¼º¾ÍÊÇÑ¡ÖĞÎïÌå£¬²»»æÖÆ (ÄÚ²¿¿Ù¿Õ)
-    int centerID = texture(u_MaskTexture, v_TexCoords).r;
-    if (centerID == 1) {
-        discard;
-    }
+    int centerMask = texture(u_MaskTexture, v_TexCoords).r;
+    if (centerMask == 1) discard;
+
+    // è·å–çº¿æ€§æ·±åº¦ (å•ä½ï¼šç±³/Unit)
+    float rawCenterDepth = texture(u_DepthTexture, v_TexCoords).r;
+    float linearCenterDepth = LinearizeDepth(rawCenterDepth);
 
     vec2 texelSize = vec2(1.0 / u_Width, 1.0 / u_Height);
-    
-    // 2. »ñÈ¡µ±Ç°ÏñËØµÄÉî¶È
-    float centerDepth = texture(u_DepthTexture, v_TexCoords).r;
-
     bool isEdge = false;
 
-    // 3. ËÑË÷ÖÜ±ß
     for (int x = -u_OutlineWidth; x <= u_OutlineWidth; ++x) 
     {
         for (int y = -u_OutlineWidth; y <= u_OutlineWidth; ++y) 
         {
-            if (x == 0 && y == 0) continue;
+            if (x==0 && y==0) continue;
 
-            vec2 sampleUV = v_TexCoords + vec2(x, y) * texelSize;
-            int neighborID = texture(u_MaskTexture, sampleUV).r;
-            
-            if (neighborID == 1) 
+            vec2 uv = v_TexCoords + vec2(x, y) * texelSize;
+            int neighborMask = texture(u_MaskTexture, uv).r;
+
+            if (neighborMask == 1) 
             {
-                // ¶ÁÈ¡¸ÃÁÚ¾Ó(Ñ¡ÖĞÎïÌå)µÄÉî¶È
-                float neighborDepth = texture(u_DepthTexture, sampleUV).r;
+                float rawNeighborDepth = texture(u_DepthTexture, uv).r;
+                float linearNeighborDepth = LinearizeDepth(rawNeighborDepth);
 
-                // Ö»ÓĞµ± [µ±Ç°ÏñËØÉî¶È] >= [ÎïÌåÉî¶È] Ê±²Å»æÖÆÃè±ß
-                // Ò²¾ÍÊÇËµ£ºÖ»ÓĞµ±ÎÒÊÇ±³¾°£¬»òÕßÎÒÔÚÎïÌåºóÃæÊ±£¬²ÅÏÔÊ¾Ãè±ß¡£
-                // Èç¹ûÎÒ±ÈÎïÌåÉî¶ÈĞ¡(±ÈÎïÌå½ü)£¬ËµÃ÷ÎÒµ²×¡ÁËÎïÌå£¬¾Í²»»­Ïß¡£
-                // ¼ÓÉÏÒ»¸öĞ¡Æ«ÒÆÁ¿(epsilon)·ÀÖ¹Z-fightingÉÁË¸
-                if (centerDepth >= neighborDepth - 0.0001) {
+                // ã€é€»è¾‘ä¿®æ­£ã€‘
+                // linearCenterDepth: å½“å‰åƒç´ è·ç¦»ç›¸æœºçš„è·ç¦»
+                // linearNeighborDepth: é€‰ä¸­ç‰©ä½“è·ç¦»ç›¸æœºçš„è·ç¦»
+                
+                // æƒ…å†µ 1: æˆ‘æ˜¯å‰é¢çš„é®æŒ¡ç‰©
+                // linearCenterDepth (10ç±³) < linearNeighborDepth (20ç±³)
+                // -> ä¸ç”»çº¿
+                
+                // æƒ…å†µ 2: æˆ‘æ˜¯åé¢çš„å¢™/èƒŒæ™¯
+                // linearCenterDepth (50ç±³) > linearNeighborDepth (20ç±³)
+                // -> ç”»çº¿
+                
+                // æƒ…å†µ 3: æˆ‘æ˜¯ç‰©ä½“è„šä¸‹çš„åœ°é¢ (æ·±åº¦éå¸¸æ¥è¿‘)
+                // -> ç”»çº¿
+                
+                // æ‰€ä»¥ï¼šåªæœ‰å½“ center >= neighbor (å‡å»ä¸€ä¸ªçº¿æ€§å®¹å·®) æ—¶æ‰ç”»
+                // è¿™é‡Œçš„ 0.1 ä»£è¡¨ 0.1 ä¸ªå•ä½è·ç¦»ï¼Œæ¯” raw depth çš„ 0.0001 é è°±å¾—å¤š
+                if (linearCenterDepth >= (linearNeighborDepth - 0.1)) {
                     isEdge = true;
-                    break; 
+                    break;
                 }
             }
         }
         if (isEdge) break;
     }
 
-    if (isEdge) {
-        FragColor = vec4(u_OutlineColor, 1.0);
-    } else {
-        discard;
-    }
+    if (isEdge) FragColor = vec4(u_OutlineColor, 1.0);
+    else discard;
 }

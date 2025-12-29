@@ -43,5 +43,6 @@
 //--------------------------------
 
 // ----------- Utils ---------------
+#include "Snail/Utils/DragDrop.h"
 #include "Snail/Utils/FileSelecter.h"
 // ---------------------------------

@@ -35,6 +35,7 @@ namespace Snail {
 
 	void OpenGLRendererCommand::ClearImpl() const
 	{
+		glDepthMask(GL_TRUE);
 		glStencilMask(0xFF);
 		//         颜色缓冲区               深度测试缓冲区           模板测试缓冲区
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

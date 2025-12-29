@@ -5,9 +5,11 @@
 namespace Snail {
 
 	struct EditorContext {
+		// 场景
+		Refptr<Scene> scene;		
 		// 当前选中的实体
 		Entity selectedEntity = {};
-		// 是否删除实体
+		// 要删除的实体
 		Entity entityToDelete = {};
 		// 多选物体时的共有属性
 		glm::vec3 entitiesPosition = glm::vec3(0.0f);
@@ -23,5 +25,12 @@ namespace Snail {
 		int    currentEditingFaceIndex = 0; // 0-5 for cubemaps
 
 		TextureUsage pendingTextureUsage = TextureUsage::None;
+
+
+		// -------------------- 选中状态管理 --------------------
+		// 设置选中实体（并处理高亮/描边逻辑）
+		void ResetSelectedEntity(const Entity& entity);
+		// 追加选中实体（用于多选或Ctrl点击逻辑）
+		void AddSelectedEntity(const Entity& entity);
 	};
 }

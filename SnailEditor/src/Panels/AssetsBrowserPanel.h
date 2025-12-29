@@ -19,8 +19,10 @@ namespace Snail {
 
 		// 回调类型
 		using OnSceneFileOpenCallback = std::function<void(const std::string&)>;
+		using OnEntityFileOpenCallback = std::function<void(const std::string&)>;
 		// 设置回调的函数
 		void SetOnSceneFileOpenCallback(const OnSceneFileOpenCallback& callback) { m_OnSceneFileOpenCallback = callback; }
+		void SetOnEntityFileOpenCallback(const OnEntityFileOpenCallback& callback) { m_OnEntityFileOpenCallback = callback; }
 
 	private:
 		std::filesystem::path m_CurrentDirectory;
@@ -42,6 +44,7 @@ namespace Snail {
 
 		// 存储回调函数
 		OnSceneFileOpenCallback m_OnSceneFileOpenCallback;
+		OnEntityFileOpenCallback m_OnEntityFileOpenCallback;
 	
 	private:
 
