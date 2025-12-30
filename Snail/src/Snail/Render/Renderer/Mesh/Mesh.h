@@ -79,12 +79,16 @@ namespace Snail {
 		inline const std::vector<Vertex> GetVertices() const					{ return GetVAO()->GetVertexBuffer(); }
 		inline const std::vector<uint32_t> GetIndices() const					{ return GetVAO()->GetIndexBuffer()->GetIndices(); }
 
+		// --- 修改着色器 ---
+		void EditShader(const std::string& path) const;
 		// --- 添加纹理 ---
 		void AddTexture(const Refptr<Texture>& texture, const TextureUsage& usage);
 		// --- 修改纹理 ---
-		void EditTexture(size_t index, const std::string& assetPath) const;
+		void EditTexture(size_t index, const std::vector<std::string>& assetPath) const;
 		// --- 删除纹理 ---
 		void RemoveTexture(size_t index);
+		// --- 清空纹理 ---
+		void ClearTextures();
 
 		// --- 绘制 ---
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;

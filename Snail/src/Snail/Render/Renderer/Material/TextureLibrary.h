@@ -13,7 +13,10 @@ namespace Snail {
 		static Refptr<Texture> Load(const std::string& customName, const std::vector<std::string>& filePath, const TextureUsage& usage);
 
 		static Refptr<Texture> Get(const std::string& name);
-	private:
+
+		static void Remove(const std::string& name);
+		static void Remove(const Refptr<Texture>& texture);
+
 		static std::string PathsToKey(const std::vector<std::string>& paths);
 	private:
 		static std::unordered_map<std::string, Refptr<Texture>> m_TextureNames;

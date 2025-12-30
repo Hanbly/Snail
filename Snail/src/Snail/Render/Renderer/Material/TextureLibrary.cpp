@@ -24,8 +24,8 @@ namespace Snail {
 		}
 
 		if (m_TextureNames.find(name) != m_TextureNames.end()) { // 命名已经存在
-			SNL_CORE_WARN("TextureLibrary: 名字 '{0}' 已被占用，但指向的是不同资源！", name); // 返回已有资源
-			return m_TextureNames[name];
+			SNL_CORE_WARN("TextureLibrary: 名字 '{0}' 已被占用，但指向的是不同资源！", name); // 新加载一个纹理
+			//return m_TextureNames[customName];
 		}
 
 		Refptr<Texture> texture;
@@ -53,8 +53,8 @@ namespace Snail {
 		}
 
 		if (m_TextureNames.find(customName) != m_TextureNames.end()) { // 命名已经存在
-			SNL_CORE_WARN("TextureLibrary: 名字 '{0}' 已被占用，但指向的是不同资源！", customName); // 返回已有资源
-			return m_TextureNames[customName];
+			SNL_CORE_WARN("TextureLibrary: 名字 '{0}' 已被占用，但指向的是不同资源！", customName); // 新加载一个纹理
+			//return m_TextureNames[customName];
 		}
 
 		Refptr<Texture> texture;
@@ -76,6 +76,21 @@ namespace Snail {
 		SNL_CORE_ASSERT(status, "TextureLibrary: 纹理库不存在该 texture '{0}' ", name);
 
 		return m_TextureNames[name];
+	}
+
+	void TextureLibrary::Remove(const std::string& name)
+	{
+		if (m_TextureNames.find(name) != m_TextureNames.end()) {
+			m_TextureNames.erase(name);
+		}
+	}
+
+	void TextureLibrary::Remove(const Refptr<Texture>& texture)
+	{
+		std::string path = PathsToKey(texture->GetPath());
+		if (m_TexturePaths.find(path) != m_TexturePaths.end()) {
+			m_TexturePaths.erase(path);
+		}
 	}
 
 	std::string TextureLibrary::PathsToKey(const std::vector<std::string>& paths) {

@@ -20,7 +20,7 @@ namespace Snail {
 
 	class Model {
 	private:
-		Refptr<Shader> m_Shader;
+		Refptr<Shader> m_DefaultShader;
 		std::vector<Refptr<Mesh>> m_Meshes;
 		std::string m_FullPath;
 		std::string m_Directory;
@@ -45,7 +45,7 @@ namespace Snail {
 		Model(const Refptr<Shader>& shader, const std::string& objPath);
 		~Model() = default;
 
-		inline const std::string& GetShaderPath() const { return m_Shader->GetFilePath(); }
+		inline const std::string& GetDefaultShaderPath() const { return m_DefaultShader->GetFilePath(); }
 		inline const std::vector<Refptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 		inline const std::string& GetFullPath() const { return m_FullPath; }
 		inline bool IsImported() const { return m_IsImported; }

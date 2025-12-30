@@ -24,7 +24,7 @@ namespace Snail {
 	void SnailEditorLayer::OnAttach() {
 		SNL_PROFILE_FUNCTION();
 
-		LoadScene("assets/scenes/test.snl");
+		LoadScene("assets/scenes/InitScene.snl");
 
 		// ----- 初始化面板的上下文 EditorContext 的选中实体 ------
 		// 如果选中只有一个实体就设置 selectedEntity ，如果超过一个就置空

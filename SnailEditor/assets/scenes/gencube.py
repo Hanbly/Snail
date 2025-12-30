@@ -44,22 +44,13 @@ Entities:
 # 定义一个光源
 light_entity = f"""  - Entity: {str(uuid.uuid4())}
     TagComponent:
-      Tag: Sun
-    TransformComponent:
-      Position: [0, 2000, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    PointLightComponent:
+      Tag: 平行光源
+    DirectionalLightComponent:
       Color: [1, 1, 1, 1]
-      Intensity: 1.0
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/light_box.glsl
-      Meshes:
-        - PrimitiveType: Cube
-          Textures: []
-      Visible: true
-      EdgeEnable: false
+      Direction: [1.10000002, -1, 1.20000005]
+      Ambient: 0.100000001
+      Diffuse: 0.560000002
+      Specular: 1
 """
 
 # 直接打开文件进行流式写入
@@ -98,10 +89,12 @@ with open(FILENAME, "w", encoding="utf-8") as f:
       Scale: [{scale_val:.2f}, {scale_val:.2f}, {scale_val:.2f}]
     ModelComponent:
       IsImported: false
-      ShaderPath: assets/shaders/Standard.glsl
+      DefaultShaderPath: assets/shaders/Standard.glsl
       Meshes:
         - PrimitiveType: Cube
-          Textures: [] 
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
       Visible: true
       EdgeEnable: false
 """

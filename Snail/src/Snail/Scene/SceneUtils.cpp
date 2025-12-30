@@ -276,7 +276,7 @@ namespace Snail {
 			out << YAML::EndMap;
 		}
 
-        // --- 序列化 ModelComponent ---
+		// --- 序列化 ModelComponent ---
 		if (entity.HasAllofComponent<ModelComponent>())
 		{
 			out << YAML::Key << "ModelComponent";
@@ -284,50 +284,47 @@ namespace Snail {
 
 			const auto& modelComponent = entity.GetComponent<ModelComponent>();
 
-			// 处理模型资源
+			// 1. 保存基础信息
 			if (modelComponent.model) {
 				bool isImported = modelComponent.model->IsImported();
 				out << YAML::Key << "IsImported" << YAML::Value << isImported;
-				out << YAML::Key << "ShaderPath" << YAML::Value << modelComponent.model->GetShaderPath();
+				// 保存模型的默认 Shader
+				out << YAML::Key << "DefaultShaderPath" << YAML::Value << modelComponent.model->GetDefaultShaderPath();
+
 				if (isImported) {
 					// --- 外部导入模型 (FBX/OBJ) ---
 					out << YAML::Key << "FilePath" << YAML::Value << modelComponent.model->GetFullPath();
 				}
-				else {
-					// --- 内部图元 (Cube/Sphere/Plane) ---
-					out << YAML::Key << "Meshes" << YAML::Value << YAML::BeginSeq; // 开始 Mesh 列表
 
-					for (auto& mesh : modelComponent.model->GetMeshes()) {
-						out << YAML::BeginMap; // 开始单个 Mesh
+				// 2. 统一序列化 Meshes 列表 (无论是否导入，都保存 Mesh 的 Shader 和纹理状态)
+				out << YAML::Key << "Meshes" << YAML::Value << YAML::BeginSeq;
 
-						// 图元类型
-                        out << YAML::Key << "PrimitiveType" << YAML::Value << PrimitiveTypeToString(mesh->GetPrimitiveType());
+				for (auto& mesh : modelComponent.model->GetMeshes()) {
+					out << YAML::BeginMap;
 
-						// 纹理序列化
-						out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq; // 开始 Textures 列表
+					// 图元类型
+					out << YAML::Key << "PrimitiveType" << YAML::Value << PrimitiveTypeToString(mesh->GetPrimitiveType());
 
-						auto textures = mesh->GetTextures();
-						for (const auto& texture : textures) {
-							out << YAML::BeginMap;
+					// 保存 Mesh 独立的 Shader 路径
+					out << YAML::Key << "ShaderPath" << YAML::Value << mesh->GetMaterial()->GetShader()->GetFilePath();
 
-							out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(texture->GetType());
-							out << YAML::Key << "Usage" << YAML::Value << TextureUsageToString(texture->GetUsage());							
-							out << YAML::Key << "Paths" << YAML::Value << texture->GetPath(); // 一律存入路径数组
-
-							out << YAML::EndMap;
-						}
-						out << YAML::EndSeq; // 结束 Textures
-
-						// 不序列化 Vertices 和 Indices
-						// 必须确保数据量极小，否则就会出现乱码
-						// out << YAML::Key << "VertexCount" << mesh->GetVertices().size();
-						// out << YAML::Key << "IndexCount" << mesh->GetIndices().size();
-
-						out << YAML::EndMap; // 结束单个 Mesh
+					// 保存纹理 (支持保存导入模型后被修改的纹理)
+					out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq;
+					auto textures = mesh->GetTextures();
+					for (const auto& texture : textures) {
+						out << YAML::BeginMap;
+						out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(texture->GetType());
+						out << YAML::Key << "Usage" << YAML::Value << TextureUsageToString(texture->GetUsage());
+						out << YAML::Key << "Paths" << YAML::Value << texture->GetPath();
+						out << YAML::EndMap;
 					}
-					out << YAML::EndSeq; // 结束 Mesh 列表
+					out << YAML::EndSeq; // 结束 Textures
+
+					out << YAML::EndMap; // 结束单个 Mesh
 				}
+				out << YAML::EndSeq; // 结束 Mesh 列表
 			}
+
 			// 通用属性
 			out << YAML::Key << "Visible" << YAML::Value << modelComponent.visible;
 			out << YAML::Key << "EdgeEnable" << YAML::Value << modelComponent.edgeEnable;
@@ -493,7 +490,7 @@ namespace Snail {
 					// 注意：旧代码中的 Intensity 字段已被移除，不需要再读取
 				}
 
-				// --- ModelComponent ---
+				// --- 反序列化 ModelComponent ---
 				auto modelComponent = entityNode["ModelComponent"];
 				if (modelComponent)
 				{
@@ -501,55 +498,55 @@ namespace Snail {
 					bool visible = modelComponent["Visible"].as<bool>();
 					bool edgeEnable = modelComponent["EdgeEnable"].as<bool>();
 					bool isImported = modelComponent["IsImported"].as<bool>();
-					std::string shaderPath = modelComponent["ShaderPath"].as<std::string>();
+					std::string defaultShaderPath = modelComponent["DefaultShaderPath"].as<std::string>();
 
-					// 加载 Shader
-					Refptr<Shader> shader = ShaderLibrary::Load(shaderPath, {});
+					// 加载默认 Shader
+					Refptr<Shader> defaultShader = ShaderLibrary::Load(defaultShaderPath, {});
 
 					Refptr<Model> model = nullptr;
 					std::string cacheKey;
 
-					if (isImported)	{
-						cacheKey = modelComponent["FilePath"].as<std::string>();
+					// ==================== 创建/获取 Model ====================
+					if (isImported) {
+						// --- 外部模型 (FBX/OBJ) ---
 						std::string filePath = modelComponent["FilePath"].as<std::string>();
+						cacheKey = filePath; // 导入模型的 Key 就是文件路径
 
 						if (!cacheKey.empty() && s_ModelCache.find(cacheKey) != s_ModelCache.end()) {
 							model = s_ModelCache[cacheKey];
 						}
 						else {
-							// 调用 Model 构造函数加载文件
-							model = std::make_shared<Model>(shader, filePath);
+							// 使用默认 Shader 加载模型
+							model = std::make_shared<Model>(defaultShader, filePath);
 							s_ModelCache[cacheKey] = model;
 						}
 					}
 					else {
-						// --- 图元 (Cube/Sphere) + 纹理重建 ---
+						// --- 内部图元 (Cube/Sphere) ---
 						auto meshesNode = modelComponent["Meshes"];
 						if (meshesNode && meshesNode.size() > 0) {
-							// 简化：目前 Light/Cube 只有一个 Mesh
-							cacheKey = "Primitive:" + meshesNode[0]["PrimitiveType"].as<std::string>() + "|" + shaderPath;
-
-							auto meshNode = meshesNode[0];
-
-							std::string primStr = meshNode["PrimitiveType"].as<std::string>();
+							auto firstMeshNode = meshesNode[0];
+							std::string primStr = firstMeshNode["PrimitiveType"].as<std::string>();
 							PrimitiveType primType = StringToPrimitiveType(primStr);
 
-							// 重建纹理列表
-							std::vector<Refptr<Texture>> textureDataList;
-							auto texturesNode = meshNode["Textures"];
+							// CacheKey包含图元类型、Shader路径以及所有纹理路径
+							cacheKey = "Primitive:" + primStr + "|" + defaultShaderPath;
+
+							// 预解析纹理，用于生成 CacheKey 和 构造 Model
+							std::vector<Refptr<Texture>> initialTextures;
+							auto texturesNode = firstMeshNode["Textures"];
 							if (texturesNode) {
 								for (auto texNode : texturesNode) {
-									std::string usage = texNode["Usage"].as<std::string>(); // "texture_diffuse" ...
+									std::string usage = texNode["Usage"].as<std::string>();
+									auto paths = texNode["Paths"].as<std::vector<std::string>>();
 
-									if (texNode["Paths"]) {
-										auto paths = texNode["Paths"].as<std::vector<std::string>>();
-										// 内部判断是单路径还是多路径 (比如 Texture2D vs CubeMap)
-										if (auto texture = TextureLibrary::Load(paths, StringToTextureUsage(usage))) {
-											textureDataList.push_back(texture);
-										}
+									// 尝试加载纹理
+									if (auto texture = TextureLibrary::Load(paths, StringToTextureUsage(usage))) {
+										initialTextures.push_back(texture);
+									}
 
-										for (const auto& path : paths) cacheKey += "|" + path; // 把纹理也附加作为缓存的键
-									}									
+									// 追加 Key
+									for (const auto& p : paths) cacheKey += "|" + p;
 								}
 							}
 
@@ -557,15 +554,59 @@ namespace Snail {
 								model = s_ModelCache[cacheKey];
 							}
 							else {
-								// 调用 Model 构造函数创建图元 
-								// (不需要传入 vertices/indices，内部根据 PrimitiveType 生成)
-								model = std::make_shared<Model>(primType, shader, textureDataList);
+								model = std::make_shared<Model>(primType, defaultShader, initialTextures);
 								s_ModelCache[cacheKey] = model;
 							}
 						}
 					}
 
+					// ==================== 覆盖 Shader 和 纹理 ====================
 					if (model) {
+						auto meshesNode = modelComponent["Meshes"];
+						auto& modelMeshes = model->GetMeshes();
+						if (meshesNode && meshesNode.size() <= modelMeshes.size()) {
+							for (size_t i = 0; i < meshesNode.size(); i++) {
+								auto meshNode = meshesNode[i];
+								auto& targetMesh = modelMeshes[i];
+								// 覆盖 Shader
+								if (meshNode["ShaderPath"]) {
+									std::string savedShaderPath = meshNode["ShaderPath"].as<std::string>();
+
+									// 获取当前 Mesh 实际使用的 Shader 路径
+									// 如果保存的 Shader 与当前 Mesh 里的不一样，则替换
+									if (!savedShaderPath.empty() && savedShaderPath != targetMesh->GetMaterial()->GetShader()->GetFilePath()) {
+										targetMesh->EditShader(savedShaderPath);
+									}
+								}
+
+								// 覆盖 外部模型的 纹理
+								if (isImported) {
+									auto texturesNode = meshNode["Textures"];
+									// 获取当前 Mesh 的纹理列表
+									auto currentTextures = targetMesh->GetTextures();
+
+									// 简单的策略：如果数量或内容不一致，清空并重新添加
+									// 或者：如果 YAML 里有数据，我们完全信任 YAML
+									if (texturesNode) {
+										// 清空现有纹理
+										targetMesh->ClearTextures();
+
+										// 重新添加保存的纹理
+										for (auto texNode : texturesNode) {
+											std::string usageStr = texNode["Usage"].as<std::string>();
+											TextureUsage usage = StringToTextureUsage(usageStr);
+											auto paths = texNode["Paths"].as<std::vector<std::string>>();
+
+											// 加载并添加
+											if (auto texture = TextureLibrary::Load(paths, usage)) {
+												targetMesh->AddTexture(texture, usage);
+											}
+										}
+									}
+								}
+							}
+						}
+
 						auto& mc = deserializedEntity.AddComponent<ModelComponent>(model);
 						mc.visible = visible;
 						mc.edgeEnable = edgeEnable;

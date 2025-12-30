@@ -211,8 +211,8 @@ namespace Snail {
 					ImGui::TableSetColumnIndex(1); ImGui::Checkbox("##Outline", &component.edgeEnable);
 				}
 
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::TextDisabled("Shader");
-				ImGui::TableSetColumnIndex(1); ImGui::TextDisabled("%s", component.model->GetShaderPath().c_str());
+				//ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::TextDisabled("Shader");
+				//ImGui::TableSetColumnIndex(1); ImGui::TextDisabled("%s", component.model->GetShaderPath().c_str());
 				ImGui::EndTable();
 			}
 
@@ -247,7 +247,43 @@ namespace Snail {
 		std::string meshLabel = "Mesh " + std::to_string(meshIndex) + " (" + PrimitiveTypeToString(mesh->GetPrimitiveType()) + ")";
 
 		if (ImGui::TreeNodeEx(meshLabel.c_str(), meshFlags)) {
-			// 纹理列表
+
+			// ------------------ 着色器 ---------------------
+			std::string shaderPath = "Unknown Shader";
+			if (auto& material = mesh->GetMaterial()) {
+				if (auto shader = material->GetShader()) {
+					shaderPath = shader->GetFilePath();
+				}
+			}
+
+			ImGui::PushID(("MeshShader_" + std::to_string(meshIndex)).c_str());
+
+			ImGui::TextDisabled("Shader"); // 标题
+
+			// 计算布局：保留右侧 28像素 给按钮
+			float availWidth = ImGui::GetContentRegionAvail().x;
+			ImGui::PushItemWidth(availWidth - 28.0f);
+
+			// 显示文件名
+			std::filesystem::path p(shaderPath);
+			std::string filename = p.filename().string();
+			ImGui::TextDisabled("%s", filename.c_str());
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+
+			// 替换按钮
+			if (ImGui::Button("...", { 24.0f, 24.0f })) {
+				m_Context->currentEditingMeshIndex = meshIndex;
+				// 打开文件选择器，过滤 .glsl 文件
+				FileSelecter::Open("EditMeshShader", "选择 Shader 文件", "(.glsl){.glsl},.glsl");
+			}
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("替换此 Mesh 的 Shader");
+
+			ImGui::PopID();
+			ImGui::Spacing(); // 增加一点间距
+
+			// --------------- 纹理列表 ---------------------
 			DrawTextureTable(meshIndex, mesh->GetTextures(), const_cast<Refptr<Mesh>&>(mesh));
 
 			ImGui::Spacing();
@@ -262,12 +298,32 @@ namespace Snail {
 				ImGui::TextDisabled("选择纹理用途");
 				ImGui::Separator();
 
-				// 定义 lambda 减少重复代码
 				auto AddTextureMenuItem = [&](const char* label, TextureUsage usage) {
 					if (ImGui::MenuItem(label)) {
 						m_Context->currentEditingMeshIndex = meshIndex;
 						m_Context->pendingTextureUsage = usage;
-						FileSelecter::Open("AddNewTexture", "导入新纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+						if (usage == TextureUsage::Cubemap) {
+							std::vector<std::string> defaultPaths = {
+								"assets/images/defaultSky/right.jpg",
+								"assets/images/defaultSky/left.jpg",
+								"assets/images/defaultSky/top.jpg",
+								"assets/images/defaultSky/bottom.jpg",
+								"assets/images/defaultSky/front.jpg",
+								"assets/images/defaultSky/back.jpg"
+							};
+							if (auto newTexture = TextureLibrary::Load("NewCubemap", defaultPaths, TextureUsage::Cubemap)) {
+								// 获取当前 Mesh 并添加纹理
+								auto& modelComp = m_Context->selectedEntity.GetComponent<ModelComponent>();
+								auto& meshes = modelComp.model->GetMeshes();
+
+								if (meshIndex < meshes.size()) {
+									meshes[meshIndex]->AddTexture(newTexture, usage);
+								}
+							}
+						}
+						else {
+							FileSelecter::Open("LoadNewTexture", "导入新纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+						}
 						ImGui::CloseCurrentPopup();
 					}
 					};
@@ -298,32 +354,98 @@ namespace Snail {
 
 				ImGui::TableNextRow();
 
-				// Column 0: 预览图 (可点击替换)
-				ImGui::TableSetColumnIndex(0);
-				uint32_t textureId = texture->GetRendererId();
-				if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
-					m_Context->currentEditingMeshIndex = meshIndex;
-					m_Context->currentEditingTexIndex = t;
-					FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
-				}
-				if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
+				if (texture->GetPath().size() == 1) {
+					// Column 0: 预览图 (可点击替换)
+					ImGui::TableSetColumnIndex(0);
+					uint32_t textureId = texture->GetRendererId();
+					if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
+						m_Context->currentEditingMeshIndex = meshIndex;
+						m_Context->currentEditingTexIndex = t;
+						FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+					}
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
 
-				// Column 1: 信息文本
-				ImGui::TableSetColumnIndex(1);
-				ImGui::TextColored({ 0.8f, 0.8f, 0.8f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
-				ImGui::TextDisabled("%s", TextureTypeToString(texture->GetType()).c_str());
-				if (!texture->GetPath().empty())
-					ImGui::TextWrapped("%s", texture->GetPath()[0].c_str());
+					// Column 1: 信息文本
+					ImGui::TableSetColumnIndex(1);
+					ImGui::TextColored({ 0.8f, 0.8f, 0.8f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
+					ImGui::TextDisabled("%s", TextureTypeToString(texture->GetType()).c_str());
+					if (!texture->GetPath().empty())
+						ImGui::TextWrapped("%s", texture->GetPath()[0].c_str());
 
-				// Column 2: 删除按钮
-				ImGui::TableSetColumnIndex(2);
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-				if (ImGui::Button("X", { 24, 24 })) {
-					textureIndexToRemove = static_cast<int>(t);
+					// Column 2: 删除按钮
+					ImGui::TableSetColumnIndex(2);
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+					if (ImGui::Button("X", { 24, 24 })) {
+						textureIndexToRemove = static_cast<int>(t);
+					}
+					ImGui::PopStyleColor(2);
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此纹理");
 				}
-				ImGui::PopStyleColor(2);
-				if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此纹理");
+				else if (texture->GetPath().size() > 1) {
+					// Cubemap 处理逻辑
+
+					ImGui::TableSetColumnIndex(0);
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.4f, 1.0f));
+					ImGui::Button("Cube", { 56.0f, 56.0f }); // 占位符，或者简单的 Cube 图标
+					ImGui::PopStyleColor();
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("Cubemap 包含 6 个面");
+
+					// Column 1: 信息文本 + 展开 6 面
+					ImGui::TableSetColumnIndex(1);
+					ImGui::TextColored({ 0.4f, 0.8f, 1.0f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
+
+					// 使用 TreeNode 显示 6 个面的路径
+					bool open = ImGui::TreeNodeEx("##cubemap_faces", ImGuiTreeNodeFlags_SpanAvailWidth, "包含 6 个纹理面");
+
+					if (open) {
+						const std::vector<std::string>& paths = texture->GetPath();
+						// 定义面的名称，顺序通常是: Right, Left, Top, Bottom, Front, Back
+						const char* faceNames[] = { "右侧", "左侧", "顶部", "底部", "前方", "后方" };
+
+						// 确保路径数量正确，防止越界
+						size_t count = std::min(paths.size(), (size_t)6);
+
+						for (size_t i = 0; i < count; i++) {
+							ImGui::PushID(static_cast<int>(i));
+
+							// 面名称
+							ImGui::AlignTextToFramePadding();
+							ImGui::TextDisabled("%-12s", faceNames[i]);
+							ImGui::SameLine();
+
+							// 该面的2D预览图
+							auto previewTex = TextureLibrary::Load("TempSkyboxPreview_" + paths[i], { paths[i] }, TextureUsage::None);
+							uint32_t texId = previewTex ? previewTex->GetRendererId() : 0;
+
+							// 图像按钮
+							if (ImGui::ImageButton("##FaceBtn", (void*)(intptr_t)texId, { 64.0f, 64.0f }, { 0, 1 }, { 1, 0 })) {
+								m_Context->currentEditingMeshIndex = meshIndex;
+								m_Context->currentEditingTexIndex = t;
+								m_Context->currentEditingFaceIndex = static_cast<int>(i);
+								FileSelecter::Open("EditCubemapFace", "替换贴图面", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+							}
+
+							// 悬浮提示路径
+							if (ImGui::IsItemHovered()) {
+								ImGui::SetTooltip("%s", paths[i].c_str());
+							}
+
+							ImGui::PopID();
+						}
+						ImGui::TreePop();
+					}
+
+					// Column 2: 删除按钮 (整个 Cubemap 一起删)
+					ImGui::TableSetColumnIndex(2);
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+					if (ImGui::Button("X", { 24, 24 })) {
+						textureIndexToRemove = static_cast<int>(t);
+					}
+					ImGui::PopStyleColor(2);
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此 Cubemap");
+				}
 
 				ImGui::PopID();
 			}
@@ -357,12 +479,12 @@ namespace Snail {
 			size_t tIdx = m_Context->currentEditingTexIndex;
 
 			if (mIdx < meshes.size()) {
-				meshes[mIdx]->EditTexture(tIdx, path);
+				meshes[mIdx]->EditTexture(tIdx, { path });
 			}
 			});
 
-		// 3. 添加新纹理
-		FileSelecter::Handle("AddNewTexture", [this](const std::string& path) {
+		// 3. 加载新纹理
+		FileSelecter::Handle("LoadNewTexture", [this](const std::string& path) {
 			auto entity = m_Context->selectedEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
@@ -375,6 +497,53 @@ namespace Snail {
 				if (auto newTexture = TextureLibrary::Load({ path }, targetUsage)) {
 					meshes[mIdx]->AddTexture(newTexture, targetUsage);
 				}
+			}
+			});
+
+		// 4. 替换 Cubemap 的某一面
+		FileSelecter::Handle("EditCubemapFace", [this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+			size_t tIdx = m_Context->currentEditingTexIndex;
+			int faceIdx = m_Context->currentEditingFaceIndex; // 获取记录的面索引
+
+			if (mIdx < meshes.size()) {
+				auto& mesh = meshes[mIdx];
+				auto textures = mesh->GetTextures(); // 获取当前纹理列表 (副本)
+
+				if (tIdx < textures.size()) {
+					auto& oldTexture = textures[tIdx];
+					// Cubemap (路径 > 1)
+					if (oldTexture->GetPath().size() > 1) {
+						std::vector<std::string> newPaths = oldTexture->GetPath();
+
+						if (faceIdx >= 0 && faceIdx < newPaths.size()) {
+							newPaths[faceIdx] = path;
+
+							mesh->EditTexture(tIdx, newPaths);
+						}
+					}
+				}
+			}
+			});
+
+		// 5. 替换 Mesh 的 Shader
+		FileSelecter::Handle("EditMeshShader", [this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+
+			if (mIdx < meshes.size()) {
+				// 调用 Mesh 的接口替换 Shader
+				meshes[mIdx]->EditShader(path);
 			}
 			});
 	}

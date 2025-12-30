@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Render/Renderer/Material/ShaderLibrary.h"
+#include "Snail/Render/Renderer/Material/TextureLibrary.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
 
 #include "Mesh.h"
@@ -15,6 +17,12 @@ namespace Snail {
 		SetupMesh(vertices, indices, shader, textures);
 	}
 
+	void Mesh::EditShader(const std::string& path) const
+	{
+		auto newShader = ShaderLibrary::Load(path, {});
+		GetMaterial()->SetShader(newShader);
+	}
+
 	void Mesh::AddTexture(const Refptr<Texture>& texture, const TextureUsage& usage)
 	{
 		// --------------------- 获取原有材质 + 添加新的材质 -------------------------------
@@ -25,12 +33,12 @@ namespace Snail {
 		RemapMaterialTextures(textures);
 	}
 
-	void Mesh::EditTexture(size_t index, const std::string& assetPath) const
+	void Mesh::EditTexture(size_t index, const std::vector<std::string>& assetPath) const
 	{
 		auto textures = GetTextures(); // 获取当前纹理列表
 
 		TextureUsage usage = textures[index]->GetUsage(); // 保持原有的 Usage
-		auto newTexture = TextureLibrary::Load({ assetPath }, usage);
+		auto newTexture = TextureLibrary::Load(assetPath, usage);
 
 		auto& toEdit = textures[index];
 
@@ -46,7 +54,17 @@ namespace Snail {
 		auto textures = GetTextures();
 		if (index >= textures.size()) return;
 
+		//TextureLibrary::Remove(textures[index]);
 		textures.erase(textures.begin() + index);
+
+		// 重新映射材质的纹理缓存
+		RemapMaterialTextures(textures);
+	}
+
+	void Mesh::ClearTextures()
+	{
+		auto textures = GetTextures();
+		textures.clear();
 
 		// 重新映射材质的纹理缓存
 		RemapMaterialTextures(textures);

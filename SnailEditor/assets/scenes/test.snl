@@ -4,14 +4,14 @@ SceneSettings:
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
-  Near: 0.00999999978
-  Far: 50000
-  Aspect: 0.961914062
+  Near: 1
+  Far: 10000
+  Aspect: 1.66716421
   ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.613327, 0.414948076, -1055.85779, 1]
   Position: [5.77682114, 438.311981, 961.052612]
-  DirvecFront: [-0.0344380438, -0.415481567, -0.908949494]
-  DirvecRight: [0.999283075, 0, -0.0378605798]
-  DirvecUp: [-0.0157303736, 0.909601688, -0.415183693]
+  DirvecFront: [1, 0, 0]
+  DirvecRight: [0, 0, 1]
+  DirvecUp: [0, 1, 0]
   DirvecWorldUp: [0, 1, 0]
   EulerPitch: 24.5496426
   DirvecYaw: -362.169769
@@ -23,172 +23,18 @@ EditorCamera:
   MoveSpeed: 0.00999999978
   DollySpeed: 0.5
 Entities:
-  - Entity: 7f404773-5eba-4ab3-9866-d54a586c8acb
+  - Entity: 240636c3-0858-49ba-9316-0c1da39ecaac
     TagComponent:
-      Tag: Sky
-    SkyboxComponent:
-      Active: true
+      Tag: UnnamedEntity
     ModelComponent:
       IsImported: false
-      ShaderPath: assets/shaders/TextureCube_Shader.glsl
+      DefaultShaderPath: assets/shaders/Standard.glsl
       Meshes:
-        - PrimitiveType: Skybox
+        - PrimitiveType: Cube
+          ShaderPath: F:\Snail\SnailEditor\assets\shaders\TextureCube_Shader.glsl
           Textures:
             - DimType: TextureCube
               Usage: texture_cubemap
-              Paths: [assets/images/skybox/right.jpg, assets/images/skybox/left.jpg, assets/images/skybox/top.jpg, assets/images/skybox/bottom.jpg, assets/images/skybox/front.jpg, assets/images/skybox/back.jpg]
+              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
       Visible: true
       EdgeEnable: false
-  - Entity: 34048efb-a663-43ac-9167-99bea6fb20fa
-    TagComponent:
-      Tag: Cube
-    TransformComponent:
-      Position: [0, 60, 0]
-      Rotation: [25, 25, 25]
-      Scale: [25, 25, 25]
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/Standard.glsl
-      Meshes:
-        - PrimitiveType: Cube
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/images/kulisu.png]
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/images/mayoli.png]
-      Visible: true
-      EdgeEnable: false
-  - Entity: b54dfdb6-426d-4199-8ade-8a2e5a5d9f2f
-    TagComponent:
-      Tag: Light
-    TransformComponent:
-      Position: [41.2000008, 170.199997, 170]
-      Rotation: [25, 25, 25]
-      Scale: [25, 25, 25]
-    PointLightComponent:
-      Color: [1, 1, 1, 1]
-      Intensity: 0.100000001
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/light_box.glsl
-      Meshes:
-        - PrimitiveType: Cube
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: false
-  - Entity: 96ddc4da-09c4-4440-a656-b6856e99b763
-    TagComponent:
-      Tag: Spider
-    TransformComponent:
-      Position: [10, 10, -210]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Standard.glsl
-      FilePath: assets/models/spider-fbx/Spider.fbx
-      Visible: true
-      EdgeEnable: false
-  - Entity: 7acb17e4-c17a-4399-bece-5380d9f95bac
-    TagComponent:
-      Tag: 球
-    TransformComponent:
-      Position: [76.4000015, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [100, 100, 100]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Standard.glsl
-      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Sphere.fbx
-      Visible: true
-      EdgeEnable: false
-  - Entity: d084f868-e7e2-4744-8dda-b7a3ff05091c
-    TagComponent:
-      Tag: 立方体
-    TransformComponent:
-      Position: [194.100006, 0, 173.699997]
-      Rotation: [0, 0, 0]
-      Scale: [100, 100, 100]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Standard.glsl
-      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Cube.fbx
-      Visible: true
-      EdgeEnable: false
-  - Entity: 03c375ba-8704-42c8-a55e-bfa5468c30be
-    TagComponent:
-      Tag: 半锥体
-    TransformComponent:
-      Position: [-166.316895, 84.2097931, 55.0279999]
-      Rotation: [0, -0, 0]
-      Scale: [100, 100, 100]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Standard.glsl
-      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Tapered Cylinder.fbx
-      Visible: true
-      EdgeEnable: true
-  - Entity: 4faa9a71-76eb-436f-91a0-6dd0e8624a18
-    TagComponent:
-      Tag: 圆环
-    TransformComponent:
-      Position: [13.3999996, -10.8000002, 237.399994]
-      Rotation: [0, 0, 0]
-      Scale: [40, 40, 40]
-    ModelComponent:
-      IsImported: true
-      ShaderPath: assets/shaders/Standard.glsl
-      FilePath: F:\Snail\SnailEditor\assets\models\Primitives\Torus.fbx
-      Visible: true
-      EdgeEnable: false
-  - Entity: be29d899-817c-4e9d-86d3-1e491c50d9d7
-    TagComponent:
-      Tag: 图元立方体
-    TransformComponent:
-      Position: [-354.600006, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [100, 100, 100]
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/Standard.glsl
-      Meshes:
-        - PrimitiveType: Cube
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: false
-  - Entity: 38773621-047d-46dd-a57e-3284deb7d4b0
-    TagComponent:
-      Tag: 图元球体
-    TransformComponent:
-      Position: [-175.516907, 221.709824, 266.02832]
-      Rotation: [0, -0, 0]
-      Scale: [100, 100, 100]
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/Standard.glsl
-      Meshes:
-        - PrimitiveType: Sphere
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: true
-  - Entity: fb6a7153-9d76-4c79-86b0-90f1748f267c
-    TagComponent:
-      Tag: 图元平面
-    TransformComponent:
-      Position: [1.58310151, 339.715393, 201.228409]
-      Rotation: [126.199966, -2.19999981, 1.23373127e-07]
-      Scale: [99.9999695, 99.9999619, 100.000023]
-    ModelComponent:
-      IsImported: false
-      ShaderPath: assets/shaders/Standard.glsl
-      Meshes:
-        - PrimitiveType: Plane
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: true
