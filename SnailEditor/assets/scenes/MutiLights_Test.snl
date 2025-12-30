@@ -7,16 +7,16 @@ EditorCamera:
   Near: 1
   Far: 10000
   Aspect: 1.66716421
-  ViewMatrix: [-0.37558794, 0.237843499, 0.89574784, -0, -1.4901163e-08, 0.966509044, -0.256632388, 0, -0.9267869, -0.0963880122, -0.363009065, 0, 279.035767, -365.272064, -1145.3783, 1]
-  Position: [1217.65027, 59.0976257, -192.384064]
-  DirvecFront: [-0.895747781, 0.256632388, 0.363009095]
-  DirvecRight: [-0.37558791, 0, -0.92678678]
-  DirvecUp: [0.237843528, 0.966509104, -0.0963880345]
+  ViewMatrix: [-0.210324466, -0.166060224, 0.963424861, -0, -7.45057971e-09, 0.985468328, 0.169859707, 0, -0.977631629, 0.0357256569, -0.207268119, -0, 90.2695465, -98.6107254, -1171.01343, 1]
+  Position: [1130.79419, 296.085724, -150.940445]
+  DirvecFront: [-0.96342504, -0.169859707, 0.207268119]
+  DirvecRight: [-0.210324481, 0, -0.977631688]
+  DirvecUp: [-0.166060194, 0.985468209, 0.0357256457]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: -14.8703337
-  DirvecYaw: -472.060638
-  FocalPoint: [61.8069, 390.247589, 276.030884]
-  Distance: 1290.36694
+  EulerPitch: 9.77966118
+  DirvecYaw: -462.141388
+  FocalPoint: [826.96167, 242.517578, -85.5749207]
+  Distance: 315.367004
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -50,8 +50,8 @@ Entities:
       Constant: 1
       Linear: 0.00139999995
       Quadratic: 7.0000001e-06
-      Ambient: 0.100000001
-      Diffuse: 0.689999998
+      Ambient: 0.230000004
+      Diffuse: 0.730000019
       Specular: 0.5
     ModelComponent:
       IsImported: false
@@ -75,8 +75,8 @@ Entities:
       Constant: 1
       Linear: 0.00139999995
       Quadratic: 7.0000001e-06
-      Ambient: 0.100000001
-      Diffuse: 0.550000012
+      Ambient: 0.270000011
+      Diffuse: 0.579999983
       Specular: 0.5
     ModelComponent:
       IsImported: false
@@ -92,7 +92,7 @@ Entities:
     TagComponent:
       Tag: 点光源3
     TransformComponent:
-      Position: [-473.489594, 470.431366, 0]
+      Position: [782.754883, 172.399918, -199.291214]
       Rotation: [0, -0, 0]
       Scale: [20, 20, 20]
     PointLightComponent:
@@ -100,8 +100,8 @@ Entities:
       Constant: 1
       Linear: 0.00139999995
       Quadratic: 7.0000001e-06
-      Ambient: 0.180000007
-      Diffuse: 1
+      Ambient: 0.100000001
+      Diffuse: 0.479999989
       Specular: 0.379999995
     ModelComponent:
       IsImported: false
@@ -120,26 +120,30 @@ Entities:
       Color: [1, 1, 1, 1]
       Direction: [1.10000002, -1, 1.20000005]
       Ambient: 0.100000001
-      Diffuse: 0.560000002
+      Diffuse: 0.449999988
       Specular: 1
-  - Entity: 18aaf2b6-14f0-47ea-b842-1c6ac2c42d67
+  - Entity: 39919556-610e-45f7-8caa-1c6e85693e34
     TagComponent:
-      Tag: 龙
+      Tag: 立方体
     TransformComponent:
-      Position: [182.769608, 68.9528351, -40.9128647]
-      Rotation: [-179.999496, 63.4745483, -179.999634]
-      Scale: [158.154938, 158.154709, 158.154938]
+      Position: [-193.542023, 271.733795, 0]
+      Rotation: [0, -0, 0]
+      Scale: [102.144417, 102.144417, 102.144417]
     ModelComponent:
-      IsImported: true
+      IsImported: false
       DefaultShaderPath: assets/shaders/Standard.glsl
-      FilePath: assets\models\dragon\dragon.obj
       Meshes:
-        - PrimitiveType: NonePrimitive
+        - PrimitiveType: Cube
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
-            []
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\images\mayoli.png]
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\images\kulisu.png]
       Visible: true
-      EdgeEnable: true
+      EdgeEnable: false
   - Entity: 7abf86e5-a813-4978-b3f4-bbc0e29954ac
     TagComponent:
       Tag: 宫殿室内
@@ -2618,25 +2622,356 @@ Entities:
               Paths: [assets\models\sponza/textures/spnza_bricks_a_spec.png]
       Visible: true
       EdgeEnable: false
-  - Entity: 39919556-610e-45f7-8caa-1c6e85693e34
+  - Entity: c130afa9-c679-45dd-8193-bd2052b385dd
     TagComponent:
-      Tag: 立方体
+      Tag: 摄像机模型01
     TransformComponent:
-      Position: [-193.542084, 271.733246, 0]
-      Rotation: [0, -0, 0]
-      Scale: [102.144417, 102.144417, 102.144417]
+      Position: [29.1063805, 6.70954561, -107.465744]
+      Rotation: [178.636749, 56.0632591, 179.541504]
+      Scale: [13.8662567, 13.8663845, 13.8664255]
     ModelComponent:
-      IsImported: false
+      IsImported: true
       DefaultShaderPath: assets/shaders/Standard.glsl
+      FilePath: F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx\Camera_01_4k.fbx
       Meshes:
-        - PrimitiveType: Cube
+        - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\images\mayoli.png]
+              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\images\kulisu.png]
+              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_lens_body_diff_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_body_diff_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
       Visible: true
       EdgeEnable: false
+  - Entity: 1ee1f660-454e-428a-8a35-4fca88724a2d
+    TagComponent:
+      Tag: New Model
+    TransformComponent:
+      Position: [495.799561, -1.90734863e-06, 0]
+      Rotation: [0, -0, 0]
+      Scale: [5.0099988, 5.0099988, 5.00999832]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      FilePath: assets\models\chess_set_4k.fbx\chess_set_4k.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_board_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_board_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
+      Visible: true
+      EdgeEnable: true

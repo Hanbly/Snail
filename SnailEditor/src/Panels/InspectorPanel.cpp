@@ -330,6 +330,7 @@ namespace Snail {
 
 				AddTextureMenuItem("Diffuse / Albedo", TextureUsage::Diffuse);
 				AddTextureMenuItem("Specular / Metallic", TextureUsage::Specular);
+				AddTextureMenuItem("Normal", TextureUsage::Normal);
 				AddTextureMenuItem("Cube Map", TextureUsage::Cubemap);
 				ImGui::EndPopup();
 			}

@@ -145,16 +145,24 @@ namespace Snail {
 		if (textures.size()) {
 			unsigned int diffuseNr = 1;
 			unsigned int specularNr = 1;
+			unsigned int normalNr = 1;
 			unsigned int cubemapNr = 1;
 
 			for (const auto& texData : textures) {
 				std::string number;
 				std::string usage = TextureUsageToString(texData->GetUsage()); // e.g. "texture_diffuse"
 
+				if (usage == "texture_normal")
+					m_Material->SetInt("u_UseTextureNormal", 1);
+				else
+					m_Material->SetInt("u_UseTextureNormal", 0);
+
 				if (usage == "texture_diffuse")
 					number = std::to_string(diffuseNr++);
 				else if (usage == "texture_specular")
 					number = std::to_string(specularNr++);
+				else if (usage == "texture_normal")
+					number = std::to_string(normalNr++);
 				else if (usage == "texture_cubemap")
 					number = std::to_string(cubemapNr++);
 
@@ -162,6 +170,7 @@ namespace Snail {
 				std::string uniformName;
 				if (usage == "texture_diffuse")			uniformName = "u_Diffuse" + number;
 				else if (usage == "texture_specular")	uniformName = "u_Specular" + number;
+				else if (usage == "texture_normal")	uniformName = "u_Normal" + number;
 				else if (usage == "texture_cubemap")		uniformName = "u_Cubemap" + number;
 
 				// 将纹理对象传递给 Material

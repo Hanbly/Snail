@@ -153,10 +153,10 @@ namespace Snail {
 
 		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
 			if (s_3DSceneData.EnableInstancing) {
-				SubmitMesh(mesh, edgeEnable, transform);
+				SubmitMesh(mesh, edgeEnable, transform * mesh->GetLocationTransform());
 			}
 			else {
-				DrawMesh(*mesh, edgeEnable, transform);
+				DrawMesh(*mesh, edgeEnable, transform * mesh->GetLocationTransform());
 			}
 		}
 	}

@@ -12,7 +12,7 @@ namespace Snail {
 
 	enum class TextureUsage {
 		None = 0,
-		Diffuse, Specular, Cubemap
+		Diffuse, Specular, Normal, Cubemap
 	};
 
 	static std::string TextureTypeToString(const TextureType& type)
@@ -29,6 +29,7 @@ namespace Snail {
 		switch (type) {
 			case TextureUsage::Diffuse: return "texture_diffuse";
 			case TextureUsage::Specular: return "texture_specular";
+			case TextureUsage::Normal: return "texture_normal";
 			case TextureUsage::Cubemap: return "texture_cubemap";
 			default: return "None";
 		}
@@ -38,6 +39,7 @@ namespace Snail {
 	{
 		if (typestr == "texture_diffuse") return TextureUsage::Diffuse;
 		if (typestr == "texture_specular") return TextureUsage::Specular;
+		if (typestr == "texture_normal") return TextureUsage::Normal;
 		if (typestr == "texture_cubemap") return TextureUsage::Cubemap;
 
 		return TextureUsage::None;

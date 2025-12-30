@@ -1,9 +1,9 @@
 ﻿#type vertex
 #version 330 core
 
-layout(location = 0) in vec3 position;
+layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
-layout(location = 2) in vec2 TextureCoords;
+layout(location = 2) in vec2 a_TextureCoords;
 
 #ifdef INSTANCING
     // 实例化模式：矩阵来自顶点属性 (VBO)
@@ -41,16 +41,17 @@ void main()
 #endif
 
     // 计算世界坐标
-    vec4 worldPos = modelMatrix * vec4(position, 1.0);
+    vec4 worldPos = modelMatrix * vec4(a_Position, 1.0);
 
     // 计算法线 (已在CPU端计算好 NormalMatrix)
-    v_Normal = normalize(normalMatrix * a_Normal);
+    v_Normal = normalize(normalMatrix * a_Normal);    
     
-    // 传递世界坐标给片元着色器用于光照计算
+    // --- 传递世界坐标给片元着色器用于光照计算 ---
     v_FragPos = vec3(worldPos);
     
-    v_TextureCoords = TextureCoords;
+    v_TextureCoords = a_TextureCoords;
     v_EntityID = entityID;
+
     
     gl_Position = u_ViewProjection * worldPos;
 }
@@ -72,7 +73,9 @@ flat in int v_EntityID;
 // 材质
 uniform sampler2D u_Diffuse1;
 uniform sampler2D u_Specular1;
+uniform sampler2D u_Normal1;
 uniform bool u_UseTexture;
+uniform bool u_UseTextureNormal;
 
 uniform vec3 u_ColorDiffuse;
 uniform vec3 u_ColorSpecular;
@@ -106,6 +109,24 @@ uniform int u_DirLightCount;
 uniform PointLight u_PointLights[MAX_POINT_LIGHTS];
 uniform int u_PointLightCount;
 
+// 无需预计算切线，利用偏导数构建 TBN 并计算扰动后的法线
+vec3 getNormalFromMap()
+{
+    vec3 tangentNormal = texture(u_Normal1, v_TextureCoords).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = dFdx(v_FragPos);
+    vec3 Q2  = dFdy(v_FragPos);
+    vec2 st1 = dFdx(v_TextureCoords);
+    vec2 st2 = dFdy(v_TextureCoords);
+
+    vec3 N   = normalize(v_Normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
+
 // 函数声明
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask);
@@ -127,13 +148,18 @@ void main()
     if (u_UseTexture) {
         specMask = texture(u_Specular1, v_TextureCoords).r;
     }
+    
+    // --- 法线计算 ---
+    vec3 norm;
+    if (u_UseTexture && u_UseTextureNormal) {
+        norm = getNormalFromMap();
+    } else {
+        norm = normalize(v_Normal);
+    }
 
-    // 必须在 Fragment Shader 中再次归一化，插值会导致长度变化
-    vec3 norm = normalize(v_Normal);
     vec3 viewDir = normalize(u_ViewPosition - v_FragPos);
     
     vec3 result = vec3(0.0);
-
     // 3. 计算平行光
     int dirCount = min(u_DirLightCount, MAX_DIR_LIGHTS);
     for(int i = 0; i < dirCount; i++)

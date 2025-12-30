@@ -69,8 +69,9 @@ namespace Snail {
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(
 			path,
-			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
-			//	  分割成三角形      |      反转y轴		  |   自动生成顶点的法向量	 
+			aiProcess_Triangulate | aiProcess_GenNormals);
+			//aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
+			////	  分割成三角形      |      反转y轴		  |   自动生成顶点的法向量	 
 
 		// 读取数据是否非空 & 读取数据是否完整
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -169,10 +170,20 @@ namespace Snail {
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 			std::vector<Refptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Diffuse);
+			if (diffuseMaps.empty()) {
+				diffuseMaps = LoadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureUsage::Normal);
+			}
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 			std::vector<Refptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureUsage::Specular);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			std::vector<Refptr<Texture>> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, TextureUsage::Normal);
+			if (normalMaps.empty()) {
+				// 很多 FBX 把法线贴图放在 Height 通道
+				normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TextureUsage::Normal);
+			}
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
 			// TODO: cube 纹理
 			//std::vector<Refptr<Texture>> cubeMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Cubemap);
