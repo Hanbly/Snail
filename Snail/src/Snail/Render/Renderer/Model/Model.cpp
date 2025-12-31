@@ -81,8 +81,9 @@ namespace Snail {
 			return;
 		}
 		// 示例：assets/models/sponza/sponza.obj
-		std::filesystem::path stdPath = path;
-		m_FullPath = path;
+		std::string tempPath = ExtractRelativePath(std::string(path));
+		std::filesystem::path stdPath = tempPath;
+		m_FullPath = tempPath;
 
 		// parent_path() 自动提取目录
 	    m_Directory = stdPath.parent_path().u8string(); 
@@ -251,12 +252,12 @@ namespace Snail {
 				continue;
 			}
 			std::string filename = std::string(str.C_Str());
-			std::replace(filename.begin(), filename.end(), '\\', '/');
+			filename = ExtractRelativePath(filename);
 						
 			Refptr<Texture> texture;
 
 			std::filesystem::path filePath(filename);
-			if (filePath.extension() != ".png" && filePath.extension() != ".jpg") {
+			if (filePath.extension() == "") {
 				filename += ".png";
 			}
 
@@ -466,6 +467,30 @@ namespace Snail {
 		}
 
 		return std::pair<std::vector<Vertex>, std::vector<uint32_t>>(vertices, indices);
+	}
+
+	std::string Model::ExtractRelativePath(std::string& path)
+	{
+		std::filesystem::path p(path);
+		std::filesystem::path result;
+
+		// 遍历路径的每一段
+		for (const auto& part : p)
+		{
+			// 如果这一段是 ".." 或者 "."，就跳过
+			if (part == ".." || part == ".") {
+				continue;
+			}
+
+			// 剩下的部分拼接起来 (会自动处理 / 或 \)
+			// 如果 result 是空的，直接赋值；否则用 /= 拼接
+			result /= part;
+		}
+
+		std::string resultStr = result.string();
+		std::replace(resultStr.begin(), resultStr.end(), '\\', '/');
+
+		return resultStr;
 	}
 
 }

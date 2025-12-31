@@ -142,14 +142,14 @@ namespace Snail {
 		}
 		else if (m_Mode == EditorCameraMode::Arcball) {
 			// Alt + Middle Mouse = Pan (平移)
-			if (Input::IsKeyPressed(SNL_KEY_SPACE) && Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
+			if (Input::IsKeyPressed(SNL_KEY_LEFT_ALT) && Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
 				xoffset *= m_MoveSpeed;
 				yoffset *= m_MoveSpeed;
 
 				ArcballMove(xoffset, yoffset);
 			}
-			// Left Mouse = Rotate (轨道旋转)
-			else if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
+			// Middle Mouse = Rotate (轨道旋转)
+			else if (Input::IsMouseButton(SNL_MOUSE_BUTTON_MIDDLE)) {
 				xoffset *= m_RotateSpeed;
 				yoffset *= m_RotateSpeed;
 

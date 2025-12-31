@@ -322,7 +322,7 @@ namespace Snail {
 							}
 						}
 						else {
-							FileSelecter::Open("LoadNewTexture", "导入新纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+							FileSelecter::Open("LoadNewTexture", "导入新纹理", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
 						}
 						ImGui::CloseCurrentPopup();
 					}
@@ -362,7 +362,7 @@ namespace Snail {
 					if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
 						m_Context->currentEditingMeshIndex = meshIndex;
 						m_Context->currentEditingTexIndex = t;
-						FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+						FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
 					}
 					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
 
@@ -424,7 +424,7 @@ namespace Snail {
 								m_Context->currentEditingMeshIndex = meshIndex;
 								m_Context->currentEditingTexIndex = t;
 								m_Context->currentEditingFaceIndex = static_cast<int>(i);
-								FileSelecter::Open("EditCubemapFace", "替换贴图面", "(.png,.jpg,.jpeg,.tga,.bmp){.png,.jpg,.jpeg,.tga,.bmp},.png,.jpg,.jpeg,.tga,.bmp");
+								FileSelecter::Open("EditCubemapFace", "替换贴图面", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
 							}
 
 							// 悬浮提示路径

@@ -1,6 +1,7 @@
 ﻿#include "SNLpch.h"
 
 #include <stb_image.h>
+#include <tinyexr.h>
 
 #include "OpenGLTexture.h"
 
@@ -11,34 +12,98 @@ namespace Snail {
 	{
 		stbi_set_flip_vertically_on_load(true);
 		int width, height, channels;
-		stbi_uc* data = stbi_load(path[0].c_str(), &width, &height, &channels, 0);
-		SNL_CORE_ASSERT(data, "OpenGLTexture2D: stbi_load加载纹理文件失败!");
+		void* data = nullptr;
+		bool isFloat = false;
+
+		std::filesystem::path filePath(path[0]);
+		std::string extension = filePath.extension().string();
+		std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+		
+		if (extension == ".exr") {
+			const char* err = nullptr;
+			int ret = LoadEXR((float**)&data, &width, &height, path[0].c_str(), &err);
+
+			if (ret != TINYEXR_SUCCESS) {
+				if (err) {
+					SNL_CORE_ERROR("OpenGLTexture2D: TinyEXR 加载失败: \n路径: {0} \n错误信息: {1}", path[0], err);
+					FreeEXRErrorMessage(err); // TinyEXR 要求释放错误信息内存
+				} else {
+					SNL_CORE_ERROR("OpenGLTexture2D: TinyEXR 加载失败: {0} (未知错误)", path[0]);
+				}
+				return;
+			}
+			// TinyEXR 加载的总是 RGBA float，除非特殊设置
+			channels = 4;
+			isFloat = true;
+		}
+		else {
+			// 判断是否为 HDR (stbi 只支持 .hdr，不支持 .exr)
+			if (stbi_is_hdr(path[0].c_str())) {
+				// 加载为浮点数据
+				data = stbi_loadf(path[0].c_str(), &width, &height, &channels, 0);
+				isFloat = true;
+			}
+			else {
+				// 普通 LDR 加载 (png, jpg)
+				data = stbi_load(path[0].c_str(), &width, &height, &channels, 0);
+				isFloat = false;
+			}
+			if (!data) {
+				const char* reason = stbi_failure_reason();
+				SNL_CORE_ERROR("OpenGLTexture2D: stbi_load 加载失败!\n路径: {0} \n错误信息: {1}", path[0], reason);
+				return;
+			}
+		}
+
 		m_Width = width;
 		m_Height = height;
 
+		GLenum type = GL_UNSIGNED_BYTE;
 		GLenum internalFormat = GL_RGB8;
 		GLenum dataFormat = GL_RGB;
-		if (channels == 4) {
-			internalFormat = GL_RGBA8;
-			dataFormat = GL_RGBA;
-		}
-		else if (channels == 3) {
-			internalFormat = GL_RGB8;
-			dataFormat = GL_RGB;
-		}
-		else if (channels == 2) {
-			internalFormat = GL_RG8;
-			dataFormat = GL_RG;
-		}
-		else if (channels == 1) // 高光图往往是单通道灰度图！
-		{
-			internalFormat = GL_R8;
-			dataFormat = GL_RED;
+		if (isFloat) {
+			// HDR / EXR 处理
+			type = GL_FLOAT;
+			if (channels == 1) {
+				internalFormat = GL_R32F;
+				dataFormat = GL_RED;
+			}
+			else if (channels == 2) {
+				internalFormat = GL_RG32F;
+				dataFormat = GL_RG;
+			}
+			else if (channels == 3) {
+				internalFormat = GL_RGB32F;
+				dataFormat = GL_RGB;
+			}
+			else if (channels == 4) {
+				internalFormat = GL_RGBA32F;
+				dataFormat = GL_RGBA;
+			}
+		} else {
+			// 普通 LDR 处理
+			type = GL_UNSIGNED_BYTE;
+			if (channels == 1) {
+				internalFormat = GL_R8;
+				dataFormat = GL_RED;
+			}
+			else if (channels == 2) {
+				internalFormat = GL_RG8;
+				dataFormat = GL_RG;
+			}
+			else if (channels == 3) {
+				internalFormat = GL_RGB8;
+				dataFormat = GL_RGB;
+			}
+			else if (channels == 4) {
+				internalFormat = GL_RGBA8;
+				dataFormat = GL_RGBA;
+			}
 		}
 
 		if (internalFormat == 0 || dataFormat == 0)
 		{
-			SNL_CORE_ASSERT(false, "纹理格式错误! Channels: {0}, Path: {1}", channels, path);
+			SNL_CORE_ERROR("纹理格式错误! Channels: {0}, Path: {1}", channels, path);
 			stbi_image_free(data);
 			return; // 或者抛出异常
 		}
@@ -57,7 +122,7 @@ namespace Snail {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		// ---------------------------------
 
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, type, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		
 		Unbind();

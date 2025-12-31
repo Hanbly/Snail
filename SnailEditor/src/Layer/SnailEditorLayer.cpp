@@ -102,15 +102,16 @@ namespace Snail {
 			float height = m_EditorViewportPanel.GetSize().y;
 
 			Entity hit = m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection());
-
-			if (Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT)) {
-				m_EditorContext->ResetSelectedEntity({});
+						
+			if (Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
+				if (hit.IsValid() && Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT))
+					m_EditorContext->AddSelectedEntity(hit);
 			}
-			else if (hit.IsValid() && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
-				m_EditorContext->AddSelectedEntity(hit);
-			}
-			else if (hit.IsValid()) {
-				m_EditorContext->ResetSelectedEntity(hit);
+			else if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT)) {
+				if (hit.IsValid())
+					m_EditorContext->ResetSelectedEntity(hit);
+				else
+					m_EditorContext->ClearAllEdge();
 			}
 		}
 		return false;

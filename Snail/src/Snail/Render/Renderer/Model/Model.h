@@ -63,6 +63,7 @@ namespace Snail {
 		glm::mat4 ConvertaiMat4ToglmMat4(const aiMatrix4x4& matrix) const;
 		void ConsiderMeshAABB(const Refptr<Mesh>& mesh);
 		std::pair<std::vector<Vertex>, std::vector<uint32_t>> GetPrimitiveDatas(const PrimitiveType& type);
+		std::string ExtractRelativePath(std::string& path);
 	};
 
 }

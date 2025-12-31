@@ -7,34 +7,69 @@ EditorCamera:
   Near: 1
   Far: 10000
   Aspect: 1.66716421
-  ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.613327, 0.414948076, -1055.85779, 1]
-  Position: [5.77682114, 438.311981, 961.052612]
-  DirvecFront: [1, 0, 0]
-  DirvecRight: [0, 0, 1]
-  DirvecUp: [0, 1, 0]
+  ViewMatrix: [-0.924412131, 0.245307326, -0.29203862, 0, -1.4901163e-08, 0.765711546, 0.643184304, 0, 0.381395161, 0.594567299, -0.707832992, -0, -73.0120087, -114.807922, -943.854919, 1]
+  Position: [-314.972015, 694.982239, -571.98407]
+  DirvecFront: [0.29203862, -0.643184185, 0.707832932]
+  DirvecRight: [-0.924412191, 0, 0.381395161]
+  DirvecUp: [0.245307311, 0.765711427, 0.594567239]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 24.5496426
-  DirvecYaw: -362.169769
+  EulerPitch: 40.0296745
+  DirvecYaw: -562.420105
   FocalPoint: [-25.7466259, 57.9938965, 129.030258]
-  Distance: 915.366943
+  Distance: 990.366943
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
   DollySpeed: 0.5
 Entities:
-  - Entity: 240636c3-0858-49ba-9316-0c1da39ecaac
+  - Entity: 5a56abcf-f3f6-4102-83a9-e8919fd73347
     TagComponent:
-      Tag: UnnamedEntity
+      Tag: New Model
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
     ModelComponent:
-      IsImported: false
+      IsImported: true
       DefaultShaderPath: assets/shaders/Standard.glsl
+      FilePath: assets/models/tree_small_02_4k.fbx/tree_small_02_4k.fbx
       Meshes:
-        - PrimitiveType: Cube
-          ShaderPath: F:\Snail\SnailEditor\assets\shaders\TextureCube_Shader.glsl
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
           Textures:
-            - DimType: TextureCube
-              Usage: texture_cubemap
-              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_nor_gl_4k.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_nor_gl_4k.exr]
       Visible: true
       EdgeEnable: false
+  - Entity: e1e8e7b3-ee53-40bd-a66e-3a66657d0207
+    TagComponent:
+      Tag: UnnamedEntity
+    DirectionalLightComponent:
+      Color: [1, 1, 1, 1]
+      Direction: [0, -1, 0]
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5

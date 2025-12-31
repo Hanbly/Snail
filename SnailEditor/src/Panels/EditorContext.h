@@ -29,12 +29,17 @@ namespace Snail {
 
 		// -------------------- 选中状态管理 --------------------
 
-		// 设置选中实体（并处理高亮/描边逻辑）
-		void EditorContext::ResetSelectedEntity(const Entity& entity) {
-			// 清除所有实体的描边状态
+		// 清除所有实体的描边状态
+		void ClearAllEdge() const {
 			auto modelview = scene->GetAllofEntitiesWith<ModelComponent>();
 			for (auto [e, model] : modelview.each())
 				model.edgeEnable = false;
+		}
+
+		// 设置选中实体（并处理高亮/描边逻辑）
+		void EditorContext::ResetSelectedEntity(const Entity& entity) {
+
+			ClearAllEdge();
 
 			selectedEntity = entity;
 
@@ -48,7 +53,13 @@ namespace Snail {
 
 		// 追加选中实体（用于多选或Ctrl点击逻辑）
 		void EditorContext::AddSelectedEntity(const Entity& entity) {
-			if (selectedEntity == entity) return;
+			if (selectedEntity == entity) {
+				if (entity.HasAllofComponent<ModelComponent>()) {
+					entity.GetComponent<ModelComponent>().edgeEnable = true;
+				}
+				return;
+			}
+
 
 			selectedEntity = {};
 
