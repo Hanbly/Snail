@@ -26,7 +26,7 @@ IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
 IncludeDirs["tinyexr"] = "Snail/vendor/tinyexr"
-IncludeDirs["miniz"] = "Snail/vendor/tinyexr/deps/miniz"
+IncludeDirs["miniz"] = "Snail/vendor/miniz"
 IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
 IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
 IncludeDirs["yaml"] = "Snail/vendor/yaml-cpp/include"
@@ -62,8 +62,8 @@ project "Snail"
         "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/tinyexr/tinyexr.h",
         "%{prj.name}/vendor/tinyexr/tinyexr_impl.cpp",
-        "%{prj.name}/vendor/tinyexr/deps/miniz/miniz.h",
-        "%{prj.name}/vendor/tinyexr/deps/miniz/miniz.c",
+        "%{prj.name}/vendor/miniz/miniz.h",
+        "%{prj.name}/vendor/miniz/miniz.c",
         "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.h",
         "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.cpp",
         "%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
