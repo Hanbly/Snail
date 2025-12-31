@@ -11,16 +11,21 @@ namespace Snail {
 	// 职责：显示选中实体的组件详情，处理属性修改和资源引用
 	// ---------------------------------------------------------
 	class InspectorPanel : public Panel {
-	private:
-		Refptr<EditorContext> m_Context;
-
 	public:
-		InspectorPanel(const Refptr<EditorContext>& context)
-			: m_Context(context) {
-		}
+		InspectorPanel(const Refptr<EditorContext>& context);
 
 		void Show();
 
+		// 回调类型
+		using OnEditTexture2DCallback = std::function<void(const std::string&)>;
+		using OnEditTextureCubeCallback = std::function<void(const std::string&)>;
+		using OnCreateTextureCallback = std::function<void(const std::string&)>;
+		using OnShaderFileOpenCallback = std::function<void(const std::string&)>;
+		// 设置回调的函数
+		void SetEditTexture2DCallback(const OnEditTexture2DCallback& callback) { m_OnEditTexture2DCallback = callback; }
+		void SetEditTextureCubeCallback(const OnEditTextureCubeCallback& callback) { m_OnEditTextureCubeCallback = callback; }
+		void SetCreateTextureCallback(const OnCreateTextureCallback& callback) { m_OnCreateTextureCallback = callback; }
+		void SetShaderFileOpenCallback(const OnShaderFileOpenCallback& callback) { m_OnShaderFileOpenCallback = callback; }
 	private:
 		// -------------------- 主流程 --------------------
 		void DrawAllComponents(Entity entity);
@@ -46,6 +51,14 @@ namespace Snail {
 
 		template<typename T, typename UIFunction>
 		void DrawComponentWrapper(const std::string& name, Entity entity, UIFunction uiFunction);
+	private:
+		Refptr<EditorContext> m_Context;
+
+		// 存储回调函数
+		OnEditTexture2DCallback m_OnEditTexture2DCallback;
+		OnEditTextureCubeCallback m_OnEditTextureCubeCallback;
+		OnCreateTextureCallback m_OnCreateTextureCallback;
+		OnShaderFileOpenCallback m_OnShaderFileOpenCallback;
 	};
 
 }

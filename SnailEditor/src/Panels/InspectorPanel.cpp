@@ -6,6 +6,90 @@
 
 namespace Snail {
 
+	InspectorPanel::InspectorPanel(const Refptr<EditorContext>& context)
+		: m_Context(context)
+	{
+		// --- 设置回调函数 ---
+		// 替换现有纹理
+		SetEditTexture2DCallback([this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+			size_t tIdx = m_Context->currentEditingTexIndex;
+
+			if (mIdx < meshes.size()) {
+				meshes[mIdx]->EditTexture(tIdx, { path });
+			}
+			});
+
+		// 加载新纹理
+		SetCreateTextureCallback([this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+
+			if (mIdx < meshes.size()) {
+				TextureUsage targetUsage = m_Context->pendingTextureUsage;
+				if (auto newTexture = TextureLibrary::Load({ path }, targetUsage)) {
+					meshes[mIdx]->AddTexture(newTexture, targetUsage);
+				}
+			}
+			});
+
+		// 替换 Cubemap 的某一面
+		SetEditTextureCubeCallback([this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+			size_t tIdx = m_Context->currentEditingTexIndex;
+			int faceIdx = m_Context->currentEditingFaceIndex; // 获取记录的面索引
+
+			if (mIdx < meshes.size()) {
+				auto& mesh = meshes[mIdx];
+				auto textures = mesh->GetTextures(); // 获取当前纹理列表 (副本)
+
+				if (tIdx < textures.size()) {
+					auto& oldTexture = textures[tIdx];
+					// Cubemap (路径 > 1)
+					if (oldTexture->GetPath().size() > 1) {
+						std::vector<std::string> newPaths = oldTexture->GetPath();
+
+						if (faceIdx >= 0 && faceIdx < newPaths.size()) {
+							newPaths[faceIdx] = path;
+
+							mesh->EditTexture(tIdx, newPaths);
+						}
+					}
+				}
+			}
+			});
+
+		// 替换 Mesh 的 Shader
+		SetShaderFileOpenCallback([this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+
+			if (mIdx < meshes.size()) {
+				// 调用 Mesh 的接口替换 Shader
+				meshes[mIdx]->EditShader(path);
+			}
+			});
+	}
+
 	void InspectorPanel::Show()
 	{
 		ImGui::Begin(u8"属性面板");
@@ -270,6 +354,16 @@ namespace Snail {
 			ImGui::TextDisabled("%s", filename.c_str());
 			ImGui::PopItemWidth();
 
+			// ---------------- shader路径作为拖拽目标 -------------------
+			DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+				std::string extension = path.extension().string();
+				if (extension == ".glsl")
+				{
+					// 编辑（替换）着色器的callback
+					m_OnShaderFileOpenCallback(path.string());
+				}
+				});
+
 			ImGui::SameLine();
 
 			// 替换按钮
@@ -292,6 +386,18 @@ namespace Snail {
 			if (ImGui::Button(" + 添加新纹理 ", { -1, 28 })) {
 				ImGui::OpenPopup("SelectTextureUsagePopup");
 			}
+
+			// ---------------- 添加纹理的 按钮 作为拖拽目标 -------------------
+			DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+				std::string extension = path.extension().string();
+				if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
+				{
+					m_Context->currentEditingMeshIndex = meshIndex;
+					m_Context->pendingTextureUsage = TextureUsage::Diffuse; // TODO: 暂时设置成默认diffuse
+					// 新增纹理的callback
+					m_OnCreateTextureCallback(path.string());
+				}
+				});
 
 			if (ImGui::BeginPopup("SelectTextureUsagePopup"))
 			{
@@ -366,6 +472,16 @@ namespace Snail {
 					}
 					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
 
+					// ---------------- 2D预览图作为拖拽目标 -------------------
+					DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+						std::string extension = path.extension().string();
+						if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
+						{
+							// 编辑（替换）2D纹理的callback
+							m_OnEditTexture2DCallback(path.string());
+						}
+						});
+
 					// Column 1: 信息文本
 					ImGui::TableSetColumnIndex(1);
 					ImGui::TextColored({ 0.8f, 0.8f, 0.8f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
@@ -418,14 +534,22 @@ namespace Snail {
 							// 该面的2D预览图
 							auto previewTex = TextureLibrary::Load("TempSkyboxPreview_" + paths[i], { paths[i] }, TextureUsage::None);
 							uint32_t texId = previewTex ? previewTex->GetRendererId() : 0;
-
-							// 图像按钮
 							if (ImGui::ImageButton("##FaceBtn", (void*)(intptr_t)texId, { 64.0f, 64.0f }, { 0, 1 }, { 1, 0 })) {
 								m_Context->currentEditingMeshIndex = meshIndex;
 								m_Context->currentEditingTexIndex = t;
 								m_Context->currentEditingFaceIndex = static_cast<int>(i);
 								FileSelecter::Open("EditCubemapFace", "替换贴图面", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
 							}
+
+							// ---------------- Cube map 预览图作为拖拽目标 -------------------
+							DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+								std::string extension = path.extension().string();
+								if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
+								{
+									// 编辑（替换）立方体贴图纹理的callback
+									m_OnEditTextureCubeCallback(path.string());
+								}
+								});
 
 							// 悬浮提示路径
 							if (ImGui::IsItemHovered()) {
@@ -471,81 +595,22 @@ namespace Snail {
 
 		// 2. 替换现有纹理
 		FileSelecter::Handle("EditTexture2D", [this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
-			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
-
-			auto& modelComp = entity.GetComponent<ModelComponent>();
-			auto& meshes = modelComp.model->GetMeshes();
-			size_t mIdx = m_Context->currentEditingMeshIndex;
-			size_t tIdx = m_Context->currentEditingTexIndex;
-
-			if (mIdx < meshes.size()) {
-				meshes[mIdx]->EditTexture(tIdx, { path });
-			}
+			m_OnEditTexture2DCallback(path);
 			});
 
 		// 3. 加载新纹理
 		FileSelecter::Handle("LoadNewTexture", [this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
-			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
-
-			auto& modelComp = entity.GetComponent<ModelComponent>();
-			auto& meshes = modelComp.model->GetMeshes();
-			size_t mIdx = m_Context->currentEditingMeshIndex;
-
-			if (mIdx < meshes.size()) {
-				TextureUsage targetUsage = m_Context->pendingTextureUsage;
-				if (auto newTexture = TextureLibrary::Load({ path }, targetUsage)) {
-					meshes[mIdx]->AddTexture(newTexture, targetUsage);
-				}
-			}
+			m_OnCreateTextureCallback(path);
 			});
 
 		// 4. 替换 Cubemap 的某一面
 		FileSelecter::Handle("EditCubemapFace", [this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
-			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
-
-			auto& modelComp = entity.GetComponent<ModelComponent>();
-			auto& meshes = modelComp.model->GetMeshes();
-
-			size_t mIdx = m_Context->currentEditingMeshIndex;
-			size_t tIdx = m_Context->currentEditingTexIndex;
-			int faceIdx = m_Context->currentEditingFaceIndex; // 获取记录的面索引
-
-			if (mIdx < meshes.size()) {
-				auto& mesh = meshes[mIdx];
-				auto textures = mesh->GetTextures(); // 获取当前纹理列表 (副本)
-
-				if (tIdx < textures.size()) {
-					auto& oldTexture = textures[tIdx];
-					// Cubemap (路径 > 1)
-					if (oldTexture->GetPath().size() > 1) {
-						std::vector<std::string> newPaths = oldTexture->GetPath();
-
-						if (faceIdx >= 0 && faceIdx < newPaths.size()) {
-							newPaths[faceIdx] = path;
-
-							mesh->EditTexture(tIdx, newPaths);
-						}
-					}
-				}
-			}
+			m_OnEditTextureCubeCallback(path);
 			});
 
 		// 5. 替换 Mesh 的 Shader
 		FileSelecter::Handle("EditMeshShader", [this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
-			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
-
-			auto& modelComp = entity.GetComponent<ModelComponent>();
-			auto& meshes = modelComp.model->GetMeshes();
-			size_t mIdx = m_Context->currentEditingMeshIndex;
-
-			if (mIdx < meshes.size()) {
-				// 调用 Mesh 的接口替换 Shader
-				meshes[mIdx]->EditShader(path);
-			}
+			m_OnShaderFileOpenCallback(path);
 			});
 	}
 

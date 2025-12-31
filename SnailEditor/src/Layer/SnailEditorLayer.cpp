@@ -90,10 +90,13 @@ namespace Snail {
 	{
 		if (Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) ||
 			Input::IsMouseButton(SNL_MOUSE_BUTTON_RIGHT) ||
+			Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) && Input::IsKeyPressed(SNL_KEY_SPACE) ||
 			Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT) && Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL))
 		{
 			if (!m_EditorViewportPanel.IsHovered())
 				return false;
+
+			if (Input::IsKeyPressed(SNL_KEY_SPACE)) return false; // 空格左键用来操作gizmo，不会触发物体选择逻辑
 
 			auto [mx_global, my_global] = ImGui::GetMousePos();
 			float mx = mx_global - m_EditorViewportPanel.GetBoundMin().x;
@@ -102,7 +105,7 @@ namespace Snail {
 			float height = m_EditorViewportPanel.GetSize().y;
 
 			Entity hit = m_Scene->CastRay(mx, my, width, height, glm::inverse(m_EditorCamera->GetTransform()), m_EditorCamera->GetProjection());
-						
+
 			if (Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL)) {
 				if (hit.IsValid() && Input::IsMouseButton(SNL_MOUSE_BUTTON_LEFT))
 					m_EditorContext->AddSelectedEntity(hit);
