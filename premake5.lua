@@ -25,6 +25,8 @@ IncludeDirs["GLM"] = "Snail/vendor/GLM"
 IncludeDirs["ImGui"] = "Snail/vendor/Imgui"
 IncludeDirs["spdlog"] = "Snail/vendor/spdlog/include"
 IncludeDirs["stb_image"] = "Snail/vendor/stb_image"
+IncludeDirs["tinyexr"] = "Snail/vendor/tinyexr"
+IncludeDirs["miniz"] = "Snail/vendor/tinyexr/deps/miniz"
 IncludeDirs["Assimp"] = "Snail/vendor/Assimp/include"
 IncludeDirs["EnTT"] = "Snail/vendor/EnTT/include"
 IncludeDirs["yaml"] = "Snail/vendor/yaml-cpp/include"
@@ -58,11 +60,22 @@ project "Snail"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/stb_image/**.h",
         "%{prj.name}/vendor/stb_image/**.cpp",
+        "%{prj.name}/vendor/tinyexr/tinyexr.h",
+        "%{prj.name}/vendor/tinyexr/tinyexr_impl.cpp",
+        "%{prj.name}/vendor/tinyexr/deps/miniz/miniz.h",
+        "%{prj.name}/vendor/tinyexr/deps/miniz/miniz.c",
         "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.h",
         "%{prj.name}/vendor/ImGuiFileDialog/ImGuiFileDialog.cpp",
         "%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
         "%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
     }
+
+    filter "files:Snail/vendor/**.c"
+        flags { "NoPCH" }       -- 禁用预编译头
+    filter {} -- 重置过滤器，以免影响后续配置
+    filter "files:Snail/vendor/**.cpp"
+        flags { "NoPCH" }
+    filter {}
 
     includedirs {
         "%{IncludeDirs.GLFW}",
@@ -71,6 +84,8 @@ project "Snail"
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.spdlog}",
         "%{IncludeDirs.stb_image}",
+        "%{IncludeDirs.tinyexr}",
+        "%{IncludeDirs.miniz}",
         "%{IncludeDirs.Assimp}",
         "%{IncludeDirs.EnTT}",
         "%{IncludeDirs.yaml}",

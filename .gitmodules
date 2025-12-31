@@ -29,3 +29,6 @@
 [submodule "Snail/vendor/ImGuizmo"]
 	path = Snail/vendor/ImGuizmo
 	url = https://github.com/Hanbly/ImGuizmo.git
+[submodule "Snail/vendor/tinyexr"]
+	path = Snail/vendor/tinyexr
+	url = https://github.com/Hanbly/tinyexr.git
