@@ -6,17 +6,17 @@ EditorCamera:
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.62084866
-  ViewMatrix: [-0.46362558, -0.274675727, 0.842380404, -0, -7.45058149e-09, 0.950734377, 0.310006827, 0, -0.886031389, 0.143727064, -0.440784663, -0, 12.0561733, 9.02040863, -1575.32874, 1]
-  Position: [1335.09302, 479.78653, -684.995056]
-  DirvecFront: [-0.842380345, -0.310006797, 0.440784693]
-  DirvecRight: [-0.46362555, 0, -0.88603133]
-  DirvecUp: [-0.274675727, 0.950734437, 0.143727079]
+  Aspect: 1.66716421
+  ViewMatrix: [-0.434138596, -0.388244301, 0.812889814, -0, -4.47034729e-08, 0.902362645, 0.430977434, 0, -0.900846004, 0.187103912, -0.391750455, 0, -13.4505529, 114.234085, -2017.26099, 1]
+  Position: [1678.32251, 766.313354, -823.753662]
+  DirvecFront: [-0.812889993, -0.430977464, 0.391750574]
+  DirvecRight: [-0.434138656, 0, -0.900846124]
+  DirvecUp: [-0.388244331, 0.902362704, 0.187103957]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 18.0596409
-  DirvecYaw: -477.621307
+  EulerPitch: 25.5296059
+  DirvecYaw: -475.730469
   FocalPoint: [690.362915, 242.517563, -347.632996]
-  Distance: 765.367004
+  Distance: 1215.36694
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -35,9 +35,9 @@ Entities:
           Textures:
             - DimType: TextureCube
               Usage: texture_cubemap
-              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
+              Paths: [assets\skybox\rogland_clear_night_4k.exr]
       Visible: true
-      EdgeEnable: false
+      EdgeEnable: true
   - Entity: c1813b8e-c555-4d63-84b4-1567547bc06e
     TagComponent:
       Tag: 点光源1
@@ -50,8 +50,8 @@ Entities:
       Constant: 1
       Linear: 0.00139999995
       Quadratic: 7.0000001e-06
-      Ambient: 0.230000004
-      Diffuse: 0.730000019
+      Ambient: 0.629999995
+      Diffuse: 0.839999974
       Specular: 0.5
     ModelComponent:
       IsImported: false
@@ -88,30 +88,36 @@ Entities:
             []
       Visible: true
       EdgeEnable: false
-  - Entity: c130afa9-c679-45dd-8193-bd2052b385dd
+  - Entity: 8f0be6d3-44f6-430b-89f5-3f51b3f00f23
     TagComponent:
       Tag: 摄像机模型01
     TransformComponent:
-      Position: [29.1063805, 6.70954561, -107.465744]
-      Rotation: [178.636749, 56.0632591, 179.541504]
-      Scale: [13.8662567, 13.8663845, 13.8664255]
+      Position: [0.000396451534, 1.31470501e-10, -161.294098]
+      Rotation: [-179.999893, 49.924633, -179.999893]
+      Scale: [23.6526527, 23.6526299, 23.6526527]
     ModelComponent:
       IsImported: true
       DefaultShaderPath: assets/shaders/Standard.glsl
-      FilePath: F:/Snail/SnailEditor/assets/models/Camera_01_4k.fbx/Camera_01_4k.fbx
+      FilePath: assets/models/Camera_01_4k.fbx/Camera_01_4k.fbx
       Meshes:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_nor_gl_4k.png]
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_lens_body_diff_4k.png]
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_nor_gl_4k.png]
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
@@ -121,13 +127,19 @@ Entities:
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_body_diff_4k.png]
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_nor_gl_4k.png]
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\models\Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_nor_gl_4k.png]
       Visible: true
       EdgeEnable: false
   - Entity: 35234230-4747-4271-8f3c-7b62fb9c3725
@@ -471,4 +483,4 @@ Entities:
               Usage: texture_normal
               Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_black_nor_gl_4k.png]
       Visible: true
-      EdgeEnable: true
+      EdgeEnable: false

@@ -42,6 +42,22 @@ namespace Snail {
 			}
 			});
 
+		// 替换整个 cube map
+		SetEditTextureCubeCallback_Entirely([this](const std::string& path) {
+			auto entity = m_Context->selectedEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+
+			size_t mIdx = m_Context->currentEditingMeshIndex;
+			size_t tIdx = m_Context->currentEditingTexIndex;
+
+			if (mIdx < meshes.size()) {
+				meshes[mIdx]->EditTexture(tIdx, { path });
+			}
+			});
+
 		// 替换 Cubemap 的某一面
 		SetEditTextureCubeCallback([this](const std::string& path) {
 			auto entity = m_Context->selectedEntity;
@@ -359,6 +375,7 @@ namespace Snail {
 				std::string extension = path.extension().string();
 				if (extension == ".glsl")
 				{
+					m_Context->currentEditingMeshIndex = meshIndex;
 					// 编辑（替换）着色器的callback
 					m_OnShaderFileOpenCallback(path.string());
 				}
@@ -450,10 +467,9 @@ namespace Snail {
 
 		int textureIndexToRemove = -1;
 
-		if (ImGui::BeginTable("TextureSlots", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp)) {
-			ImGui::TableSetupColumn("Preview", ImGuiTableColumnFlags_WidthFixed, 64.0f);
-			ImGui::TableSetupColumn("Info", ImGuiTableColumnFlags_WidthStretch);
-			ImGui::TableSetupColumn("Edit", ImGuiTableColumnFlags_WidthFixed, 40.0f);
+		if (ImGui::BeginTable("TextureSlots", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp)) {
+			ImGui::TableSetupColumn("Content", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed, 40.0f);
 
 			for (size_t t = 0; t < textures.size(); t++) {
 				auto& texture = textures[t];
@@ -461,9 +477,11 @@ namespace Snail {
 
 				ImGui::TableNextRow();
 
-				if (texture->GetPath().size() == 1) {
-					// Column 0: 预览图 (可点击替换)
-					ImGui::TableSetColumnIndex(0);
+				// --- Column 0: Content ---
+				ImGui::TableSetColumnIndex(0);
+
+				if (texture->GetPath().size() == 1 && texture->GetUsage() != TextureUsage::Cubemap) {
+					// 2D Texture: 预览图 + 右侧文字
 					uint32_t textureId = texture->GetRendererId();
 					if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
 						m_Context->currentEditingMeshIndex = meshIndex;
@@ -472,105 +490,128 @@ namespace Snail {
 					}
 					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
 
-					// ---------------- 2D预览图作为拖拽目标 -------------------
+					// --- 普通2D纹理 预览图 作为拖拽对象
 					DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 						std::string extension = path.extension().string();
-						if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
-						{
-							// 编辑（替换）2D纹理的callback
+						if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr") {
+							m_Context->currentEditingMeshIndex = meshIndex;
+							m_Context->currentEditingTexIndex = t;
 							m_OnEditTexture2DCallback(path.string());
 						}
 						});
 
-					// Column 1: 信息文本
-					ImGui::TableSetColumnIndex(1);
-					ImGui::TextColored({ 0.8f, 0.8f, 0.8f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
-					ImGui::TextDisabled("%s", TextureTypeToString(texture->GetType()).c_str());
+					ImGui::SameLine();
+					ImGui::BeginGroup();
+					ImGui::TextColored({ 1.0f, 0.8f, 0.4f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
+					ImGui::TextDisabled("Type: %s", TextureTypeToString(texture->GetType()).c_str());
 					if (!texture->GetPath().empty())
-						ImGui::TextWrapped("%s", texture->GetPath()[0].c_str());
+						ImGui::TextWrapped("%s", std::filesystem::path(texture->GetPath()[0]).filename().string().c_str());
+					ImGui::EndGroup();
+				}
+				else if (texture->GetPath().size() == 1 && texture->GetUsage() == TextureUsage::Cubemap) {
+					// Equirectangular Cubemap: 大图 + 下方文字
+					auto previewTex = TextureLibrary::Load({ texture->GetPath() }, TextureUsage::None);
+					uint32_t texId = previewTex ? previewTex->GetRendererId() : 0;
 
-					// Column 2: 删除按钮
-					ImGui::TableSetColumnIndex(2);
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-					if (ImGui::Button("X", { 24, 24 })) {
-						textureIndexToRemove = static_cast<int>(t);
+					if (ImGui::ImageButton("##CubemapBtn", (void*)(intptr_t)texId, { 256.0f, 128.0f }, { 0, 1 }, { 1, 0 })) {
+						m_Context->currentEditingMeshIndex = meshIndex;
+						m_Context->currentEditingTexIndex = t;
+						FileSelecter::Open("EditTextureCube", "替换立方体贴图", "(.hdr,.exr){.hdr,.exr},.hdr,.exr");
 					}
-					ImGui::PopStyleColor(2);
-					if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此纹理");
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换立方体贴图");
+
+					// --- 整个立方体贴图作为拖拽对象 ---
+					DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+						std::string extension = path.extension().string();
+						if (extension == ".hdr" || extension == ".exr") {
+							m_Context->currentEditingMeshIndex = meshIndex;
+							m_Context->currentEditingTexIndex = t;
+							m_OnEditTextureCubeCallback_Entirely(path.string());
+						}
+						});
+
+					ImGui::Spacing();
+					ImGui::TextColored({ 0.4f, 0.8f, 1.0f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
+					ImGui::TextDisabled("Type: %s", TextureTypeToString(texture->GetType()).c_str());
+					if (!texture->GetPath().empty())
+						ImGui::TextWrapped("路径: %s", texture->GetPath()[0].c_str());
 				}
 				else if (texture->GetPath().size() > 1) {
-					// Cubemap 处理逻辑
-
-					ImGui::TableSetColumnIndex(0);
+					// 6-Sided Cubemap
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.4f, 1.0f));
-					ImGui::Button("Cube", { 56.0f, 56.0f }); // 占位符，或者简单的 Cube 图标
+					if (ImGui::Button("Cube", { 56.0f, 56.0f })) {
+						m_Context->currentEditingMeshIndex = meshIndex;
+						m_Context->currentEditingTexIndex = t;
+						FileSelecter::Open("EditTextureCube", "替换立方体贴图", "(.hdr,.exr){.hdr,.exr},.hdr,.exr");
+					}
+					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换立方体贴图");
 					ImGui::PopStyleColor();
-					if (ImGui::IsItemHovered()) ImGui::SetTooltip("Cubemap 包含 6 个面");
 
-					// Column 1: 信息文本 + 展开 6 面
-					ImGui::TableSetColumnIndex(1);
+					// --- 整个立方体贴图作为拖拽对象 ---
+					DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+						std::string extension = path.extension().string();
+						if (extension == ".hdr" || extension == ".exr") {
+							m_Context->currentEditingMeshIndex = meshIndex;
+							m_Context->currentEditingTexIndex = t;
+							m_OnEditTextureCubeCallback_Entirely(path.string());
+						}
+						});
+
+					ImGui::SameLine();
+					ImGui::BeginGroup();
 					ImGui::TextColored({ 0.4f, 0.8f, 1.0f, 1.0f }, "%s", TextureUsageToString(texture->GetUsage()).c_str());
 
-					// 使用 TreeNode 显示 6 个面的路径
-					bool open = ImGui::TreeNodeEx("##cubemap_faces", ImGuiTreeNodeFlags_SpanAvailWidth, "包含 6 个纹理面");
-
+					bool open = ImGui::TreeNodeEx("##cubemap_faces", ImGuiTreeNodeFlags_SpanAvailWidth, "贴图面数(6)");
 					if (open) {
-						const std::vector<std::string>& paths = texture->GetPath();
-						// 定义面的名称，顺序通常是: Right, Left, Top, Bottom, Front, Back
+						const auto& paths = texture->GetPath();
 						const char* faceNames[] = { "右侧", "左侧", "顶部", "底部", "前方", "后方" };
-
-						// 确保路径数量正确，防止越界
 						size_t count = std::min(paths.size(), (size_t)6);
 
 						for (size_t i = 0; i < count; i++) {
-							ImGui::PushID(static_cast<int>(i));
-
-							// 面名称
+							ImGui::PushID((int)i);
 							ImGui::AlignTextToFramePadding();
-							ImGui::TextDisabled("%-12s", faceNames[i]);
+							ImGui::TextDisabled("%-8s", faceNames[i]);
 							ImGui::SameLine();
 
-							// 该面的2D预览图
-							auto previewTex = TextureLibrary::Load("TempSkyboxPreview_" + paths[i], { paths[i] }, TextureUsage::None);
-							uint32_t texId = previewTex ? previewTex->GetRendererId() : 0;
-							if (ImGui::ImageButton("##FaceBtn", (void*)(intptr_t)texId, { 64.0f, 64.0f }, { 0, 1 }, { 1, 0 })) {
+							auto facePreview = TextureLibrary::Load("Temp_Face_Prev_" + paths[i], { paths[i] }, TextureUsage::None);
+							uint32_t fId = facePreview ? facePreview->GetRendererId() : 0;
+
+							if (ImGui::ImageButton("##FaceBtn", (void*)(intptr_t)fId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
 								m_Context->currentEditingMeshIndex = meshIndex;
 								m_Context->currentEditingTexIndex = t;
-								m_Context->currentEditingFaceIndex = static_cast<int>(i);
-								FileSelecter::Open("EditCubemapFace", "替换贴图面", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
+								m_Context->currentEditingFaceIndex = (int)i;
+								FileSelecter::Open("EditCubemapFace", "替换贴图单面", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
 							}
+							if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换立方体贴图单面");
 
-							// ---------------- Cube map 预览图作为拖拽目标 -------------------
+							// --- 立方体贴图 单面 作为拖拽对象 ---
 							DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 								std::string extension = path.extension().string();
-								if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
-								{
-									// 编辑（替换）立方体贴图纹理的callback
+								if (extension == ".hdr" || extension == ".exr") {
+									m_Context->currentEditingMeshIndex = meshIndex;
+									m_Context->currentEditingTexIndex = t;
+									m_Context->currentEditingFaceIndex = (int)i;
 									m_OnEditTextureCubeCallback(path.string());
 								}
 								});
 
-							// 悬浮提示路径
-							if (ImGui::IsItemHovered()) {
-								ImGui::SetTooltip("%s", paths[i].c_str());
-							}
-
+							if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", paths[i].c_str());
 							ImGui::PopID();
 						}
 						ImGui::TreePop();
 					}
-
-					// Column 2: 删除按钮 (整个 Cubemap 一起删)
-					ImGui::TableSetColumnIndex(2);
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-					if (ImGui::Button("X", { 24, 24 })) {
-						textureIndexToRemove = static_cast<int>(t);
-					}
-					ImGui::PopStyleColor(2);
-					if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此 Cubemap");
+					ImGui::EndGroup();
 				}
+
+				// --- Column 1: Action ---
+				ImGui::TableSetColumnIndex(1);
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 0.4f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+				if (ImGui::Button("X", { 24, 24 })) {
+					textureIndexToRemove = static_cast<int>(t);
+				}
+				ImGui::PopStyleColor(2);
+				if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此纹理");
 
 				ImGui::PopID();
 			}
@@ -603,12 +644,17 @@ namespace Snail {
 			m_OnCreateTextureCallback(path);
 			});
 
-		// 4. 替换 Cubemap 的某一面
+		// 4. 替换整个 Cubemap
+		FileSelecter::Handle("EditTextureCube", [this](const std::string& path) {
+			m_OnEditTextureCubeCallback_Entirely(path);
+			});
+
+		// 5. 替换 Cubemap 的某一面
 		FileSelecter::Handle("EditCubemapFace", [this](const std::string& path) {
 			m_OnEditTextureCubeCallback(path);
 			});
 
-		// 5. 替换 Mesh 的 Shader
+		// 6. 替换 Mesh 的 Shader
 		FileSelecter::Handle("EditMeshShader", [this](const std::string& path) {
 			m_OnShaderFileOpenCallback(path);
 			});

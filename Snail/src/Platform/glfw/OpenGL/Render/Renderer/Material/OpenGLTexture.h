@@ -27,10 +27,14 @@ namespace Snail {
 		inline virtual const TextureUsage& GetUsage() const override { return m_Usage; }
 		inline virtual const std::vector<std::string>& GetPath() const override { return m_Path; }
 
+		inline virtual void SetPath(const std::vector<std::string>& path) override { m_Path = path; }
+
 		virtual void Bind(const uint32_t& slot = 0) const override;
 		virtual void Unbind(const uint32_t& slot = 0) const override;
 
 		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
+	private:
+		virtual void LoadTexture2D(const std::vector<std::string>& path) override;
 	};
 
 	class OpenGLTextureCube : public TextureCube {
@@ -43,6 +47,7 @@ namespace Snail {
 		TextureUsage m_Usage;
 		std::vector<std::string> m_Path;
 	public:
+		OpenGLTextureCube(const int dim);
 		OpenGLTextureCube(const std::vector<std::string>& path, const TextureUsage& usage);
 		virtual ~OpenGLTextureCube();
 
@@ -53,8 +58,13 @@ namespace Snail {
 		inline virtual const TextureUsage& GetUsage() const override { return m_Usage; }
 		inline virtual const std::vector<std::string>& GetPath() const override { return m_Path; }
 
+		inline virtual void SetPath(const std::vector<std::string>& path) override { m_Path = path; }
+
 		virtual void Bind(const uint32_t& slot = 0) const override;
 		virtual void Unbind(const uint32_t& slot = 0) const override;
+
+	private:
+		virtual void LoadCubemapFromFaces(const std::vector<std::string>& path) override;
 	};
 
 }

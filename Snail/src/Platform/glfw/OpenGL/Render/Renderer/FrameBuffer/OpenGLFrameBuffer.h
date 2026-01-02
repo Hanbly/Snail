@@ -32,6 +32,9 @@ namespace Snail {
 		virtual void ReGenerate() override;
 		virtual void Resize(const uint32_t& width, const uint32_t& height) override;
 		virtual void Delete() override;
+
+		// 接收立方体贴图的一个面，用作下一次的绘制对象
+		virtual void SetupTextureCubei(const int index, const uint32_t& rendererId) override;
 	};
 
 }

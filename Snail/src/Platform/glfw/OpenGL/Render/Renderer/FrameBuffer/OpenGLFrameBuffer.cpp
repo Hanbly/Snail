@@ -39,11 +39,45 @@ namespace Snail {
 		glGenFramebuffers(1, &m_RendererId);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererId);
 
+		GLenum dataType = GL_UNSIGNED_BYTE;
+		GLenum internalFormat = GL_RGB8;
+		GLenum dataFormat = GL_RGB;
+		switch (m_Specification.colorFormat) {
+			case FrameBufferColorFormat::RGB8:
+			{
+				dataType = GL_UNSIGNED_BYTE;
+				internalFormat = GL_RGB8;
+				dataFormat = GL_RGB;
+				break;
+			}
+			case FrameBufferColorFormat::RGBA8:
+			{
+				dataType = GL_UNSIGNED_BYTE;
+				internalFormat = GL_RGBA8;
+				dataFormat = GL_RGBA;
+				break;
+			}
+			case FrameBufferColorFormat::RGBA16F:
+			{
+				dataType = GL_FLOAT;
+				internalFormat = GL_RGBA16F;
+				dataFormat = GL_RGBA;
+				break;
+			}
+			case FrameBufferColorFormat::RGBA32F:
+			{
+				dataType = GL_FLOAT;
+				internalFormat = GL_RGBA32F;
+				dataFormat = GL_RGBA;
+				break;
+			}
+		}
+
 		// --------------------- ColorAttachment -----------------------
 		glGenTextures(1, &m_ColorAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Specification.width, m_Specification.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Specification.width, m_Specification.height, 0, dataFormat, dataType, nullptr);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -119,6 +153,12 @@ namespace Snail {
 		//glDeleteRenderbuffers(1, &m_RenderbufferObjectAttachment);
 
 		glDeleteFramebuffers(1, &m_RendererId);
+	}
+
+	void OpenGLFrameBuffer::SetupTextureCubei(const int index, const uint32_t& rendererId)
+	{
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + index, rendererId, 0);
 	}
 
 }
