@@ -22,8 +22,6 @@ namespace Snail {
 
 			{ "a_Padding", VertexDataType::Float2 }
 			}));
-
-		ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl", {});
 	}
 
 	void Renderer3D::Shutdown()

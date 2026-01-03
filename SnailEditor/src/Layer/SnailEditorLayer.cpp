@@ -16,7 +16,10 @@ namespace Snail {
 		m_EditorContext->scene = m_Scene;
 
 		FrameBufferSpecification spec(1920, 1080);
-		m_FBO = FrameBuffer::Create(spec);
+		spec.colorFormat = FrameBufferColorFormat::RGBA32F;
+		m_TempFBO = FrameBuffer::Create(spec);
+		spec.colorFormat = FrameBufferColorFormat::RGBA8;
+		m_FinalFBO = FrameBuffer::Create(spec);
 
 		m_AssetsBrowserPanel.LoadIcons();
 	}
@@ -123,31 +126,61 @@ namespace Snail {
 	void SnailEditorLayer::OnRender() {
 		SNL_PROFILE_FUNCTION();
 
-		m_FBO->Bind();
-		RendererCommand::Clear();
+
+		// 依据 final fbo 来resize中间fbo
+		if(m_TempFBO->GetSpecification().width != m_FinalFBO->GetSpecification().width || m_TempFBO->GetSpecification().height != m_FinalFBO->GetSpecification().height)
+			m_TempFBO->Resize(m_FinalFBO->GetSpecification().width, m_FinalFBO->GetSpecification().height);
 
 		// 渲染
+		m_TempFBO->Bind();
+		RendererCommand::Clear();
 		m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform());
+		m_TempFBO->Unbind();
+
+		// --------后处理：伽马矫正 (Tone Mapping + Gamma) -----------
+		m_FinalFBO->Bind();
+		RendererCommand::Clear();
+		RendererCommand::DepthTest(false);
+
+		auto gammaShader = ShaderLibrary::Load("PostProcessGamma", "assets/shaders/post_process_gamma.glsl", {});
+		if (gammaShader) {
+			gammaShader->Bind();
+			gammaShader->SetInt("u_ScreenTexture", 0);
+			gammaShader->SetFloat("u_Gamma", m_Scene->GetGamma());
+			gammaShader->SetFloat("u_Exposure", m_Scene->GetExposure());
+
+			// 绑定 中间fbo 的结果作为输入
+			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachment());
+
+			m_ScreenQuadVAO->Bind();
+			RendererCommand::DrawIndexed(m_ScreenQuadVAO);
+		}
+
+		RendererCommand::DepthTest(true);
+		m_FinalFBO->Unbind();
+		// --------------------------------------------------------
 
 		// -------------------- 后处理：轮廓描边 --------------------
+		m_FinalFBO->Bind();
+
 		RendererCommand::DepthTest(false);
 		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::ALWAYS);
 		RendererCommand::EnableBlend(true);
 
-		auto outlineShader = ShaderLibrary::Load("PostProcessOutline", "assets/shaders/process_outline.glsl", {});
+		auto outlineShader = ShaderLibrary::Load("PostProcessOutline", "assets/shaders/post_process_outline.glsl", {});
 		if (outlineShader)
 		{
 			outlineShader->Bind();
 			outlineShader->SetInt("u_MaskTexture", 0);
 			outlineShader->SetInt("u_DepthTexture", 1);
 
-			Texture2D::BindExternal(0, m_FBO->GetMaskAttachment());
-			Texture2D::BindExternal(1, m_FBO->GetDepthAttachment());
+			Texture2D::BindExternal(0, m_TempFBO->GetMaskAttachment());
+			Texture2D::BindExternal(1, m_TempFBO->GetDepthAttachment());
 
 			outlineShader->SetFloat3("u_OutlineColor", m_OutlineColor);
 			outlineShader->SetInt("u_OutlineWidth", m_OutlineWidth);
-			outlineShader->SetFloat("u_Width", (float)m_FBO->GetSpecification().width);
-			outlineShader->SetFloat("u_Height", (float)m_FBO->GetSpecification().height);
+			outlineShader->SetFloat("u_Width", (float)m_TempFBO->GetSpecification().width);
+			outlineShader->SetFloat("u_Height", (float)m_TempFBO->GetSpecification().height);
 
 			outlineShader->SetFloat("u_Near", m_EditorCamera->GetNear());
 			outlineShader->SetFloat("u_Far", m_EditorCamera->GetFar());
@@ -159,8 +192,9 @@ namespace Snail {
 		RendererCommand::DepthTest(true);
 		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::LESS);
 		RendererCommand::EnableBlend(false);
-
-		m_FBO->Unbind();
+		
+		m_FinalFBO->Unbind();
+		// --------------------------------------------------------
 	}
 
 	void SnailEditorLayer::OnImGuiRender() {
@@ -199,7 +233,7 @@ namespace Snail {
 
 		// -------------------- 面板显示 --------------------
 		m_GlobalSettingsPanel.Show(m_EditorCamera);
-		m_EditorViewportPanel.Show(m_FBO);
+		m_EditorViewportPanel.Show(m_FinalFBO);
 		m_SceneHierarchyPanel.Show();
 		m_InspectorPanel.Show();
 		m_AssetsBrowserPanel.show();

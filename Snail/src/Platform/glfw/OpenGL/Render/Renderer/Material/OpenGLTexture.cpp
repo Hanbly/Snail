@@ -40,6 +40,7 @@ namespace Snail {
 	OpenGLTexture2D::~OpenGLTexture2D() 
 	{
 		glDeleteTextures(1, &m_RendererId);
+		if (m_UIId > 0) glDeleteTextures(1, &m_UIId);
 	}
 
 	void OpenGLTexture2D::Bind(const uint32_t& slot) const 
@@ -148,14 +149,29 @@ namespace Snail {
 				dataFormat = GL_RG;
 			}
 			else if (channels == 3) {
-				internalFormat = GL_RGB8;
+				// 如果是颜色贴图，使用 sRGB
+				// 注意：只有当这张图是"人眼看的颜色"(Albedo/Diffuse)时才用 sRGB
+				// 如果是 法线(Normal)、粗糙度(Roughness)等数据图，必须保持 GL_RGB8
+				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+					internalFormat = GL_SRGB8;
+				}
+				else {
+					internalFormat = GL_RGB8;
+				}
 				dataFormat = GL_RGB;
 			}
 			else if (channels == 4) {
-				internalFormat = GL_RGBA8;
+				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+					internalFormat = GL_SRGB8_ALPHA8;
+				}
+				else {
+					internalFormat = GL_RGBA8;
+				}
 				dataFormat = GL_RGBA;
 			}
 		}
+
+		bool useSRGB = (internalFormat == GL_SRGB8 || internalFormat == GL_SRGB8_ALPHA8);
 
 		if (internalFormat == 0 || dataFormat == 0)
 		{
@@ -172,19 +188,45 @@ namespace Snail {
 		glGenTextures(1, &m_RendererId);
 		Bind(0);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// 放大使用线性取色
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// 缩小使用临近取色
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // u%方向超出0-1的处理
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // v%方向超出0-1的处理
+		// 计算 Mipmap 层级数量
+		int levels = 1;
+		if (m_Width > 0 && m_Height > 0)
+			levels = 1 + floor(log2(std::max(m_Width, m_Height)));
 
-		// ------------ 内存对齐 ------------
-		// 告诉 OpenGL 哪怕是 1 字节对齐也可以
-		// 防止宽度不是 4 的倍数时读取越界崩溃
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		// ---------------------------------
+		// 分配不可变显存 (Immutable Storage)
+		glTexStorage2D(GL_TEXTURE_2D, levels, internalFormat, m_Width, m_Height);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, type, data);
+		// 上传数据
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, dataFormat, type, data);
+
+		// 设置参数
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// 生成 Mipmap
 		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// ------------ 如果使用了sRGB转换线性，创建UI视图 ---------------
+		if (useSRGB) {
+			glGenTextures(1, &m_UIId);
+
+			// 确定 View 的格式 (把 SRGB 剥离，只看作纯数据)
+			GLenum viewFormat = (internalFormat == GL_SRGB8) ? GL_RGB8 : GL_RGBA8;
+
+			// glTextureView(新ID, 类型, 原ID, 格式, Mip层级范围...)
+			glTextureView(m_UIId, GL_TEXTURE_2D, m_RendererId, viewFormat, 0, 1000, 0, 1);
+
+			// 注意：TextureView 需要设置自己的采样器参数
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_UIId);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glBindTexture(GL_TEXTURE_2D, 0); // 解绑
+		}
 
 		Unbind();
 		if (extension == ".exr") {
@@ -234,10 +276,8 @@ namespace Snail {
 
 	OpenGLTextureCube::~OpenGLTextureCube()
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		glDeleteTextures(1, &m_RendererId);
+		if (m_UIId > 0) glDeleteTextures(1, &m_UIId);
 	}
 
 	void OpenGLTextureCube::Bind(const uint32_t& slot) const
@@ -264,6 +304,10 @@ namespace Snail {
 
 		glGenTextures(1, &m_RendererId);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererId);
+
+		GLenum internalFormat = 0; // 需要在循环外记录格式供View使用
+		int levels = 1;            // Mipmap层级
+		bool storageAllocated = false;
 
 		// 遍历 6 个面
 		for (int i = 0; i < 6; i++) {
@@ -315,74 +359,93 @@ namespace Snail {
 				}
 			}
 
-			m_Width = width;
-			m_Height = height;
-
 			// ------------------ 确定 OpenGL 格式 ------------------
 			GLenum type = isFloat ? GL_FLOAT : GL_UNSIGNED_BYTE;
-			GLenum internalFormat = 0;
+			// 注意：这里定义局部变量用于当前计算，最终会存入外部 internalFormat
+			GLenum currentInternalFormat = 0;
 			GLenum dataFormat = 0;
 
 			if (isFloat) {
 				// --- 浮点纹理 (HDR/EXR) ---
 				if (channels == 1) {
-					internalFormat = GL_R32F;
+					currentInternalFormat = GL_R32F;
 					dataFormat = GL_RED;
 				}
 				else if (channels == 2) {
-					internalFormat = GL_RG32F;
+					currentInternalFormat = GL_RG32F;
 					dataFormat = GL_RG;
 				}
 				else if (channels == 3) {
-					internalFormat = GL_RGB32F;
+					currentInternalFormat = GL_RGB32F;
 					dataFormat = GL_RGB;
 				}
 				else if (channels == 4) {
-					internalFormat = GL_RGBA32F;
+					currentInternalFormat = GL_RGBA32F;
 					dataFormat = GL_RGBA;
 				}
 			}
 			else {
 				// --- 普通字节纹理 (LDR) ---
 				if (channels == 1) {
-					internalFormat = GL_R8;
+					currentInternalFormat = GL_R8;
 					dataFormat = GL_RED;
 				}
 				else if (channels == 2) {
-					internalFormat = GL_RG8;
+					currentInternalFormat = GL_RG8;
 					dataFormat = GL_RG;
 				}
 				else if (channels == 3) {
-					internalFormat = GL_RGB8;
+					if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+						currentInternalFormat = GL_SRGB8;
+					}
+					else {
+						currentInternalFormat = GL_RGB8;
+					}
 					dataFormat = GL_RGB;
 				}
 				else if (channels == 4) {
-					internalFormat = GL_RGBA8;
+					if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+						currentInternalFormat = GL_SRGB8_ALPHA8;
+					}
+					else {
+						currentInternalFormat = GL_RGBA8;
+					}
 					dataFormat = GL_RGBA;
 				}
 			}
 
 			// 校验格式
-			if (internalFormat == 0 || dataFormat == 0) {
+			if (currentInternalFormat == 0 || dataFormat == 0) {
 				SNL_CORE_ERROR("纹理通道数不支持! Channels: {0}, Path: {1}", channels, path[i]);
-				if (extension == ".exr") free(data); // TinyEXR 使用 free
-				else stbi_image_free(data);          // STB 使用 stbi_image_free
+				if (extension == ".exr") free(data);
+				else stbi_image_free(data);
 				continue;
 			}
 
-			// ------------------ 上传纹理数据 ------------------
+			// ------------------ 上传纹理数据 (使用 Immutable Storage) ------------------
+
+			// 如果是第一张图，初始化不可变存储
+			if (!storageAllocated) {
+				m_Width = width;
+				m_Height = height;
+				internalFormat = currentInternalFormat;
+
+				// 计算 mipmap 层级
+				levels = 1;
+				if (m_Width > 0 && m_Height > 0)
+					levels = 1 + floor(log2(std::max(m_Width, m_Height)));
+
+				glTexStorage2D(GL_TEXTURE_CUBE_MAP, levels, internalFormat, m_Width, m_Height);
+				storageAllocated = true;
+			}
+
 			// 设置对齐，防止非4字节对齐导致的崩溃
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0,
-				internalFormat,
-				m_Width, m_Height,
-				0,
-				dataFormat,
-				type,
-				data
-			);
+			// 使用 SubImage 上传
+			glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, 0, 0, m_Width, m_Height,
+				dataFormat, type, data);
 
 			if (extension == ".exr") {
 				free(data); // TinyEXR 的数据通常由 malloc 分配
@@ -401,6 +464,32 @@ namespace Snail {
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		// ------------ 如果使用了sRGB转换线性，创建UI视图 (循环外执行) ---------------
+		bool useSRGB = (internalFormat == GL_SRGB8 || internalFormat == GL_SRGB8_ALPHA8);
+
+		if (useSRGB) {
+			glGenTextures(1, &m_UIId);
+
+			// 确定 View 的格式 (把 SRGB 剥离，只看作纯数据)
+			GLenum viewFormat = (internalFormat == GL_SRGB8) ? GL_RGB8 : GL_RGBA8;
+
+			// glTextureView(新ID, 类型, 原ID, 格式, Mip层级范围, 图层范围)
+			// Cubemap 有 6 个 Layer
+			glTextureView(m_UIId, GL_TEXTURE_CUBE_MAP, m_RendererId, viewFormat, 0, levels, 0, 6);
+
+			// 注意：TextureView 需要设置自己的采样器参数
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, m_UIId);
+
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		}
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}

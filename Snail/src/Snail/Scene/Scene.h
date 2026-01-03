@@ -20,10 +20,12 @@ namespace Snail {
 	class Camera;
 
 	class Scene {
+		friend class Entity;
 	private:
 		entt::registry m_Registry;
 
-		float m_AmbientStrength = 0.1f;
+		float m_Gamma = 2.2f;
+		float m_Exposure = 1.0f;
 	public:
 		Scene();
 		~Scene();
@@ -43,8 +45,10 @@ namespace Snail {
 		}
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
-		inline float& GetAmbientStrength() { return m_AmbientStrength; }
-		inline void SetAmbientStrength(const float& ambient) { m_AmbientStrength = ambient; }
+		inline float& GetGamma() { return m_Gamma; }
+		inline void SetGamma(const float& gamma) { m_Gamma = gamma; }
+		inline float& GetExposure() { return m_Exposure; }
+		inline void SetExposure(const float& exposure) { m_Exposure = exposure; }
 
 		void OnUpdateRuntime(const Timestep& ts);
 		void OnUpdateEditor(const Timestep& ts);
@@ -53,7 +57,5 @@ namespace Snail {
 		void OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform);
 
 		Entity CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat);
-
-		friend class Entity;
 	};
 }

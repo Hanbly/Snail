@@ -104,15 +104,17 @@ namespace Snail{
 			ImGui::TreePop();
 		}
 
-		// --- 光源设置 (Lighting) ---
+		// --- 伽马校正 ---
 		if (m_Context->scene)
 		{
-			if (ImGui::TreeNodeEx(u8"场景光照", ImGuiTreeNodeFlags_DefaultOpen))
+			if (ImGui::TreeNodeEx(u8"伽马校正", ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				// 获取引用的方式修改 Scene 中的数据
-				auto& ambient = m_Context->scene->GetAmbientStrength();
+				auto& gamma = m_Context->scene->GetGamma();
+				auto& exposure = m_Context->scene->GetExposure();
 
-				ImGui::DragFloat("Ambient", &ambient, 0.001f, 0.0f, 1.0f, "%.2f");
+				ImGui::DragFloat("Gamma", &gamma, 0.1f, 1.0f, 3.0f, "%.1f");
+				ImGui::DragFloat("Exposure", &exposure, 0.01f, 0.0f, 2.0f, "%.2f");
 
 				ImGui::TreePop();
 			}

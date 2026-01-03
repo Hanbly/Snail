@@ -115,7 +115,8 @@ namespace Snail {
 		out << YAML::Key << "SceneSettings";
 		out << YAML::BeginMap;
 
-        out << YAML::Key << "AmbientStrength" << YAML::Value << m_Scene->GetAmbientStrength();
+		out << YAML::Key << "Gamma" << YAML::Value << m_Scene->GetGamma();
+		out << YAML::Key << "Exposure" << YAML::Value << m_Scene->GetExposure();
 
 		out << YAML::EndMap; // SceneSettings 结束
 
@@ -369,8 +370,10 @@ namespace Snail {
 		// 反序列化场景全局设置
 		auto settingsNode = data["SceneSettings"];
 		if (settingsNode) {
-			if (settingsNode["AmbientStrength"])
-				m_Scene->SetAmbientStrength(settingsNode["AmbientStrength"].as<float>());
+			if (settingsNode["Gamma"])
+				m_Scene->SetGamma(settingsNode["Gamma"].as<float>());
+			if (settingsNode["Exposure"])
+				m_Scene->SetExposure(settingsNode["Exposure"].as<float>());
 		}
 
 		// 反序列化编辑器相机 (EditorCamera)

@@ -10,6 +10,7 @@ namespace Snail {
 	class OpenGLTexture2D : public Texture2D {
 	private:
 		uint32_t m_RendererId;
+		uint32_t m_UIId = 0; // UI 视图 ID
 		uint32_t m_Width;
 		uint32_t m_Height;
 
@@ -21,6 +22,8 @@ namespace Snail {
 		virtual ~OpenGLTexture2D();
 
 		inline virtual uint32_t GetRendererId() const override { return m_RendererId; }
+		// 根据是否线性转换（sRGB），选择返回UIid还是RendererId
+		inline virtual uint32_t GetUIRendererId() const override { return m_UIId > 0 ? m_UIId : m_RendererId; }
 		inline virtual uint32_t GetWidth() const override { return m_Width; }
 		inline virtual uint32_t GetHeight() const override { return m_Height; }
 		inline virtual const TextureType& GetType() const override { return m_Type; }
@@ -40,6 +43,7 @@ namespace Snail {
 	class OpenGLTextureCube : public TextureCube {
 	private:
 		uint32_t m_RendererId;
+		uint32_t m_UIId = 0; // UI 视图 ID
 		uint32_t m_Width;
 		uint32_t m_Height;
 
@@ -52,6 +56,8 @@ namespace Snail {
 		virtual ~OpenGLTextureCube();
 
 		inline virtual uint32_t GetRendererId() const override { return m_RendererId; }
+		// 根据是否线性转换（sRGB），选择返回UIid还是RendererId
+		inline virtual uint32_t GetUIRendererId() const override { return m_UIId > 0 ? m_UIId : m_RendererId; }
 		inline virtual uint32_t GetWidth() const override { return m_Width; }
 		inline virtual uint32_t GetHeight() const override { return m_Height; }
 		inline virtual const TextureType& GetType() const override { return m_Type; }

@@ -12,6 +12,7 @@ namespace Snail {
 
 	enum class TextureUsage {
 		None = 0,
+		UI,
 		Diffuse, Specular, Normal, Cubemap
 	};
 
@@ -51,6 +52,7 @@ namespace Snail {
 		virtual ~Texture() = default;
 
 		virtual uint32_t GetRendererId() const = 0;
+		virtual uint32_t GetUIRendererId() const = 0;
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 		virtual const TextureType& GetType() const = 0;

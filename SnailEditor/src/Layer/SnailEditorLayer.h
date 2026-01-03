@@ -21,8 +21,9 @@ namespace Snail {
 	class SnailEditorLayer : public Layer
 	{
 	private:
-		// -------------------临时------------------------------------------
-		Refptr<FrameBuffer> m_FBO;
+		Refptr<FrameBuffer> m_TempFBO;			// 中间帧缓冲，存储浮点数类型的数据
+		Refptr<FrameBuffer> m_FinalFBO;		// gamma 矫正后的输出帧缓冲，存储RGBA8
+
 		Refptr<VertexArray> m_ScreenQuadVAO; // 屏幕四边形
 		glm::vec3 m_OutlineColor = { 1.0f, 0.5f, 0.0f }; // 默认橙色
 		int m_OutlineWidth = 3;

@@ -55,7 +55,6 @@ namespace Snail{
 
 		// ----------------- 获取帧缓冲信息，绘制纹理 -----------------------
 		uint32_t textureId = fbo->GetColorAttachment();
-		//uint32_t textureId = fbo->GetMaskAttachment();
 		ImGui::Image(
 			(void*)(intptr_t)textureId, ImGui::GetContentRegionAvail(),
 			ImVec2(0, 1), // UV0: 纹理的(0,1) -> 对应 OpenGL 左上

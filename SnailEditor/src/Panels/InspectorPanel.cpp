@@ -482,7 +482,7 @@ namespace Snail {
 
 				if (texture->GetPath().size() == 1 && texture->GetUsage() != TextureUsage::Cubemap) {
 					// 2D Texture: 预览图 + 右侧文字
-					uint32_t textureId = texture->GetRendererId();
+					uint32_t textureId = texture->GetUIRendererId();
 					if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
 						m_Context->currentEditingMeshIndex = meshIndex;
 						m_Context->currentEditingTexIndex = t;
@@ -510,7 +510,7 @@ namespace Snail {
 				}
 				else if (texture->GetPath().size() == 1 && texture->GetUsage() == TextureUsage::Cubemap) {
 					// Equirectangular Cubemap: 大图 + 下方文字
-					auto previewTex = TextureLibrary::Load({ texture->GetPath() }, TextureUsage::None);
+					auto previewTex = TextureLibrary::Load({ texture->GetPath() }, TextureUsage::UI);
 					uint32_t texId = previewTex ? previewTex->GetRendererId() : 0;
 
 					if (ImGui::ImageButton("##CubemapBtn", (void*)(intptr_t)texId, { 256.0f, 128.0f }, { 0, 1 }, { 1, 0 })) {
@@ -573,7 +573,7 @@ namespace Snail {
 							ImGui::TextDisabled("%-8s", faceNames[i]);
 							ImGui::SameLine();
 
-							auto facePreview = TextureLibrary::Load("Temp_Face_Prev_" + paths[i], { paths[i] }, TextureUsage::None);
+							auto facePreview = TextureLibrary::Load("Temp_Face_Prev_" + paths[i], { paths[i] }, TextureUsage::UI);
 							uint32_t fId = facePreview ? facePreview->GetRendererId() : 0;
 
 							if (ImGui::ImageButton("##FaceBtn", (void*)(intptr_t)fId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
@@ -692,7 +692,7 @@ namespace Snail {
 								"assets/images/defaultSky/top.jpg",   "assets/images/defaultSky/bottom.jpg",
 								"assets/images/defaultSky/front.jpg", "assets/images/defaultSky/back.jpg"
 							};
-							if (auto texture = TextureLibrary::Load("DefaultSkyboxTextures", paths, TextureUsage::Cubemap)) {
+							if (auto texture = TextureLibrary::Load("Default_Skybox_Cubemap", paths, TextureUsage::Cubemap)) {
 								std::vector<Refptr<Texture>> texList = { texture };
 								auto model = std::make_shared<Model>(type, skyShader, texList);
 								m_Context->selectedEntity.AddComponent<ModelComponent>(model);

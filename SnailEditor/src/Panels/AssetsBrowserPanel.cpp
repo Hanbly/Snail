@@ -12,21 +12,21 @@ namespace Snail {
 
 	void AssetsBrowserPanel::LoadIcons()
 	{
-		m_DirectoryIcon = TextureLibrary::Load("AssetsBrowser_Icons_DirectoryIcon", { "resources/icons/DirectoryIcon.png" }, TextureUsage::None);
+		m_DirectoryIcon = TextureLibrary::Load("AssetsBrowser_Icons_DirectoryIcon", { "resources/icons/DirectoryIcon.png" }, TextureUsage::UI);
 		m_DirectoryBackIcon = TextureLibrary::Load("AssetsBrowser_Icons_DirectoryBackIcon", { "resources/icons/DirectoryBackIcon.png" }, TextureUsage::None);
 
-		m_FileIcon = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon", { "resources/icons/FileIcon.png" }, TextureUsage::None);
+		m_FileIcon = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon", { "resources/icons/FileIcon.png" }, TextureUsage::UI);
 
-		m_FileIcon_snl = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_snl", { "resources/icons/FileIcon_snl.png" }, TextureUsage::None);
-		m_FileIcon_txt = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_txt", { "resources/icons/FileIcon_txt.png" }, TextureUsage::None);
-		m_FileIcon_md = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_md", { "resources/icons/FileIcon_md.png" }, TextureUsage::None);
+		m_FileIcon_snl = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_snl", { "resources/icons/FileIcon_snl.png" }, TextureUsage::UI);
+		m_FileIcon_txt = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_txt", { "resources/icons/FileIcon_txt.png" }, TextureUsage::UI);
+		m_FileIcon_md = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_md", { "resources/icons/FileIcon_md.png" }, TextureUsage::UI);
 
-		m_FileIcon_png = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_png", { "resources/icons/FileIcon_png.png" }, TextureUsage::None);
-		m_FileIcon_jpg = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_jpg", { "resources/icons/FileIcon_jpg.png" }, TextureUsage::None);
+		m_FileIcon_png = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_png", { "resources/icons/FileIcon_png.png" }, TextureUsage::UI);
+		m_FileIcon_jpg = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_jpg", { "resources/icons/FileIcon_jpg.png" }, TextureUsage::UI);
 
-		m_FileIcon_obj = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_obj", { "resources/icons/FileIcon_obj.png" }, TextureUsage::None);
-		m_FileIcon_mtl = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_mtl", { "resources/icons/FileIcon_mtl.png" }, TextureUsage::None);
-		m_FileIcon_fbx = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_fbx", { "resources/icons/FileIcon_fbx.png" }, TextureUsage::None);
+		m_FileIcon_obj = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_obj", { "resources/icons/FileIcon_obj.png" }, TextureUsage::UI);
+		m_FileIcon_mtl = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_mtl", { "resources/icons/FileIcon_mtl.png" }, TextureUsage::UI);
+		m_FileIcon_fbx = TextureLibrary::Load("AssetsBrowser_Icons_FileIcon_fbx", { "resources/icons/FileIcon_fbx.png" }, TextureUsage::UI);
 	}
 
 	void AssetsBrowserPanel::show()
