@@ -35,7 +35,7 @@ git submodule update --init
 |              |   多选物体    | 左 Ctrl + 鼠标左键 | 按住 Ctrl 点击物体加入当前选择；在此状态下 Gizmo 有效。      |
 |              |   仅操作轴    |  空格 + 鼠标左键   | 禁用物体选取功能，仅响应对 Gizmo 的操作。                    |
 | **视角控制** |   旋转视图    |    鼠标中键拖动    | FPS 和 Arcball 模式。按住中键并拖动以旋转视角。              |
-|              |   平移视图    |   Alt + 鼠标左键   | Arcball模式。按住 Alt 拖动左键平移视角中心。                 |
+|              |   平移视图    |   Alt + 鼠标中键   | Arcball模式。按住 Alt 拖动中键平移视角中心。                 |
 |              | 调整视场/距离 |      鼠标滚轮      | FPS模式： 调整视场角 (FOV)；Arcball模式： 调整视点距离 (推拉/缩放)。 |
 |              |   场景漫游    |   W / A / S / D    | FPS模式。 前 / 左 / 后 / 右 移动相机位置。                   |
 |              |   垂直升降    |       Q / E        | FPS模式。 下降 (Q) / 上升 (E) 相机高度。                     |
@@ -55,6 +55,14 @@ git submodule update --init
 *Model by [Riley Queen] from [https://polyhaven.com/models]*
 
 *Model by [Rajil Jose Macatangay] from [https://polyhaven.com/models]*
+
+#### HDRI支持 与 Gamma校正：
+
+![img_2026-01-03110755](notes/images/img_2026-01-03110755.png)
+
+![img_2026-01-03110836](notes/images/img_2026-01-03110836.png)
+
+*HDRI by [**Greg Zaal** & **Jarod Guest**] from [https://polyhaven.com/hdris]*
 
 #### 实例化渲染（360K+顶点数据）：
 
