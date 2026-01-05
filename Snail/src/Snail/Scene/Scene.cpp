@@ -64,7 +64,20 @@ namespace Snail {
         entity.AddComponent<ModelComponent>(model);
     }
 
-	void Scene::OnUpdateRuntime(const Timestep& ts)
+    glm::vec3 Scene::GetMainLightDirection() const
+    {
+		// --- 目前只考虑平行光源 ---
+		{
+			auto view = m_Registry.view<DirectionalLightComponent>();
+			for (auto [entity, light] : view.each())
+			{
+				return glm::normalize(light.direction);
+			}
+		}
+        return glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f));
+    }
+
+    void Scene::OnUpdateRuntime(const Timestep& ts)
 	{
         // ------------------------------------------------
         // 寻找主相机 (System: Camera System)
@@ -89,15 +102,19 @@ namespace Snail {
         if (!mainCamera) return;
 	}
 
-    void Scene::OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform)
+    void Scene::OnRenderRuntime()
+    {
+    }
+
+	void Scene::OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform, const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId)
 	{
         // ------------------------------------------------
-        // 寻找光源 (System: Light System)
+        // 寻找光源
         // ------------------------------------------------
         std::vector<DirectionLight> dirLights;
         std::vector<PointLight> poiLights;
         
-		// // --- 平行光源组件 ---
+		// --- 平行光源组件 ---
 		{
 			auto view = m_Registry.view<DirectionalLightComponent>();
 			for (auto [entity, light] : view.each())
@@ -134,9 +151,9 @@ namespace Snail {
 
 
         // ------------------------------------------------
-        // 渲染流程 (System: Render System)
+        // 渲染流程
         // ------------------------------------------------
-        Renderer3D::BeginScene(camera.get(), cameraTransform, dirLights, poiLights);
+        Renderer3D::BeginScene(camera.get(), cameraTransform, dirLights, poiLights, mainLightSpace, shadowRendererId);
 
 
         auto group = m_Registry.group<TransformComponent, ModelComponent>();
@@ -160,6 +177,19 @@ namespace Snail {
 
         Renderer3D::EndScene();
 	}
+
+    void Scene::OnRenderExternalShader(Refptr<Shader>& shader)
+    {
+		auto group = m_Registry.group<TransformComponent, ModelComponent>();
+		for (auto [entity, transform, model] : group.each())
+		{
+			if (model.visible && model.model) {
+				Renderer3D::DrawModel(shader, *model.model, transform.GetTransform());
+			}
+		}
+
+		Renderer3D::EndScene(shader);
+    }
 
     Entity Scene::CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat)
     {

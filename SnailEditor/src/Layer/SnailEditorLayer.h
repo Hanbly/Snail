@@ -21,7 +21,8 @@ namespace Snail {
 	class SnailEditorLayer : public Layer
 	{
 	private:
-		Refptr<FrameBuffer> m_TempFBO;			// 中间帧缓冲，存储浮点数类型的数据
+		Refptr<FrameBuffer> m_TempFBO;		// 中间帧缓冲，存储浮点数类型的数据
+		Refptr<FrameBuffer> m_DepthMapFBO;	// 深度贴图FBO，仅深度附件
 		Refptr<FrameBuffer> m_FinalFBO;		// gamma 矫正后的输出帧缓冲，存储RGBA8
 
 		Refptr<VertexArray> m_ScreenQuadVAO; // 屏幕四边形

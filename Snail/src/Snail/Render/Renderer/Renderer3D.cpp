@@ -28,7 +28,9 @@ namespace Snail {
 	{
 	}
 
-	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform, std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights)
+	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform,
+		std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights,
+		const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -42,14 +44,22 @@ namespace Snail {
 		// 复制光源列表
 		s_3DSceneData.DirLights.assign(dirLights.begin(), dirLights.end());
 		s_3DSceneData.PoiLights.assign(poiLights.begin(), poiLights.end());
+
+		// 光源空间矩阵 和 光源视角的深度贴图id
+		s_3DSceneData.MainLightSpace = mainLightSpace;
+		s_3DSceneData.ShadowRendererId = shadowRendererId;
 	}
 
 	void Renderer3D::EndScene()
 	{
-		SNL_PROFILE_FUNCTION();
-
 		if(s_3DSceneData.EnableInstancing)
 			FlushMeshes();
+	}
+
+	void Renderer3D::EndScene(Refptr<Shader>& shader)
+	{
+		if (s_3DSceneData.EnableInstancing)
+			FlushMeshes(shader);
 	}
 
 	void Renderer3D::DrawSkybox(const Model& model, const EditorCamera& camera)
@@ -80,7 +90,7 @@ namespace Snail {
 		mesh->GetVAO()->Bind();
 		RendererCommand::DrawIndexed(mesh->GetVAO());
 
-		// 恢复渲染状态 (非常重要！)
+		// 恢复渲染状态
 		RendererCommand::SetDepthFunc(RendererCommand::DepthFuncType::LESS); // 恢复默认 LESS
 		// RenderCommand::DepthMask(true);
 	}
@@ -106,6 +116,15 @@ namespace Snail {
 		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
 		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
 		//material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
+
+		// 上传主光源的空间矩阵
+		material->SetMat4("u_LightSpaceMatrix", s_3DSceneData.MainLightSpace);
+
+		// 上传阴影贴图id, 绑定阴影贴图
+		// 与实际材质纹理的上传区别开，这个只是外部的深度图
+		int slot = (int)material->GetTextures().size();
+		material->SetInt("u_ShadowMap", slot);
+		Texture2D::BindExternal(slot, s_3DSceneData.ShadowRendererId);
 
 		material->SetInt("u_EntityID", (int)edgeEnable); // 后处理边缘的 uniform
 
@@ -144,11 +163,94 @@ namespace Snail {
 		//}
 	}
 
+	void Renderer3D::DrawMesh(Refptr<Shader>& shader, const Mesh& mesh, const glm::mat4& transform)
+	{
+		shader->Bind();
+
+		shader->SetMat4("u_Model", transform);
+
+		// 绘制几何体
+		mesh.GetVAO()->Bind();
+		RendererCommand::DrawIndexed(mesh.GetVAO());
+	}
+
+	void Renderer3D::SubmitMesh(const Refptr<Mesh>& mesh, const glm::mat4& transform)
+	{
+		s_3DSceneData.MeshInstanceQueue[mesh].push_back({ transform, 0 });
+	}
+
+	void Renderer3D::FlushMeshes(Refptr<Shader>& shader)
+	{
+		static std::vector<InstanceData> s_InstanceBufferData;
+
+		// 遍历所有不同的 Mesh
+		for (auto& [mesh, meshData] : s_3DSceneData.MeshInstanceQueue)
+		{
+			if (meshData.empty()) continue;
+
+			// 绑定uniforms
+			auto instancingShader = ShaderLibrary::Load(shader->GetFilePath(), {"INSTANCING"});
+
+			instancingShader->Bind();
+
+			// 绑定 Mesh 的 VAO 并挂载 Instance Buffer
+			auto& vao = mesh->GetVAO();
+			vao->Bind();
+
+			// 这一步将 InstanceVBO 绑定到该 VAO 的属性位置上 (例如 location 3,4,5,6)
+			vao->SetInstanceBuffer(s_3DSceneData.InstanceVBO);
+
+			size_t totalInstances = meshData.size();
+			size_t offset = 0;
+			while (offset < totalInstances) {
+
+				// 确保不比 MAX_INSTANCES_PER_BATCH 大
+				size_t batchCount = std::min((size_t)MAX_INSTANCES_PER_BATCH, totalInstances - offset);
+
+				// -------- 实例数据 ------------- （这个版本的函数指上传 a_Model 即transform）
+				s_InstanceBufferData.clear();
+				s_InstanceBufferData.reserve(batchCount);
+
+				for (size_t i = 0; i < batchCount; i++)
+				{
+					auto& transform = meshData[offset + i].Transform;
+
+					InstanceData data;
+					data.ModelMatrix = transform;
+
+					s_InstanceBufferData.push_back(data);
+				}
+
+				// 上传 ModelMatrix，但数据大小保持不变
+				uint32_t dataSize = (uint32_t)s_InstanceBufferData.size() * sizeof(InstanceData);
+				s_3DSceneData.InstanceVBO->SetData(s_InstanceBufferData.data(), dataSize);
+
+				// 执行实例化绘制命令
+				RendererCommand::DrawIndexedInstanced(vao, (uint32_t)batchCount);
+
+				// 推进偏移量
+				offset += batchCount;
+			}
+		}
+
+		// 清空队列，准备下一帧
+		s_3DSceneData.MeshInstanceQueue.clear();
+	}
+
+	void Renderer3D::DrawModel(Refptr<Shader>& shader, const Model& model, const glm::mat4& transform)
+	{
+		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
+			if (s_3DSceneData.EnableInstancing) {
+				SubmitMesh(mesh, transform * mesh->GetLocationTransform());
+			}
+			else {
+				DrawMesh(shader, *mesh, transform * mesh->GetLocationTransform());
+			}
+		}
+	}
+
 	void Renderer3D::DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform)
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		for (const Refptr<Mesh> mesh : model.GetMeshes()) {
 			if (s_3DSceneData.EnableInstancing) {
 				SubmitMesh(mesh, edgeEnable, transform * mesh->GetLocationTransform());
@@ -166,9 +268,6 @@ namespace Snail {
 
 	void Renderer3D::FlushMeshes()
 	{
-		SNL_PROFILE_FUNCTION();
-
-
 		static std::vector<InstanceData> s_InstanceBufferData;
 
 		// 遍历所有不同的 Mesh
@@ -191,6 +290,15 @@ namespace Snail {
 
 			// 上传光源列表的 uniforms 
 			UploadLightsUniforms(instancingShader);
+
+			// 上传主光源的空间矩阵
+			material->SetMat4("u_LightSpaceMatrix", s_3DSceneData.MainLightSpace);
+
+			// 上传阴影贴图id, 绑定阴影贴图
+			// 与实际材质纹理的上传区别开，这个只是外部的深度图
+			int slot = (int)material->GetTextures().size();
+			material->SetInt("u_ShadowMap", slot);
+			Texture2D::BindExternal(slot, s_3DSceneData.ShadowRendererId);
 
 			// 真正上传 uniforms
 			material->BindToShader(instancingShader);

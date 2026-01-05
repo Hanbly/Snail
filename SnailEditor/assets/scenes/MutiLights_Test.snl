@@ -1,23 +1,23 @@
 Scene: MutiLights_Test
 SceneSettings:
   Gamma: 2
-  Exposure: 0.469999999
+  Exposure: 0.600000024
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.66716421
-  ViewMatrix: [-0.283354193, -0.145054802, 0.947981894, -0, 1.4901163e-08, 0.988494992, 0.151253894, -0, -0.959015429, 0.0428584293, -0.280094177, -0, -137.768143, -124.687943, -1845.37964, 1]
-  Position: [1692.26245, 402.374207, -643.657837]
-  DirvecFront: [-0.947981775, -0.151253879, 0.280094147]
-  DirvecRight: [-0.283354163, 0, -0.95901531]
-  DirvecUp: [-0.145054802, 0.988494992, 0.0428584218]
+  Aspect: 1.5454545
+  ViewMatrix: [-0.340061277, -0.401291758, 0.850484192, -0, 2.98023259e-08, 0.904382408, 0.426723033, -0, -0.940403342, 0.145112008, -0.307545483, -0, -27.2276878, 41.3776741, -1726.30615, 1]
+  Position: [1475.54138, 699.233276, -562.526917]
+  DirvecFront: [-0.850484133, -0.426723003, 0.307545424]
+  DirvecRight: [-0.340061307, 0, -0.940403342]
+  DirvecUp: [-0.401291728, 0.904382408, 0.145111978]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 8.69959736
-  DirvecYaw: -466.46051
-  FocalPoint: [690.362915, 242.517563, -347.632996]
-  Distance: 1056.87634
+  EulerPitch: 25.2597733
+  DirvecYaw: -109.880608
+  FocalPoint: [2.60802937, -39.798233, -29.8963032]
+  Distance: 1731.87634
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -36,14 +36,14 @@ Entities:
           Textures:
             - DimType: TextureCube
               Usage: texture_cubemap
-              Paths: [assets\skybox\rogland_clear_night_4k.exr]
+              Paths: [assets\skybox\warm_bar_4k.exr]
       Visible: true
-      EdgeEnable: true
+      EdgeEnable: false
   - Entity: c1813b8e-c555-4d63-84b4-1567547bc06e
     TagComponent:
       Tag: 点光源1
     TransformComponent:
-      Position: [305.919067, 107.489998, 89.8099976]
+      Position: [232.06308, 136.199265, 291.363037]
       Rotation: [0, -0, 0]
       Scale: [20.0702591, 20.0702591, 20.0702591]
     PointLightComponent:
@@ -68,7 +68,7 @@ Entities:
     TagComponent:
       Tag: 点光源2
     TransformComponent:
-      Position: [142.650055, 246.209045, -394.269989]
+      Position: [-91.9403152, 222.021774, -247.010483]
       Rotation: [0, -0, 0]
       Scale: [20, 20, 20]
     PointLightComponent:
@@ -93,7 +93,7 @@ Entities:
     TagComponent:
       Tag: 摄像机模型01
     TransformComponent:
-      Position: [0.000396451534, 1.31470501e-10, -161.294098]
+      Position: [-7.04645176e-10, 51.7515755, -2.58414423e-09]
       Rotation: [-179.999893, 49.924633, -179.999893]
       Scale: [23.6526527, 23.6526299, 23.6526527]
     ModelComponent:
@@ -149,14 +149,14 @@ Entities:
     DirectionalLightComponent:
       Color: [1, 1, 1, 1]
       Direction: [0, -1, 0]
-      Ambient: 0.100000001
-      Diffuse: 0.449999988
+      Ambient: 0.25999999
+      Diffuse: 0.720000029
       Specular: 1
   - Entity: 39919556-610e-45f7-8caa-1c6e85693e34
     TagComponent:
       Tag: 立方体
     TransformComponent:
-      Position: [-193.542023, 271.733795, 0]
+      Position: [633.275146, 195.275055, 268.203552]
       Rotation: [0, -0, 0]
       Scale: [102.144417, 102.144417, 102.144417]
     ModelComponent:
@@ -178,7 +178,7 @@ Entities:
     TagComponent:
       Tag: 国际象棋棋盘
     TransformComponent:
-      Position: [-10.5117607, -54.4226608, -114.097122]
+      Position: [0, 0, 0]
       Rotation: [0, -0, 0]
       Scale: [29.3585911, 29.3585911, 29.3585873]
     ModelComponent:
@@ -191,7 +191,7 @@ Entities:
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [assets\images\kulisu.png]
+              Paths: [assets\models\chess_set_4k.fbx\textures\chess_set_pieces_white_diff_4k.png]
             - DimType: Texture2D
               Usage: texture_normal
               Paths: [assets\models\chess_set_4k.fbx/textures/chess_set_pieces_white_nor_gl_4k.png]

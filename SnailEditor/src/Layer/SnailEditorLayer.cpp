@@ -16,9 +16,21 @@ namespace Snail {
 		m_EditorContext->scene = m_Scene;
 
 		FrameBufferSpecification spec(1920, 1080);
-		spec.colorFormat = FrameBufferColorFormat::RGBA32F;
+
+		spec.width = 1920, spec.height = 1080;
+		spec.attachments = {
+			FrameBufferTextureFormat::RGBA32F,
+			FrameBufferTextureFormat::R32I,
+			FrameBufferTextureFormat::DEPTH24_STENCIL8
+		};
 		m_TempFBO = FrameBuffer::Create(spec);
-		spec.colorFormat = FrameBufferColorFormat::RGBA8;
+
+		spec.width = 2048, spec.height = 2048;
+		spec.attachments = { FrameBufferTextureFormat::DEPTH_COMPONENT };
+		m_DepthMapFBO = FrameBuffer::Create(spec);
+
+		spec.width = 1920, spec.height = 1080;
+		spec.attachments = { FrameBufferTextureFormat::RGB8 };
 		m_FinalFBO = FrameBuffer::Create(spec);
 
 		m_AssetsBrowserPanel.LoadIcons();
@@ -131,10 +143,46 @@ namespace Snail {
 		if(m_TempFBO->GetSpecification().width != m_FinalFBO->GetSpecification().width || m_TempFBO->GetSpecification().height != m_FinalFBO->GetSpecification().height)
 			m_TempFBO->Resize(m_FinalFBO->GetSpecification().width, m_FinalFBO->GetSpecification().height);
 
-		// 渲染
+		// ------ 渲染光照空间深度附件 ------
+		m_DepthMapFBO->Bind();
+		RendererCommand::Clear();
+		RendererCommand::CullFront();
+
+		glm::vec3 lightDir = m_Scene->GetMainLightDirection();
+
+		float orthoSize = 1000.0f;
+		float nearPlane = 1.0f;
+		float farPlane = 1000.0f;
+		glm::mat4 lightProjection = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, nearPlane, 2 * farPlane);
+
+		glm::vec3 lightPos = glm::vec3(0.0f) - lightDir * farPlane;
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+		if (glm::abs(glm::dot(lightDir, up)) > 0.99f) {
+			up = glm::vec3(0.0f, 0.0f, 1.0f);
+		}
+
+		glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), up);
+
+		// 最终矩阵
+		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+		auto shadowShader = ShaderLibrary::Load("LightShadowDepth", "assets/shaders/light_shadow_depth.glsl", {});
+		auto instancedShadowShader = ShaderLibrary::Load("LightShadowDepth", "assets/shaders/light_shadow_depth.glsl", { "INSTANCING" });
+		if (shadowShader && instancedShadowShader) {
+			shadowShader->Bind();
+			shadowShader->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
+			instancedShadowShader->Bind();
+			instancedShadowShader->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
+				
+			m_Scene->OnRenderExternalShader(shadowShader);
+		}
+
+		RendererCommand::EnableCull(false);
+		m_DepthMapFBO->Unbind();
+
+		// ------ 渲染实际画面 ------
 		m_TempFBO->Bind();
 		RendererCommand::Clear();
-		m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform());
+		m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform(), lightSpaceMatrix, m_DepthMapFBO->GetDepthAttachmentRendererID());
 		m_TempFBO->Unbind();
 
 		// --------后处理：伽马矫正 (Tone Mapping + Gamma) -----------
@@ -150,7 +198,7 @@ namespace Snail {
 			gammaShader->SetFloat("u_Exposure", m_Scene->GetExposure());
 
 			// 绑定 中间fbo 的结果作为输入
-			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachment());
+			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0));
 
 			m_ScreenQuadVAO->Bind();
 			RendererCommand::DrawIndexed(m_ScreenQuadVAO);
@@ -174,8 +222,8 @@ namespace Snail {
 			outlineShader->SetInt("u_MaskTexture", 0);
 			outlineShader->SetInt("u_DepthTexture", 1);
 
-			Texture2D::BindExternal(0, m_TempFBO->GetMaskAttachment());
-			Texture2D::BindExternal(1, m_TempFBO->GetDepthAttachment());
+			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(1)); // 索引1对应Mask附件
+			Texture2D::BindExternal(1, m_TempFBO->GetDepthAttachmentRendererID());
 
 			outlineShader->SetFloat3("u_OutlineColor", m_OutlineColor);
 			outlineShader->SetInt("u_OutlineWidth", m_OutlineWidth);

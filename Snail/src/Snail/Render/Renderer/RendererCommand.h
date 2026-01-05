@@ -57,6 +57,9 @@ namespace Snail {
 		virtual void SetDepthFuncImpl(const DepthFuncType& type) const = 0;
 		virtual void EnableBlendImpl(const bool& enable) const = 0;
 
+		virtual void EnableCullImpl(bool enable) = 0;
+		virtual void CullFrontImpl() = 0;
+		virtual void CullBackImpl() = 0;
 	public:
 		inline static void Init() 
 		{ RC->InitImpl(); }
@@ -82,6 +85,13 @@ namespace Snail {
 		{ RC->SetDepthFuncImpl(type); }
 		inline static void EnableBlend(const bool& enable)
 		{ RC->EnableBlendImpl(enable); }
+
+		inline static void EnableCull(bool enable)
+		{ RC->EnableCullImpl(enable); }
+		inline static void CullFront() 
+		{ RC->CullFrontImpl(); }
+		inline static void CullBack() 
+		{ RC->CullBackImpl(); }
 
 		static Uniptr<RendererCommand> Create();
 	};

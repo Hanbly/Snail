@@ -5,15 +5,23 @@
 
 namespace Snail {
 
-	enum class FrameBufferColorFormat {
-		None = 0,
-		RGB8, RGBA8, RGBA16F, RGBA32F
+	enum class FrameBufferTextureFormat {
+		None,
+		R32I, RGB8, RGBA8, RGBA16F, RGBA32F,
+		DEPTH_COMPONENT, DEPTH24_STENCIL8
+	};
+
+	struct FrameBufferAttachmentSpecification {
+		FrameBufferTextureFormat TextureFormat = FrameBufferTextureFormat::None;
+		// 可以在这里添加 wrap/filter 选项，目前保持简单
+
+		FrameBufferAttachmentSpecification() = default;
+		FrameBufferAttachmentSpecification(FrameBufferTextureFormat format) : TextureFormat(format) {}
 	};
 
 	struct FrameBufferSpecification {
 		uint32_t width, height;
-		uint32_t samples = 1;
-		FrameBufferColorFormat colorFormat = FrameBufferColorFormat::RGB8;
+		std::vector<FrameBufferAttachmentSpecification> attachments;
 
 		bool SwapChainTarget = false;
 
@@ -30,9 +38,8 @@ namespace Snail {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual const uint32_t& GetColorAttachment() const = 0;
-		virtual const uint32_t& GetMaskAttachment() const = 0;
-		virtual const uint32_t& GetDepthAttachment() const = 0;
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const = 0;
+		virtual uint32_t GetDepthAttachmentRendererID() const = 0;
 		virtual const FrameBufferSpecification& GetSpecification() const = 0;
 
 		virtual void ReGenerate() = 0;

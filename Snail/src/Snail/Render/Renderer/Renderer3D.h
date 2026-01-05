@@ -81,6 +81,10 @@ namespace Snail {
 			// 光源列表
 			std::vector<DirectionLight> DirLights;
 			std::vector<PointLight> PoiLights;
+
+			// 光源空间矩阵 和 光源视角的深度贴图id
+			glm::mat4 MainLightSpace = glm::mat4(1.0f);
+			uint32_t ShadowRendererId = 0;
 		};
 
 		static Renderer3DSceneData s_3DSceneData;
@@ -91,18 +95,27 @@ namespace Snail {
 		static void Shutdown();
 
 		// BeginScene 升级：接收相机 + 光源信息
-		static void BeginScene(const Camera* camera, const glm::mat4& transform, std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights);
+		static void BeginScene(const Camera* camera, const glm::mat4& transform, 
+			std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights, 
+			const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId);
 		static void EndScene();
+		static void EndScene(Refptr<Shader>& shader);
 
+		// --- 正常绘制流程的函数 ---
 		static void DrawSkybox(const Model& model, const EditorCamera& camera);
 		static void DrawMesh(const Mesh& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
-
 		static void SubmitMesh(const Refptr<Mesh>& mesh, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 		static void FlushMeshes();
+		static void DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
+
+		// --- 接收外部shader绘制 --- （用于阴影贴图绘制等）
+		static void DrawMesh(Refptr<Shader>& shader, const Mesh& mesh, const glm::mat4& transform = glm::mat4(1.0f));
+		static void SubmitMesh(const Refptr<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
+		static void FlushMeshes(Refptr<Shader>& shader);
+		static void DrawModel(Refptr<Shader>& shader, const Model& model, const glm::mat4& transform);
 
 		static void SetEnableInstancing(const bool& status) { s_3DSceneData.EnableInstancing = status; }
 		static bool& GetEnableInstancing() { return s_3DSceneData.EnableInstancing; }
-		static void DrawModel(const Model& model, const bool& edgeEnable, const glm::mat4& transform = glm::mat4(1.0f));
 	private:
 		static void UploadLightsUniforms(const Refptr<Shader>& shader);
 	};

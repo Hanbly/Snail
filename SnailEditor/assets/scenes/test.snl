@@ -1,75 +1,111 @@
 Scene: test
 SceneSettings:
-  AmbientStrength: 0.100000001
+  Gamma: 2.20000005
+  Exposure: 1
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.66716421
-  ViewMatrix: [-0.924412131, 0.245307326, -0.29203862, 0, -1.4901163e-08, 0.765711546, 0.643184304, 0, 0.381395161, 0.594567299, -0.707832992, -0, -73.0120087, -114.807922, -943.854919, 1]
-  Position: [-314.972015, 694.982239, -571.98407]
-  DirvecFront: [0.29203862, -0.643184185, 0.707832932]
-  DirvecRight: [-0.924412191, 0, 0.381395161]
-  DirvecUp: [0.245307311, 0.765711427, 0.594567239]
+  Aspect: 1.5454545
+  ViewMatrix: [-0.911983073, 0.214768246, -0.349516034, -0, -0, 0.852004766, 0.523534119, 0, 0.410227776, 0.477454275, -0.777013898, -0, -43.5419388, 81.2681656, -1077.66858, 1]
+  Position: [-433.825745, 494.955383, -858.303162]
+  DirvecFront: [0.349516004, -0.523534119, 0.777013898]
+  DirvecRight: [-0.911983132, 0, 0.410227805]
+  DirvecUp: [0.214768246, 0.852004766, 0.477454275]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 40.0296745
-  DirvecYaw: -562.420105
-  FocalPoint: [-25.7466259, 57.9938965, 129.030258]
-  Distance: 990.366943
+  EulerPitch: 31.5696106
+  DirvecYaw: -204.219147
+  FocalPoint: [-61.462944, -62.8005409, -30.4982338]
+  Distance: 1065.36694
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
   DollySpeed: 0.5
 Entities:
-  - Entity: 5a56abcf-f3f6-4102-83a9-e8919fd73347
+  - Entity: 58baab63-3184-4215-8e68-cc158a1ce2c0
     TagComponent:
-      Tag: New Model
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Tag: 天空盒
     ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets/shaders/Standard.glsl
-      FilePath: assets/models/tree_small_02_4k.fbx/tree_small_02_4k.fbx
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
       Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
           Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_nor_gl_4k.png]
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_nor_gl_4k.png]
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_nor_gl_4k.exr]
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets\skybox\warm_bar_4k.exr]
       Visible: true
       EdgeEnable: false
-  - Entity: e1e8e7b3-ee53-40bd-a66e-3a66657d0207
+  - Entity: 6c6e81cb-561b-41e1-8f1b-fb76165b94e7
     TagComponent:
-      Tag: UnnamedEntity
+      Tag: 平行光
     DirectionalLightComponent:
       Color: [1, 1, 1, 1]
       Direction: [0, -1, 0]
       Ambient: 0.100000001
       Diffuse: 0.800000012
       Specular: 0.5
+  - Entity: b19374df-de79-4df5-b37a-a4e60eac881f
+    TagComponent:
+      Tag: 平面
+    TransformComponent:
+      Position: [-1.64016831, -81.001091, 0.0507572331]
+      Rotation: [0, -0, 0]
+      Scale: [860.333557, 860.333557, 860.333557]
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Plane
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: 9f3627f2-6073-4653-b732-d70102b891fa
+    TagComponent:
+      Tag: New Model
+    TransformComponent:
+      Position: [-0.484348297, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      FilePath: assets/models/spider-fbx/Spider_3.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+      Visible: true
+      EdgeEnable: true

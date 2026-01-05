@@ -6,23 +6,25 @@ layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TextureCoords;
 
 #ifdef INSTANCING
-    // 实例化模式：矩阵来自顶点属性 (VBO)
     layout(location = 3) in mat4 a_Model; 
     layout(location = 7) in mat3 a_NormalMatrix;
     layout(location = 10) in int a_EntityID;
 #else
-    // 普通模式：矩阵来自 Uniform
     uniform mat4 u_Model;
     uniform mat3 u_NormalMatrix;
     uniform int u_EntityID;
 #endif
 
+uniform mat4 u_ViewProjection;
+// 接收光照空间矩阵
+uniform mat4 u_LightSpaceMatrix;
+
 out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 flat out int v_EntityID;
-
-uniform mat4 u_ViewProjection;
+// 输出光照空间矩阵
+out vec4 v_FragPosLightSpace;
 
 void main()
 {
@@ -40,18 +42,15 @@ void main()
     entityID = u_EntityID;
 #endif
 
-    // 计算世界坐标
     vec4 worldPos = modelMatrix * vec4(a_Position, 1.0);
 
-    // 计算法线 (已在CPU端计算好 NormalMatrix)
     v_Normal = normalize(normalMatrix * a_Normal);    
-    
-    // --- 传递世界坐标给片元着色器用于光照计算 ---
     v_FragPos = vec3(worldPos);
-    
     v_TextureCoords = a_TextureCoords;
     v_EntityID = entityID;
 
+    // --- 计算光照空间的 片段坐标 ---
+    v_FragPosLightSpace = u_LightSpaceMatrix * worldPos;
     
     gl_Position = u_ViewProjection * worldPos;
 }
@@ -69,24 +68,25 @@ in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
 flat in int v_EntityID;
+in vec4 v_FragPosLightSpace;
 
-// 材质
 uniform sampler2D u_Diffuse1;
 uniform sampler2D u_Specular1;
 uniform sampler2D u_Normal1;
 uniform bool u_UseTexture;
 uniform bool u_UseTextureNormal;
+uniform sampler2D u_ShadowMap; 
 
 uniform vec3 u_ColorDiffuse;
 uniform vec3 u_ColorSpecular;
 uniform vec3 u_ColorAmbient;
-uniform float u_Shininess; // 建议值: 32.0 ~ 256.0
+uniform float u_Shininess; 
 
 uniform vec3 u_ViewPosition;
 
 struct DirLight {
     vec3 direction;
-    vec3 color; // rgb
+    vec3 color;
     float ambient;
     float diffuse;
     float specular;
@@ -94,7 +94,7 @@ struct DirLight {
 
 struct PointLight {
     vec3 position;
-    vec3 color; // rgb
+    vec3 color;
     float constant;
     float linear;
     float quadratic;
@@ -109,7 +109,7 @@ uniform int u_DirLightCount;
 uniform PointLight u_PointLights[MAX_POINT_LIGHTS];
 uniform int u_PointLightCount;
 
-// 无需预计算切线，利用偏导数构建 TBN 并计算扰动后的法线
+// TBN 计算
 vec3 getNormalFromMap()
 {
     vec3 tangentNormal = texture(u_Normal1, v_TextureCoords).xyz * 2.0 - 1.0;
@@ -128,8 +128,9 @@ vec3 getNormalFromMap()
 }
 
 // 函数声明
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask);
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask, float shadow);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask);
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
 
 void main()
 {
@@ -164,7 +165,15 @@ void main()
     int dirCount = min(u_DirLightCount, MAX_DIR_LIGHTS);
     for(int i = 0; i < dirCount; i++)
     {
-        result += CalcDirLight(u_DirLights[i], norm, viewDir, diffMapColor, specMask);
+        vec3 lightDir = normalize(-u_DirLights[i].direction);
+        
+        float shadow = 0.0;
+        
+        if(i == 0) {
+            shadow = ShadowCalculation(v_FragPosLightSpace, norm, lightDir);
+        }
+        
+        result += CalcDirLight(u_DirLights[i], norm, viewDir, diffMapColor, specMask, shadow);
     }
 
     // 4. 计算点光源
@@ -174,56 +183,46 @@ void main()
         result += CalcPointLight(u_PointLights[i], norm, v_FragPos, viewDir, diffMapColor, specMask);
     }
 
-    // 简单的色调映射或钳制，防止过曝成纯白
-    result = result / (result + vec3(1.0)); // Reinhard tone mapping
+    // Tone Mapping
+    result = result / (result + vec3(1.0));
     
     FinalColor = vec4(result, 1.0);
     EntityIDBuffer = v_EntityID;
 }
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask)
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask, float shadow)
 {
-    // 这里的 direction 是光线传播方向，所以取反指向光源
     vec3 lightDir = normalize(-light.direction);
     
-    // Diffuse
     float diff = max(dot(normal, lightDir), 0.0);
     
-    // Specular
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
     
-    // 如果漫反射为0（光源在背面），强制取消高光
     if(diff <= 0.0) spec = 0.0;
 
-    // 合并
-    vec3 ambient  = light.ambient  * light.color * diffColor; // 注意：多光源时环境光会累加变白，调低 light.ambient
+    vec3 ambient  = light.ambient  * light.color * diffColor;
     vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
     vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
     
-    return (ambient + diffuse + specular);
+    // 应用阴影：环境光不受影响，漫反射和高光受阴影遮蔽
+    return (ambient + (1.0 - shadow) * (diffuse + specular));
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask)
 {
     vec3 lightDir = normalize(light.position - fragPos);
     
-    // Diffuse
     float diff = max(dot(normal, lightDir), 0.0);
     
-    // Specular
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
     
-    // 背面剔除高光
     if(diff <= 0.0) spec = 0.0;
 
-    // 衰减计算
     float distance = length(light.position - fragPos);
-    // 衰减公式: 1 / (Kc + Kl*d + Kq*d^2)
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     
-    // 组合
     vec3 ambient  = light.ambient  * light.color * diffColor;
     vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
     vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
@@ -233,4 +232,33 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     specular *= attenuation;
     
     return (ambient + diffuse + specular);
+}
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
+{
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    
+    if(projCoords.z > 1.0)
+        return 0.0;
+        
+    // 保留一个较小的值，因为绘制阴影贴图时使用了正面剔除
+    // float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.0001);
+    float bias =0.0f;
+    
+    float shadow = 0.0;
+    
+    vec2 texelSize = 1.0 / vec2(textureSize(u_ShadowMap, 0));
+    
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += (projCoords.z - bias) > pcfDepth ? 1.0 : 0.0;
+        }    
+    }
+    shadow /= 9.0;
+    
+    return shadow;
 }

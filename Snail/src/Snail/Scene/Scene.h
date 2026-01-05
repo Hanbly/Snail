@@ -5,6 +5,7 @@
 
 #include "Snail/Basic/Timestep.h"
 
+#include "Snail/Render/Renderer/Material/Shader.h"
 #include "Snail/Render/Renderer/Camera/EditorCamera.h"
 
 #include <glm/glm.hpp>
@@ -43,8 +44,11 @@ namespace Snail {
 		{
 			return m_Registry.view<T...>();
 		}
+
 		inline entt::registry& GetRegistry() { return m_Registry; }
 		inline const entt::registry& GetRegistry() const { return m_Registry; }
+
+		glm::vec3 GetMainLightDirection() const;
 		inline float& GetGamma() { return m_Gamma; }
 		inline void SetGamma(const float& gamma) { m_Gamma = gamma; }
 		inline float& GetExposure() { return m_Exposure; }
@@ -54,7 +58,9 @@ namespace Snail {
 		void OnUpdateEditor(const Timestep& ts);
 
 		void OnRenderRuntime();
-		void OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform);
+		void OnRenderEditor(const Refptr<EditorCamera>& camera, const glm::mat4& cameraTransform, const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId);
+
+		void OnRenderExternalShader(Refptr<Shader>& shader);
 
 		Entity CastRay(const float& x, const float& y, const float& width, const float& height, const glm::mat4& viewMat, const glm::mat4& projMat);
 	};

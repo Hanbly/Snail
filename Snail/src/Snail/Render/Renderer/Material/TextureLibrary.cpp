@@ -146,7 +146,7 @@ namespace Snail {
 		int dim = 2048;
 		// 使用 RGBA32F 浮点格式
 		FrameBufferSpecification spec(dim, dim);
-		spec.colorFormat = FrameBufferColorFormat::RGBA32F;
+		spec.attachments = { FrameBufferTextureFormat::RGBA32F };
 		auto captureFBO = FrameBuffer::Create(spec);
 
 		// ------------- 一些临时的相机视角 --------------

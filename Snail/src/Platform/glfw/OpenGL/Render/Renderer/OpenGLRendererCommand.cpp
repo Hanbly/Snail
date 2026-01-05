@@ -115,4 +115,21 @@ namespace Snail {
 		}
 	}
 
+	void OpenGLRendererCommand::EnableCullImpl(bool enable)
+	{
+		enable ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+	}
+
+	void OpenGLRendererCommand::CullFrontImpl()
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+	}
+
+	void OpenGLRendererCommand::CullBackImpl()
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+
 }
