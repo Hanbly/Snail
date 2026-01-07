@@ -112,10 +112,6 @@ namespace Snail {
 
 		// 上传光源列表的 uniforms 
 		UploadLightsUniforms(material->GetShader());
-		//material->SetFloat3("u_LightPosition", s_3DSceneData.LightPosition);
-		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		//material->SetFloat4("u_LightColor", s_3DSceneData.LightColor);
-		//material->SetFloat("u_AmbientStrength", s_3DSceneData.AmbientStrength);
 
 		// 上传主光源的空间矩阵
 		material->SetMat4("u_LightSpaceMatrix", s_3DSceneData.MainLightSpace);

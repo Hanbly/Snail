@@ -23,7 +23,7 @@ out vec2 v_TextureCoords;
 out vec3 v_Normal;
 out vec3 v_FragPos;
 flat out int v_EntityID;
-// 输出光照空间矩阵
+// 输出光照空间坐标
 out vec4 v_FragPosLightSpace;
 
 void main()
@@ -184,7 +184,7 @@ void main()
     }
 
     // Tone Mapping
-    result = result / (result + vec3(1.0));
+    // result = result / (result + vec3(1.0));
     
     FinalColor = vec4(result, 1.0);
     EntityIDBuffer = v_EntityID;

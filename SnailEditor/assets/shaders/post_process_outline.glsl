@@ -58,19 +58,18 @@ void main()
                 float rawNeighborDepth = texture(u_DepthTexture, uv).r;
                 float linearNeighborDepth = LinearizeDepth(rawNeighborDepth);
 
-                // 【逻辑修正】
-                // linearCenterDepth: 当前像素距离相机的距离
-                // linearNeighborDepth: 选中物体距离相机的距离
+                // linearCenterDepth: 当前片段离相机的距离
+                // linearNeighborDepth: 选中物体片段距离相机的距离
                 
-                // 情况 1: 我是前面的遮挡物
+                // 情况 1: Center是前面的遮挡物片段
                 // linearCenterDepth (10米) < linearNeighborDepth (20米)
                 // -> 不画线
-                
-                // 情况 2: 我是后面的墙/背景
+            
+                // 情况 2: Center是后面的墙/背景片段
                 // linearCenterDepth (50米) > linearNeighborDepth (20米)
                 // -> 画线
-                
-                // 情况 3: 我是物体脚下的地面 (深度非常接近)
+            
+                // 情况 3: Center是物体脚下的地面 (深度非常接近)片段
                 // -> 画线
                 
                 // 所以：只有当 center >= neighbor (减去一个线性容差) 时才画
