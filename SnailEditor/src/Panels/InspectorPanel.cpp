@@ -12,7 +12,7 @@ namespace Snail {
 		// --- 设置回调函数 ---
 		// 替换现有纹理
 		SetEditTexture2DCallback([this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
+			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
 			auto& modelComp = entity.GetComponent<ModelComponent>();
@@ -27,7 +27,7 @@ namespace Snail {
 
 		// 加载新纹理
 		SetCreateTextureCallback([this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
+			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
 			auto& modelComp = entity.GetComponent<ModelComponent>();
@@ -44,7 +44,7 @@ namespace Snail {
 
 		// 替换整个 cube map
 		SetEditTextureCubeCallback_Entirely([this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
+			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
 			auto& modelComp = entity.GetComponent<ModelComponent>();
@@ -60,7 +60,7 @@ namespace Snail {
 
 		// 替换 Cubemap 的某一面
 		SetEditTextureCubeCallback([this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
+			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
 			auto& modelComp = entity.GetComponent<ModelComponent>();
@@ -92,7 +92,7 @@ namespace Snail {
 
 		// 替换 Mesh 的 Shader
 		SetShaderFileOpenCallback([this](const std::string& path) {
-			auto entity = m_Context->selectedEntity;
+			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
 			auto& modelComp = entity.GetComponent<ModelComponent>();
@@ -110,21 +110,20 @@ namespace Snail {
 	{
 		ImGui::Begin(u8"属性面板");
 
-		if (m_Context->selectedEntity && m_Context->selectedEntity.IsValid())
+		if (m_Context->displayEntity && m_Context->displayEntity.IsValid())
 		{
-			DrawAllComponents(m_Context->selectedEntity);
+			DrawAllComponents(m_Context->displayEntity);
 		}
 		else
 		{
-			// 检测多选实体
+			// 多选实体
 			std::vector<Entity> multiSelected;
-			auto view = m_Context->scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
-			for (auto [e, trans, model] : view.each()) {
-				if (model.edgeEnable)
-					multiSelected.emplace_back(e, m_Context->scene.get());
+			for (auto& e : m_Context->selectedEntities) {
+				if(e.HasAllofComponent<TransformComponent, ModelComponent>())
+					multiSelected.push_back(e);
 			}
 
-			if (!multiSelected.empty())
+			if (multiSelected.size() > 1)
 				DrawMultiSelection(multiSelected);
 			else
 				ImGui::TextDisabled(u8"未选中任何实体");
@@ -197,7 +196,7 @@ namespace Snail {
 		}
 
 		// --- 批量 Model 可见性 ---
-		if (ImGui::CollapsingHeader("Model (Batch)", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("Model (多个)", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			bool visible = entities[0].GetComponent<ModelComponent>().visible;
 			if (ImGui::Checkbox("Visible", &visible)) {
@@ -436,7 +435,7 @@ namespace Snail {
 							};
 							if (auto newTexture = TextureLibrary::Load("NewCubemap", defaultPaths, TextureUsage::Cubemap)) {
 								// 获取当前 Mesh 并添加纹理
-								auto& modelComp = m_Context->selectedEntity.GetComponent<ModelComponent>();
+								auto& modelComp = m_Context->displayEntity.GetComponent<ModelComponent>();
 								auto& meshes = modelComp.model->GetMeshes();
 
 								if (meshIndex < meshes.size()) {
@@ -627,10 +626,10 @@ namespace Snail {
 	{
 		// 1. 导入新模型到实体
 		FileSelecter::Handle("ModelImportKey", [this](const std::string& path) {
-			if (m_Context->selectedEntity) {
+			if (m_Context->displayEntity) {
 				auto shader = ShaderLibrary::Load("assets/shaders/Standard.glsl", {});
 				auto model = std::make_shared<Model>(shader, path);
-				m_Context->selectedEntity.AddComponent<ModelComponent>(model);
+				m_Context->displayEntity.AddComponent<ModelComponent>(model);
 			}
 			});
 
@@ -677,12 +676,12 @@ namespace Snail {
 				if (ImGui::BeginMenu("基础图元"))
 				{
 					auto AddPrimitive = [&](PrimitiveType type, const std::string& name) {
-						if (m_Context->selectedEntity.HasAllofComponent<ModelComponent>()) return;
+						if (m_Context->displayEntity.HasAllofComponent<ModelComponent>()) return;
 
 						if (type != PrimitiveType::Skybox) {
 							auto defaultShader = ShaderLibrary::Load("assets/shaders/Standard.glsl", {});
 							auto model = std::make_shared<Model>(type, defaultShader, std::vector<Refptr<Texture>>{});
-							m_Context->selectedEntity.AddComponent<ModelComponent>(model);
+							m_Context->displayEntity.AddComponent<ModelComponent>(model);
 						}
 						else {
 							// Skybox 特殊处理
@@ -695,8 +694,8 @@ namespace Snail {
 							if (auto texture = TextureLibrary::Load("Default_Skybox_Cubemap", paths, TextureUsage::Cubemap)) {
 								std::vector<Refptr<Texture>> texList = { texture };
 								auto model = std::make_shared<Model>(type, skyShader, texList);
-								m_Context->selectedEntity.AddComponent<ModelComponent>(model);
-								m_Context->selectedEntity.RemoveComponent<TransformComponent>();
+								m_Context->displayEntity.AddComponent<ModelComponent>(model);
+								m_Context->displayEntity.RemoveComponent<TransformComponent>();
 							}
 						}
 						ImGui::CloseCurrentPopup();
@@ -741,15 +740,15 @@ namespace Snail {
 					// 实际执行添加的按钮
 					if (ImGui::MenuItem("确认添加"))
 					{
-						if (m_Context->selectedEntity && !m_Context->selectedEntity.HasAllofComponent<DirectionalLightComponent>())
+						if (m_Context->displayEntity && !m_Context->displayEntity.HasAllofComponent<DirectionalLightComponent>())
 						{
-							auto& dlc = m_Context->selectedEntity.AddComponent<DirectionalLightComponent>();
+							auto& dlc = m_Context->displayEntity.AddComponent<DirectionalLightComponent>();
 
 							// 删除transform组件和model组件
-							if(m_Context->selectedEntity.HasAllofComponent<TransformComponent>()) 
-								m_Context->selectedEntity.RemoveComponent<TransformComponent>();
-							if (m_Context->selectedEntity.HasAllofComponent<ModelComponent>())
-								m_Context->selectedEntity.RemoveComponent<ModelComponent>();
+							if(m_Context->displayEntity.HasAllofComponent<TransformComponent>())
+								m_Context->displayEntity.RemoveComponent<TransformComponent>();
+							if (m_Context->displayEntity.HasAllofComponent<ModelComponent>())
+								m_Context->displayEntity.RemoveComponent<ModelComponent>();
 
 							dlc.color = s_InitColor;
 							dlc.direction = s_InitDir;
@@ -790,9 +789,9 @@ namespace Snail {
 					// 实际执行添加的按钮
 					if (ImGui::MenuItem("确认添加"))
 					{
-						if (m_Context->selectedEntity && !m_Context->selectedEntity.HasAllofComponent<PointLightComponent>())
+						if (m_Context->displayEntity && !m_Context->displayEntity.HasAllofComponent<PointLightComponent>())
 						{
-							auto& plc = m_Context->selectedEntity.AddComponent<PointLightComponent>();
+							auto& plc = m_Context->displayEntity.AddComponent<PointLightComponent>();
 							plc.color = s_InitColor;
 							
 							plc.ambient = s_InitAmbient;
@@ -842,7 +841,7 @@ namespace Snail {
 		if (ImGui::Button("X", buttonSize)) values.x = resetValue.x;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##X", &values.x, 0.01f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -852,7 +851,7 @@ namespace Snail {
 		if (ImGui::Button("Y", buttonSize)) values.y = resetValue.y;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Y", &values.y, 0.01f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -862,7 +861,7 @@ namespace Snail {
 		if (ImGui::Button("Z", buttonSize)) values.z = resetValue.z;
 		ImGui::PopStyleColor(2);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Z", &values.z, 0.01f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 		ImGui::PopStyleVar();

@@ -81,21 +81,22 @@ namespace Snail{
 
 		ImGuizmo::SetDrawlist(); // 如果在一个 ImGui 窗口内绘制，确保 ImGuizmo 使用该窗口的绘图列表
 
-		// 收集选中物体并计算中心点
-		std::vector<Entity> selectedEntities;
+		// 收集多选物体并计算中心点
+		std::vector<Entity> multiSelected;
 		glm::vec3 avgPosition = { 0.0f, 0.0f, 0.0f };
 		int count = 0;
-		auto modelview = m_Context->scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
-		for (auto [entity, transform, model] : modelview.each()) {
-			if (model.edgeEnable) {
-				selectedEntities.push_back({ entity, m_Context->scene.get() });
+		for (auto& e : m_Context->selectedEntities) {
+			if (e.HasAllofComponent<TransformComponent, ModelComponent>()) {
+				multiSelected.push_back(e);
+
+				auto& transform = e.GetComponent<TransformComponent>();
 				avgPosition += transform.position;
 				count++;
 			}
 		}
 
 		// 如果没有选中任何物体，直接结束
-		if (selectedEntities.empty()) {
+		if (multiSelected.empty()) {
 			ImGui::End();
 			ImGui::PopStyleVar();
 			return;
@@ -106,14 +107,14 @@ namespace Snail{
 		// 将计算出的中心点和共有属性同步到 Context
 		m_Context->entitiesPosition = avgPosition;
 		// 旋转和缩放取第一个物体的作为基准显示
-		m_Context->entitiesRotation = selectedEntities[0].GetComponent<TransformComponent>().rotation;
-		m_Context->entitiesScale = selectedEntities[0].GetComponent<TransformComponent>().scale;
+		m_Context->entitiesRotation = multiSelected[0].GetComponent<TransformComponent>().rotation;
+		m_Context->entitiesScale = multiSelected[0].GetComponent<TransformComponent>().scale;
 
 		// ImGuizmo::RecomposeMatrixFromComponents 构建 Gizmo 矩阵 ref
 		glm::mat4 ref;
-		TransformComponent firstTransform = selectedEntities[0].GetComponent<TransformComponent>();
+		TransformComponent firstTransform = multiSelected[0].GetComponent<TransformComponent>();
 
-		if (selectedEntities.size() == 1) {
+		if (multiSelected.size() == 1) {
 			// 单选模式：完全对齐物体
 			ImGuizmo::RecomposeMatrixFromComponents(
 				glm::value_ptr(firstTransform.position),
@@ -153,7 +154,7 @@ namespace Snail{
 			// 这种方法能同时处理 平移、旋转和缩放
 			deltaMatrix = ref * glm::inverse(oldRef);
 
-			for (auto& entity : selectedEntities) {
+			for (auto& entity : multiSelected) {
 				auto& transform = entity.GetComponent<TransformComponent>();
 
 				// A. 还原该物体当前的矩阵

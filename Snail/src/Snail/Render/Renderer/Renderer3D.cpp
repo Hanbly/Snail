@@ -274,7 +274,7 @@ namespace Snail {
 			// 绑定材质
 			auto& material = mesh->GetMaterial();
 			auto oriShader = material->GetShader();
-			auto instancingShader = ShaderLibrary::Load(oriShader->GetFilePath(), { "INSTANCING" });
+			auto instancingShader = ShaderLibrary::Load(oriShader->GetFilePath() + "_INSTANCING", oriShader->GetFilePath(), {"INSTANCING"});
 			
 			instancingShader->Bind();
 

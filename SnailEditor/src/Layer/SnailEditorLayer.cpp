@@ -25,7 +25,8 @@ namespace Snail {
 		};
 		m_TempFBO = FrameBuffer::Create(spec);
 
-		spec.width = 2048, spec.height = 2048;
+		// 阴影贴图分辨率
+		spec.width = 10240, spec.height = 10240;
 		spec.attachments = { FrameBufferTextureFormat::DEPTH_COMPONENT };
 		m_DepthMapFBO = FrameBuffer::Create(spec);
 
@@ -40,22 +41,6 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 
 		LoadScene("assets/scenes/InitScene.snl");
-
-		// ----- 初始化面板的上下文 EditorContext 的选中实体 ------
-		// 如果选中只有一个实体就设置 selectedEntity ，如果超过一个就置空
-		int count = 0;
-		auto modelview = m_Scene->GetAllofEntitiesWith<TransformComponent, ModelComponent>();
-		for (auto [entity, transform, model] : modelview.each()) {
-			if (model.edgeEnable) {
-				if (count > 1) {
-					m_EditorContext->selectedEntity = {};
-					break;
-				}
-				m_EditorContext->selectedEntity = { entity, m_Scene.get() };
-				count += 1;
-			}
-		}
-
 
 		// --------------- UI面板的回调函数绑定 -----------------
 		// 视口面板：
@@ -129,7 +114,7 @@ namespace Snail {
 				if (hit.IsValid())
 					m_EditorContext->ResetSelectedEntity(hit);
 				else
-					m_EditorContext->ClearAllEdge();
+					m_EditorContext->ClearSelectedEntities();
 			}
 		}
 		return false;
@@ -150,9 +135,9 @@ namespace Snail {
 
 		glm::vec3 lightDir = m_Scene->GetMainLightDirection();
 
-		float orthoSize = 1000.0f;
+		float orthoSize = 4096.0f;
 		float nearPlane = 1.0f;
-		float farPlane = 1000.0f;
+		float farPlane = 10000.0f;
 		glm::mat4 lightProjection = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, nearPlane, 2 * farPlane);
 
 		glm::vec3 lightPos = glm::vec3(0.0f) - lightDir * farPlane;
@@ -166,7 +151,7 @@ namespace Snail {
 		// 最终矩阵
 		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 		auto shadowShader = ShaderLibrary::Load("LightShadowDepth", "assets/shaders/light_shadow_depth.glsl", {});
-		auto instancedShadowShader = ShaderLibrary::Load("LightShadowDepth", "assets/shaders/light_shadow_depth.glsl", { "INSTANCING" });
+		auto instancedShadowShader = ShaderLibrary::Load("LightShadowDepth_INSTANCING", "assets/shaders/light_shadow_depth.glsl", { "INSTANCING" });
 		if (shadowShader && instancedShadowShader) {
 			shadowShader->Bind();
 			shadowShader->SetMat4("u_LightSpaceMatrix", lightSpaceMatrix);
@@ -291,7 +276,6 @@ namespace Snail {
 
 	void SnailEditorLayer::LoadScene(const std::string& path)
 	{
-		m_EditorContext->selectedEntity = {};
 		m_Scene->Clear();
 
 		SceneSerializer serializer(m_Scene, m_EditorCamera);
@@ -301,6 +285,9 @@ namespace Snail {
 		else {
 			SNL_CORE_ERROR("加载场景失败: {0}", path);
 		}
+
+		// 初始化面板的上下文 EditorContext 的选中实体
+		m_EditorContext->ClearSelectedEntities();
 	}
 
 	void SnailEditorLayer::SaveScene(const std::string& path) const

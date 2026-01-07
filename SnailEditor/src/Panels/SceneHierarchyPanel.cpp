@@ -40,12 +40,18 @@ namespace Snail {
 			});
 
 		// -------------------- 空白处点击取消选中 --------------------
-		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-			m_Context->ResetSelectedEntity({});
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered() && !ImGui::IsAnyItemHovered())
+		{
+			// 只有不按住 Ctrl 点击空白处,取消选中
+			if(!Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL))
+				m_Context->ClearSelectedEntities();
+		}
+			
 
 		// ----------------- 在此延迟删除实体 --------------------
-		if (m_Context->entityToDelete.IsValid())
-			m_Context->scene->DestroyEntity(m_Context->entityToDelete);
+		for (auto& etd : m_Context->entitiesToDelete) {
+			if(etd.IsValid()) m_Context->scene->DestroyEntity(etd);
+		}
 
 		ImGui::End();
 	}
@@ -66,7 +72,9 @@ namespace Snail {
 		if (entity.HasAllofComponent<TagComponent>())
 			name = entity.GetComponent<TagComponent>().name;
 
-		ImGuiTreeNodeFlags flags = ((m_Context->selectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+		bool isSelected = m_Context->IsEntitySelected(entity);
+
+		ImGuiTreeNodeFlags flags = (isSelected ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
 		// 转换为唯一指针ID
@@ -75,7 +83,20 @@ namespace Snail {
 
 		if (ImGui::IsItemClicked())
 		{
-			m_Context->ResetSelectedEntity(entity);
+			bool ctrlPressed = Input::IsKeyPressed(SNL_KEY_LEFT_CONTROL);
+			if (ctrlPressed)
+			{
+				// 如果按住 Ctrl：执行多选逻辑
+				if (!isSelected) {
+					// 如果没选中，则添加到选中列表
+					m_Context->AddSelectedEntity(entity);
+				}
+			}
+			else
+			{
+				// 如果没按 Ctrl：执行单选逻辑
+				m_Context->ResetSelectedEntity(entity);
+			}
 		}
 
 		bool entityDeleted = false;
@@ -90,9 +111,9 @@ namespace Snail {
 
 		if (entityDeleted)
 		{
-			if (m_Context->selectedEntity == entity)
-				m_Context->selectedEntity = {};
-			m_Context->entityToDelete = entity;
+			if (isSelected)
+				m_Context->displayEntity = {};
+			m_Context->entitiesToDelete.push_back(entity);
 		}
 	}
 }
