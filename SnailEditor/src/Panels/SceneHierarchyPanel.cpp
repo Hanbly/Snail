@@ -49,9 +49,13 @@ namespace Snail {
 			
 
 		// ----------------- 在此延迟删除实体 --------------------
-		for (auto& etd : m_Context->entitiesToDelete) {
-			if(etd.IsValid()) m_Context->scene->DestroyEntity(etd);
-		}
+		if (m_Context->entitiesToDelete.size()) {
+			for (auto& etd : m_Context->entitiesToDelete) {
+				if (etd.IsValid()) m_Context->scene->DestroyEntity(etd);
+			}
+			m_Context->selectedEntities.clear();
+			m_Context->entitiesToDelete.clear();
+		}		
 
 		ImGui::End();
 	}
@@ -113,7 +117,8 @@ namespace Snail {
 		{
 			if (isSelected)
 				m_Context->displayEntity = {};
-			m_Context->entitiesToDelete.push_back(entity);
+			m_Context->entitiesToDelete.reserve(m_Context->selectedEntities.size());
+			m_Context->entitiesToDelete.insert(m_Context->entitiesToDelete.end(), m_Context->selectedEntities.begin(), m_Context->selectedEntities.end());
 		}
 	}
 }

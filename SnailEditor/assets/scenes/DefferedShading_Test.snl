@@ -1,0 +1,3406 @@
+Scene: DefferedShading_Test
+SceneSettings:
+  Gamma: 2.20000005
+  Exposure: 0.200000003
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 45
+  Near: 1
+  Far: 10000
+  Aspect: 1.65142858
+  ViewMatrix: [-0.376731157, -0.497706503, 0.781256497, -0, -2.98023188e-08, 0.843395829, 0.537292838, 0, -0.926322579, 0.202414945, -0.317733437, -0, -21.9739819, -395.376434, -789.342468, 1]
+  Position: [411.619385, 757.566895, -191.125488]
+  DirvecFront: [-0.781256676, -0.537292838, 0.317733526]
+  DirvecRight: [-0.376731157, 0, -0.926322579]
+  DirvecUp: [-0.497706473, 0.843395829, 0.20241496]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: 32.4995384
+  DirvecYaw: -112.131348
+  FocalPoint: [60.542942, 516.12146, -48.3443031]
+  Distance: 449.374023
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  DollySpeed: 0.5
+Entities:
+  - Entity: 9c8d2647-a819-46a5-a161-f47813b042a8
+    TagComponent:
+      Tag: 天空盒
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
+      Meshes:
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets\skybox\rogland_clear_night_4k.exr]
+      Visible: true
+      EdgeEnable: false
+  - Entity: 6aebf544-02a9-430e-8448-6d380a5125d5
+    TagComponent:
+      Tag: 宫殿室内
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      FilePath: assets/models/sponza/sponza.obj
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/background.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/background_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_floor_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/floor_gloss.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_ceiling_a_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_details_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_details_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_details_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_details_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_details_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_c_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_c_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_floor_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/floor_gloss.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_arch_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_column_b_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_column_b_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_thorn_diff.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/sponza_thorn_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_fabric_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_flagpole_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_green_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_curtain_blue_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/chain_texture.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/chain_texture_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/vase_hanging.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_plant.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_round.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_round_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_dif.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_dif.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_dif.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/vase_dif.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/vase_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/lion.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/lion_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/background.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/background_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/lion.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/lion_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/background.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/background_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_roof_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/sponza_roof_diff.png]
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_diff.png]
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_spec.png]
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza/textures/spnza_bricks_a_bump.png]
+      Visible: true
+      EdgeEnable: false
+  - Entity: 54371fa7-a321-4fa6-be77-c691898f9caf
+    TagComponent:
+      Tag: UnnamedEntity
+    TransformComponent:
+      Position: [150.455704, 596.481873, -100.194763]
+      Rotation: [0, -0, 0]
+      Scale: [20, 20, 20]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true
+  - Entity: e606e1b8-4c54-440e-871e-e783d0375cce
+    TagComponent:
+      Tag: UnnamedEntity
+    TransformComponent:
+      Position: [201.677994, 596.481873, -100.194763]
+      Rotation: [0, -0, 0]
+      Scale: [20, 20, 20]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true
+  - Entity: 35234230-4747-4271-8f3c-7b62fb9c3725
+    TagComponent:
+      Tag: 平行光源
+    DirectionalLightComponent:
+      Color: [1, 1, 1, 1]
+      Direction: [0, -1, 0]
+      Ambient: 0.25999999
+      Diffuse: 0.720000029
+      Specular: 1
+  - Entity: 28ed20f1-ee67-400a-9bdd-021748f06479
+    TagComponent:
+      Tag: UnnamedEntity
+    TransformComponent:
+      Position: [95.6552124, 596.481873, -100.194763]
+      Rotation: [0, -0, 0]
+      Scale: [20, 20, 20]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true
+  - Entity: 40e4b2e0-93f9-4316-8ae2-e20b9405d558
+    TagComponent:
+      Tag: UnnamedEntity
+    TransformComponent:
+      Position: [150.455704, 596.481873, -150.874374]
+      Rotation: [0, -0, 0]
+      Scale: [20, 20, 20]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true
+  - Entity: 95cde1eb-ebe7-4b27-ac50-1b1044ecfe5e
+    TagComponent:
+      Tag: UnnamedEntity
+    TransformComponent:
+      Position: [150.455704, 596.481873, -53.0154037]
+      Rotation: [0, -0, 0]
+      Scale: [20, 20, 20]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Constant: 1
+      Linear: 0.00139999995
+      Quadratic: 7.0000001e-06
+      Ambient: 0.100000001
+      Diffuse: 0.800000012
+      Specular: 0.5
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      Meshes:
+        - PrimitiveType: Cube
+          ShaderPath: assets/shaders/Standard.glsl
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: true

@@ -7,7 +7,9 @@ namespace Snail {
 
 	enum class FrameBufferTextureFormat {
 		None,
-		R32I, RGB8, RGBA8, RGBA16F, RGBA32F,
+		R32I, 
+		RGB8, RGB16F, RGB32F,
+		RGBA8, RGBA16F, RGBA32F,
 		DEPTH_COMPONENT, DEPTH24_STENCIL8
 	};
 

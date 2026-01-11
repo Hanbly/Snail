@@ -44,13 +44,17 @@ git submodule update --init
 
 ![img_2025-12-31200533](notes/images/img_2025-12-31200533.png)
 
-#### 资源浏览器：
+#### 简易资源浏览器：
 
 ![img_2025-12-31200759](notes/images/img_2025-12-31200759.png)
 
 #### 多光源场景：
 
 ![img_2025-12-31200401](notes/images/img_2025-12-31200401.png)
+
+#### 平行光阴影映射：
+
+![img_2026-01-11164244](notes/images/img_2026-01-11164244.png)
 
 *Model by [Riley Queen] from [https://polyhaven.com/models]*
 

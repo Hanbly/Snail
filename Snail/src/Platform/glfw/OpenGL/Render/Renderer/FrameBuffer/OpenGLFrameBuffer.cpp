@@ -104,6 +104,10 @@ namespace Snail {
 				{
 				case FrameBufferTextureFormat::RGB8:
 					internalFormat = GL_RGB8; dataFormat = GL_RGB; dataType = GL_UNSIGNED_BYTE; break;
+				case FrameBufferTextureFormat::RGB16F:
+					internalFormat = GL_RGB16F; dataFormat = GL_RGB; dataType = GL_FLOAT; break;
+				case FrameBufferTextureFormat::RGB32F:
+					internalFormat = GL_RGB32F; dataFormat = GL_RGB; dataType = GL_FLOAT; break;
 				case FrameBufferTextureFormat::RGBA8:
 					internalFormat = GL_RGBA8; dataFormat = GL_RGBA; dataType = GL_UNSIGNED_BYTE; break;
 				case FrameBufferTextureFormat::RGBA16F:
@@ -136,11 +140,12 @@ namespace Snail {
 		// --- 设置 Draw Buffers ---
 		if (m_ColorAttachments.size() > 0) {
 			// 只有深度图时不需要 DrawBuffers，有颜色图时动态生成
-			SNL_CORE_ASSERT(m_ColorAttachments.size() <= 4, "OpenGLFrameBuffer: 暂不支持超过4个颜色附件");
-			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			std::vector<GLenum> buffers;
+			for (unsigned int i = 0; i < m_ColorAttachments.size(); i++)
+				buffers.push_back(GL_COLOR_ATTACHMENT0 + i);
 
 			// 只开启实际存在的数量
-			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers);
+			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers.data());
 		}
 		else if (m_ColorAttachments.empty()) {
 			// 只有深度附件 (Shadow Map)
