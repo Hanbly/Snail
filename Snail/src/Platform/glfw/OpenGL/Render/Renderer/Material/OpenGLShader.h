@@ -20,6 +20,7 @@ namespace Snail {
 
         inline virtual uint32_t GetRendererId() const override { return m_RendererID; }
 		inline virtual const std::string& GetFilePath() const override { return m_FilePath; }
+        inline virtual void SetFilePath(const std::string& path) override { m_FilePath = path; }
 		inline virtual const std::string& GetName() const override { return m_Name; }
 
         void Bind() const;

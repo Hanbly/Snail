@@ -121,10 +121,8 @@ namespace Snail {
 			{
 				glm::vec3 lightDir = light.direction;
 				glm::vec4 lightColor = light.color;
-				float ambient = light.ambient;
-				float diffuse = light.diffuse;
-				float specular = light.specular;
-				DirectionLight directionLight(lightDir, lightColor, ambient, diffuse, specular);
+				float intensity = light.intensity;
+				DirectionLight directionLight(lightDir, lightColor, intensity);
 
 				dirLights.push_back(directionLight);
 			}
@@ -137,13 +135,8 @@ namespace Snail {
             {
                 glm::vec3 lightPos = transform.position;
                 glm::vec4 lightColor = light.color;
-				float constant = light.constant;
-				float linear = light.linear;
-				float quadratic = light.quadratic;
-				float ambient = light.ambient;
-				float diffuse = light.diffuse;
-				float specular = light.specular;
-                PointLight pointLight(lightPos, lightColor, constant, linear, quadratic, ambient, diffuse, specular);
+				float intensity = light.intensity;
+                PointLight pointLight(lightPos, lightColor, intensity);
                 
                 poiLights.push_back(pointLight);
             }

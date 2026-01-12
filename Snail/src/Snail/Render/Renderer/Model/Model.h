@@ -20,13 +20,15 @@ namespace Snail {
 
 	class Model {
 	private:
-		Refptr<Shader> m_DefaultShader;
+		std::string m_DefaultShaderPath;
 		std::vector<Refptr<Mesh>> m_Meshes;
 		std::string m_FullPath;
 		std::string m_Directory;
 
 		bool m_IsImported = false;
 		PrimitiveType m_PrimitiveType = PrimitiveType::None;
+
+		bool m_EnableTextures = false;
 	public:
 		AABB m_AABB;
 	public:
@@ -45,11 +47,15 @@ namespace Snail {
 		Model(const Refptr<Shader>& shader, const std::string& objPath);
 		~Model() = default;
 
-		inline const std::string& GetDefaultShaderPath() const { return m_DefaultShader->GetFilePath(); }
+		inline const std::string& GetDefaultShaderPath() const { return m_DefaultShaderPath; }
+		inline void SetDefaultShaderPath(const std::string& path) { m_DefaultShaderPath = path; }
 		inline const std::vector<Refptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 		inline const std::string& GetFullPath() const { return m_FullPath; }
 		inline bool IsImported() const { return m_IsImported; }
 		inline const PrimitiveType& GetPrimitiveType() const { return m_PrimitiveType; }
+
+		bool& GetEnableTextures() { return m_EnableTextures; }
+		void SetEnableTextures(bool enable) { m_EnableTextures = enable; }
 
 		void Draw(const glm::mat4& worldTransform, const bool& edgeEnable) const;
 

@@ -1,0 +1,375 @@
+Scene: PBR_Test
+SceneSettings:
+  Gamma: 2.20000005
+  Exposure: 1
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 45
+  Near: 1
+  Far: 10000
+  Aspect: 1.65142858
+  ViewMatrix: [0.604317784, 0.251878977, -0.755881727, -0, 1.4901163e-08, 0.948714137, 0.316135615, -0, 0.796743512, -0.191046372, 0.57332474, -0, 64.3812332, -78.2602386, -535.280457, 1]
+  Position: [-423.803253, 243.467758, 240.642807]
+  DirvecFront: [0.755881667, -0.316135585, -0.57332468]
+  DirvecRight: [0.604317725, -0, 0.796743453]
+  DirvecUp: [0.251878947, 0.948714018, -0.191046342]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: 18.4293823
+  DirvecYaw: 412.820251
+  FocalPoint: [-78.4581909, 99.0326385, -21.2961311]
+  Distance: 456.877136
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  DollySpeed: 0.5
+Entities:
+  - Entity: 58baab63-3184-4215-8e68-cc158a1ce2c0
+    TagComponent:
+      Tag: 天空盒
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
+      EnableTextures: true
+      Meshes:
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
+          EnableTextures: false
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets\skybox\rogland_clear_night_4k.exr]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: 7b673095-7091-41e3-890f-0c6754e15ebd
+    TagComponent:
+      Tag: 手枪
+    TransformComponent:
+      Position: [-1.90734863e-06, 75.1392365, 37.4221344]
+      Rotation: [-20.0578098, -0, 0]
+      Scale: [1, 0.99999845, 0.99999845]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/Cerberus_by_Andrew_Maximov/Cerberus_LP.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_M.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_R.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_N.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_ao
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Raw\Cerberus_AO.tga]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: 0ceb8567-6a1a-42e1-99e6-9f95f113afd4
+    TagComponent:
+      Tag: 平行光
+    DirectionalLightComponent:
+      Color: [1, 1, 1, 1]
+      Direction: [0, -1, 0]
+      Intensity: 1
+  - Entity: 20b44866-f04b-4a53-8678-e8166f6dd308
+    TagComponent:
+      Tag: 树木
+    TransformComponent:
+      Position: [-9.61024094, -106.718857, -280.886505]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/tree_small_02_4k.fbx/tree_small_02_4k.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_rough_4k.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_rough_4k.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\tree_small_02_4k.fbx\textures\tree_small_02_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_rough_4k.exr]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: de43d366-068c-4216-bed3-62d332bcdcc2
+    TagComponent:
+      Tag: 蜘蛛
+    TransformComponent:
+      Position: [1.93025827, -13.6844501, -155.963837]
+      Rotation: [0, -0, 0]
+      Scale: [0.290000021, 0.290000021, 0.290000021]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard.glsl
+      EnableTextures: true
+      FilePath: assets/models/spider-fbx/Spider_3.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: f862385b-a4f8-448c-8502-ad299983b992
+    TagComponent:
+      Tag: 木桶
+    TransformComponent:
+      Position: [0.85449791, -103.987106, -154.058273]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/wooden-barrel-gltfglb/gltf/barrel.gltf
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Normal.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_BaseColor.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Metallic-barrel_Roughness.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_BaseColor.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Metallic-barrel_Roughness.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: cb904ad5-9f37-4a21-a1fa-a9f8158f207a
+    TagComponent:
+      Tag: 地面
+    TransformComponent:
+      Position: [0, -102.229591, -49.4071922]
+      Rotation: [0, -0, 0]
+      Scale: [11378.1631, 11378.1631, 11378.1631]
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      Meshes:
+        - PrimitiveType: Plane
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: false
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_rough_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_ao
+              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_ao_4k.jpg]
+              Enable: true
+      Visible: true
+      EdgeEnable: true
+  - Entity: 8d684930-9c9c-4f40-abb4-dc06480f14de
+    TagComponent:
+      Tag: 木桌
+    TransformComponent:
+      Position: [196.721466, -100.782471, -29.4168892]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/gothic_coffee_table_4k.fbx/gothic_coffee_table_4k.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\gothic_coffee_table_4k.fbx\textures\gothic_coffee_table_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/gothic_coffee_table_4k.fbx/textures/gothic_coffee_table_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/gothic_coffee_table_4k.fbx/textures/gothic_coffee_table_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets\models\gothic_coffee_table_4k.fbx\textures\gothic_coffee_table_rough_4k.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: 8b48996d-9515-4b66-8b21-0b7f17a3b5e2
+    TagComponent:
+      Tag: 转椅
+    TransformComponent:
+      Position: [-211.015335, -97.394455, -140.015625]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/mid_century_lounge_chair_4k.fbx/mid_century_lounge_chair_4k.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/mid_century_lounge_chair_4k.fbx/textures/mid_century_lounge_chair_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_metal_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/mid_century_lounge_chair_4k.fbx/textures/mid_century_lounge_chair_diff_4k.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_rough_4k.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false

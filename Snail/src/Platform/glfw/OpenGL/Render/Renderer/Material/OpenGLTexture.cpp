@@ -7,6 +7,38 @@
 
 namespace Snail {
 
+	// 处理纹理数据：从 -1~1 映射到 0~1
+	//static void ProcessEXRData(float* data, int width, int height, int channels, Snail::TextureUsage usage)
+	//{
+	//	if (!data || width <= 0 || height <= 0) return;
+
+	//	size_t pixelCount = static_cast<size_t>(width) * height;
+
+	//	// 遍历所有像素
+	//	for (size_t i = 0; i < pixelCount; ++i) {
+	//		float* pixel = data + (i * channels); // 获取当前像素指针 (R, G, B, A)
+
+	//		if (usage == Snail::TextureUsage::Normal)
+	//		{
+	//			// 法线贴图通常是 [-1, 1]，需要映射到 [0, 1] 才能正确作为纹理采样或可视化
+	//			// 算法: pixel = pixel * 0.5 + 0.5
+	//			// 只处理 RGB，忽略 Alpha
+	//			pixel[0] = pixel[0] * 0.5f + 0.5f;
+	//			pixel[1] = pixel[1] * 0.5f + 0.5f;
+	//			pixel[2] = pixel[2] * 0.5f + 0.5f;
+	//		}
+	//		else if (usage == Snail::TextureUsage::Roughness || usage == Snail::TextureUsage::Metallic)
+	//		{
+	//			// 粗糙度/金属度 必须严格在 [0, 1] 之间
+	//			// 有些 EXR 可能会有超出的 HDR 值，导致渲染异常，这里进行 Clamp 操作
+	//			for (int c = 0; c < 3; ++c) { // 如果是灰度图存成了RGB，处理前3个通道
+	//				if (pixel[c] < 0.0f) pixel[c] = 0.0f;
+	//				if (pixel[c] > 1.0f) pixel[c] = 1.0f;
+	//			}
+	//		}
+	//	}
+	//}
+
 	// 内部辅助函数：垂直翻转浮点图像数据
 	static void FlipFloatBufferVertically(float* data, int width, int height, int channels)
 	{
@@ -85,9 +117,12 @@ namespace Snail {
 				}
 				return;
 			}
-			// TinyEXR 加载的总是 RGBA float，除非特殊设置
+			// 设置通道数量
 			channels = 4;
 			isFloat = true;
+
+			// 根据用途预处理数据范围
+			//ProcessEXRData(static_cast<float*>(data), width, height, channels, m_Usage);
 
 			// 反转y轴
 			FlipFloatBufferVertically(static_cast<float*>(data), width, height, channels);
@@ -120,22 +155,8 @@ namespace Snail {
 		if (isFloat) {
 			// HDR / EXR 处理
 			type = GL_FLOAT;
-			if (channels == 1) {
-				internalFormat = GL_R32F;
-				dataFormat = GL_RED;
-			}
-			else if (channels == 2) {
-				internalFormat = GL_RG32F;
-				dataFormat = GL_RG;
-			}
-			else if (channels == 3) {
-				internalFormat = GL_RGB32F;
-				dataFormat = GL_RGB;
-			}
-			else if (channels == 4) {
-				internalFormat = GL_RGBA32F;
-				dataFormat = GL_RGBA;
-			}
+			internalFormat = GL_RGBA32F;
+			dataFormat = GL_RGBA;
 		}
 		else {
 			// 普通 LDR 处理
@@ -152,7 +173,7 @@ namespace Snail {
 				// 如果是颜色贴图，使用 sRGB
 				// 注意：只有当这张图是"人眼看的颜色"(Albedo/Diffuse)时才用 sRGB
 				// 如果是 法线(Normal)、粗糙度(Roughness)等数据图，必须保持 GL_RGB8
-				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap || m_Usage == TextureUsage::Albedo) {
 					internalFormat = GL_SRGB8;
 				}
 				else {
@@ -161,7 +182,7 @@ namespace Snail {
 				dataFormat = GL_RGB;
 			}
 			else if (channels == 4) {
-				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
+				if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap || m_Usage == TextureUsage::Albedo) {
 					internalFormat = GL_SRGB8_ALPHA8;
 				}
 				else {
@@ -188,6 +209,9 @@ namespace Snail {
 		glGenTextures(1, &m_RendererId);
 		Bind(0);
 
+		// 防止单通道(灰度)图片宽度不是4的倍数时导致倾斜/错位
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		// 计算 Mipmap 层级数量
 		int levels = 1;
 		if (m_Width > 0 && m_Height > 0)
@@ -198,6 +222,13 @@ namespace Snail {
 
 		// 上传数据
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_Width, m_Height, dataFormat, type, data);
+
+		// 如果是单通道 (GL_RED)，强制 RGB 通道都读取 R 值，Alpha 设为 1
+		// 这样 Shader 中读取 .r, .g, .b 都会得到正确的值，预览也是灰度而非红色
+		if (dataFormat == GL_RED) {
+			GLint swizzleMask[] = { GL_RED, GL_RED, GL_RED, GL_ONE };
+			glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzleMask);
+		}
 
 		// 设置参数
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -339,7 +370,7 @@ namespace Snail {
 				isFloat = true;
 
 				// 反转y轴
-				FlipFloatBufferVertically(static_cast<float*>(data), width, height, channels);
+				//FlipFloatBufferVertically(static_cast<float*>(data), width, height, channels);
 			}
 			else {
 				// 检测是否为 HDR 格式
@@ -365,36 +396,13 @@ namespace Snail {
 			GLenum currentInternalFormat = 0;
 			GLenum dataFormat = 0;
 
-			if (isFloat) {
-				// --- 浮点纹理 (HDR/EXR) ---
-				if (channels == 1) {
-					currentInternalFormat = GL_R32F;
-					dataFormat = GL_RED;
-				}
-				else if (channels == 2) {
-					currentInternalFormat = GL_RG32F;
-					dataFormat = GL_RG;
-				}
-				else if (channels == 3) {
-					currentInternalFormat = GL_RGB32F;
-					dataFormat = GL_RGB;
-				}
-				else if (channels == 4) {
-					currentInternalFormat = GL_RGBA32F;
-					dataFormat = GL_RGBA;
-				}
+			if (isFloat) {				
+				currentInternalFormat = GL_RGBA32F;
+				dataFormat = GL_RGBA;
 			}
 			else {
 				// --- 普通字节纹理 (LDR) ---
-				if (channels == 1) {
-					currentInternalFormat = GL_R8;
-					dataFormat = GL_RED;
-				}
-				else if (channels == 2) {
-					currentInternalFormat = GL_RG8;
-					dataFormat = GL_RG;
-				}
-				else if (channels == 3) {
+				if (channels == 3) {
 					if (m_Usage == TextureUsage::Diffuse || m_Usage == TextureUsage::Cubemap) {
 						currentInternalFormat = GL_SRGB8;
 					}

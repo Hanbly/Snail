@@ -50,6 +50,8 @@ namespace Snail {
 		glm::mat4 m_LocalTransform; // 保存某部分 mesh 相对于整体 Model 原点的偏移
 
 		PrimitiveType m_PrimitiveType = PrimitiveType::None;
+
+		bool m_EnableTextures = false;
 	public:
 		glm::vec3 m_MinVertex;
 		glm::vec3 m_MaxVertex;
@@ -79,6 +81,9 @@ namespace Snail {
 		inline const std::vector<Vertex> GetVertices() const					{ return GetVAO()->GetVertexBuffer(); }
 		inline const std::vector<uint32_t> GetIndices() const					{ return GetVAO()->GetIndexBuffer()->GetIndices(); }
 
+		bool& GetEnableTextures() { return m_EnableTextures; }
+		void SetEnableTextures(bool enable) { m_EnableTextures = enable; }
+
 		// --- 修改着色器 ---
 		void EditShader(const std::string& path) const;
 		// --- 添加纹理 ---
@@ -97,6 +102,8 @@ namespace Snail {
 		void SetupMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures = {});
 		void CalculateBoundingBox(const std::vector<Vertex>& vertices);
 		void RemapMaterialTextures(const std::vector<Refptr<Texture>>& textures);
+	public:
+		void RemapMaterialTextures();
 	};
 
 }

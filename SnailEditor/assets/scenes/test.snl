@@ -8,16 +8,16 @@ EditorCamera:
   Near: 1
   Far: 10000
   Aspect: 1.65142858
-  ViewMatrix: [-0.911983073, 0.214768246, -0.349516034, -0, -0, 0.852004766, 0.523534119, 0, 0.410227776, 0.477454275, -0.777013898, -0, -43.5419388, 81.2681656, -1077.66858, 1]
-  Position: [-433.825745, 494.955383, -858.303162]
-  DirvecFront: [1, 0, 0]
-  DirvecRight: [0, 0, 1]
-  DirvecUp: [0, 1, 0]
+  ViewMatrix: [-0.802579463, -0.179678738, 0.56884253, -0, -0, 0.953561306, 0.30119884, 0, -0.596545279, 0.241735995, -0.765308738, -0, -10.5777159, 4.88900089, -314.425385, 1]
+  Position: [171.247513, 90.0426025, -248.124451]
+  DirvecFront: [-0.568842471, -0.30119884, 0.765308738]
+  DirvecRight: [-0.802579463, 0, -0.596545219]
+  DirvecUp: [-0.179678723, 0.953561366, 0.24173601]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 31.5696106
-  DirvecYaw: -204.219147
-  FocalPoint: [-61.462944, -62.8005409, -30.4982338]
-  Distance: 1065.36694
+  EulerPitch: 17.529623
+  DirvecYaw: -143.377136
+  FocalPoint: [-8.14663601, -4.94557285, -6.77132511]
+  Distance: 315.367004
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -30,82 +30,142 @@ Entities:
     ModelComponent:
       IsImported: false
       DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
+      EnableTextures: false
       Meshes:
         - PrimitiveType: Skybox
           ShaderPath: assets/shaders/TextureCube_Shader.glsl
+          EnableTextures: false
           Textures:
             - DimType: TextureCube
               Usage: texture_cubemap
               Paths: [assets\skybox\warm_bar_4k.exr]
+              Enable: false
       Visible: true
       EdgeEnable: false
-  - Entity: 6c6e81cb-561b-41e1-8f1b-fb76165b94e7
+  - Entity: 7b673095-7091-41e3-890f-0c6754e15ebd
     TagComponent:
-      Tag: 平行光
-    DirectionalLightComponent:
-      Color: [1, 1, 1, 1]
-      Direction: [0, -1, 0]
-      Ambient: 0.100000001
-      Diffuse: 0.800000012
-      Specular: 0.5
-  - Entity: b19374df-de79-4df5-b37a-a4e60eac881f
-    TagComponent:
-      Tag: 平面
+      Tag: 手枪
     TransformComponent:
-      Position: [-1.64016831, -81.001091, 0.0507572331]
-      Rotation: [0, -0, 0]
-      Scale: [860.333557, 860.333557, 860.333557]
-    ModelComponent:
-      IsImported: false
-      DefaultShaderPath: assets/shaders/Standard.glsl
-      Meshes:
-        - PrimitiveType: Plane
-          ShaderPath: assets/shaders/Standard.glsl
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: false
-  - Entity: 9f3627f2-6073-4653-b732-d70102b891fa
-    TagComponent:
-      Tag: New Model
-    TransformComponent:
-      Position: [-0.484348297, 0, 0]
+      Position: [0, 0, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     ModelComponent:
       IsImported: true
       DefaultShaderPath: assets/shaders/Standard.glsl
+      EnableTextures: true
+      FilePath: assets/models/Cerberus_by_Andrew_Maximov/Cerberus_LP.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets\shaders\Standard_PBR.glsl
+          EnableTextures: true
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_M.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_R.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_N.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_ao
+              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Raw\Cerberus_AO.tga]
+              Enable: true
+      Visible: true
+      EdgeEnable: true
+  - Entity: 0ceb8567-6a1a-42e1-99e6-9f95f113afd4
+    TagComponent:
+      Tag: 平行光
+    DirectionalLightComponent:
+      Color: [1, 1, 1, 1]
+      Direction: [0, -1, 0]
+      Intensity: 1
+  - Entity: 3e4bf79f-f778-4b86-9084-7657bdfc408d
+    TagComponent:
+      Tag: 点光源1
+    TransformComponent:
+      Position: [0, 41.6113625, -45.0125046]
+      Rotation: [0, -0, 0]
+      Scale: [7.40160084, 7.40160084, 7.40160084]
+    PointLightComponent:
+      Color: [1, 1, 1, 1]
+      Intensity: 1
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Sphere
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: de43d366-068c-4216-bed3-62d332bcdcc2
+    TagComponent:
+      Tag: 蜘蛛
+    TransformComponent:
+      Position: [1.93025839, 0, -155.963837]
+      Rotation: [0, -0, 0]
+      Scale: [0.290000021, 0.290000021, 0.290000021]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      EnableTextures: true
       FilePath: assets/models/spider-fbx/Spider_3.fbx
       Meshes:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: true
           Textures:
             - DimType: Texture2D
               Usage: texture_normal
               Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: true
           Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
             - DimType: Texture2D
               Usage: texture_diffuse
               Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
             - DimType: Texture2D
               Usage: texture_specular
               Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: true
           Textures:
             - DimType: Texture2D
               Usage: texture_normal
               Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: true
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
               Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
       Visible: true
-      EdgeEnable: true
+      EdgeEnable: false

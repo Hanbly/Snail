@@ -248,9 +248,7 @@ namespace Snail {
 			out << YAML::Key << "Direction" << YAML::Value << dlc.direction;
 
 			// 光照强度分量
-			out << YAML::Key << "Ambient" << YAML::Value << dlc.ambient;
-			out << YAML::Key << "Diffuse" << YAML::Value << dlc.diffuse;
-			out << YAML::Key << "Specular" << YAML::Value << dlc.specular;
+			out << YAML::Key << "Intensity" << YAML::Value << dlc.intensity;
 
 			out << YAML::EndMap;
 		}
@@ -265,14 +263,12 @@ namespace Snail {
 			out << YAML::Key << "Color" << YAML::Value << plc.color;
 
 			// 衰减系数
-			out << YAML::Key << "Constant" << YAML::Value << plc.constant;
-			out << YAML::Key << "Linear" << YAML::Value << plc.linear;
-			out << YAML::Key << "Quadratic" << YAML::Value << plc.quadratic;
+			//out << YAML::Key << "Constant" << YAML::Value << plc.constant;
+			//out << YAML::Key << "Linear" << YAML::Value << plc.linear;
+			//out << YAML::Key << "Quadratic" << YAML::Value << plc.quadratic;
 
 			// 光照强度分量
-			out << YAML::Key << "Ambient" << YAML::Value << plc.ambient;
-			out << YAML::Key << "Diffuse" << YAML::Value << plc.diffuse;
-			out << YAML::Key << "Specular" << YAML::Value << plc.specular;
+			out << YAML::Key << "Intensity" << YAML::Value << plc.intensity;
 
 			out << YAML::EndMap;
 		}
@@ -291,6 +287,7 @@ namespace Snail {
 				out << YAML::Key << "IsImported" << YAML::Value << isImported;
 				// 保存模型的默认 Shader
 				out << YAML::Key << "DefaultShaderPath" << YAML::Value << modelComponent.model->GetDefaultShaderPath();
+				out << YAML::Key << "EnableTextures" << YAML::Value << modelComponent.model->GetEnableTextures();
 
 				if (isImported) {
 					// --- 外部导入模型 (FBX/OBJ) ---
@@ -309,6 +306,9 @@ namespace Snail {
 					// 保存 Mesh 独立的 Shader 路径
 					out << YAML::Key << "ShaderPath" << YAML::Value << mesh->GetMaterial()->GetShader()->GetFilePath();
 
+					// 全部纹理的控制
+					out << YAML::Key << "EnableTextures" << YAML::Value << mesh->GetEnableTextures();
+
 					// 保存纹理 (支持保存导入模型后被修改的纹理)
 					out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq;
 					auto textures = mesh->GetTextures();
@@ -317,6 +317,7 @@ namespace Snail {
 						out << YAML::Key << "DimType" << YAML::Value << TextureTypeToString(texture->GetType());
 						out << YAML::Key << "Usage" << YAML::Value << TextureUsageToString(texture->GetUsage());
 						out << YAML::Key << "Paths" << YAML::Value << texture->GetPath();
+						out << YAML::Key << "Enable" << YAML::Value << texture->GetEnable();
 						out << YAML::EndMap;
 					}
 					out << YAML::EndSeq; // 结束 Textures
@@ -467,9 +468,7 @@ namespace Snail {
 					dlc.color = dirLightComponent["Color"].as<glm::vec4>();
 
 					// 光照强度
-					if (dirLightComponent["Ambient"]) dlc.ambient = dirLightComponent["Ambient"].as<float>();
-					if (dirLightComponent["Diffuse"]) dlc.diffuse = dirLightComponent["Diffuse"].as<float>();
-					if (dirLightComponent["Specular"]) dlc.specular = dirLightComponent["Specular"].as<float>();
+					if (dirLightComponent["Intensity"]) dlc.intensity = dirLightComponent["Intensity"].as<float>();
 				}
 
 				// --- 反序列化 PointLightComponent ---
@@ -481,14 +480,12 @@ namespace Snail {
 					plc.color = pointLightComponent["Color"].as<glm::vec4>();
 
 					// 衰减系数
-					if (pointLightComponent["Constant"]) plc.constant = pointLightComponent["Constant"].as<float>();
-					if (pointLightComponent["Linear"]) plc.linear = pointLightComponent["Linear"].as<float>();
-					if (pointLightComponent["Quadratic"]) plc.quadratic = pointLightComponent["Quadratic"].as<float>();
+					//if (pointLightComponent["Constant"]) plc.constant = pointLightComponent["Constant"].as<float>();
+					//if (pointLightComponent["Linear"]) plc.linear = pointLightComponent["Linear"].as<float>();
+					//if (pointLightComponent["Quadratic"]) plc.quadratic = pointLightComponent["Quadratic"].as<float>();
 
 					// 光照强度
-					if (pointLightComponent["Ambient"]) plc.ambient = pointLightComponent["Ambient"].as<float>();
-					if (pointLightComponent["Diffuse"]) plc.diffuse = pointLightComponent["Diffuse"].as<float>();
-					if (pointLightComponent["Specular"]) plc.specular = pointLightComponent["Specular"].as<float>();
+					if (pointLightComponent["Intensity"]) plc.intensity = pointLightComponent["Intensity"].as<float>();
 
 					// 注意：旧代码中的 Intensity 字段已被移除，不需要再读取
 				}
@@ -502,6 +499,7 @@ namespace Snail {
 					bool edgeEnable = modelComponent["EdgeEnable"].as<bool>();
 					bool isImported = modelComponent["IsImported"].as<bool>();
 					std::string defaultShaderPath = modelComponent["DefaultShaderPath"].as<std::string>();
+					bool enableTextures = modelComponent["EnableTextures"] ? modelComponent["EnableTextures"].as<bool>() : false;
 
 					// 加载默认 Shader
 					Refptr<Shader> defaultShader = ShaderLibrary::Load(defaultShaderPath, {});
@@ -531,6 +529,7 @@ namespace Snail {
 							auto firstMeshNode = meshesNode[0];
 							std::string primStr = firstMeshNode["PrimitiveType"].as<std::string>();
 							PrimitiveType primType = StringToPrimitiveType(primStr);
+							bool enableTextures = firstMeshNode["EnableTextures"] ? firstMeshNode["EnableTextures"].as<bool>() : false;
 
 							// CacheKey包含图元类型、Shader路径以及所有纹理路径
 							cacheKey = "Primitive:" + primStr + "|" + defaultShaderPath;
@@ -542,9 +541,11 @@ namespace Snail {
 								for (auto texNode : texturesNode) {
 									std::string usage = texNode["Usage"].as<std::string>();
 									auto paths = texNode["Paths"].as<std::vector<std::string>>();
+									bool enable = texNode["Enable"] ? texNode["Enable"].as<bool>() : false;
 
 									// 尝试加载纹理
 									if (auto texture = TextureLibrary::Load(paths, StringToTextureUsage(usage))) {
+										texture->SetEnable(enable);
 										initialTextures.push_back(texture);
 									}
 
@@ -563,7 +564,7 @@ namespace Snail {
 						}
 					}
 
-					// ==================== 覆盖 Shader 和 纹理 ====================
+					// ==================== 覆盖 Shader 和 纹理 和 纹理控制enable ====================
 					if (model) {
 						auto meshesNode = modelComponent["Meshes"];
 						auto& modelMeshes = model->GetMeshes();
@@ -585,6 +586,7 @@ namespace Snail {
 								// 覆盖 外部模型的 纹理
 								if (isImported) {
 									auto texturesNode = meshNode["Textures"];
+									bool enableTextures = meshNode["EnableTextures"] ? meshNode["EnableTextures"].as<bool>() : false;
 									// 获取当前 Mesh 的纹理列表
 									auto currentTextures = targetMesh->GetTextures();
 
@@ -599,13 +601,16 @@ namespace Snail {
 											std::string usageStr = texNode["Usage"].as<std::string>();
 											TextureUsage usage = StringToTextureUsage(usageStr);
 											auto paths = texNode["Paths"].as<std::vector<std::string>>();
+											bool enable = texNode["Enable"] ? texNode["Enable"].as<bool>() : false;
 
 											// 加载并添加
 											if (auto texture = TextureLibrary::Load(paths, usage)) {
+												texture->SetEnable(enable);
 												targetMesh->AddTexture(texture, usage);
 											}
 										}
 									}
+									targetMesh->SetEnableTextures(enableTextures);
 								}
 							}
 						}
@@ -613,6 +618,7 @@ namespace Snail {
 						auto& mc = deserializedEntity.AddComponent<ModelComponent>(model);
 						mc.visible = visible;
 						mc.edgeEnable = edgeEnable;
+						mc.model->SetEnableTextures(enableTextures);
 					}
 				}
 			}

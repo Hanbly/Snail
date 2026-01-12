@@ -70,17 +70,15 @@ namespace Snail {
 		glm::vec3 direction = glm::vec3(1.0f);
 
 		// 强度系数
-		float ambient = 0.1f;
-		float diffuse = 0.8f;
-		float specular = 0.5f;
+		float intensity = 1.0f;
 
 		DirectionalLightComponent() = default;
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
-		DirectionalLightComponent(const glm::vec4& color, const glm::vec3& dir, const float& ambient, const float& diffuse, const float& specular)
+		DirectionalLightComponent(const glm::vec4& color, const glm::vec3& dir, const float& intensity)
 			: 
 			color(color), 
 			direction(dir),
-			ambient(ambient), diffuse(diffuse), specular(specular) 
+			intensity(intensity)
 		{}
 	};
 
@@ -89,22 +87,20 @@ namespace Snail {
 		glm::vec4 color = glm::vec4(1.0f);
 
 		// --- 衰减系数 ---
-		float constant = 1.0f;
-		float linear = 0.0014f;
-		float quadratic = 0.000007f;
+		//float constant = 1.0f;
+		//float linear = 0.0014f;
+		//float quadratic = 0.000007f;
 
-		float ambient = 0.1f;
-		float diffuse = 0.8f;
-		float specular = 0.5f;
+		float intensity = 1.0f;
 
 		PointLightComponent() = default;
 		PointLightComponent(const PointLightComponent&) = default;
-		PointLightComponent(const glm::vec4& color, const float& constant, const float& linear, const float& quadratic, const float& ambient, const float& diffuse, const float& specular)
-			: 
-			color(color), 
-			constant(constant), linear(linear), quadratic(quadratic), 
-			ambient(ambient), diffuse(diffuse), specular(specular) 
-		{}
+		PointLightComponent(const glm::vec4& color, const float& intensity)
+			:
+			color(color),
+			intensity(intensity)
+		{
+		}
 	};
 
     // 模型组件

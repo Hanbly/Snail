@@ -140,7 +140,7 @@ namespace Snail {
 						m_OnSceneFileOpenCallback(path.string());
 					}
 					// --- 模型文件 ---
-					else if (extension == ".obj" || extension == ".fbx")
+					else if (extension == ".obj" || extension == ".fbx" || extension == ".gltf" || extension == ".glb")
 					{
 						m_OnEntityFileOpenCallback(path.string());
 					}

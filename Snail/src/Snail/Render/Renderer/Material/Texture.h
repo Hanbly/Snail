@@ -13,7 +13,8 @@ namespace Snail {
 	enum class TextureUsage {
 		None = 0,
 		UI,
-		Diffuse, Specular, Normal, Cubemap
+		Diffuse, Specular, Cubemap, Normal,
+		Albedo, Metallic, Roughness, AO, Emissive
 	};
 
 	static std::string TextureTypeToString(const TextureType& type)
@@ -30,8 +31,13 @@ namespace Snail {
 		switch (type) {
 			case TextureUsage::Diffuse: return "texture_diffuse";
 			case TextureUsage::Specular: return "texture_specular";
-			case TextureUsage::Normal: return "texture_normal";
 			case TextureUsage::Cubemap: return "texture_cubemap";
+			case TextureUsage::Normal: return "texture_normal";
+
+			case TextureUsage::Albedo: return "texture_albedo";
+			case TextureUsage::Metallic: return "texture_metallic";
+			case TextureUsage::Roughness: return "texture_roughness";
+			case TextureUsage::AO: return "texture_ao";
 			default: return "None";
 		}
 	}
@@ -40,9 +46,13 @@ namespace Snail {
 	{
 		if (typestr == "texture_diffuse") return TextureUsage::Diffuse;
 		if (typestr == "texture_specular") return TextureUsage::Specular;
-		if (typestr == "texture_normal") return TextureUsage::Normal;
 		if (typestr == "texture_cubemap") return TextureUsage::Cubemap;
+		if (typestr == "texture_normal") return TextureUsage::Normal;
 
+		if (typestr == "texture_albedo") return TextureUsage::Albedo;
+		if (typestr == "texture_metallic") return TextureUsage::Metallic;
+		if (typestr == "texture_roughness") return TextureUsage::Roughness;
+		if (typestr == "texture_ao") return TextureUsage::AO;
 		return TextureUsage::None;
 	}
 
@@ -60,6 +70,9 @@ namespace Snail {
 		virtual const std::vector<std::string>& GetPath() const = 0;
 
 		virtual void SetPath(const std::vector<std::string>& path) = 0;
+
+		virtual bool& GetEnable() = 0;
+		virtual void SetEnable(bool enable) = 0;
 
 		virtual void Bind(const uint32_t& slot = 0) const = 0;
 		virtual void Unbind(const uint32_t& slot = 0) const = 0;

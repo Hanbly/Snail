@@ -371,9 +371,7 @@ namespace Snail {
 
 			shader->SetFloat3(baseName + ".direction", dl.direction);
 			shader->SetFloat3(baseName + ".color", dl.color);
-			shader->SetFloat(baseName + ".ambient", dl.ambient);
-			shader->SetFloat(baseName + ".diffuse", dl.diffuse);
-			shader->SetFloat(baseName + ".specular", dl.specular);
+			shader->SetFloat(baseName + ".intensity", dl.intensity);
 
 			dirLightIndex++;
 		}
@@ -389,12 +387,10 @@ namespace Snail {
 
 			shader->SetFloat3(baseName + ".position", pl.position);
 			shader->SetFloat3(baseName + ".color", pl.color);
-			shader->SetFloat(baseName + ".constant", pl.constant);
-			shader->SetFloat(baseName + ".linear", pl.linear);
-			shader->SetFloat(baseName + ".quadratic", pl.quadratic);
-			shader->SetFloat(baseName + ".ambient", pl.ambient);
-			shader->SetFloat(baseName + ".diffuse", pl.diffuse);
-			shader->SetFloat(baseName + ".specular", pl.specular);
+			//shader->SetFloat(baseName + ".constant", pl.constant);
+			//shader->SetFloat(baseName + ".linear", pl.linear);
+			//shader->SetFloat(baseName + ".quadratic", pl.quadratic);
+			shader->SetFloat(baseName + ".intensity", pl.intensity);
 
 			pointLightIndex++;
 		}

@@ -91,7 +91,7 @@ namespace Snail {
 			});
 
 		// 替换 Mesh 的 Shader
-		SetShaderFileOpenCallback([this](const std::string& path) {
+		SetMeshShaderFileOpenCallback([this](const std::string& path) {
 			auto entity = m_Context->displayEntity;
 			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
 
@@ -103,6 +103,25 @@ namespace Snail {
 				// 调用 Mesh 的接口替换 Shader
 				meshes[mIdx]->EditShader(path);
 			}
+			});
+
+		// 替换 Model 的 Shader
+		SetModelShaderFileOpenCallback([this](const std::string& path) {
+			auto entity = m_Context->displayEntity;
+			if (!entity || !entity.HasAllofComponent<ModelComponent>()) return;
+
+			auto& modelComp = entity.GetComponent<ModelComponent>();
+			auto& meshes = modelComp.model->GetMeshes();
+
+			if (meshes.size())
+				for (auto& mesh : meshes) mesh->EditShader(path);
+
+			modelComp.model->SetDefaultShaderPath(path);
+			// ----------------- 调试代码 -----------------
+			SNL_CORE_WARN("Modify Model Addr: {0}, DefaultShaderPath: {1}",
+				(void*)modelComp.model.get(),
+				modelComp.model->GetDefaultShaderPath());
+			// -------------------------------------------
 			});
 	}
 
@@ -258,12 +277,8 @@ namespace Snail {
 				ImGui::TableSetColumnIndex(1);
 				DrawVec3Control("Direction", component.direction, glm::vec3(0.0f, -1.0f, 0.0f));
 
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Ambient");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Ambient", &component.ambient, 0.01f, 0.0f, 1.0f);
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Diffuse");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Diffuse", &component.diffuse, 0.01f, 0.0f, 1.0f);
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Specular");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Specular", &component.specular, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 0.01f, 0.0f, 2.0f);
 
 				ImGui::EndTable();
 			}
@@ -280,12 +295,8 @@ namespace Snail {
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Color");
 				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
 
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Ambient");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Ambient", &component.ambient, 0.01f, 0.0f, 1.0f);
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Diffuse");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Diffuse", &component.diffuse, 0.01f, 0.0f, 1.0f);
-				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Specular");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Specular", &component.specular, 0.01f, 0.0f, 1.0f);
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 1.0f, 0.0f, 1000.0f);
 
 				ImGui::EndTable();
 			}
@@ -299,7 +310,7 @@ namespace Snail {
 		DrawComponentWrapper<ModelComponent>("渲染网格", entity, [this](auto& component) {
 			// 基础设置 (可见性、轮廓、Shader路径)
 			if (ImGui::BeginTable("ModelSettings", 2, ImGuiTableFlags_BordersInnerV)) {
-				ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
+				ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 150.0f);
 				ImGui::TableSetupColumn("Value");
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Visible");
@@ -310,8 +321,43 @@ namespace Snail {
 					ImGui::TableSetColumnIndex(1); ImGui::Checkbox("##Outline", &component.edgeEnable);
 				}
 
-				//ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::TextDisabled("Shader");
-				//ImGui::TableSetColumnIndex(1); ImGui::TextDisabled("%s", component.model->GetShaderPath().c_str());
+				// 显示文件名
+				std::filesystem::path p(component.model->GetDefaultShaderPath());
+				std::string filename = p.filename().string();
+				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::TextDisabled("Model Shader");
+				ImGui::TableSetColumnIndex(1); ImGui::TextDisabled("%s", filename.c_str());
+				// ---------------- 总shader路径作为拖拽目标 -------------------
+				DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
+					std::string extension = path.extension().string();
+					if (extension == ".glsl")
+					{
+						// 编辑（替换）Model着色器的callback
+						m_OnModelShaderFileOpenCallback(path.string());
+					}
+					});
+
+				ImGui::SameLine();
+
+				// 替换按钮
+				if (ImGui::Button("...", { 24.0f, 24.0f })) {
+					// 打开文件选择器，过滤 .glsl 文件
+					FileSelecter::Open("EditModelShader", "选择 Shader 文件", "(.glsl){.glsl},.glsl");
+				}
+				if (ImGui::IsItemHovered()) ImGui::SetTooltip("替换此 Model 的 Shader");
+
+				// --- 纹理控制 ---
+				bool enableTexture = component.model->GetEnableTextures();
+				if (ImGui::Checkbox(u8"启用 Model 全部纹理", &enableTexture)) {
+					component.model->SetEnableTextures(enableTexture);
+					for (auto& mesh : component.model->GetMeshes())
+					{
+						mesh->SetEnableTextures(enableTexture);
+						for (auto& texture : mesh->GetTextures())
+							texture->SetEnable(enableTexture);
+						mesh->RemapMaterialTextures();
+					}						
+				}
+
 				ImGui::EndTable();
 			}
 
@@ -357,7 +403,7 @@ namespace Snail {
 
 			ImGui::PushID(("MeshShader_" + std::to_string(meshIndex)).c_str());
 
-			ImGui::TextDisabled("Shader"); // 标题
+			ImGui::TextDisabled("Mesh Shader"); // 标题
 
 			// 计算布局：保留右侧 28像素 给按钮
 			float availWidth = ImGui::GetContentRegionAvail().x;
@@ -375,8 +421,8 @@ namespace Snail {
 				if (extension == ".glsl")
 				{
 					m_Context->currentEditingMeshIndex = meshIndex;
-					// 编辑（替换）着色器的callback
-					m_OnShaderFileOpenCallback(path.string());
+					// 编辑（替换）Mesh着色器的callback
+					m_OnMeshShaderFileOpenCallback(path.string());
 				}
 				});
 
@@ -389,6 +435,15 @@ namespace Snail {
 				FileSelecter::Open("EditMeshShader", "选择 Shader 文件", "(.glsl){.glsl},.glsl");
 			}
 			if (ImGui::IsItemHovered()) ImGui::SetTooltip("替换此 Mesh 的 Shader");
+
+			// --- 纹理控制 ---
+			bool enableTexture = mesh->GetEnableTextures();
+			if (ImGui::Checkbox(u8"启用 Mesh 全部纹理", &enableTexture)) {
+				mesh->SetEnableTextures(enableTexture);
+				for (auto& texture : mesh->GetTextures())
+					texture->SetEnable(enableTexture);
+				mesh->RemapMaterialTextures();
+			}
 
 			ImGui::PopID();
 			ImGui::Spacing(); // 增加一点间距
@@ -406,7 +461,7 @@ namespace Snail {
 			// ---------------- 添加纹理的 按钮 作为拖拽目标 -------------------
 			DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 				std::string extension = path.extension().string();
-				if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr")
+				if (extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".tga" || extension == ".hdr" || extension == ".exr")
 				{
 					m_Context->currentEditingMeshIndex = meshIndex;
 					m_Context->pendingTextureUsage = TextureUsage::Diffuse; // TODO: 暂时设置成默认diffuse
@@ -444,16 +499,22 @@ namespace Snail {
 							}
 						}
 						else {
-							FileSelecter::Open("LoadNewTexture", "导入新纹理", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
+							//FileSelecter::Open("LoadNewTexture", "导入新纹理", "(.png,.jpg,.bmp,.tga,.hdr,.exr){.png,.jpg,.bmp,.tga,.hdr,.exr},.png,.jpg,.bmp,.tga,.hdr,.exr");
+							m_OnCreateTextureCallback("assets/images/default.png");
 						}
 						ImGui::CloseCurrentPopup();
 					}
 					};
 
-				AddTextureMenuItem("Diffuse / Albedo", TextureUsage::Diffuse);
-				AddTextureMenuItem("Specular / Metallic", TextureUsage::Specular);
-				AddTextureMenuItem("Normal", TextureUsage::Normal);
+				AddTextureMenuItem("Diffuse", TextureUsage::Diffuse);
+				AddTextureMenuItem("Specular", TextureUsage::Specular);
 				AddTextureMenuItem("Cube Map", TextureUsage::Cubemap);
+
+				AddTextureMenuItem("Normal", TextureUsage::Normal);
+				AddTextureMenuItem("Albedo", TextureUsage::Albedo);
+				AddTextureMenuItem("Metallic", TextureUsage::Metallic);
+				AddTextureMenuItem("Roughness", TextureUsage::Roughness);
+				AddTextureMenuItem("AO", TextureUsage::AO);
 				ImGui::EndPopup();
 			}
 			ImGui::TreePop();
@@ -485,14 +546,14 @@ namespace Snail {
 					if (ImGui::ImageButton("##texBtn", (void*)(intptr_t)textureId, { 56.0f, 56.0f }, { 0, 1 }, { 1, 0 })) {
 						m_Context->currentEditingMeshIndex = meshIndex;
 						m_Context->currentEditingTexIndex = t;
-						FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
+						FileSelecter::Open("EditTexture2D", "选择纹理", "(.png,.jpg,.bmp,.tga,.hdr,.exr){.png,.jpg,.bmp,.tga,.hdr,.exr},.png,.jpg,.bmp,.tga,.hdr,.exr");
 					}
 					if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换纹理");
 
 					// --- 普通2D纹理 预览图 作为拖拽对象
 					DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 						std::string extension = path.extension().string();
-						if (extension == ".png" || extension == ".jpg" || extension == ".hdr" || extension == ".exr") {
+						if (extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".tga" || extension == ".hdr" || extension == ".exr") {
 							m_Context->currentEditingMeshIndex = meshIndex;
 							m_Context->currentEditingTexIndex = t;
 							m_OnEditTexture2DCallback(path.string());
@@ -579,7 +640,7 @@ namespace Snail {
 								m_Context->currentEditingMeshIndex = meshIndex;
 								m_Context->currentEditingTexIndex = t;
 								m_Context->currentEditingFaceIndex = (int)i;
-								FileSelecter::Open("EditCubemapFace", "替换贴图单面", "(.png,.jpg,.hdr,.exr){.png,.jpg,.hdr,.exr},.png,.jpg,.hdr,.exr");
+								FileSelecter::Open("EditCubemapFace", "替换贴图单面", "(.png,.jpg,.bmp,.tga,.hdr,.exr){.png,.jpg,.bmp,.tga,.hdr,.exr},.png,.jpg,.bmp,.tga,.hdr,.exr");
 							}
 							if (ImGui::IsItemHovered()) ImGui::SetTooltip("点击更换立方体贴图单面");
 
@@ -612,6 +673,13 @@ namespace Snail {
 				ImGui::PopStyleColor(2);
 				if (ImGui::IsItemHovered()) ImGui::SetTooltip("移除此纹理");
 
+				// --- 纹理控制 ---
+				bool& enableTexture = texture->GetEnable();
+				if (ImGui::Checkbox(u8"", &enableTexture)) {
+					texture->SetEnable(enableTexture);
+					mesh->RemapMaterialTextures();
+				}
+
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
@@ -639,9 +707,9 @@ namespace Snail {
 			});
 
 		// 3. 加载新纹理
-		FileSelecter::Handle("LoadNewTexture", [this](const std::string& path) {
-			m_OnCreateTextureCallback(path);
-			});
+		//FileSelecter::Handle("LoadNewTexture", [this](const std::string& path) {
+		//	m_OnCreateTextureCallback(path);
+		//	});
 
 		// 4. 替换整个 Cubemap
 		FileSelecter::Handle("EditTextureCube", [this](const std::string& path) {
@@ -655,7 +723,12 @@ namespace Snail {
 
 		// 6. 替换 Mesh 的 Shader
 		FileSelecter::Handle("EditMeshShader", [this](const std::string& path) {
-			m_OnShaderFileOpenCallback(path);
+			m_OnMeshShaderFileOpenCallback(path);
+			});
+
+		// 7. 替换 Mesh 的 Shader
+		FileSelecter::Handle("EditModelShader", [this](const std::string& path) {
+			m_OnModelShaderFileOpenCallback(path);
 			});
 	}
 
@@ -710,7 +783,7 @@ namespace Snail {
 								
 				if (ImGui::MenuItem("导入外部模型..."))
 				{
-					FileSelecter::Open("ModelImportKey", "导入模型", "(.obj,.fbx,.gltf){.obj,.fbx,.gltf},.obj,.fbx,.gltf");
+					FileSelecter::Open("ModelImportKey", "导入模型", "(.obj,.fbx,.gltf,.glb){.obj,.fbx,.gltf,.glb},.obj,.fbx,.gltf,.glb");
 				}
 				ImGui::EndMenu();
 			}
@@ -723,17 +796,13 @@ namespace Snail {
 				{
 					static glm::vec4 s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 					static glm::vec3 s_InitDir = { 0.0f, -1.0f, 0.0f }; // 竖直向下
-					static float s_InitAmbient = 0.1f;
-					static float s_InitDiffuse = 0.8f;
-					static float s_InitSpecular = 0.5f;
+					static float s_InitIntensity = 1.0f;
 					ImGui::TextDisabled("初始参数设置");
 
 					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
 					DrawVec3Control("方向", s_InitDir, glm::vec3(0.0f, -1.0f, 0.0f));
 					ImGui::TextDisabled("光强参数");
-					ImGui::DragFloat("环境光强度", &s_InitAmbient, 0.01f, 0.0f, 1.0f);
-					ImGui::DragFloat("漫反射光强度", &s_InitDiffuse, 0.01f, 0.0f, 1.0f);
-					ImGui::DragFloat("镜面光强度", &s_InitSpecular, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("光强", &s_InitIntensity, 0.01f, 0.0f, 2.0f);
 
 					ImGui::Separator();
 
@@ -753,9 +822,7 @@ namespace Snail {
 							dlc.color = s_InitColor;
 							dlc.direction = s_InitDir;
 
-							dlc.ambient = s_InitAmbient;
-							dlc.diffuse = s_InitDiffuse;
-							dlc.specular = s_InitSpecular;
+							dlc.intensity = s_InitIntensity;
 
 							s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 							s_InitDir = { 0.0f, -1.0f, 0.0f };
@@ -773,16 +840,12 @@ namespace Snail {
 				if (ImGui::BeginMenu("点光源组件"))
 				{
 					static glm::vec4 s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-					static float s_InitAmbient = 0.1f;
-					static float s_InitDiffuse = 0.8f;
-					static float s_InitSpecular = 0.5f;
+					static float s_InitIntensity = 1.0f;
 					ImGui::TextDisabled("初始参数设置");
 					// 颜色选择面板
 					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
 					ImGui::TextDisabled("光强参数");
-					ImGui::DragFloat("环境光强度", &s_InitAmbient, 0.01f, 0.0f, 1.0f);
-					ImGui::DragFloat("漫反射光强度", &s_InitDiffuse, 0.01f, 0.0f, 1.0f);
-					ImGui::DragFloat("镜面光强度", &s_InitSpecular, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("光强", &s_InitIntensity, 1.0f, 0.0f, 1000.0f);
 
 					ImGui::Separator();
 
@@ -793,10 +856,8 @@ namespace Snail {
 						{
 							auto& plc = m_Context->displayEntity.AddComponent<PointLightComponent>();
 							plc.color = s_InitColor;
-							
-							plc.ambient = s_InitAmbient;
-							plc.diffuse = s_InitDiffuse;
-							plc.specular = s_InitSpecular;
+
+							plc.intensity = s_InitIntensity;
 
 							s_InitColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 							static float s_InitAmbient = 0.1f;

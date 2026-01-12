@@ -1,5 +1,6 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
 
 #include "Model.h"
@@ -11,7 +12,7 @@ namespace Snail {
 	{
 		if (mesh->GetVAO() && mesh->GetMaterial()) {
 
-			m_DefaultShader = mesh->GetMaterial()->GetShader();
+			m_DefaultShaderPath = mesh->GetMaterial()->GetShader()->GetFilePath();
 
 			m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
 			m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
@@ -22,7 +23,7 @@ namespace Snail {
 	}
 
 	Model::Model(const PrimitiveType& type, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
-		: m_DefaultShader(shader), m_IsImported(false), m_PrimitiveType(type)
+		: m_DefaultShaderPath(shader->GetFilePath()), m_IsImported(false), m_PrimitiveType(type)
 	{
 		auto [vertices, indices] = GetPrimitiveDatas(type);
 
@@ -36,7 +37,7 @@ namespace Snail {
 	}
 
 	Model::Model(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
-		: m_DefaultShader(shader), m_IsImported(false), m_PrimitiveType(type)
+		: m_DefaultShaderPath(shader->GetFilePath()), m_IsImported(false), m_PrimitiveType(type)
 	{
 		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
 
@@ -48,7 +49,7 @@ namespace Snail {
 	}
 
 	Model::Model(const Refptr<Shader>& shader, const std::string& objPath)
-		: m_DefaultShader(shader), m_IsImported(true)
+		: m_DefaultShaderPath(shader->GetFilePath()), m_IsImported(true)
 	{
 		Load(objPath);
 	}
@@ -69,7 +70,7 @@ namespace Snail {
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(
 			path,
-			aiProcess_Triangulate | aiProcess_GenNormals);
+			aiProcess_Triangulate | aiProcess_GenSmoothNormals);
 			//aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
 			////	  分割成三角形      |      反转y轴		  |   自动生成顶点的法向量	 
 
@@ -171,13 +172,37 @@ namespace Snail {
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 			std::vector<Refptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Diffuse);
-			if (diffuseMaps.empty()) {
-				diffuseMaps = LoadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureUsage::Normal);
-			}
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 			std::vector<Refptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureUsage::Specular);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+			std::vector<Refptr<Texture>> albedoMaps = LoadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureUsage::Albedo);
+			if (albedoMaps.empty()) {
+				albedoMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Albedo);
+			}
+			textures.insert(textures.end(), albedoMaps.begin(), albedoMaps.end());
+
+			std::vector<Refptr<Texture>> metallicMaps = LoadMaterialTextures(material, aiTextureType_METALNESS, TextureUsage::Metallic);
+			textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
+
+			std::vector<Refptr<Texture>> roughnessMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, TextureUsage::Roughness);
+			if (roughnessMaps.empty()) {
+				// 某些旧格式可能会用 Shininess 来模拟
+				 roughnessMaps = LoadMaterialTextures(material, aiTextureType_SHININESS, TextureUsage::Roughness); 
+			}
+			textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
+
+			// 很多 glTF 模型会将 AO 放在 aiTextureType_LIGHTMAP 中，或者 aiTextureType_AMBIENT_OCCLUSION
+			std::vector<Refptr<Texture>> aoMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, TextureUsage::AO);
+			if (aoMaps.empty()) {
+				aoMaps = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, TextureUsage::AO);
+			}
+			textures.insert(textures.end(), aoMaps.begin(), aoMaps.end());
+
+			// 用于处理发光的材质（如霓虹灯、屏幕等）
+			std::vector<Refptr<Texture>> emissiveMaps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, TextureUsage::Emissive);
+			textures.insert(textures.end(), emissiveMaps.begin(), emissiveMaps.end());
 
 			std::vector<Refptr<Texture>> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, TextureUsage::Normal);
 			if (normalMaps.empty()) {
@@ -191,7 +216,8 @@ namespace Snail {
 			//textures.insert(textures.end(), cubeMaps.begin(), cubeMaps.end());
 		}
 
-		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(PrimitiveType::None, vertices, indices, m_DefaultShader, textures, localTransformation);
+		auto defaultShader = ShaderLibrary::Load(m_DefaultShaderPath, {});
+		Refptr<Mesh> resultMesh = std::make_shared<Mesh>(PrimitiveType::None, vertices, indices, defaultShader, textures, localTransformation);
 
 		// 处理材质（颜色）
 		if (mesh->mMaterialIndex >= 0)

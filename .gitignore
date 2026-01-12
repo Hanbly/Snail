@@ -31,3 +31,6 @@ CMakeSettings.json
 
 # skybox
 **/skybox/**/*
+
+# PBR textures
+**/PBRMaps/**/*

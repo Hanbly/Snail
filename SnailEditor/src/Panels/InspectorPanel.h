@@ -21,13 +21,15 @@ namespace Snail {
 		using OnEditTextureCubeCallback = std::function<void(const std::string&)>;
 		using OnEditTextureCubeCallback_Entirely = std::function<void(const std::string&)>;
 		using OnCreateTextureCallback = std::function<void(const std::string&)>;
-		using OnShaderFileOpenCallback = std::function<void(const std::string&)>;
+		using OnMeshShaderFileOpenCallback = std::function<void(const std::string&)>;
+		using OnModelShaderFileOpenCallback = std::function<void(const std::string&)>;
 		// 设置回调的函数
 		void SetEditTexture2DCallback(const OnEditTexture2DCallback& callback) { m_OnEditTexture2DCallback = callback; }
 		void SetEditTextureCubeCallback(const OnEditTextureCubeCallback& callback) { m_OnEditTextureCubeCallback = callback; }
 		void SetEditTextureCubeCallback_Entirely(const OnEditTextureCubeCallback_Entirely& callback) { m_OnEditTextureCubeCallback_Entirely = callback; }
 		void SetCreateTextureCallback(const OnCreateTextureCallback& callback) { m_OnCreateTextureCallback = callback; }
-		void SetShaderFileOpenCallback(const OnShaderFileOpenCallback& callback) { m_OnShaderFileOpenCallback = callback; }
+		void SetMeshShaderFileOpenCallback(const OnMeshShaderFileOpenCallback& callback) { m_OnMeshShaderFileOpenCallback = callback; }
+		void SetModelShaderFileOpenCallback(const OnModelShaderFileOpenCallback& callback) { m_OnModelShaderFileOpenCallback = callback; }
 	private:
 		// -------------------- 主流程 --------------------
 		void DrawAllComponents(Entity entity);
@@ -61,7 +63,8 @@ namespace Snail {
 		OnEditTextureCubeCallback m_OnEditTextureCubeCallback;
 		OnEditTextureCubeCallback_Entirely m_OnEditTextureCubeCallback_Entirely;
 		OnCreateTextureCallback m_OnCreateTextureCallback;
-		OnShaderFileOpenCallback m_OnShaderFileOpenCallback;
+		OnMeshShaderFileOpenCallback m_OnMeshShaderFileOpenCallback;
+		OnModelShaderFileOpenCallback m_OnModelShaderFileOpenCallback;
 	};
 
 }

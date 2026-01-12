@@ -33,7 +33,7 @@ namespace Snail {
 		DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 			std::string extension = path.extension().string();
 
-			if (extension == ".obj" || extension == ".fbx")
+			if (extension == ".obj" || extension == ".fbx" || extension == ".gltf" || extension == ".glb")
 			{
 				m_OnEntityFileOpenCallback(path.string());
 			}

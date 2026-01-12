@@ -20,14 +20,12 @@ namespace Snail {
 		glm::vec3 direction;
 		glm::vec4 color;
 
-		float ambient;
-		float diffuse;
-		float specular;
-		DirectionLight(const glm::vec3& dir, const glm::vec4& color, const float& ambient, const float& diffuse, const float& specular)
+		float intensity;
+		DirectionLight(const glm::vec3& dir, const glm::vec4& color, const float& intensity)
 			:
 			direction(dir),
 			color(color),
-			ambient(ambient), diffuse(diffuse), specular(specular)
+			intensity(intensity)
 		{}
 	};
 
@@ -35,20 +33,16 @@ namespace Snail {
 	struct PointLight {
 		glm::vec3 position;
 		glm::vec4 color;
+		float intensity;
 
-		float constant;
-		float linear;
-		float quadratic;
-
-		float ambient;
-		float diffuse;
-		float specular;
-		PointLight(const glm::vec3& pos, const glm::vec4& color, const float& constant, const float& linear, const float& quadratic, const float& ambient, const float& diffuse, const float& specular)
+		//float constant;
+		//float linear;
+		//float quadratic;
+		PointLight(const glm::vec3& pos, const glm::vec4& color, const float& intensity)
 			:
 			position(pos),
 			color(color),
-			constant(constant), linear(linear), quadratic(quadratic),
-			ambient(ambient), diffuse(diffuse), specular(specular)
+			intensity(intensity)
 		{}
 	};
 

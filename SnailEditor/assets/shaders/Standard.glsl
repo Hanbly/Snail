@@ -72,9 +72,11 @@ in vec4 v_FragPosLightSpace;
 
 uniform sampler2D u_Diffuse1;
 uniform sampler2D u_Specular1;
-uniform sampler2D u_Normal1;
+uniform sampler2D u_NormalMap;
 uniform bool u_UseTexture;
-uniform bool u_UseTextureNormal;
+uniform bool u_UseDiffuseMap;
+uniform bool u_UseSpecularMap;
+uniform bool u_UseNormalMap;
 uniform sampler2D u_ShadowMap; 
 
 uniform vec3 u_ColorDiffuse;
@@ -87,20 +89,13 @@ uniform vec3 u_ViewPosition;
 struct DirLight {
     vec3 direction;
     vec3 color;
-    float ambient;
-    float diffuse;
-    float specular;
+    float intensity;  // 光的强度
 };
 
 struct PointLight {
     vec3 position;
     vec3 color;
-    float constant;
-    float linear;
-    float quadratic;
-    float ambient;
-    float diffuse;
-    float specular;
+    float intensity;  // 光的强度
 };
 
 uniform DirLight u_DirLights[MAX_DIR_LIGHTS];
@@ -112,7 +107,7 @@ uniform int u_PointLightCount;
 // TBN 计算
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(u_Normal1, v_TextureCoords).xyz * 2.0 - 1.0;
+    vec3 tangentNormal = texture(u_NormalMap, v_TextureCoords).xyz * 2.0 - 1.0;
 
     vec3 Q1  = dFdx(v_FragPos);
     vec3 Q2  = dFdy(v_FragPos);
@@ -135,9 +130,9 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
 void main()
 {
     // 1. 纹理/材质颜色采样
-    vec4 texColor = texture(u_Diffuse1, v_TextureCoords);
     vec3 diffMapColor;
-    if(u_UseTexture) {
+    if(u_UseTexture && u_UseDiffuseMap) {
+        vec4 texColor = texture(u_Diffuse1, v_TextureCoords);
         if(texColor.a < 0.1) discard;
         diffMapColor = texColor.rgb;
     } else {
@@ -146,13 +141,13 @@ void main()
 
     // 2. 高光遮罩采样
     float specMask = 1.0;
-    if (u_UseTexture) {
+    if (u_UseTexture && u_UseSpecularMap) {
         specMask = texture(u_Specular1, v_TextureCoords).r;
     }
     
     // --- 法线计算 ---
     vec3 norm;
-    if (u_UseTexture && u_UseTextureNormal) {
+    if (u_UseTexture && u_UseNormalMap) {
         norm = getNormalFromMap();
     } else {
         norm = normalize(v_Normal);
@@ -193,6 +188,7 @@ void main()
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, float specMask, float shadow)
 {
     vec3 lightDir = normalize(-light.direction);
+    vec3 lightColor = light.color * light.intensity;
     
     float diff = max(dot(normal, lightDir), 0.0);
     
@@ -201,9 +197,14 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, flo
     
     if(diff <= 0.0) spec = 0.0;
 
-    vec3 ambient  = light.ambient  * light.color * diffColor;
-    vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
-    vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
+    // 不再使用 light.ambient/diffuse/specular
+    // 传统模型里，漫反射和高光通常都反射光的颜色
+    vec3 ambient  = vec3(0.1) * lightColor * diffColor;
+    vec3 diffuse  = diff * lightColor * diffColor;
+    vec3 specular = spec * lightColor * u_ColorSpecular * specMask;
+    // vec3 ambient  = light.ambient  * light.color * diffColor;
+    // vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
+    // vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
     
     // 应用阴影：环境光不受影响，漫反射和高光受阴影遮蔽
     return (ambient + (1.0 - shadow) * (diffuse + specular));
@@ -212,6 +213,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 diffColor, flo
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 diffColor, float specMask)
 {
     vec3 lightDir = normalize(light.position - fragPos);
+    vec3 lightColor = light.color * light.intensity;
     
     float diff = max(dot(normal, lightDir), 0.0);
     
@@ -221,11 +223,11 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     if(diff <= 0.0) spec = 0.0;
 
     float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    float attenuation = 1.0 / (distance * distance);    
     
-    vec3 ambient  = light.ambient  * light.color * diffColor;
-    vec3 diffuse  = light.diffuse  * diff * light.color * diffColor;
-    vec3 specular = light.specular * spec * light.color * u_ColorSpecular * specMask;
+    vec3 ambient  = vec3(0.1) * lightColor * diffColor;
+    vec3 diffuse  = diff * lightColor * diffColor;
+    vec3 specular = spec * lightColor * u_ColorSpecular * specMask;
     
     ambient  *= attenuation;
     diffuse  *= attenuation;
@@ -243,8 +245,8 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
         return 0.0;
         
     // 保留一个较小的值，因为绘制阴影贴图时使用了正面剔除
-    // float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.0001);
-    float bias =0.0f;
+    float bias = max(0.005 * (1.0 - dot(normal, lightDir)), 0.0005);
+    // float bias =0.0f;
     
     float shadow = 0.0;
     
