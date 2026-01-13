@@ -13,6 +13,9 @@ namespace Snail {
 		glm::vec3 position;
 		glm::vec3 normal;
 		glm::vec2 texCoords;
+		// 法线贴图需要
+		glm::vec3 tangent;
+		glm::vec3 bitangent;
 	};
 
 	class VertexBuffer {

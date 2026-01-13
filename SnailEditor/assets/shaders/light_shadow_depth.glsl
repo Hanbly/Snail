@@ -4,7 +4,7 @@
 layout (location = 0) in vec3 a_Position; 
 
 #ifdef INSTANCING
-    layout(location = 3) in mat4 a_Model;
+    layout(location = 5) in mat4 a_Model;
 #else
     uniform mat4 u_Model;
 #endif

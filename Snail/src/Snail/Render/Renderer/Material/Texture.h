@@ -81,6 +81,7 @@ namespace Snail {
 	class Texture2D : public Texture {
 	public:
 		friend class TextureLibrary;
+		friend class RendererTools;
 		virtual ~Texture2D() = default;
 
 		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
@@ -94,9 +95,10 @@ namespace Snail {
 	class TextureCube : public Texture {
 	public:
 		friend class TextureLibrary;
+		friend class RendererTools;
 		virtual ~TextureCube() = default;
 	private:
-		static Refptr<TextureCube> Create(const int dim);
+		static Refptr<TextureCube> Create(const int dim, const bool mipmap = false);
 		static Refptr<TextureCube> Create(const std::vector<std::string>& path, const TextureUsage& usage);
 
 		virtual void LoadCubemapFromFaces(const std::vector<std::string>& path) = 0;

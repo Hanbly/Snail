@@ -21,6 +21,7 @@ namespace Snail {
 
 		// 设置实例缓冲 (用于存储 Model 矩阵等每个实例独有的数据)
 		virtual void SetInstanceBuffer(const Refptr<VertexBuffer>& vertexBuffer) = 0;
+		virtual void UnbindInstanceBuffer() = 0;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;

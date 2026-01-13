@@ -142,11 +142,36 @@ namespace Snail {
             }
         }
 
+		Refptr<Texture> irradianceMap = nullptr;
+		Refptr<Texture> prefilterMap = nullptr;
+        Refptr<Texture> brdfLUT = TextureLibrary::Load({ "assets/PBRMaps/IBL/BRDF_LUT.png" }, TextureUsage::None);
+		// 遍历寻找 Skybox 组件
+		auto tempSkyboxView = m_Registry.view<ModelComponent>();
+		for (auto [entity, model] : tempSkyboxView.each())
+		{
+			// 找到启用的 Skybox
+			if (model.visible && model.model && model.model->GetPrimitiveType() == PrimitiveType::Skybox)
+			{
+				// 获取 Skybox 的原始 Cubemap 纹理
+				if (!model.model->GetMeshes().empty()) {
+					auto& textures = model.model->GetMeshes()[0]->GetMaterial()->GetTextures();
+					if (!textures.empty()) {
+						auto& envMap = textures[0]; // 第一个纹理就是环境Cube
+
+						// 从 TextureLibrary 获取对应的 IBL 纹理
+						irradianceMap = TextureLibrary::GetIBLIrradianceofTexture(envMap);
+						prefilterMap = TextureLibrary::GetIBLPrefilterofTexture(envMap);
+					}
+				}
+				break; // 只支持一个 Skybox
+			}
+		}
+
 
         // ------------------------------------------------
         // 渲染流程
         // ------------------------------------------------
-        Renderer3D::BeginScene(camera.get(), cameraTransform, dirLights, poiLights, mainLightSpace, shadowRendererId);
+        Renderer3D::BeginScene(camera.get(), cameraTransform, dirLights, poiLights, mainLightSpace, shadowRendererId, irradianceMap, prefilterMap, brdfLUT);
 
 
         auto group = m_Registry.group<TransformComponent, ModelComponent>();

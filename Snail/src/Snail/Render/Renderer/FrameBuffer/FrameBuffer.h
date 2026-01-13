@@ -49,7 +49,7 @@ namespace Snail {
 		virtual void Delete() = 0;
 
 		// 接收立方体贴图的一个面，用作下一次的绘制对象
-		virtual void SetupTextureCubei(const int index, const uint32_t& rendererId) = 0;
+		virtual void SetupTextureCubei(const int index, const uint32_t& rendererId, const int mip = 0) = 0;
 
 		static Refptr<FrameBuffer> Create(const FrameBufferSpecification& spec);
 	};

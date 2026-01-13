@@ -5,8 +5,8 @@
 layout(location = 0) in vec3 position;
 #ifdef INSTANCING
     // 实例化模式：矩阵来自顶点属性 (VBO)
-    layout(location = 3) in mat4 a_Model; 
-    layout(location = 10) in int a_EntityID;
+    layout(location = 5) in mat4 a_Model; 
+    layout(location = 12) in int a_EntityID;
 #else
     // 普通模式：矩阵来自 Uniform
     uniform mat4 u_Model;

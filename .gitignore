@@ -33,4 +33,4 @@ CMakeSettings.json
 **/skybox/**/*
 
 # PBR textures
-**/PBRMaps/**/*
+**/PBRMaps/old_stone_wall_4k/*

@@ -18,11 +18,11 @@ namespace Snail {
 		return nullptr;
 	}
 
-	Refptr<TextureCube> TextureCube::Create(const int dim)
+	Refptr<TextureCube> TextureCube::Create(const int dim, const bool mipmap)
 	{
 		switch (RendererCommand::GetAPI()) {
 		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
-		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLTextureCube>(dim);
+		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLTextureCube>(dim, mipmap);
 		case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!"); return nullptr;
 		}
 

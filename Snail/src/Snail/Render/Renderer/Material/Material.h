@@ -41,6 +41,25 @@ namespace Snail {
 		// 清空纹理（用于添加新纹理）
 		void ClearTexture() { m_Textures.clear(); }
 
+		// --- 基础材质参数 ---
+		void SetAmbientColor(const glm::vec3& color) { m_AmbientColor = color; }
+		glm::vec3 GetAmbientColor() const { return m_AmbientColor; }
+		void SetDiffuseColor(const glm::vec3& color) { m_DiffuseColor = color; }
+		glm::vec3 GetDiffuseColor() const { return m_DiffuseColor; }
+		void SetSpecularColor(const glm::vec3& color) { m_SpecularColor = color; }
+		glm::vec3 GetSpecularColor() const { return m_SpecularColor; }
+		float GetShininess() const { return m_Shininess; }
+		void SetShininess(float val) { m_Shininess = val; }
+		void SetAlbedoColor(const glm::vec3& color) { m_AlbedoColor = color; }
+		glm::vec3 GetAlbedoColor() const { return m_AlbedoColor; }
+		void SetMetallic(float val) { m_Metallic = val; }
+		float GetMetallic() const { return m_Metallic; }
+		void SetRoughness(float val) { m_Roughness = val; }
+		float GetRoughness() const { return m_Roughness; }
+		void SetAO(float val) { m_AO = val; }
+		float GetAO() const { return m_AO; }
+		void SetBasicValues();
+
 		static Refptr<Material> Create(const Refptr<Shader>& shader) { return std::make_shared<Material>(shader); }
 
 	private:
@@ -55,6 +74,17 @@ namespace Snail {
 		std::unordered_map<std::string, glm::mat4> m_Mat4s;
 		// uniformName + texture引用
 		std::unordered_map<std::string, Refptr<Texture>> m_Textures;
+
+		// --- 无纹理时的材质参数 ---
+		glm::vec3 m_AmbientColor = glm::vec3(1.0f);		// 默认为白色
+		glm::vec3 m_DiffuseColor = glm::vec3(1.0f);		// 默认为白色
+		glm::vec3 m_SpecularColor = glm::vec3(1.0f);	// 默认为白色
+		float m_Shininess = 32.0f;
+
+		glm::vec3 m_AlbedoColor = glm::vec3(1.0f);	// 默认为白色
+		float m_Metallic = 0.0f;					// 默认为非金属
+		float m_Roughness = 0.5f;					// 默认为中等粗糙
+		float m_AO = 1.0f;							// 默认为 1.0 (无遮蔽)
 	};
 
 }

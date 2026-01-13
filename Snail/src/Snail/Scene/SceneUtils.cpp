@@ -309,6 +309,12 @@ namespace Snail {
 					// 全部纹理的控制
 					out << YAML::Key << "EnableTextures" << YAML::Value << mesh->GetEnableTextures();
 
+					// 材质基础参数
+					out << YAML::Key << "Albedo" << YAML::Value << mesh->GetMaterial()->GetAlbedoColor();
+					out << YAML::Key << "Metallic" << YAML::Value << mesh->GetMaterial()->GetMetallic();
+					out << YAML::Key << "Roughness" << YAML::Value << mesh->GetMaterial()->GetRoughness();
+					out << YAML::Key << "AO" << YAML::Value << mesh->GetMaterial()->GetAO();
+
 					// 保存纹理 (支持保存导入模型后被修改的纹理)
 					out << YAML::Key << "Textures" << YAML::Value << YAML::BeginSeq;
 					auto textures = mesh->GetTextures();
@@ -572,6 +578,14 @@ namespace Snail {
 							for (size_t i = 0; i < meshesNode.size(); i++) {
 								auto meshNode = meshesNode[i];
 								auto& targetMesh = modelMeshes[i];
+								auto& material = targetMesh->GetMaterial();
+
+								// 材质基础参数
+								if (meshNode["Albedo"]) material->SetAlbedoColor(meshNode["Albedo"].as<glm::vec3>());
+								if (meshNode["Metallic"]) material->SetMetallic(meshNode["Metallic"].as<float>());
+								if (meshNode["Roughness"]) material->SetRoughness(meshNode["Roughness"].as<float>());
+								if (meshNode["AO"]) material->SetAO(meshNode["AO"].as<float>());
+
 								// 覆盖 Shader
 								if (meshNode["ShaderPath"]) {
 									std::string savedShaderPath = meshNode["ShaderPath"].as<std::string>();

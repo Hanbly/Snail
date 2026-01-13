@@ -58,7 +58,7 @@ namespace Snail {
 
 		bool m_Enable = false;
 	public:
-		OpenGLTextureCube(const int dim);
+		OpenGLTextureCube(const int dim, const bool mipmap = false);
 		OpenGLTextureCube(const std::vector<std::string>& path, const TextureUsage& usage);
 		virtual ~OpenGLTextureCube();
 

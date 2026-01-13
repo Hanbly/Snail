@@ -278,7 +278,7 @@ namespace Snail {
 				DrawVec3Control("Direction", component.direction, glm::vec3(0.0f, -1.0f, 0.0f));
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 0.01f, 0.0f, 2.0f);
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 0.01f, 0.0f, 10.0f);
 
 				ImGui::EndTable();
 			}
@@ -296,7 +296,7 @@ namespace Snail {
 				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
-				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 1.0f, 0.0f, 1000.0f);
+				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 1.0f, 0.0f, 10000.0f);
 
 				ImGui::EndTable();
 			}
@@ -307,7 +307,7 @@ namespace Snail {
 	{
 		if (!entity.HasAllofComponent<ModelComponent>()) return;
 
-		DrawComponentWrapper<ModelComponent>("渲染网格", entity, [this](auto& component) {
+		DrawComponentWrapper<ModelComponent>("Model", entity, [this](auto& component) {
 			// 基础设置 (可见性、轮廓、Shader路径)
 			if (ImGui::BeginTable("ModelSettings", 2, ImGuiTableFlags_BordersInnerV)) {
 				ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 150.0f);
@@ -355,7 +355,7 @@ namespace Snail {
 						for (auto& texture : mesh->GetTextures())
 							texture->SetEnable(enableTexture);
 						mesh->RemapMaterialTextures();
-					}						
+					}
 				}
 
 				ImGui::EndTable();
@@ -375,8 +375,75 @@ namespace Snail {
 
 			ImGui::Spacing();
 
+			// --- 材质参数 ---
+			if (ImGui::TreeNodeEx(u8"基础材质参数", ImGuiTreeNodeFlags_Framed)) {
+				auto firstMaterial = component.model->GetMeshes()[0]->GetMaterial();
+				ImGui::TextDisabled("———— Phong 管线 ————");
+				// Ambient
+				glm::vec3 ambient = firstMaterial->GetAmbientColor();
+				if (ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient))) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetAmbientColor(ambient);
+					}
+				}
+				// Diffuse
+				glm::vec3 diffuse = firstMaterial->GetDiffuseColor();
+				if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(diffuse))) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetDiffuseColor(diffuse);
+					}
+				}
+				// Specular
+				glm::vec3 specular = firstMaterial->GetSpecularColor();
+				if (ImGui::ColorEdit3("Specular", glm::value_ptr(specular))) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetSpecularColor(specular);
+					}
+				}
+				// Shininess
+				float shininess = firstMaterial->GetShininess();
+				if (ImGui::SliderFloat("Shininess", &shininess, 0.0f, 1000.0f)) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetShininess(shininess);
+					}
+				}
+
+				ImGui::TextDisabled("———— PBR 管线 ————");
+				// Albedo
+				glm::vec3 albedo = firstMaterial->GetAlbedoColor();
+				if (ImGui::ColorEdit3("Albedo", glm::value_ptr(albedo))) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetAlbedoColor(albedo);
+					}
+				}
+				// Roughness
+				float rough = firstMaterial->GetRoughness();
+				if (ImGui::SliderFloat("Roughness", &rough, 0.0f, 1.0f)) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetRoughness(rough);
+					}
+				}
+				// Metallic
+				float metal = firstMaterial->GetMetallic();
+				if (ImGui::SliderFloat("Metallic", &metal, 0.0f, 1.0f)) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetMetallic(metal);
+					}
+				}
+				// AO
+				float ao = firstMaterial->GetAO();
+				if (ImGui::SliderFloat("AO", &ao, 0.0f, 1.0f)) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetAO(ao);
+					}
+				}
+				ImGui::TreePop();
+			}
+
+			ImGui::Spacing();
+
 			// 网格与纹理列表 (可折叠)
-			if (ImGui::TreeNodeEx("Meshes & Textures", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed)) {
+			if (ImGui::TreeNodeEx(u8"网格 & 纹理", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed)) {
 				auto& meshes = component.model->GetMeshes();
 				for (size_t m = 0; m < meshes.size(); m++) {
 					DrawMeshNode(m, meshes[m]);
@@ -802,7 +869,7 @@ namespace Snail {
 					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
 					DrawVec3Control("方向", s_InitDir, glm::vec3(0.0f, -1.0f, 0.0f));
 					ImGui::TextDisabled("光强参数");
-					ImGui::DragFloat("光强", &s_InitIntensity, 0.01f, 0.0f, 2.0f);
+					ImGui::DragFloat("光强", &s_InitIntensity, 0.01f, 0.0f, 10.0f);
 
 					ImGui::Separator();
 
@@ -845,7 +912,7 @@ namespace Snail {
 					// 颜色选择面板
 					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
 					ImGui::TextDisabled("光强参数");
-					ImGui::DragFloat("光强", &s_InitIntensity, 1.0f, 0.0f, 1000.0f);
+					ImGui::DragFloat("光强", &s_InitIntensity, 1.0f, 0.0f, 10000.0f);
 
 					ImGui::Separator();
 

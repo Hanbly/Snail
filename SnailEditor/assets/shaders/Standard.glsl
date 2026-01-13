@@ -4,11 +4,13 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TextureCoords;
+layout(location = 3) in vec3 a_Tangent;
+layout(location = 4) in vec3 a_Bitangent;
 
 #ifdef INSTANCING
-    layout(location = 3) in mat4 a_Model; 
-    layout(location = 7) in mat3 a_NormalMatrix;
-    layout(location = 10) in int a_EntityID;
+    layout(location = 5) in mat4 a_Model; 
+    layout(location = 9) in mat3 a_NormalMatrix;
+    layout(location = 12) in int a_EntityID;
 #else
     uniform mat4 u_Model;
     uniform mat3 u_NormalMatrix;
@@ -25,6 +27,8 @@ out vec3 v_FragPos;
 flat out int v_EntityID;
 // 输出光照空间坐标
 out vec4 v_FragPosLightSpace;
+// 输出TBN
+out mat3 v_TBN;
 
 void main()
 {
@@ -44,13 +48,30 @@ void main()
 
     vec4 worldPos = modelMatrix * vec4(a_Position, 1.0);
 
-    v_Normal = normalize(normalMatrix * a_Normal);    
     v_FragPos = vec3(worldPos);
     v_TextureCoords = a_TextureCoords;
     v_EntityID = entityID;
 
     // --- 计算光照空间的 片段坐标 ---
     v_FragPosLightSpace = u_LightSpaceMatrix * worldPos;
+
+    // --- TBN 计算核心 ---
+    // 1. 将法线和切线变换到世界空间
+    vec3 T = normalize(normalMatrix * a_Tangent);
+    vec3 N = normalize(normalMatrix * a_Normal);
+    
+    // 2. Gram-Schmidt 正交化 (重新调整 T，使其垂直于 N)
+    // 这一步能消除由于插值造成的 TBN 不垂直问题
+    T = normalize(T - dot(T, N) * N);
+    
+    // 3. 计算副切线 B
+    // 直接使用 CPU 传来的 Bitangent (处理镜像纹理更稳健)
+    vec3 B = normalize(normalMatrix * a_Bitangent);
+    
+    // 4. 构建矩阵
+    v_TBN = mat3(T, B, N);
+
+    v_Normal = N;
     
     gl_Position = u_ViewProjection * worldPos;
 }
@@ -61,15 +82,19 @@ void main()
 #define MAX_DIR_LIGHTS 4
 #define MAX_POINT_LIGHTS 16
 
+// 输出
 layout(location = 0) out vec4 FinalColor;
 layout(location = 1) out int EntityIDBuffer;
 
+// 输入
 in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
 flat in int v_EntityID;
 in vec4 v_FragPosLightSpace;
+in mat3 v_TBN;
 
+// --- 材质 Uniforms (Phong 工作流) ---
 uniform sampler2D u_Diffuse1;
 uniform sampler2D u_Specular1;
 uniform sampler2D u_NormalMap;
@@ -107,19 +132,17 @@ uniform int u_PointLightCount;
 // TBN 计算
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(u_NormalMap, v_TextureCoords).xyz * 2.0 - 1.0;
-
-    vec3 Q1  = dFdx(v_FragPos);
-    vec3 Q2  = dFdy(v_FragPos);
-    vec2 st1 = dFdx(v_TextureCoords);
-    vec2 st2 = dFdy(v_TextureCoords);
-
-    vec3 N   = normalize(v_Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
+    // 1. 采样法线贴图 [0, 1]
+    vec3 tangentNormal = texture(u_NormalMap, v_TextureCoords).xyz;
+    
+    // 2. 映射到 [-1, 1]
+    tangentNormal = tangentNormal * 2.0 - 1.0;
+    
+    // 3. 将法线从切线空间变换到世界空间
+    // 直接乘以上一步传来的 TBN 矩阵
+    vec3 worldNormal = normalize(v_TBN * tangentNormal);
+    
+    return worldNormal;
 }
 
 // 函数声明
@@ -223,7 +246,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     if(diff <= 0.0) spec = 0.0;
 
     float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (distance * distance);    
+    // 加一个很小的数 0.0001 避免除以零
+    float attenuation = 1.0 / (distance * distance + 0.0001);  
     
     vec3 ambient  = vec3(0.1) * lightColor * diffColor;
     vec3 diffuse  = diff * lightColor * diffColor;

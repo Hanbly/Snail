@@ -30,7 +30,10 @@ namespace Snail {
 
 	void Renderer3D::BeginScene(const Camera* camera, const glm::mat4& transform,
 		std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights,
-		const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId)
+		const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId,
+		const Refptr<Texture>& irradianceMap,
+		const Refptr<Texture>& prefilterMap,
+		const Refptr<Texture>& brdfLut)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -48,6 +51,11 @@ namespace Snail {
 		// 光源空间矩阵 和 光源视角的深度贴图id
 		s_3DSceneData.MainLightSpace = mainLightSpace;
 		s_3DSceneData.ShadowRendererId = shadowRendererId;
+
+		// --- 存储 IBL 数据 ---
+		s_3DSceneData.IrradianceMap = irradianceMap;
+		s_3DSceneData.PrefilterMap = prefilterMap;
+		s_3DSceneData.BRDFLUT = brdfLut;
 	}
 
 	void Renderer3D::EndScene()
@@ -104,6 +112,9 @@ namespace Snail {
 		auto& material = mesh.GetMaterial();
 		material->GetShader()->Bind();
 
+		// --- 上传默认参数 ---
+		material->SetBasicValues();
+
 		material->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
 		material->SetMat4("u_Model", transform);
 		material->SetMat3("u_NormalMatrix", glm::transpose(glm::inverse(glm::mat3(transform))));
@@ -118,9 +129,11 @@ namespace Snail {
 
 		// 上传阴影贴图id, 绑定阴影贴图
 		// 与实际材质纹理的上传区别开，这个只是外部的深度图
-		int slot = (int)material->GetTextures().size();
-		material->SetInt("u_ShadowMap", slot);
-		Texture2D::BindExternal(slot, s_3DSceneData.ShadowRendererId);
+		material->SetInt("u_ShadowMap", s_3DSceneData.ShadowMapSlot);
+		Texture2D::BindExternal(s_3DSceneData.ShadowMapSlot, s_3DSceneData.ShadowRendererId);
+
+		// 上传IBL环境Maps
+		UploadEnvUniforms(material->GetShader(), s_3DSceneData.IBLMapsStartSlot);
 
 		material->SetInt("u_EntityID", (int)edgeEnable); // 后处理边缘的 uniform
 
@@ -278,6 +291,9 @@ namespace Snail {
 			
 			instancingShader->Bind();
 
+			// --- 上传默认参数 ---
+			material->SetBasicValues();
+
 			// 设置全局 Uniform (VP矩阵, 光照等)
 			// 注意：u_Model 不再通过 Uniform 设置，而是通过 InstanceVBO 传递
 			material->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
@@ -292,9 +308,11 @@ namespace Snail {
 
 			// 上传阴影贴图id, 绑定阴影贴图
 			// 与实际材质纹理的上传区别开，这个只是外部的深度图
-			int slot = (int)material->GetTextures().size();
-			material->SetInt("u_ShadowMap", slot);
-			Texture2D::BindExternal(slot, s_3DSceneData.ShadowRendererId);
+			material->SetInt("u_ShadowMap", s_3DSceneData.ShadowMapSlot);
+			Texture2D::BindExternal(s_3DSceneData.ShadowMapSlot, s_3DSceneData.ShadowRendererId);
+
+			// 上传IBL环境Maps
+			UploadEnvUniforms(instancingShader, s_3DSceneData.IBLMapsStartSlot);
 
 			// 真正上传 uniforms
 			material->BindToShader(instancingShader);
@@ -396,6 +414,25 @@ namespace Snail {
 		}
 		// 告诉 Shader 实际有多少个点光源
 		shader->SetInt("u_PointLightCount", pointLightIndex);
+	}
+
+	void Renderer3D::UploadEnvUniforms(const Refptr<Shader>& shader, int startSlot)
+	{
+		// 只有当三者都存在时才开启 IBL
+		bool status = (s_3DSceneData.IrradianceMap && s_3DSceneData.PrefilterMap && s_3DSceneData.BRDFLUT);
+		shader->SetInt("u_UseIBL", (int)(s_3DSceneData.UseIBL && status));
+
+		if (s_3DSceneData.UseIBL && status)
+		{
+			shader->SetInt("u_IrradianceMap", startSlot);
+			s_3DSceneData.IrradianceMap->Bind(startSlot);
+
+			shader->SetInt("u_PrefilterMap", startSlot + 1);
+			s_3DSceneData.PrefilterMap->Bind(startSlot + 1);
+
+			shader->SetInt("u_BRDFLUT", startSlot + 2);
+			s_3DSceneData.BRDFLUT->Bind(startSlot + 2);
+		}
 	}
 
 }

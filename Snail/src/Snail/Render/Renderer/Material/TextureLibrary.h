@@ -11,14 +11,17 @@ namespace Snail {
 	public:
 		static Refptr<Texture> Load(const std::vector<std::string>& filePath, const TextureUsage& usage);
 		static Refptr<Texture> Load(const std::string& customName, const std::vector<std::string>& filePath, const TextureUsage& usage);
-		static Refptr<Texture> LoadEquirectangularToCubemap(const std::string& path);
 
 		static Refptr<Texture> Get(const std::string& name);
 
 		static void Remove(const std::string& name);
 		static void Remove(const Refptr<Texture>& texture);
 
-		static std::string PathsToKey(const std::vector<std::string>& paths, const TextureUsage& usage);
+		static Refptr<Texture> GetIBLIrradianceofTexture(const Refptr<Texture>& cubemap);
+		static Refptr<Texture> GetIBLPrefilterofTexture(const Refptr<Texture>& cubemap);
+	private:
+		// 同时生成IBL的漫反射辐照和镜面IBL
+		static void GenIBLTextures(const Refptr<Texture>& cubemap);
 	private:
 		static std::unordered_map<std::string, Refptr<Texture>> m_TextureNames;
 		static std::unordered_map<std::string, Refptr<Texture>> m_TexturePaths;

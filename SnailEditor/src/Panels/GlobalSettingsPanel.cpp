@@ -28,6 +28,15 @@ namespace Snail{
 			ImGui::SetTooltip(u8"当开启时，相同的 Mesh 将合并为一个 DrawCall 进行批量绘制。\n大幅提升大量重复物体场景的性能。");
 		}
 
+		bool isUseIBL = Renderer3D::GetUseIBL();
+		if (ImGui::Checkbox(u8"启用基于图像的光照 (IBL)", &isUseIBL)) {
+			Renderer3D::SetUseIBL(isUseIBL);
+		}
+		// 鼠标悬停提示
+		if (ImGui::IsItemHovered()) {
+			ImGui::SetTooltip(u8"当开启时，环境图像（天空盒）会被计算光照，并附加在PBR物体上。");
+		}
+
 		ImGui::Separator();
 
 

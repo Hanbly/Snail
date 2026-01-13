@@ -268,27 +268,37 @@ namespace Snail {
 		}
 	}
 
-	OpenGLTextureCube::OpenGLTextureCube(const int dim)
+	OpenGLTextureCube::OpenGLTextureCube(const int dim, const bool mipmap)
 		: m_RendererId(0), m_Type(TextureType::Cube), m_Usage(TextureUsage::Cubemap)
 	{
 		glGenTextures(1, &m_RendererId);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererId);
 
-		for (unsigned int i = 0; i < 6; ++i)
-		{
-			// 分配内存
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA32F,
-				dim, dim, 0, GL_RGBA, GL_FLOAT, nullptr);
+		m_Width = dim;
+		m_Height = dim;
+
+		// 计算需要的 Mipmap 层级数
+		int levels = 1;
+		if (mipmap) {
+			// 公式：floor(log2(max(w, h))) + 1
+			levels = static_cast<int>(std::floor(std::log2(dim))) + 1;
 		}
-		// 采样参数
+
+		glTexStorage2D(GL_TEXTURE_CUBE_MAP, levels, GL_RGBA32F, dim, dim);
+
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		m_Width = dim;
-		m_Height = dim;
+		// 如果启用了 mipmap，Min Filter 必须改为支持 mipmap 的模式
+		if (mipmap) {
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		}
+		else {
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		}
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
 	OpenGLTextureCube::OpenGLTextureCube(const std::vector<std::string>& path, const TextureUsage& usage)

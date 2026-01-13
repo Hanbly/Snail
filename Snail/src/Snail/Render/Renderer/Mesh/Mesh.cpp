@@ -102,7 +102,9 @@ namespace Snail {
 			{
 				{ "a_Position",  VertexDataType::Float3 },
 				{ "a_Normal",    VertexDataType::Float3 },
-				{ "a_TexCoord",  VertexDataType::Float2 }
+				{ "a_TexCoord",  VertexDataType::Float2 },
+				{ "a_Tangent",  VertexDataType::Float3 },
+				{ "a_Bitangent",  VertexDataType::Float3 }
 			}
 		);
 		vbo->SetLayout(layout);
@@ -120,7 +122,7 @@ namespace Snail {
 		//m_Material->SetFloat("u_AmbientStrength", 0.1f);  // 默认一点点环境光 // 现在依据Scene类的属性来设置了
 		//m_Material->SetFloat("u_DiffuseStrength", 0.8f);  // 默认较强的漫反射
 		//m_Material->SetFloat("u_SpecularStrength", 0.5f); // 默认中等高光
-		m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度
+		//m_Material->SetFloat("u_Shininess", 32.0f);       // 默认反光度 // 现在作为材质类的属性来控制了
 
 		CalculateBoundingBox(vertices);
 	}

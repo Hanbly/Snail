@@ -187,10 +187,10 @@ namespace Snail {
 		}
 	}
 
-	void OpenGLFrameBuffer::SetupTextureCubei(const int index, const uint32_t& rendererId)
+	void OpenGLFrameBuffer::SetupTextureCubei(const int index, const uint32_t& rendererId, const int mip)
 	{
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_X + index, rendererId, 0);
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + index, rendererId, mip);
 	}
 
 }

@@ -4,11 +4,13 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TextureCoords;
+layout(location = 3) in vec3 a_Tangent;
+layout(location = 4) in vec3 a_Bitangent;
 
 #ifdef INSTANCING
-    layout(location = 3) in mat4 a_Model; 
-    layout(location = 7) in mat3 a_NormalMatrix;
-    layout(location = 10) in int a_EntityID;
+    layout(location = 5) in mat4 a_Model; 
+    layout(location = 9) in mat3 a_NormalMatrix;
+    layout(location = 12) in int a_EntityID;
 #else
     uniform mat4 u_Model;
     uniform mat3 u_NormalMatrix;
@@ -25,6 +27,8 @@ out vec3 v_FragPos;
 flat out int v_EntityID;
 // 输出光照空间坐标
 out vec4 v_FragPosLightSpace;
+// 输出TBN
+out mat3 v_TBN;
 
 void main()
 {
@@ -44,13 +48,30 @@ void main()
 
     vec4 worldPos = modelMatrix * vec4(a_Position, 1.0);
 
-    v_Normal = normalize(normalMatrix * a_Normal);    
     v_FragPos = vec3(worldPos);
     v_TextureCoords = a_TextureCoords;
     v_EntityID = entityID;
 
     // --- 计算光照空间的 片段坐标 ---
     v_FragPosLightSpace = u_LightSpaceMatrix * worldPos;
+
+    // --- TBN 计算核心 ---
+    // 1. 将法线和切线变换到世界空间
+    vec3 T = normalize(normalMatrix * a_Tangent);
+    vec3 N = normalize(normalMatrix * a_Normal);
+    
+    // 2. Gram-Schmidt 正交化 (重新调整 T，使其垂直于 N)
+    // 这一步能消除由于插值造成的 TBN 不垂直问题
+    T = normalize(T - dot(T, N) * N);
+    
+    // 3. 计算副切线 B
+    // 直接使用 CPU 传来的 Bitangent (处理镜像纹理更稳健)
+    vec3 B = normalize(normalMatrix * a_Bitangent);
+    
+    // 4. 构建矩阵
+    v_TBN = mat3(T, B, N);
+
+    v_Normal = N;
     
     gl_Position = u_ViewProjection * worldPos;
 }
@@ -67,12 +88,13 @@ const float PI = 3.14159265359;
 layout(location = 0) out vec4 FinalColor;
 layout(location = 1) out int EntityIDBuffer;
 
-// 输入 (来自顶点着色器)
+// 输入
 in vec2 v_TextureCoords;
 in vec3 v_Normal;
 in vec3 v_FragPos;
 flat in int v_EntityID;
 in vec4 v_FragPosLightSpace;
+in mat3 v_TBN;
 
 // --- 材质 Uniforms (PBR 工作流) ---
 uniform bool u_UseTexture;
@@ -104,6 +126,12 @@ uniform float u_AOVal; // 备用数值 (通常为 1.0)
 // 阴影贴图
 uniform sampler2D u_ShadowMap; 
 
+// --- IBL Maps ---
+uniform samplerCube u_IrradianceMap; // 漫反射环境
+uniform samplerCube u_PrefilterMap;  // 镜面反射环境 (带 Mipmap)
+uniform sampler2D   u_BRDFLUT;       // BRDF 积分图
+uniform bool        u_UseIBL;
+
 // 摄像机位置
 uniform vec3 u_ViewPosition;
 
@@ -133,6 +161,8 @@ float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
+// --- IBL 专用 Fresnel 函数 ---
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 
 // 工具函数
 vec3 getNormalFromMap();
@@ -141,40 +171,36 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
 void main()
 {
     // 1. 采样材质属性
-    vec3 albedo;
-    float metallic;
-    float roughness;
-    float ao;
-
-    if (u_UseTexture && u_UseAlbedoMap) {
-        vec4 albedoTex = texture(u_AlbedoMap, v_TextureCoords);
-        if(albedoTex.a < 0.1) discard; // 透明度测试
-        albedo = albedoTex.rgb;
-    } else {
-        albedo = u_AlbedoColor;
+    // 逻辑：以 Uniform 颜色为基准，如果有贴图，则乘以贴图颜色
+    vec3 albedo = u_AlbedoColor; 
+    if (u_UseAlbedoMap) {
+        vec4 texColor = texture(u_AlbedoMap, v_TextureCoords);
+        if(texColor.a < 0.1) discard;
+        albedo *= texColor.rgb; 
     }
 
-    if (u_UseTexture && u_UseMetallicMap) {
-        metallic = texture(u_MetallicMap, v_TextureCoords).r;
-    } else {
-        metallic = u_MetallicVal;
+    // Metallic 计算
+    float metallic = u_MetallicVal;
+    if (u_UseMetallicMap) {
+        metallic *= texture(u_MetallicMap, v_TextureCoords).r; 
     }
 
-    if (u_UseTexture && u_UseRoughnessMap) {
-        roughness = texture(u_RoughnessMap, v_TextureCoords).r;
-    } else {
-        roughness = u_RoughnessVal;
+    // Roughness 计算
+    float roughness = u_RoughnessVal;
+    if (u_UseRoughnessMap) {
+        roughness *= texture(u_RoughnessMap, v_TextureCoords).r;
     }
 
-    if (u_UseTexture && u_UseAOMap) {
-        ao = texture(u_AOMap, v_TextureCoords).r;
-    } else {
-        ao = u_AOVal;
+    // AO 计算
+    float ao = u_AOVal;
+    if (u_UseAOMap) {
+        ao *= texture(u_AOMap, v_TextureCoords).r;
     }
 
     // 2. 准备向量
     vec3 N = (u_UseTexture && u_UseNormalMap) ? getNormalFromMap() : normalize(v_Normal);
     vec3 V = normalize(u_ViewPosition - v_FragPos);
+    vec3 R = reflect(-V, N);
 
     // 3. 计算 F0 (基础反射率)
     // 非金属 F0 约为 0.04，金属 F0 为其 Albedo 颜色
@@ -231,7 +257,8 @@ void main()
         
         float distance = length(u_PointLights[i].position - v_FragPos);
         // PBR 物理衰减 (Inverse Square Law)
-        float attenuation = 1.0 / (distance * distance); 
+        // 加一个很小的数 0.0001 避免除以零
+        float attenuation = 1.0 / (distance * distance + 0.0001);
         
         vec3 radiance = u_PointLights[i].color * u_PointLights[i].intensity * attenuation;
 
@@ -254,10 +281,43 @@ void main()
     }
 
     // --- 环境光 (Ambient) ---
-    // TODO [PBR进阶]: 这里目前使用简单的常数环境光。
-    // 完整的PBR需要使用 IBL (Image Based Lighting) 替换此处。
-    // 即: Irradiance Map (漫反射) + Prefiltered Map (镜面反射) + BRDF LUT
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    // Irradiance Map (漫反射) + Prefiltered Map (镜面反射) + BRDF LUT
+    vec3 ambient;
+    if (u_UseIBL) 
+    {
+        // --- 1. 漫反射部分 (Diffuse IBL) ---
+        // kS 是菲涅尔反射比例，kD 是漫反射比例
+        // 注意：这里使用 roughness 修正版的 Fresnel
+        vec3 F_IBL = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+        
+        vec3 kS = F_IBL;
+        vec3 kD = 1.0 - kS;
+        kD *= 1.0 - metallic; // 金属没有漫反射
+
+        // 采样 Irradiance Map
+        vec3 irradiance = texture(u_IrradianceMap, N).rgb;
+        vec3 diffuseIBL = irradiance * albedo;
+
+        // --- 2. 镜面反射部分 (Specular IBL) ---
+        // 2.1 采样 Prefilter Map
+        const float MAX_REFLECTION_LOD = 4.0; // cpp中 Prefilter Map 生成了 5 级 mip (0-4)
+        vec3 prefilteredColor = textureLod(u_PrefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+
+        // 2.2 采样 BRDF LUT
+        // x轴是 NdotV, y轴是 Roughness
+        vec2 brdf  = texture(u_BRDFLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+
+        // 2.3 组合 Specular
+        vec3 specularIBL = prefilteredColor * (F_IBL * brdf.x + brdf.y);
+
+        // --- 3. 合成环境光 ---
+        ambient = (kD * diffuseIBL + specularIBL) * ao;
+    } 
+    else 
+    {
+        // 降级回简单的常数环境光
+        ambient = vec3(0.03) * albedo * ao;
+    }
     
     vec3 color = ambient + Lo;
 
@@ -314,6 +374,12 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
+// IBL 专用 Fresnel 函数
+// IBL 即使在 90 度观察角，如果表面很粗糙，反光也会变弱，所以需要考虑 roughness
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
 
 // ----------------------------------------------------------------------------
 // 辅助函数
@@ -322,19 +388,17 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // 法线贴图 TBN 计算 (无需预计算切线)
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(u_NormalMap, v_TextureCoords).xyz * 2.0 - 1.0;
-
-    vec3 Q1  = dFdx(v_FragPos);
-    vec3 Q2  = dFdy(v_FragPos);
-    vec2 st1 = dFdx(v_TextureCoords);
-    vec2 st2 = dFdy(v_TextureCoords);
-
-    vec3 N   = normalize(v_Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
+    // 1. 采样法线贴图 [0, 1]
+    vec3 tangentNormal = texture(u_NormalMap, v_TextureCoords).xyz;
+    
+    // 2. 映射到 [-1, 1]
+    tangentNormal = tangentNormal * 2.0 - 1.0;
+    
+    // 3. 将法线从切线空间变换到世界空间
+    // 直接乘以上一步传来的 TBN 矩阵
+    vec3 worldNormal = normalize(v_TBN * tangentNormal);
+    
+    return worldNormal;
 }
 
 // 阴影计算 ( PCF 逻辑)

@@ -119,4 +119,17 @@ namespace Snail {
 		return std::string();
 	}
 
+	void Material::SetBasicValues()
+	{
+		// --- 上传默认参数 ---
+		SetFloat3("u_ColorDiffuse", m_AmbientColor);
+		SetFloat3("u_ColorSpecular", m_DiffuseColor);
+		SetFloat3("u_ColorAmbient", m_SpecularColor);
+		SetFloat("u_Shininess", m_Shininess);
+		SetFloat3("u_AlbedoColor", m_AlbedoColor);
+		SetFloat("u_MetallicVal", m_Metallic);
+		SetFloat("u_RoughnessVal", m_Roughness);
+		SetFloat("u_AOVal", m_AO);
+	}
+
 }

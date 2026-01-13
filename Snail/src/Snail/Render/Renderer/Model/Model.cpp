@@ -2,6 +2,7 @@
 
 #include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
+#include "Snail/Utils/RendererTools.h"
 
 #include "Model.h"
 
@@ -70,9 +71,11 @@ namespace Snail {
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(
 			path,
-			aiProcess_Triangulate | aiProcess_GenSmoothNormals);
-			//aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
-			////	  分割成三角形      |      反转y轴		  |   自动生成顶点的法向量	 
+			//aiProcess_CalcTangentSpace |	// 计算切线和副切线（debug模式很慢）
+			//aiProcess_FlipUVs |				// 翻转y轴
+			aiProcess_Triangulate |			// 分割成三角形
+			aiProcess_GenNormals			// 生成法线
+		);
 
 		// 读取数据是否非空 & 读取数据是否完整
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -130,10 +133,12 @@ namespace Snail {
 		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex vertex;
+
+			// --- 读取顶点 ---
 			vertex.position.x = static_cast<float>(mesh->mVertices[i].x);
 			vertex.position.y = static_cast<float>(mesh->mVertices[i].y);
 			vertex.position.z = static_cast<float>(mesh->mVertices[i].z);
-
+			// --- 读取法线 ---
 			if (mesh->HasNormals())
 			{
 				vertex.normal.x = static_cast<float>(mesh->mNormals[i].x);
@@ -145,6 +150,7 @@ namespace Snail {
 				// 如果没有法线，给一个默认值（比如朝上），防止数据未初始化
 				vertex.normal = glm::vec3(0.0f, 1.0f, 0.0f);
 			}
+			// --- 读取UV ---
 			if (mesh->HasTextureCoords(0))
 			{
 				vertex.texCoords.x = static_cast<float>(mesh->mTextureCoords[0][i].x);
@@ -154,6 +160,23 @@ namespace Snail {
 			{
 				vertex.texCoords = glm::vec2(0.0f, 0.0f);
 			}
+			// --- 读取切线和副切线 ---
+			//if (mesh->HasTangentsAndBitangents())
+			//{
+			//	vertex.tangent.x = static_cast<float>(mesh->mTangents[i].x);
+			//	vertex.tangent.y = static_cast<float>(mesh->mTangents[i].y);
+			//	vertex.tangent.z = static_cast<float>(mesh->mTangents[i].z);
+
+			//	vertex.bitangent.x = static_cast<float>(mesh->mBitangents[i].x);
+			//	vertex.bitangent.y = static_cast<float>(mesh->mBitangents[i].y);
+			//	vertex.bitangent.z = static_cast<float>(mesh->mBitangents[i].z);
+			//}
+			//else
+			//{
+			//	// 默认值，防止由未初始化导致的渲染错误
+			//	vertex.tangent = glm::vec3(0.0f);
+			//	vertex.bitangent = glm::vec3(0.0f);
+			//}
 			
 			vertices.push_back(vertex);
 		}
@@ -165,6 +188,9 @@ namespace Snail {
 			for (uint32_t j = 0; j < face.mNumIndices; j++)
 				indices.push_back(face.mIndices[j]);
 		}
+
+		// --- 手动计算切线和副切线 ---
+		RendererTools::RecalculateTangents(vertices, indices);
 
 		// 处理材质（纹理）
 		if (mesh->mMaterialIndex >= 0)
@@ -342,52 +368,116 @@ namespace Snail {
 
 		switch (type)
 		{
-		case PrimitiveType::Cube: // 六面分别定义的立方体
+		case PrimitiveType::Cube:
+			// 立方体：切线方向与 UV 的 U 方向一致
 			vertices = {
-				// 1. 前面 (Front Face) - Z = 0.5f
-				{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f} },
-				{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f} },
-				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f} },
-				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f} },
-				// 2. 右面 (Right Face) - X = 0.5f
-				{ { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f} },
-				{ { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f} },
-				{ { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f} },
-				{ { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f} },
-				// 3. 后面 (Back Face) - Z = -0.5f
-				{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f} },
-				{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f} },
-				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f} },
-				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f} },
-				// 4. 左面 (Left Face) - X = -0.5f
-				{ {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
-				{ {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
-				{ {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f} },
-				{ {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f} },
-				// 5. 上面 (Top Face) - Y = 0.5f
-				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} },
-				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} },
-				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} },
-				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} },
-				// 6. 下面 (Bottom Face) - Y = -0.5f
-				{ {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f} },
-				{ { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f} },
-				{ { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
-				{ {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f} }
+				// 格式: {Pos}, {Normal}, {UV}, {Tangent}, {Bitangent}
+
+				// 1. 前面 (Front) - Z+ | Tangent 指向 X+
+				{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 1.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+
+				// 2. 右面 (Right) - X+ | Tangent 指向 Z- (因为贴图是绕着贴的)
+				{ { 0.5f, -0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f, -0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {1.0f, 0.0f, 0.0f},  {1.0f, 1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {1.0f, 0.0f, 0.0f},  {0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f} },
+
+				// 3. 后面 (Back) - Z- | Tangent 指向 X-
+				{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+
+				// 4. 左面 (Left) - X- | Tangent 指向 Z+
+				{ {-0.5f, -0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f, -0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f,  0.5f,  0.5f},  {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+
+				// 5. 上面 (Top) - Y+ | Tangent 指向 X+
+				{ {-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ { 0.5f,  0.5f,  0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ { 0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ {-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+
+				// 6. 下面 (Bottom) - Y- | Tangent 指向 X+
+				{ {-0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+				{ { 0.5f, -0.5f, -0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+				{ { 0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+				{ {-0.5f, -0.5f,  0.5f},  {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} }
 			};
-			indices = {
-				0, 1, 2, 2, 3, 0,       // 前面
-				4, 5, 6, 6, 7, 4,       // 右面
-				8, 9, 10, 10, 11, 8,    // 后面
-				12, 13, 14, 14, 15, 12, // 左面
-				16, 17, 18, 18, 19, 16, // 上面
-				20, 21, 22, 22, 23, 20  // 下面
-			};
+
+			indices = { 0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 8, 9, 10, 10, 11, 8, 12, 13, 14, 14, 15, 12, 16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20 };
 			break;
+
+		case PrimitiveType::Sphere:
+		{
+			const int X_SEGMENTS = 64;
+			const int Y_SEGMENTS = 64;
+			const float radius = 0.5f;
+
+			for (int y = 0; y <= Y_SEGMENTS; ++y)
+			{
+				for (int x = 0; x <= X_SEGMENTS; ++x)
+				{
+					float xSegment = (float)x / (float)X_SEGMENTS;
+					float ySegment = (float)y / (float)Y_SEGMENTS;
+
+					float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+					float yPos = std::cos(ySegment * PI);
+					float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+
+					glm::vec3 normal = glm::vec3(xPos, yPos, zPos);
+					glm::vec3 pos = normal * radius;
+					glm::vec2 uv = glm::vec2(xSegment, ySegment);
+
+					// --- 动态计算球面切线 ---
+					// 切线 T 是沿着纬度线（Longitude）方向的导数
+					// 简单的几何推导：垂直于 Normal，且在 XZ 平面上旋转
+					// T = (-sin(theta), 0, cos(theta)) 对应 xPos/zPos 的生成逻辑
+					glm::vec3 tangent = glm::normalize(glm::vec3(-std::sin(xSegment * 2.0f * PI), 0.0f, std::cos(xSegment * 2.0f * PI)));
+
+					// 副切线 B 直接叉乘得到 (遵循右手定则)
+					glm::vec3 bitangent = glm::normalize(glm::cross(normal, tangent));
+
+					vertices.push_back({ pos, normal, uv, tangent, bitangent });
+				}
+			}
+			// 索引生成逻辑
+			bool oddRow = false;
+			for (int y = 0; y < Y_SEGMENTS; ++y)
+			{
+				for (int x = 0; x < X_SEGMENTS; ++x)
+				{
+					uint32_t k1 = y * (X_SEGMENTS + 1) + x;
+					uint32_t k2 = k1 + X_SEGMENTS + 1;
+					indices.push_back(k1); indices.push_back(k2); indices.push_back(k1 + 1);
+					indices.push_back(k1 + 1); indices.push_back(k2); indices.push_back(k2 + 1);
+				}
+			}
+			break;
+		}
+
+		case PrimitiveType::Plane:
+		{
+			float size = 0.5f;
+			// 平面：XZ 平面，法线向上(0,1,0)，切线自然是 X 轴(1,0,0)，副切线是 Z 轴(0,0,1)或(0,0,-1)
+			vertices = {
+				// Pos                  // Normal          // UV         // Tangent         // Bitangent
+				{ {-size, 0.0f, -size}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ {-size, 0.0f,  size}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ { size, 0.0f,  size}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+				{ { size, 0.0f, -size}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} }
+			};
+			indices = { 0, 1, 2, 2, 3, 0 };
+			break;
+		}
 
 		case PrimitiveType::Skybox: // 天空盒
 			vertices = {
-				// ... (你原本的代码保持不变) ...
 				// Positions          // Normals           // UVs (Unused)
 				{ {-1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 0. 左下前
 				{ { 1.0f, -1.0f,  1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f} }, // 1. 右下前
@@ -407,85 +497,6 @@ namespace Snail {
 				4, 5, 1, 1, 0, 4
 			};
 			break;
-
-		case PrimitiveType::Sphere:
-		{
-			// 生成 UV Sphere
-			const int X_SEGMENTS = 64; // 经度切分 (Sectors)
-			const int Y_SEGMENTS = 64; // 纬度切分 (Stacks)
-			const float radius = 0.5f; // 半径 0.5，直径 1.0，匹配 Cube 大小
-
-			for (int y = 0; y <= Y_SEGMENTS; ++y)
-			{
-				for (int x = 0; x <= X_SEGMENTS; ++x)
-				{
-					float xSegment = (float)x / (float)X_SEGMENTS;
-					float ySegment = (float)y / (float)Y_SEGMENTS;
-
-					// 使用球坐标系计算位置
-					// ySegment * PI 从 0 (顶) 到 PI (底)
-					// xSegment * 2PI 从 0 到 2PI (绕圈)
-					float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-					float yPos = std::cos(ySegment * PI);
-					float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-
-					// 法线就是归一化的位置向量 (对于单位球)
-					glm::vec3 normal = glm::vec3(xPos, yPos, zPos);
-
-					// 应用半径
-					glm::vec3 pos = normal * radius;
-
-					// UV 坐标 (简单映射)
-					glm::vec2 uv = glm::vec2(xSegment, ySegment);
-
-					vertices.push_back({ pos, normal, uv });
-				}
-			}
-
-			// 生成索引
-			bool oddRow = false;
-			for (int y = 0; y < Y_SEGMENTS; ++y)
-			{
-				// 如果处理极点可能需要优化（顶部和底部三角形），但通用逻辑如下：
-				for (int x = 0; x < X_SEGMENTS; ++x)
-				{
-					// 每一格由两个三角形组成
-					uint32_t k1 = y * (X_SEGMENTS + 1) + x;
-					uint32_t k2 = k1 + X_SEGMENTS + 1;
-
-					indices.push_back(k1);
-					indices.push_back(k2);
-					indices.push_back(k1 + 1);
-
-					indices.push_back(k1 + 1);
-					indices.push_back(k2);
-					indices.push_back(k2 + 1);
-				}
-			}
-			break;
-		}
-
-		case PrimitiveType::Plane:
-		{
-			// XZ 平面，Y 轴朝上，中心在原点，大小 1x1
-			// 与 Cube 的面大小保持一致
-			float size = 0.5f;
-			vertices = {
-				// Pos                        // Normal           // UV
-				// 左上 (Top Left) -> Z是负的还是正的取决于你的坐标系习惯，通常OpenGL里 Z+是屏幕外
-				// 对应 Cube 的 Top Face
-				{ {-size, 0.0f, -size},  {0.0f, 1.0f, 0.0f},  {0.0f, 1.0f} }, // 0
-				{ {-size, 0.0f,  size},  {0.0f, 1.0f, 0.0f},  {0.0f, 0.0f} }, // 1
-				{ { size, 0.0f,  size},  {0.0f, 1.0f, 0.0f},  {1.0f, 0.0f} }, // 2
-				{ { size, 0.0f, -size},  {0.0f, 1.0f, 0.0f},  {1.0f, 1.0f} }  // 3
-			};
-
-			indices = {
-				0, 1, 2,
-				2, 3, 0
-			};
-			break;
-		}
 
 		default:
 			SNL_CORE_WARN("ModelConstruct::GetPrimitiveDatas: 图元类型为 None 无法生成数据!");

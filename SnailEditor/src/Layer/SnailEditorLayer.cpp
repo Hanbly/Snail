@@ -279,11 +279,8 @@ namespace Snail {
 		m_Scene->Clear();
 
 		SceneSerializer serializer(m_Scene, m_EditorCamera);
-		if (serializer.Deserialize(path)) {
-			SNL_CORE_INFO("成功加载场景: {0}", path);
-		}
-		else {
-			SNL_CORE_ERROR("加载场景失败: {0}", path);
+		if (!serializer.Deserialize(path)) {
+			return;
 		}
 
 		// 初始化面板的上下文 EditorContext 的选中实体
@@ -295,7 +292,6 @@ namespace Snail {
 		SceneSerializer serializer(m_Scene, m_EditorCamera);
 		std::string sceneName = std::filesystem::path(path).stem().u8string();
 		serializer.Serialize(sceneName, path);
-		SNL_CORE_INFO("场景已保存至: {0}", path);
 	}
 
 }

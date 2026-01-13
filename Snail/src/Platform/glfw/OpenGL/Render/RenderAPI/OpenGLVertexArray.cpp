@@ -27,12 +27,12 @@ namespace Snail {
 	OpenGLVertexArray::OpenGLVertexArray()
 		: m_VertexBufferIndexOffset(0)
 	{
-		glGenVertexArrays(1, &m_ArrayId);
+		glGenVertexArrays(1, &m_RendererId);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
-		glDeleteVertexArrays(1, &m_ArrayId);
+		glDeleteVertexArrays(1, &m_RendererId);
 	}
 
 	const std::vector<Vertex> OpenGLVertexArray::GetVertexBuffer() const {		
@@ -158,9 +158,21 @@ namespace Snail {
 		}
 	}
 
+	void OpenGLVertexArray::UnbindInstanceBuffer()
+	{
+		glBindVertexArray(m_RendererId);
+
+		for (unsigned int i = 5; i <= 12; i++) {
+			// 禁用属性
+			glDisableVertexAttribArray(i);
+			// 重置 Divisor
+			glVertexAttribDivisor(i, 0);
+		}
+	}
+
 	void OpenGLVertexArray::Bind() const
 	{
-		glBindVertexArray(m_ArrayId);
+		glBindVertexArray(m_RendererId);
 	}
 
 	void OpenGLVertexArray::Unbind() const

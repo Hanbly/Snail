@@ -3,12 +3,12 @@
 
 layout (location = 0) in vec3 aPos;
 out vec3 localPos;
-uniform mat4 projection;
-uniform mat4 view;
+uniform mat4 u_Projection;
+uniform mat4 u_View;
 void main()
 {
     localPos = aPos;  
-    gl_Position = projection * view * vec4(localPos, 1.0);
+    gl_Position = u_Projection * u_View * vec4(localPos, 1.0);
 }
 
 #type fragment
@@ -17,7 +17,7 @@ void main()
 out vec4 FragColor;
 in vec3 localPos;
 
-uniform sampler2D equirectangularMap;
+uniform sampler2D u_EnvironmentMap;
 
 const vec2 invAtan = vec2(0.1591, 0.3183);
 vec2 SampleSphericalMap(vec3 v)
@@ -31,6 +31,6 @@ vec2 SampleSphericalMap(vec3 v)
 void main()
 {		
     vec2 uv = SampleSphericalMap(normalize(localPos));
-    vec3 color = texture(equirectangularMap, uv).rgb;
+    vec3 color = texture(u_EnvironmentMap, uv).rgb;
     FragColor = vec4(color, 1.0);
 }

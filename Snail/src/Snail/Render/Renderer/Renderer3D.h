@@ -79,6 +79,15 @@ namespace Snail {
 			// 光源空间矩阵 和 光源视角的深度贴图id
 			glm::mat4 MainLightSpace = glm::mat4(1.0f);
 			uint32_t ShadowRendererId = 0;
+
+			// --- IBL 数据 ---
+			bool UseIBL = true;
+			Refptr<Texture> IrradianceMap = nullptr;
+			Refptr<Texture> PrefilterMap = nullptr;
+			Refptr<Texture> BRDFLUT = nullptr; // BRDF LUT 通常是全局唯一的资源
+
+			const int ShadowMapSlot = 10;
+			const int IBLMapsStartSlot = 11;
 		};
 
 		static Renderer3DSceneData s_3DSceneData;
@@ -91,7 +100,10 @@ namespace Snail {
 		// BeginScene 升级：接收相机 + 光源信息
 		static void BeginScene(const Camera* camera, const glm::mat4& transform, 
 			std::vector<DirectionLight>& dirLights, std::vector<PointLight>& poiLights, 
-			const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId);
+			const glm::mat4& mainLightSpace, const uint32_t& shadowRendererId,
+			const Refptr<Texture>& irradianceMap = nullptr,
+			const Refptr<Texture>& prefilterMap = nullptr,
+			const Refptr<Texture>& brdfLut = nullptr);
 		static void EndScene();
 		static void EndScene(Refptr<Shader>& shader);
 
@@ -110,8 +122,11 @@ namespace Snail {
 
 		static void SetEnableInstancing(const bool& status) { s_3DSceneData.EnableInstancing = status; }
 		static bool& GetEnableInstancing() { return s_3DSceneData.EnableInstancing; }
+		static void SetUseIBL(const bool& status) { s_3DSceneData.UseIBL = status; }
+		static bool& GetUseIBL() { return s_3DSceneData.UseIBL; }
 	private:
 		static void UploadLightsUniforms(const Refptr<Shader>& shader);
+		static void UploadEnvUniforms(const Refptr<Shader>& shader, int startSlot);
 	};
 
 }
