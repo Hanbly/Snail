@@ -1,24 +1,27 @@
 Scene: InitScene
 SceneSettings:
-  AmbientStrength: 0.100000001
+  Gamma: 2.20000005
+  Exposure: 1
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
-  Near: 1.0
+  Near: 1
   Far: 10000
-  Aspect: 0.961914062
-  ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.613327, 0.414948076, -1055.85779, 1]
-  Position: [5.77682114, 438.311981, 961.052612]
-  DirvecFront: [-0.0344380438, -0.415481567, -0.908949494]
-  DirvecRight: [0.999283075, 0, -0.0378605798]
-  DirvecUp: [-0.0157303736, 0.909601688, -0.415183693]
+  Aspect: 1.65142858
+  ViewMatrix: [1, -0, 0, -0, -0, 1, -0, 0, 0, -0, 1, -0, -0, 0, -10, 1]
+  Position: [0, 0, 10]
+  DirvecFront: [1, 0, 0]
+  DirvecRight: [0, 0, 1]
+  DirvecUp: [0, 1, 0]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 24.5496426
-  DirvecYaw: -362.169769
-  FocalPoint: [-25.7466259, 57.9938965, 129.030258]
-  Distance: 915.366943
+  EulerPitch: 0
+  DirvecYaw: 0
+  FocalPoint: [0, 0, 0]
+  Distance: 10
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
   DollySpeed: 0.5
+Entities:
+  []

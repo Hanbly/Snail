@@ -18,6 +18,18 @@ namespace Snail {
 		return nullptr;
 	}
 
+	Refptr<Texture2D> Texture2D::Create(const void* data, size_t size, const TextureUsage& usage)
+	{
+		switch (RendererCommand::GetAPI()) {
+		case RendererCommand::API::None:		SNL_CORE_ASSERT(false, "RenderAPI: 取无效值 None!"); return nullptr;
+		case RendererCommand::API::OpenGL:		return std::make_shared<OpenGLTexture2D>(data, size, usage);
+		case RendererCommand::API::Vulkan:		SNL_CORE_ASSERT(false, "RenderAPI: 暂不支持Vulkan!"); return nullptr;
+		}
+
+		SNL_CORE_ASSERT(false, "RenderAPI: switch无法取值!");
+		return nullptr;
+	}
+
 	Refptr<TextureCube> TextureCube::Create(const int dim, const bool mipmap)
 	{
 		switch (RendererCommand::GetAPI()) {

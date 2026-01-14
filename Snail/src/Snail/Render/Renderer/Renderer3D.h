@@ -18,10 +18,10 @@ namespace Snail {
 	// --- 平行光数据 ---
 	struct DirectionLight {
 		glm::vec3 direction;
-		glm::vec4 color;
+		glm::vec3 color;
 
 		float intensity;
-		DirectionLight(const glm::vec3& dir, const glm::vec4& color, const float& intensity)
+		DirectionLight(const glm::vec3& dir, const glm::vec3& color, const float& intensity)
 			:
 			direction(dir),
 			color(color),
@@ -32,13 +32,13 @@ namespace Snail {
 	// --- 点光源数据 ---
 	struct PointLight {
 		glm::vec3 position;
-		glm::vec4 color;
+		glm::vec3 color;
 		float intensity;
 
 		//float constant;
 		//float linear;
 		//float quadratic;
-		PointLight(const glm::vec3& pos, const glm::vec4& color, const float& intensity)
+		PointLight(const glm::vec3& pos, const glm::vec3& color, const float& intensity)
 			:
 			position(pos),
 			color(color),

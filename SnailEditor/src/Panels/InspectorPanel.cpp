@@ -271,7 +271,7 @@ namespace Snail {
 				ImGui::TableSetupColumn("Control");
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Color");
-				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
+				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit3("##Color", glm::value_ptr(component.color));
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Direction");
 				ImGui::TableSetColumnIndex(1);
@@ -293,7 +293,7 @@ namespace Snail {
 				ImGui::TableSetupColumn("Control");
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Color");
-				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit4("##Color", glm::value_ptr(component.color));
+				ImGui::TableSetColumnIndex(1); ImGui::ColorEdit3("##Color", glm::value_ptr(component.color));
 
 				ImGui::TableNextRow(); ImGui::TableSetColumnIndex(0); ImGui::Text("Intensity");
 				ImGui::TableSetColumnIndex(1); ImGui::DragFloat("##Intensity", &component.intensity, 1.0f, 0.0f, 10000.0f);
@@ -510,6 +510,55 @@ namespace Snail {
 				for (auto& texture : mesh->GetTextures())
 					texture->SetEnable(enableTexture);
 				mesh->RemapMaterialTextures();
+			}
+
+			// --- 材质参数 ---
+			if (ImGui::TreeNodeEx(u8"Mesh 基础材质参数", ImGuiTreeNodeFlags_Framed)) {
+				auto firstMaterial = mesh->GetMaterial();
+				ImGui::TextDisabled("———— Phong 管线 ————");
+				// Ambient
+				glm::vec3 ambient = firstMaterial->GetAmbientColor();
+				if (ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient))) {
+					mesh->GetMaterial()->SetAmbientColor(ambient);
+				}
+				// Diffuse
+				glm::vec3 diffuse = firstMaterial->GetDiffuseColor();
+				if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(diffuse))) {
+					mesh->GetMaterial()->SetDiffuseColor(diffuse);
+				}
+				// Specular
+				glm::vec3 specular = firstMaterial->GetSpecularColor();
+				if (ImGui::ColorEdit3("Specular", glm::value_ptr(specular))) {
+					mesh->GetMaterial()->SetSpecularColor(specular);
+				}
+				// Shininess
+				float shininess = firstMaterial->GetShininess();
+				if (ImGui::SliderFloat("Shininess", &shininess, 0.0f, 1000.0f)) {
+					mesh->GetMaterial()->SetShininess(shininess);
+				}
+
+				ImGui::TextDisabled("———— PBR 管线 ————");
+				// Albedo
+				glm::vec3 albedo = firstMaterial->GetAlbedoColor();
+				if (ImGui::ColorEdit3("Albedo", glm::value_ptr(albedo))) {
+					mesh->GetMaterial()->SetAlbedoColor(albedo);
+				}
+				// Roughness
+				float rough = firstMaterial->GetRoughness();
+				if (ImGui::SliderFloat("Roughness", &rough, 0.0f, 1.0f)) {
+					mesh->GetMaterial()->SetRoughness(rough);
+				}
+				// Metallic
+				float metal = firstMaterial->GetMetallic();
+				if (ImGui::SliderFloat("Metallic", &metal, 0.0f, 1.0f)) {
+					mesh->GetMaterial()->SetMetallic(metal);
+				}
+				// AO
+				float ao = firstMaterial->GetAO();
+				if (ImGui::SliderFloat("AO", &ao, 0.0f, 1.0f)) {
+					mesh->GetMaterial()->SetAO(ao);
+				}
+				ImGui::TreePop();
 			}
 
 			ImGui::PopID();
@@ -866,7 +915,7 @@ namespace Snail {
 					static float s_InitIntensity = 1.0f;
 					ImGui::TextDisabled("初始参数设置");
 
-					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
+					ImGui::ColorEdit3("颜色", glm::value_ptr(s_InitColor));
 					DrawVec3Control("方向", s_InitDir, glm::vec3(0.0f, -1.0f, 0.0f));
 					ImGui::TextDisabled("光强参数");
 					ImGui::DragFloat("光强", &s_InitIntensity, 0.01f, 0.0f, 10.0f);
@@ -910,7 +959,7 @@ namespace Snail {
 					static float s_InitIntensity = 1.0f;
 					ImGui::TextDisabled("初始参数设置");
 					// 颜色选择面板
-					ImGui::ColorEdit4("颜色", glm::value_ptr(s_InitColor));
+					ImGui::ColorEdit3("颜色", glm::value_ptr(s_InitColor));
 					ImGui::TextDisabled("光强参数");
 					ImGui::DragFloat("光强", &s_InitIntensity, 1.0f, 0.0f, 10000.0f);
 

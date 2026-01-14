@@ -87,6 +87,7 @@ namespace Snail {
 		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
 	private:
 		static Refptr<Texture2D> Create(const std::vector<std::string>& path, const TextureUsage& usage);
+		static Refptr<Texture2D> Create(const void* data, size_t size, const TextureUsage& usage);
 
 		virtual void LoadTexture2D(const std::vector<std::string>& path) = 0;
 

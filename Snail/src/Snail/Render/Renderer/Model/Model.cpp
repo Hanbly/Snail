@@ -85,7 +85,8 @@ namespace Snail {
 			return;
 		}
 		// 示例：assets/models/sponza/sponza.obj
-		std::string tempPath = ExtractRelativePath(std::string(path));
+		std::string tempPath = RendererTools::CleanFilePath(std::string(path));
+		tempPath = RendererTools::CleanWindowsPath(tempPath);
 		std::filesystem::path stdPath = tempPath;
 		m_FullPath = tempPath;
 
@@ -197,43 +198,43 @@ namespace Snail {
 		{
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-			std::vector<Refptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Diffuse);
+			std::vector<Refptr<Texture>> diffuseMaps = LoadMaterialTextures(scene, material, aiTextureType_DIFFUSE, TextureUsage::Diffuse);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-			std::vector<Refptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureUsage::Specular);
+			std::vector<Refptr<Texture>> specularMaps = LoadMaterialTextures(scene, material, aiTextureType_SPECULAR, TextureUsage::Specular);
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-			std::vector<Refptr<Texture>> albedoMaps = LoadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureUsage::Albedo);
+			std::vector<Refptr<Texture>> albedoMaps = LoadMaterialTextures(scene, material, aiTextureType_BASE_COLOR, TextureUsage::Albedo);
 			if (albedoMaps.empty()) {
-				albedoMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::Albedo);
+				albedoMaps = LoadMaterialTextures(scene, material, aiTextureType_DIFFUSE, TextureUsage::Albedo);
 			}
 			textures.insert(textures.end(), albedoMaps.begin(), albedoMaps.end());
 
-			std::vector<Refptr<Texture>> metallicMaps = LoadMaterialTextures(material, aiTextureType_METALNESS, TextureUsage::Metallic);
+			std::vector<Refptr<Texture>> metallicMaps = LoadMaterialTextures(scene, material, aiTextureType_METALNESS, TextureUsage::Metallic);
 			textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
 
-			std::vector<Refptr<Texture>> roughnessMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, TextureUsage::Roughness);
+			std::vector<Refptr<Texture>> roughnessMaps = LoadMaterialTextures(scene, material, aiTextureType_DIFFUSE_ROUGHNESS, TextureUsage::Roughness);
 			if (roughnessMaps.empty()) {
 				// 某些旧格式可能会用 Shininess 来模拟
-				 roughnessMaps = LoadMaterialTextures(material, aiTextureType_SHININESS, TextureUsage::Roughness); 
+				roughnessMaps = LoadMaterialTextures(scene, material, aiTextureType_SHININESS, TextureUsage::Roughness);
 			}
 			textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
 
 			// 很多 glTF 模型会将 AO 放在 aiTextureType_LIGHTMAP 中，或者 aiTextureType_AMBIENT_OCCLUSION
-			std::vector<Refptr<Texture>> aoMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, TextureUsage::AO);
+			std::vector<Refptr<Texture>> aoMaps = LoadMaterialTextures(scene, material, aiTextureType_AMBIENT_OCCLUSION, TextureUsage::AO);
 			if (aoMaps.empty()) {
-				aoMaps = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, TextureUsage::AO);
+				aoMaps = LoadMaterialTextures(scene, material, aiTextureType_LIGHTMAP, TextureUsage::AO);
 			}
 			textures.insert(textures.end(), aoMaps.begin(), aoMaps.end());
 
 			// 用于处理发光的材质（如霓虹灯、屏幕等）
-			std::vector<Refptr<Texture>> emissiveMaps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, TextureUsage::Emissive);
+			std::vector<Refptr<Texture>> emissiveMaps = LoadMaterialTextures(scene, material, aiTextureType_EMISSIVE, TextureUsage::Emissive);
 			textures.insert(textures.end(), emissiveMaps.begin(), emissiveMaps.end());
 
-			std::vector<Refptr<Texture>> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, TextureUsage::Normal);
+			std::vector<Refptr<Texture>> normalMaps = LoadMaterialTextures(scene, material, aiTextureType_NORMALS, TextureUsage::Normal);
 			if (normalMaps.empty()) {
 				// 很多 FBX 把法线贴图放在 Height 通道
-				normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TextureUsage::Normal);
+				normalMaps = LoadMaterialTextures(scene, material, aiTextureType_HEIGHT, TextureUsage::Normal);
 			}
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
@@ -283,7 +284,7 @@ namespace Snail {
 		return resultMesh;
 	}
 
-	std::vector<Refptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage)
+	std::vector<Refptr<Texture>> Model::LoadMaterialTextures(const aiScene* scene, aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage)
 	{
 		SNL_PROFILE_FUNCTION();
 
@@ -298,14 +299,56 @@ namespace Snail {
 				SNL_CORE_WARN("Model: Assimp Failed to get texture path for type {0}, index {1}", TextureUsageToString(usage), i);
 				continue;
 			}
+
+			// --------------------------- 嵌入式纹理 ----------------------------------
+			// 路径以 '*' 开头，表示它在 aiScene::mTextures 数组中
+			if (str.C_Str()[0] == '*')
+			{
+				if (scene->HasTextures())
+				{
+					int textureIndex = atoi(str.C_Str() + 1); // 解析 "*0" -> 0
+
+					if (textureIndex < scene->mNumTextures)
+					{
+						aiTexture* aiTex = scene->mTextures[textureIndex];
+
+						Refptr<Texture> texture;
+
+						// mHeight == 0 表示它是压缩格式 (如 png/jpg 文件的二进制流)
+						if (aiTex->mHeight == 0)
+						{
+							SNL_CORE_TRACE("Model: 加载嵌入的压缩纹理 (Index: {0}, Size: {1} bytes)", textureIndex, aiTex->mWidth);
+
+							// aiTex->pcData 指向数据首地址
+							// aiTex->mWidth 是数据的大小（字节数）
+							// aiTex->achFormatHint 包含格式提示 (如 "png", "jpg")
+							std::string pathKey = "Embedded_*" + std::to_string(textureIndex) + "_" + TextureUsageToString(usage);
+							texture = TextureLibrary::Load(aiTex->pcData, aiTex->mWidth, usage, pathKey);
+						}
+						else
+						{
+							// mHeight > 0 表示它是原始的 ARGB8888 像素数据
+							SNL_CORE_TRACE("Model: 加载嵌入的原始纹理 (Index: {0}, W: {1}, H: {2})", textureIndex, aiTex->mWidth, aiTex->mHeight);
+
+							// 数据大小通常是 mWidth * mHeight * 4 (RGBA)
+							// texture = TextureLibrary::LoadRawData(aiTex->pcData, aiTex->mWidth, aiTex->mHeight, usage);
+						}
+
+						if (texture) textures.push_back(texture);
+					}
+				}
+				continue; // 处理完嵌入纹理后跳过本次循环，不走下面的文件加载逻辑
+			}
+
+			// ------------------------ 从文件系统加载 --------------------------
 			// 防御空路径
 			if (str.length == 0) {
 				SNL_CORE_WARN("Model: Texture path is empty!");
 				continue;
 			}
-			std::string filename = std::string(str.C_Str());
-			filename = ExtractRelativePath(filename);
-						
+			std::string filename = RendererTools::CleanWindowsPath(str.C_Str());
+			//filename = RendererTools::CleanFilePath(filename);
+
 			Refptr<Texture> texture;
 
 			std::filesystem::path filePath(filename);
@@ -504,30 +547,6 @@ namespace Snail {
 		}
 
 		return std::pair<std::vector<Vertex>, std::vector<uint32_t>>(vertices, indices);
-	}
-
-	std::string Model::ExtractRelativePath(std::string& path)
-	{
-		std::filesystem::path p(path);
-		std::filesystem::path result;
-
-		// 遍历路径的每一段
-		for (const auto& part : p)
-		{
-			// 如果这一段是 ".." 或者 "."，就跳过
-			if (part == ".." || part == ".") {
-				continue;
-			}
-
-			// 剩下的部分拼接起来 (会自动处理 / 或 \)
-			// 如果 result 是空的，直接赋值；否则用 /= 拼接
-			result /= part;
-		}
-
-		std::string resultStr = result.string();
-		std::replace(resultStr.begin(), resultStr.end(), '\\', '/');
-
-		return resultStr;
 	}
 
 }

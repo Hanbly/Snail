@@ -8,29 +8,36 @@ EditorCamera:
   Near: 1
   Far: 10000
   Aspect: 1.65142858
-  ViewMatrix: [0.757470906, 0.153177351, -0.634645283, -0, -7.4505806e-09, 0.972086728, 0.234621882, 0, 0.652868927, -0.177719235, 0.73632735, -0, 73.3333664, -88.0350342, -589.224487, 1]
-  Position: [-416.011475, 223.822662, 370.339539]
-  DirvecFront: [0.634645224, -0.234621882, -0.73632735]
-  DirvecRight: [0.757470906, -0, 0.652868986]
-  DirvecUp: [0.153177351, 0.972086728, -0.17771925]
+  ViewMatrix: [0.80448854, 0.28514567, -0.521047115, -0, -1.49011612e-08, 0.877230763, 0.480068982, 0, 0.593968153, -0.386209965, 0.705722094, -0, -148.956848, 4.68214798, -513.890503, 1]
+  Position: [-149.262207, 242.595566, 452.947815]
+  DirvecFront: [0.521047115, -0.480068952, -0.705722094]
+  DirvecRight: [0.804488599, -0, 0.593968153]
+  DirvecUp: [0.28514567, 0.877230763, -0.386209995]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 13.5693359
-  DirvecYaw: 400.75827
-  FocalPoint: [-78.4581909, 99.0326385, -21.2961311]
-  Distance: 531.877136
+  EulerPitch: 28.6899071
+  DirvecYaw: 36.439106
+  FocalPoint: [210.451538, -88.8282013, -34.2594337]
+  Distance: 690.367004
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
   DollySpeed: 0.5
 Entities:
-  - Entity: 58baab63-3184-4215-8e68-cc158a1ce2c0
+  - Entity: ca4ae032-0339-4cf6-ba5e-d0e01f44528c
+    TagComponent:
+      Tag: 平行光
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [-0.419999987, -1, 0.0900000036]
+      Intensity: 1
+  - Entity: 6c194b0a-c8e9-4404-a8d4-52946d43960f
     TagComponent:
       Tag: 天空盒
     ModelComponent:
       IsImported: false
       DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
-      EnableTextures: true
+      EnableTextures: false
       Meshes:
         - PrimitiveType: Skybox
           ShaderPath: assets/shaders/TextureCube_Shader.glsl
@@ -42,386 +49,174 @@ Entities:
           Textures:
             - DimType: TextureCube
               Usage: texture_cubemap
-              Paths: [assets\skybox\warm_bar_4k.exr]
+              Paths: [assets/skybox/warm_bar_4k.exr]
+              Enable: false
+      Visible: true
+      EdgeEnable: false
+  - Entity: d371587e-860b-491f-bb39-ca8569eb31a9
+    TagComponent:
+      Tag: 摄像机
+    TransformComponent:
+      Position: [-1.43851965e-15, -1.90728417e-06, -1.73472358e-15]
+      Rotation: [0.0037882484, -1.93133426, -0.00100262451]
+      Scale: [12.4244585, 12.4244318, 12.4244642]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/Camera_01_4k.fbx/Camera_01_4k.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.912999988
+          AO: 0.708000004
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_metallic_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_roughness_4k.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          Albedo: [1, 1, 1]
+          Metallic: 1
+          Roughness: 0.737999976
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_metallic_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_lens_body_roughness_4k.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          Albedo: [1, 1, 1]
+          Metallic: 1
+          Roughness: 0
+          AO: 1
+          Textures:
+            []
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.508000016
+          AO: 0.462000012
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_metallic_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_body_roughness_4k.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          Albedo: [1, 1, 1]
+          Metallic: 1
+          Roughness: 0
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_nor_gl_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_metallic_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_diff_4k.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/Camera_01_4k.fbx/textures/Camera_01_strap_roughness_4k.png]
               Enable: true
       Visible: true
       EdgeEnable: false
-  - Entity: 7b673095-7091-41e3-890f-0c6754e15ebd
+  - Entity: 005023d2-2ac2-471b-b7c5-962a8d980751
     TagComponent:
       Tag: 手枪
     TransformComponent:
-      Position: [-1.90734863e-06, 75.1392365, 37.4221344]
-      Rotation: [-20.0578098, -0, 0]
-      Scale: [1, 0.99999845, 0.99999845]
+      Position: [399.98407, 0, 156.52597]
+      Rotation: [0, 1.50907393e-08, 0]
+      Scale: [4.4199996, 4.41999865, 4.4199996]
     ModelComponent:
       IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
       EnableTextures: true
       FilePath: assets/models/Cerberus_by_Andrew_Maximov/Cerberus_LP.fbx
       Meshes:
         - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
+          ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
           Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_metallic
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_M.tga]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_R.tga]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_N.tga]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Cerberus_A.tga]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_ao
-              Paths: [F:\Snail\SnailEditor\assets\models\Cerberus_by_Andrew_Maximov\Textures\Raw\Cerberus_AO.tga]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: 0ceb8567-6a1a-42e1-99e6-9f95f113afd4
-    TagComponent:
-      Tag: 平行光
-    DirectionalLightComponent:
-      Color: [1, 1, 1, 1]
-      Direction: [0.75, -1, -0.99000001]
-      Intensity: 1.5
-  - Entity: 20b44866-f04b-4a53-8678-e8166f6dd308
-    TagComponent:
-      Tag: 树木
-    TransformComponent:
-      Position: [-9.61024094, -106.718857, -280.886505]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      FilePath: assets/models/tree_small_02_4k.fbx/tree_small_02_4k.fbx
-      Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 0.173999995
+          Metallic: 1
+          Roughness: 0.307000011
+          AO: 0.518999994
           Textures:
             - DimType: Texture2D
               Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_nor_gl_4k.png]
+              Paths: [assets/models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.tga]
               Enable: true
             - DimType: Texture2D
               Usage: texture_albedo
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_diff_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_branch_rough_4k.png]
-              Enable: true
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 0.173999995
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_nor_gl_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_diff_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_leaves_rough_4k.png]
-              Enable: true
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 0.173999995
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets\models\tree_small_02_4k.fbx\textures\tree_small_02_nor_gl_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets/models/tree_small_02_4k.fbx/textures/tree_small_02_rough_4k.exr]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: de43d366-068c-4216-bed3-62d332bcdcc2
-    TagComponent:
-      Tag: 蜘蛛
-    TransformComponent:
-      Position: [1.93025827, -13.6844501, -155.963837]
-      Rotation: [0, -0, 0]
-      Scale: [0.290000021, 0.290000021, 0.290000021]
-    ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets\shaders\Standard.glsl
-      EnableTextures: true
-      FilePath: assets/models/spider-fbx/Spider_3.fbx
-      Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
-              Enable: true
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_specular
-              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
-              Enable: true
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
-              Enable: true
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/spider-fbx/textures/SH3.png]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: f862385b-a4f8-448c-8502-ad299983b992
-    TagComponent:
-      Tag: 木桶
-    TransformComponent:
-      Position: [0.85449791, -103.987106, -154.058273]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      FilePath: assets/models/wooden-barrel-gltfglb/gltf/barrel.gltf
-      Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 0.5
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Normal.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_BaseColor.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_metallic
-              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Metallic-barrel_Roughness.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_BaseColor.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets/models/wooden-barrel-gltfglb/gltf/barrel_Metallic-barrel_Roughness.png]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: cb904ad5-9f37-4a21-a1fa-a9f8158f207a
-    TagComponent:
-      Tag: 地面
-    TransformComponent:
-      Position: [0, -102.229584, -49.4071922]
-      Rotation: [0, -0, 0]
-      Scale: [1251.59814, 1251.59814, 1251.59814]
-    ModelComponent:
-      IsImported: false
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      Meshes:
-        - PrimitiveType: Plane
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: false
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_nor_gl_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_rough_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_ao
-              Paths: [assets\PBRMaps\old_stone_wall_4k\textures\old_stone_wall_ao_4k.jpg]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: 8d684930-9c9c-4f40-abb4-dc06480f14de
-    TagComponent:
-      Tag: 木桌
-    TransformComponent:
-      Position: [196.229248, 6.73040771, 94.6624451]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      FilePath: assets/models/gothic_coffee_table_4k.fbx/gothic_coffee_table_4k.fbx
-      Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 1
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/gothic_coffee_table_4k.fbx/textures/gothic_coffee_table_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets\models\gothic_coffee_table_4k.fbx\textures\gothic_coffee_table_nor_gl_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets/models/gothic_coffee_table_4k.fbx/textures/gothic_coffee_table_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets\models\gothic_coffee_table_4k.fbx\textures\gothic_coffee_table_rough_4k.png]
-              Enable: true
-      Visible: true
-      EdgeEnable: false
-  - Entity: 8b48996d-9515-4b66-8b21-0b7f17a3b5e2
-    TagComponent:
-      Tag: 转椅
-    TransformComponent:
-      Position: [-241.851532, 2.79337025, -177.767334]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      FilePath: assets/models/mid_century_lounge_chair_4k.fbx/mid_century_lounge_chair_4k.fbx
-      Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets\shaders\Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 0
-          Roughness: 0.5
-          AO: 0.510999978
-          Textures:
-            - DimType: Texture2D
-              Usage: texture_normal
-              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_nor_gl_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/mid_century_lounge_chair_4k.fbx/textures/mid_century_lounge_chair_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_metallic
-              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_metal_4k.png]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_albedo
-              Paths: [assets/models/mid_century_lounge_chair_4k.fbx/textures/mid_century_lounge_chair_diff_4k.jpg]
-              Enable: true
-            - DimType: Texture2D
-              Usage: texture_roughness
-              Paths: [assets\models\mid_century_lounge_chair_4k.fbx\textures\mid_century_lounge_chair_rough_4k.png]
+              Paths: [assets/models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.tga]
               Enable: true
       Visible: true
       EdgeEnable: false

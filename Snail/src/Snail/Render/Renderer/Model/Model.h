@@ -63,13 +63,12 @@ namespace Snail {
 		void Load(const std::string& path);
 		void ProcessNode(aiNode* node, const aiScene* scene, const glm::mat4& parentTransformation);
 		Refptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene, const glm::mat4& localTransformation);
-		std::vector<Refptr<Texture>> LoadMaterialTextures(aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage);
+		std::vector<Refptr<Texture>> LoadMaterialTextures(const aiScene* scene, aiMaterial* mat, const aiTextureType& type, const TextureUsage& usage);
 
 		//--------------Tools--------------------
 		glm::mat4 ConvertaiMat4ToglmMat4(const aiMatrix4x4& matrix) const;
 		void ConsiderMeshAABB(const Refptr<Mesh>& mesh);
 		std::pair<std::vector<Vertex>, std::vector<uint32_t>> GetPrimitiveDatas(const PrimitiveType& type);
-		std::string ExtractRelativePath(std::string& path);
 	};
 
 }

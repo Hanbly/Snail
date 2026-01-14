@@ -12,9 +12,12 @@ namespace Snail {
 
 	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_TextureNames = std::unordered_map<std::string, Refptr<Texture>>();
 	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_TexturePaths = std::unordered_map<std::string, Refptr<Texture>>();
+	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_EmbeddedTexturePaths = std::unordered_map<std::string, Refptr<Texture>>();
 
-	Refptr<Texture> TextureLibrary::Load(const std::vector<std::string>& filePath, const TextureUsage& usage)
+	Refptr<Texture> TextureLibrary::Load(const std::vector<std::string>& rawPath, const TextureUsage& usage)
 	{
+		std::vector<std::string> filePath = rawPath;
+		filePath = CleanFilePath(filePath);
 		// 从路径提取名字 (例如 assets/images/color.png -> color)
 		std::filesystem::path path = filePath[0];		// 默认首个
 		std::string name = path.u8string() + "_" + TextureUsageToString(usage);
@@ -51,8 +54,10 @@ namespace Snail {
 		return texture;
 	}
 
-	Refptr<Texture> TextureLibrary::Load(const std::string& customName, const std::vector<std::string>& filePath, const TextureUsage& usage)
+	Refptr<Texture> TextureLibrary::Load(const std::string& customName, const std::vector<std::string>& rawPath, const TextureUsage& usage)
 	{
+		std::vector<std::string> filePath = rawPath;
+		filePath = CleanFilePath(filePath);
 		std::string pathKey = RendererTools::TexturePathsToKey(filePath, usage);
 
 		if (m_TexturePaths.find(pathKey) != m_TexturePaths.end()) { // 资源已经加载过
@@ -83,6 +88,19 @@ namespace Snail {
 		m_TexturePaths[pathKey] = texture;
 
 		return texture;
+	}
+
+	Refptr<Texture> TextureLibrary::Load(const void* data, size_t size, const TextureUsage& usage, const std::string& pathKey)
+	{
+		if (m_EmbeddedTexturePaths.find(pathKey) != m_EmbeddedTexturePaths.end()) { // 资源已经加载过
+			return m_EmbeddedTexturePaths[pathKey];
+		}
+
+		if (Refptr<Texture> texture = Texture2D::Create(data, size, usage)) {
+			m_EmbeddedTexturePaths[pathKey] = texture;
+			return texture;
+		}
+		return nullptr;
 	}
 
 	Refptr<Texture> TextureLibrary::Get(const std::string& name)
@@ -136,6 +154,15 @@ namespace Snail {
 		std::string prefilterName = "IBL_Prefilter_CubemapTexture_" + path.u8string() + "_" + TextureUsageToString(usage);
 
 		return Get(prefilterName);
+	}
+
+	std::vector<std::string> TextureLibrary::CleanFilePath(std::vector<std::string>& rawPath)
+	{
+		for (auto& path : rawPath) {
+			path = RendererTools::CleanFilePath(path);
+			path = RendererTools::CleanWindowsPath(path);
+		}
+		return rawPath;
 	}
 
 	void TextureLibrary::GenIBLTextures(const Refptr<Texture>& cubemap)

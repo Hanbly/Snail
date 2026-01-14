@@ -157,6 +157,12 @@ namespace YAML {
 	template<>
 	struct convert<std::vector<std::string>> {
 		static Node encode(const std::vector<std::string>& rhs) {
+			if (rhs.empty()) {
+				Node node(NodeType::Sequence);
+				node.SetStyle(EmitterStyle::Flow); // 使用 [path1, path2] 格式
+				return node;
+			}
+
 			Node node;
 			for (const auto& s : rhs) node.push_back(s);
 			node.SetStyle(EmitterStyle::Flow); // 使用 [path1, path2] 格式

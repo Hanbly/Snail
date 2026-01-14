@@ -66,7 +66,7 @@ namespace Snail {
 
 	// 平行光源组件
 	struct DirectionalLightComponent {
-		glm::vec4 color = glm::vec4(1.0f);
+		glm::vec3 color = glm::vec4(1.0f);
 		glm::vec3 direction = glm::vec3(1.0f);
 
 		// 强度系数
@@ -74,7 +74,7 @@ namespace Snail {
 
 		DirectionalLightComponent() = default;
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
-		DirectionalLightComponent(const glm::vec4& color, const glm::vec3& dir, const float& intensity)
+		DirectionalLightComponent(const glm::vec3& color, const glm::vec3& dir, const float& intensity)
 			: 
 			color(color), 
 			direction(dir),
@@ -84,7 +84,7 @@ namespace Snail {
 
 	// 点光源组件
 	struct PointLightComponent {
-		glm::vec4 color = glm::vec4(1.0f);
+		glm::vec3 color = glm::vec4(1.0f);
 
 		// --- 衰减系数 ---
 		//float constant = 1.0f;
@@ -95,7 +95,7 @@ namespace Snail {
 
 		PointLightComponent() = default;
 		PointLightComponent(const PointLightComponent&) = default;
-		PointLightComponent(const glm::vec4& color, const float& intensity)
+		PointLightComponent(const glm::vec3& color, const float& intensity)
 			:
 			color(color),
 			intensity(intensity)

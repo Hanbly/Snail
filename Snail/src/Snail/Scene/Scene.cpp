@@ -120,7 +120,7 @@ namespace Snail {
 			for (auto [entity, light] : view.each())
 			{
 				glm::vec3 lightDir = light.direction;
-				glm::vec4 lightColor = light.color;
+				glm::vec3 lightColor = light.color;
 				float intensity = light.intensity;
 				DirectionLight directionLight(lightDir, lightColor, intensity);
 
@@ -134,7 +134,7 @@ namespace Snail {
             for (auto [entity, transform, light] : view.each())
             {
                 glm::vec3 lightPos = transform.position;
-                glm::vec4 lightColor = light.color;
+                glm::vec3 lightColor = light.color;
 				float intensity = light.intensity;
                 PointLight pointLight(lightPos, lightColor, intensity);
                 

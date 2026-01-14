@@ -21,6 +21,8 @@ namespace Snail {
 		bool m_Enable = false;
 	public:
 		OpenGLTexture2D(const std::vector<std::string>& path, const TextureUsage& usage);
+		// 内存数据构造函数 (用于 glTF/glb 嵌入纹理)
+		OpenGLTexture2D(const void* data, size_t size, const TextureUsage& usage);
 		virtual ~OpenGLTexture2D();
 
 		inline virtual uint32_t GetRendererId() const override { return m_RendererId; }
@@ -42,7 +44,9 @@ namespace Snail {
 
 		static void BindExternal(const uint32_t& slot, const uint32_t& rendererId);
 	private:
-		virtual void LoadTexture2D(const std::vector<std::string>& path) override;
+		virtual void LoadTexture2D(const std::vector<std::string>& path) override;		
+		void LoadTextureFromMemory(const void* data, size_t size); // 从内存加载的逻辑
+		void CreateInternalTexture(void* data, int width, int height, int channels, bool isFloat);
 	};
 
 	class OpenGLTextureCube : public TextureCube {

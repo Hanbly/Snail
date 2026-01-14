@@ -471,7 +471,7 @@ namespace Snail {
 					auto& dlc = deserializedEntity.AddComponent<DirectionalLightComponent>();
 
 					dlc.direction = dirLightComponent["Direction"].as<glm::vec3>();
-					dlc.color = dirLightComponent["Color"].as<glm::vec4>();
+					dlc.color = dirLightComponent["Color"].as<glm::vec3>();
 
 					// 光照强度
 					if (dirLightComponent["Intensity"]) dlc.intensity = dirLightComponent["Intensity"].as<float>();
@@ -483,7 +483,7 @@ namespace Snail {
 				{
 					auto& plc = deserializedEntity.AddComponent<PointLightComponent>();
 
-					plc.color = pointLightComponent["Color"].as<glm::vec4>();
+					plc.color = pointLightComponent["Color"].as<glm::vec3>();
 
 					// 衰减系数
 					//if (pointLightComponent["Constant"]) plc.constant = pointLightComponent["Constant"].as<float>();
@@ -604,25 +604,37 @@ namespace Snail {
 									// 获取当前 Mesh 的纹理列表
 									auto currentTextures = targetMesh->GetTextures();
 
-									// 简单的策略：如果数量或内容不一致，清空并重新添加
-									// 或者：如果 YAML 里有数据，我们完全信任 YAML
+									// 如果数量或内容不一致，清空并重新添加
 									if (texturesNode) {
-										// 清空现有纹理
-										targetMesh->ClearTextures();
-
-										// 重新添加保存的纹理
+										bool flag = true;
+										// 先循环检查一遍路径，如果有空路径就不覆盖了
 										for (auto texNode : texturesNode) {
-											std::string usageStr = texNode["Usage"].as<std::string>();
-											TextureUsage usage = StringToTextureUsage(usageStr);
 											auto paths = texNode["Paths"].as<std::vector<std::string>>();
-											bool enable = texNode["Enable"] ? texNode["Enable"].as<bool>() : false;
-
-											// 加载并添加
-											if (auto texture = TextureLibrary::Load(paths, usage)) {
-												texture->SetEnable(enable);
-												targetMesh->AddTexture(texture, usage);
+											if (!paths.size()) {
+												flag = false;
+												break;
 											}
 										}
+
+										if (flag) {
+											// 清空现有纹理
+											targetMesh->ClearTextures();
+
+											// 重新添加保存的纹理
+											for (auto texNode : texturesNode) {
+												std::string usageStr = texNode["Usage"].as<std::string>();
+												TextureUsage usage = StringToTextureUsage(usageStr);
+												auto paths = texNode["Paths"].as<std::vector<std::string>>();
+												bool enable = texNode["Enable"] ? texNode["Enable"].as<bool>() : false;
+
+												// 加载并添加
+												if (auto texture = TextureLibrary::Load(paths, usage)) {
+													texture->SetEnable(enable);
+													targetMesh->AddTexture(texture, usage);
+												}
+											}
+										}
+										
 									}
 									targetMesh->SetEnableTextures(enableTextures);
 								}

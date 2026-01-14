@@ -1,5 +1,7 @@
 ﻿#include "SNLpch.h"
 
+#include "Snail/Utils/RendererTools.h"
+
 #include "ShaderLibrary.h"
 
 namespace Snail {
@@ -7,8 +9,10 @@ namespace Snail {
 	std::unordered_map<std::string, Refptr<Shader>> ShaderLibrary::m_ShaderNames = std::unordered_map<std::string, Refptr<Shader>>();
 	std::unordered_map<std::string, Refptr<Shader>> ShaderLibrary::m_ShaderPaths = std::unordered_map<std::string, Refptr<Shader>>();
 
-	Refptr<Shader> ShaderLibrary::Load(const std::string& filePath, const std::vector<std::string>& macros)
+	Refptr<Shader> ShaderLibrary::Load(const std::string& rawPath, const std::vector<std::string>& macros)
 	{
+		std::string filePath = rawPath;
+		CleanFilePath(filePath);
 		// 从路径提取名字 (例如 assets/shaders/Cube.glsl -> Cube)
 		std::filesystem::path path = filePath;
 		std::string name = path.stem().u8string();          // 除去扩展名的文件名
@@ -33,8 +37,10 @@ namespace Snail {
 		return shader;
 	}
 
-	Refptr<Shader> ShaderLibrary::Load(const std::string& customName, const std::string& filePath, const std::vector<std::string>& macros)
+	Refptr<Shader> ShaderLibrary::Load(const std::string& customName, const std::string& rawPath, const std::vector<std::string>& macros)
 	{
+		std::string filePath = rawPath;
+		CleanFilePath(filePath);
 		std::string pathKey = PathsMacrosToKey(std::string(filePath), macros);
 
 		if (m_ShaderPaths.find(pathKey) != m_ShaderPaths.end()) { // 资源已经加载过
@@ -70,6 +76,12 @@ namespace Snail {
 			key += "#" + m; // 加个分隔符防止路径和宏粘在一起 (e.g. "path" + "Define" -> "pathDefine")
 		}
 		return key;
+	}
+
+	void ShaderLibrary::CleanFilePath(std::string& rawPath)
+	{
+		rawPath = RendererTools::CleanFilePath(rawPath);
+		rawPath = RendererTools::CleanWindowsPath(rawPath);
 	}
 
 

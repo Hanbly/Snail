@@ -1,0 +1,114 @@
+Scene: test
+SceneSettings:
+  Gamma: 2.20000005
+  Exposure: 1
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 45
+  Near: 1
+  Far: 10000
+  Aspect: 1.65142858
+  ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.6133289, 0.414856583, -1655.85779, 1]
+  Position: [26.4396458, 687.600952, 1506.42224]
+  DirvecFront: [1, 0, 0]
+  DirvecRight: [0, 0, 1]
+  DirvecUp: [0, 1, 0]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: 24.5496426
+  DirvecYaw: -362.169769
+  FocalPoint: [-25.7466259, 57.9938965, 129.030258]
+  Distance: 1515.36694
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  DollySpeed: 0.5
+Entities:
+  - Entity: 7f8221b8-016d-46c8-8dd7-24193e270848
+    TagComponent:
+      Tag: New Model
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard.glsl
+      EnableTextures: false
+      FilePath: assets/models/spider-fbx/Spider.fbx
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            []
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false

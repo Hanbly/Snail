@@ -69,7 +69,13 @@ namespace Snail {
 		LoadTexture2D(path);
 	}
 
-	OpenGLTexture2D::~OpenGLTexture2D() 
+	OpenGLTexture2D::OpenGLTexture2D(const void* data, size_t size, const TextureUsage& usage)
+		: m_RendererId(0), m_Type(TextureType::TWOD), m_Usage(usage)
+	{
+		LoadTextureFromMemory(data, size);
+	}
+
+	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &m_RendererId);
 		if (m_UIId > 0) glDeleteTextures(1, &m_UIId);
@@ -146,6 +152,70 @@ namespace Snail {
 			}
 		}
 
+		CreateInternalTexture(data, width, height, channels, isFloat);
+
+		if (extension == ".exr") {
+			free(data); // TinyEXR 的数据通常由 malloc 分配
+		}
+		else {
+			stbi_image_free(data);
+		}
+	}
+
+	void OpenGLTexture2D::LoadTextureFromMemory(const void* data, size_t size)
+	{
+		stbi_set_flip_vertically_on_load(true);
+		int width, height, channels;
+		void* decodedData = nullptr;
+		bool isFloat = false;
+		bool isExr = false;
+
+		const unsigned char* buffer = static_cast<const unsigned char*>(data);
+
+		// 检测是否为 EXR
+		if (IsEXRFromMemory(buffer, size) == TINYEXR_SUCCESS)
+		{
+			const char* err = nullptr;
+			int ret = LoadEXRFromMemory((float**)&decodedData, &width, &height, buffer, size, &err);
+
+			if (ret != TINYEXR_SUCCESS) {
+				SNL_CORE_ERROR("OpenGLTexture2D: 内存加载 EXR 失败: {0}", err);
+				if (err) FreeEXRErrorMessage(err);
+				return;
+			}
+			channels = 4;
+			isFloat = true;
+			isExr = true;
+			FlipFloatBufferVertically(static_cast<float*>(decodedData), width, height, channels);
+		}
+		// 检测是否为 HDR (Radiance RGBE)
+		else if (stbi_is_hdr_from_memory(buffer, (int)size))
+		{
+			decodedData = stbi_loadf_from_memory(buffer, (int)size, &width, &height, &channels, 0);
+			isFloat = true;
+		}
+		// 普通格式 (PNG, JPG, BMP, TGA 等)
+		else
+		{
+			decodedData = stbi_load_from_memory(buffer, (int)size, &width, &height, &channels, 0);
+			isFloat = false;
+		}
+
+		if (!decodedData) {
+			SNL_CORE_ERROR("OpenGLTexture2D: 内存纹理解码失败! (stbi/tinyexr)");
+			return;
+		}
+
+		// 调用公共上传函数
+		CreateInternalTexture(decodedData, width, height, channels, isFloat);
+
+		// 释放内存
+		if (isExr) free(decodedData);
+		else stbi_image_free(decodedData);
+	}
+
+	void OpenGLTexture2D::CreateInternalTexture(void* data, int width, int height, int channels, bool isFloat)
+	{
 		m_Width = width;
 		m_Height = height;
 
@@ -194,15 +264,8 @@ namespace Snail {
 
 		bool useSRGB = (internalFormat == GL_SRGB8 || internalFormat == GL_SRGB8_ALPHA8);
 
-		if (internalFormat == 0 || dataFormat == 0)
-		{
-			SNL_CORE_ERROR("纹理格式错误! Channels: {0}, Path: {1}", channels, path);
-			if (extension == ".exr") {
-				free(data); // TinyEXR 的数据通常由 malloc 分配
-			}
-			else {
-				stbi_image_free(data);
-			}
+		if (internalFormat == 0 || dataFormat == 0) {
+			SNL_CORE_ERROR("纹理格式错误! Channels: {0}", channels);
 			return;
 		}
 
@@ -260,12 +323,6 @@ namespace Snail {
 		}
 
 		Unbind();
-		if (extension == ".exr") {
-			free(data); // TinyEXR 的数据通常由 malloc 分配
-		}
-		else {
-			stbi_image_free(data);
-		}
 	}
 
 	OpenGLTextureCube::OpenGLTextureCube(const int dim, const bool mipmap)

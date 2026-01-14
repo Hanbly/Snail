@@ -1,8 +1,13 @@
 ﻿#pragma once
 
 #include "Snail/Render/RenderAPI/Buffer/VertexBuffer.h"
+#include "Snail/Render/RenderAPI/VertexArray.h"
 #include "Snail/Render/Renderer/FrameBuffer/FrameBuffer.h"
 #include "Snail/Render/Renderer/Material/Texture.h"
+#include "Snail/Render/Renderer/Material/ShaderLibrary.h"
+#include "Snail/Render/Renderer/Material/TextureLibrary.h"
+
+#include "Snail/Render/Renderer/RendererCommand.h"
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -27,6 +32,55 @@ namespace Snail {
 
 	class RendererTools {
 	public:
+
+		// --- 处理绝对路径 ---
+		static std::string CleanFilePath(const std::string& rawPath)
+		{
+			// --- 路径处理核心 ---
+			std::string cleanPathStr;
+
+			std::filesystem::path p(rawPath);
+			std::filesystem::path currentPath = std::filesystem::current_path();
+
+			std::filesystem::path relativePath;
+			try {
+				// 相对于工程目录的路径
+				relativePath = std::filesystem::relative(p, currentPath);
+			}
+			catch (...) {
+				// 如果不在同一磁盘，relative 会失败，回退到原始路径
+				relativePath = rawPath;
+			}
+
+			cleanPathStr = relativePath.string();
+
+			return cleanPathStr;
+		}
+
+		static std::string CleanWindowsPath(const std::string& path)
+		{
+			std::filesystem::path rawPath = path;
+			std::filesystem::path finalPath;
+			// 遍历路径的每一段
+			for (const auto& part : rawPath)
+			{
+				// 如果这一段是 ".." 或者 "."，就跳过
+				if (part == ".." || part == ".") {
+					continue;
+				}
+
+				// 剩下的部分拼接起来 (会自动处理 / 或 \)
+				// 如果 result 是空的，直接赋值；否则用 /= 拼接
+				finalPath /= part;
+			}
+
+			// 统一将 Windows 的 '\' 替换为 '/'
+			std::string result = finalPath.string();
+			std::replace(result.begin(), result.end(), '\\', '/');
+
+			return result;
+		}
+
 		// --- 手动计算切线空间 ---
 		static void RecalculateTangents(std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
