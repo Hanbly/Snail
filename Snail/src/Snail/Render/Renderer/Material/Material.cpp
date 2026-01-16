@@ -130,6 +130,8 @@ namespace Snail {
 		SetFloat("u_MetallicVal", m_Metallic);
 		SetFloat("u_RoughnessVal", m_Roughness);
 		SetFloat("u_AOVal", m_AO);
+		SetFloat3("u_EmissiveColor", m_EmissiveColor);
+		SetFloat("u_EmissiveIntensityVal", m_EmissiveIntensity);
 	}
 
 }

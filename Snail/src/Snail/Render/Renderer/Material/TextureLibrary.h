@@ -9,6 +9,8 @@ namespace Snail {
 
 	class TextureLibrary {
 	public:
+		static void Clear();
+
 		static Refptr<Texture> Load(const std::vector<std::string>& rawPath, const TextureUsage& usage);
 		static Refptr<Texture> Load(const std::string& customName, const std::vector<std::string>& rawPath, const TextureUsage& usage);
 		static Refptr<Texture> Load(const void* data, size_t size, const TextureUsage& usage, const std::string& cacheKey);

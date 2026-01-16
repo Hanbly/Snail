@@ -16,6 +16,13 @@ namespace Snail {
 	int TextureLibrary::m_PrefilterMapResolution = 256;
 	int TextureLibrary::m_PrefilterMipLevels = 5;
 
+	void TextureLibrary::Clear()
+	{
+		m_TextureNames.clear();
+		m_TexturePaths.clear();
+		m_EmbeddedTexturePaths.clear();
+	}
+
 	Refptr<Texture> TextureLibrary::Load(const std::vector<std::string>& rawPath, const TextureUsage& usage)
 	{
 		std::vector<std::string> filePath = rawPath;

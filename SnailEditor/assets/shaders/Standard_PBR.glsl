@@ -123,6 +123,12 @@ uniform sampler2D u_AOMap;
 uniform bool u_UseAOMap;
 uniform float u_AOVal; // 备用数值 (通常为 1.0)
 
+// 自发光贴图
+uniform sampler2D u_EmissiveMap;
+uniform bool u_UseEmissiveMap;
+uniform vec3 u_EmissiveColor;
+uniform float u_EmissiveIntensityVal;
+
 // 阴影贴图
 uniform sampler2D u_ShadowMap; 
 
@@ -174,7 +180,7 @@ void main()
     // 1. 采样材质属性
     // 逻辑：以 Uniform 颜色为基准，如果有贴图，则乘以贴图颜色
     vec3 albedo = u_AlbedoColor; 
-    if (u_UseAlbedoMap) {
+    if (u_UseTexture && u_UseAlbedoMap) {
         vec4 texColor = texture(u_AlbedoMap, v_TextureCoords);
         if(texColor.a < 0.1) discard;
         albedo *= texColor.rgb; 
@@ -182,19 +188,19 @@ void main()
 
     // Metallic 计算
     float metallic = u_MetallicVal;
-    if (u_UseMetallicMap) {
+    if (u_UseTexture && u_UseMetallicMap) {
         metallic *= texture(u_MetallicMap, v_TextureCoords).r; 
     }
 
     // Roughness 计算
     float roughness = u_RoughnessVal;
-    if (u_UseRoughnessMap) {
+    if (u_UseTexture && u_UseRoughnessMap) {
         roughness *= texture(u_RoughnessMap, v_TextureCoords).r;
     }
 
     // AO 计算
     float ao = u_AOVal;
-    if (u_UseAOMap) {
+    if (u_UseTexture && u_UseAOMap) {
         ao *= texture(u_AOMap, v_TextureCoords).r;
     }
 
@@ -318,8 +324,15 @@ void main()
         // 降级回简单的常数环境光
         ambient = vec3(0.03) * albedo * ao;
     }
+
+    // --- 自发光 ---
+    vec3 emissive = u_EmissiveColor * u_EmissiveIntensityVal; 
+    if (u_UseTexture && u_UseEmissiveMap) {
+        vec4 texColor = texture(u_EmissiveMap, v_TextureCoords);
+        emissive *= texColor.rgb; 
+    }
     
-    vec3 color = ambient + Lo;
+    vec3 color = ambient + Lo + emissive;
 
     FinalColor = vec4(color, 1.0);
     EntityIDBuffer = v_EntityID;

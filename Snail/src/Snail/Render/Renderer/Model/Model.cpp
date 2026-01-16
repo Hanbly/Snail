@@ -28,7 +28,7 @@ namespace Snail {
 	{
 		auto [vertices, indices] = GetPrimitiveDatas(type);
 
-		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
+		Refptr<Mesh> mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
 
 		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
 		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());
@@ -40,7 +40,7 @@ namespace Snail {
 	Model::Model(const PrimitiveType& type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const Refptr<Shader>& shader, const std::vector<Refptr<Texture>>& textures, const glm::mat4& localTransform)
 		: m_DefaultShaderPath(shader->GetFilePath()), m_IsImported(false), m_PrimitiveType(type)
 	{
-		auto& mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
+		Refptr<Mesh> mesh = std::make_shared<Mesh>(type, vertices, indices, shader, textures, localTransform);
 
 		m_AABB.min = glm::vec3(std::numeric_limits<float>::max());
 		m_AABB.max = glm::vec3(std::numeric_limits<float>::lowest());

@@ -58,6 +58,10 @@ namespace Snail {
 		float GetRoughness() const { return m_Roughness; }
 		void SetAO(float val) { m_AO = val; }
 		float GetAO() const { return m_AO; }
+		void SetEmissiveColor(const glm::vec3& color) { m_EmissiveColor = color; }
+		glm::vec3 GetEmissiveColor() const { return m_EmissiveColor; }
+		void SetEmissiveIntensity(float val) { m_EmissiveIntensity = val; }
+		float GetEmissiveIntensity() const { return m_EmissiveIntensity; }
 		void SetBasicValues();
 
 		static Refptr<Material> Create(const Refptr<Shader>& shader) { return std::make_shared<Material>(shader); }
@@ -85,6 +89,8 @@ namespace Snail {
 		float m_Metallic = 0.0f;					// 默认为非金属
 		float m_Roughness = 0.5f;					// 默认为中等粗糙
 		float m_AO = 1.0f;							// 默认为 1.0 (无遮蔽)
+		glm::vec3 m_EmissiveColor = glm::vec3(1.0f);	// 默认为白色
+		float m_EmissiveIntensity = 0.0f;				// 默认不发光
 	};
 
 }

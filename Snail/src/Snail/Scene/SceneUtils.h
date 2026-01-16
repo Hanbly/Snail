@@ -8,6 +8,7 @@
 
 #include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Material/TextureLibrary.h"
+#include "Snail/Render/Renderer/Renderer3D.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

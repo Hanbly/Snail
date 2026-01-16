@@ -115,6 +115,39 @@ namespace Snail {
 		}
 	}
 
+	void OpenGLRendererCommand::BlendFuncImpl(const BlendFuncType& sfactor, const BlendFuncType& dfactor) const
+	{
+		GLenum glsfactor = 0;
+		GLenum gldfactor = 0;
+		switch (sfactor) {
+			case BlendFuncType::ONE:
+				glsfactor = GL_ONE;
+				break;
+			case BlendFuncType::SRC_ALPHA:
+				glsfactor = GL_SRC_ALPHA;
+				break;
+			case BlendFuncType::ONE_MINUS_SRC_ALPHA:
+				glsfactor = GL_ONE_MINUS_SRC_ALPHA;
+				break;
+			default:
+				glsfactor = GL_SRC_ALPHA;
+		}
+		switch (dfactor) {
+			case BlendFuncType::ONE:
+				gldfactor = GL_ONE;
+				break;
+			case BlendFuncType::SRC_ALPHA:
+				gldfactor = GL_SRC_ALPHA;
+				break;
+			case BlendFuncType::ONE_MINUS_SRC_ALPHA:
+				gldfactor = GL_ONE_MINUS_SRC_ALPHA;
+				break;
+			default:
+				gldfactor = GL_SRC_ALPHA;
+		}
+		glBlendFunc(glsfactor, gldfactor);
+	}
+
 	void OpenGLRendererCommand::EnableCullImpl(bool enable)
 	{
 		enable ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);

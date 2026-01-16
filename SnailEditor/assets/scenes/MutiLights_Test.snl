@@ -7,22 +7,22 @@ EditorCamera:
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.65142858
-  ViewMatrix: [0.0219679978, 0.721227109, -0.692350209, -0, 4.19095123e-08, 0.69251734, 0.721401215, -0, 0.999758601, -0.0158477649, 0.0152132027, -0, 10.3624678, -92.7040176, -627.377869, 1]
-  Position: [-367.732239, 516.790283, -2.28469944]
-  DirvecFront: [0.692350268, -0.721401215, -0.0152131915]
-  DirvecRight: [0.0219679549, -0, 0.999758661]
-  DirvecUp: [0.721227109, 0.6925174, -0.015847709]
+  Aspect: 1.61318052
+  ViewMatrix: [-0.0141651984, 0.201233581, -0.979440868, -0, -1.39698386e-09, 0.979539216, 0.201253772, 0, 0.999899685, 0.00285081659, -0.0138754491, -0, 10.3824749, -130.443909, -363.304199, 1]
+  Position: [-329.438202, 200.891266, -15.0505419]
+  DirvecFront: [0.979440868, -0.201253772, 0.0138753653]
+  DirvecRight: [-0.0141651966, 0, 0.999899626]
+  DirvecUp: [0.201233566, 0.979539156, 0.00285079912]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 46.1702881
-  DirvecYaw: 88.7412262
+  EulerPitch: 11.6102848
+  DirvecYaw: 90.8116379
   FocalPoint: [0.513023674, 133.093475, -10.3762484]
-  Distance: 531.877136
+  Distance: 336.877136
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
-  DollySpeed: 0.5
+  DollySpeed: 0.100000001
 Entities:
   - Entity: 877bafa2-9eab-4064-ba9f-a3ad4e27f068
     TagComponent:
@@ -35,6 +35,12 @@ Entities:
         - PrimitiveType: Skybox
           ShaderPath: assets/shaders/TextureCube_Shader.glsl
           EnableTextures: false
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
@@ -51,8 +57,8 @@ Entities:
       Tag: 平行光
     DirectionalLightComponent:
       Color: [1, 1, 1]
-      Direction: [0, -1, 0]
-      Intensity: 1
+      Direction: [0, -1, -0.129999995]
+      Intensity: 5
   - Entity: 2ba485a9-f8f3-4401-b1aa-91c53582b134
     TagComponent:
       Tag: sponza
@@ -62,13 +68,19 @@ Entities:
       Scale: [48.5518227, 48.5518227, 48.5518227]
     ModelComponent:
       IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
       EnableTextures: true
       FilePath: assets/models/sponza-gltf-pbr/sponza.glb
       Meshes:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -97,6 +109,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -125,6 +143,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -153,6 +177,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -181,6 +211,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -209,6 +245,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -237,6 +279,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -265,6 +313,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -293,6 +347,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -321,6 +381,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -349,6 +415,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -377,6 +449,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -405,6 +483,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -433,6 +517,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -461,6 +551,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -489,6 +585,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -517,6 +619,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -545,6 +653,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -573,6 +687,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -601,6 +721,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -629,6 +755,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -657,6 +789,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -685,6 +823,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -713,6 +857,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -741,6 +891,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -769,6 +925,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -797,6 +959,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -825,6 +993,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -853,6 +1027,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -881,6 +1061,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -909,6 +1095,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -937,6 +1129,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -965,6 +1163,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -993,6 +1197,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1021,6 +1231,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1049,6 +1265,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1077,6 +1299,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1105,6 +1333,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1133,6 +1367,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1161,6 +1401,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1189,6 +1435,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1217,6 +1469,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1245,6 +1503,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1273,6 +1537,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1301,6 +1571,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1329,6 +1605,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1357,6 +1639,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1385,6 +1673,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1413,6 +1707,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1441,6 +1741,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1469,6 +1775,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1478,6 +1790,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1506,6 +1824,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1534,6 +1858,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1562,6 +1892,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1590,6 +1926,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1618,6 +1960,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1646,6 +1994,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1674,6 +2028,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1702,6 +2062,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1730,6 +2096,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1758,6 +2130,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1786,6 +2164,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1814,6 +2198,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1842,6 +2232,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1870,6 +2266,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1898,6 +2300,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1926,6 +2334,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1954,6 +2368,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -1982,6 +2402,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2010,6 +2436,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2038,6 +2470,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2066,6 +2504,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2094,6 +2538,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2122,6 +2572,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2150,6 +2606,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2178,6 +2640,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2206,6 +2674,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2234,6 +2708,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2262,6 +2742,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2290,6 +2776,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2318,6 +2810,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2346,6 +2844,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2374,6 +2878,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2402,6 +2912,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2430,6 +2946,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2458,6 +2980,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2486,6 +3014,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2514,6 +3048,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2542,6 +3082,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2570,6 +3116,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2598,6 +3150,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2626,6 +3184,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2654,6 +3218,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2682,6 +3252,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2710,6 +3286,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2738,6 +3320,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2766,6 +3354,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2794,6 +3388,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2822,6 +3422,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2850,6 +3456,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2878,6 +3490,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2906,6 +3524,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 1
@@ -2942,13 +3566,19 @@ Entities:
       Scale: [1.76999962, 1.76999962, 1.76999962]
     ModelComponent:
       IsImported: true
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
       EnableTextures: true
       FilePath: assets/models/chess_set_4k.fbx/chess_set_4k.fbx
       Meshes:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -2973,6 +3603,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -2997,6 +3633,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3021,6 +3663,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3045,6 +3693,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3069,6 +3723,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3093,6 +3753,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3117,6 +3783,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3141,6 +3813,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3165,6 +3843,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3189,6 +3873,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3213,6 +3903,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3237,6 +3933,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3261,6 +3963,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3285,6 +3993,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3309,6 +4023,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3333,6 +4053,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3357,6 +4083,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3381,6 +4113,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3405,6 +4143,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3429,6 +4173,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3453,6 +4203,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3477,6 +4233,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3501,6 +4263,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3525,6 +4293,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3549,6 +4323,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3573,6 +4353,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3597,6 +4383,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3621,6 +4413,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3645,6 +4443,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3669,6 +4473,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3693,6 +4503,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3717,6 +4533,12 @@ Entities:
         - PrimitiveType: NonePrimitive
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0
@@ -3740,54 +4562,66 @@ Entities:
               Enable: true
       Visible: true
       EdgeEnable: false
-  - Entity: 5f8ebf9a-5735-45a7-8dae-10fe9b1b453b
+  - Entity: f03ecfb8-1341-4d14-9bb0-c76c75dc0d8d
     TagComponent:
-      Tag: 点光源1
+      Tag: 1
     TransformComponent:
-      Position: [-48.5542183, 101.276367, -58.1181641]
+      Position: [-51.6719742, 127.989288, -63.4821053]
       Rotation: [0, -0, 0]
-      Scale: [11.7935991, 11.7935991, 11.7935991]
+      Scale: [10.7842531, 10.7842531, 10.7842531]
     PointLightComponent:
-      Color: [0.0396040678, 1, 0]
-      Intensity: 1000
+      Color: [1, 0, 0]
+      Intensity: 5000
     ModelComponent:
       IsImported: false
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
-      EnableTextures: true
-      Meshes:
-        - PrimitiveType: Sphere
-          ShaderPath: assets/shaders/Standard_PBR.glsl
-          EnableTextures: true
-          Albedo: [1, 1, 1]
-          Metallic: 1
-          Roughness: 1
-          AO: 0.5
-          Textures:
-            []
-      Visible: true
-      EdgeEnable: false
-  - Entity: f6da0d0c-1efd-4f9e-ac5b-39ae0bfc6e18
-    TagComponent:
-      Tag: 点光源2
-    TransformComponent:
-      Position: [47.4923935, 106.158493, 34.2936935]
-      Rotation: [0, -0, 0]
-      Scale: [12.5551996, 12.5551996, 12.5551996]
-    PointLightComponent:
-      Color: [0.976897717, 0, 0]
-      Intensity: 1000
-    ModelComponent:
-      IsImported: false
-      DefaultShaderPath: assets\shaders\Standard_PBR.glsl
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
       EnableTextures: false
       Meshes:
         - PrimitiveType: Sphere
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: false
+          EmissiveColor: [1, 0, 0]
+          EmissiveIntensity: 5000
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
-          Metallic: 1
-          Roughness: 1
-          AO: 0.504000008
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: d2e7f48c-cbce-43fc-bf8f-7e845f1eb71d
+    TagComponent:
+      Tag: 2
+    TransformComponent:
+      Position: [41.8790321, 127.989235, 34.1645508]
+      Rotation: [0, -0, 0]
+      Scale: [10.7842531, 10.7842531, 10.7842531]
+    PointLightComponent:
+      Color: [0, 1, 0.0990097523]
+      Intensity: 5000
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Sphere
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: false
+          EmissiveColor: [0, 1, 0.0990097523]
+          EmissiveIntensity: 5000
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
           Textures:
             []
       Visible: true

@@ -27,6 +27,7 @@ namespace Snail {
 		virtual void DepthTestImpl(const bool& enable) const override;
 		virtual void SetDepthFuncImpl(const DepthFuncType& type) const override;
 		virtual void EnableBlendImpl(const bool& enable) const override;
+		virtual void BlendFuncImpl(const BlendFuncType& sfactor, const BlendFuncType& dfactor) const override;
 
 		virtual void EnableCullImpl(bool enable) override;
 		virtual void CullFrontImpl() override;

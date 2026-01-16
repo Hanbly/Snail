@@ -117,6 +117,8 @@ namespace Snail {
 
 		out << YAML::Key << "Gamma" << YAML::Value << m_Scene->GetGamma();
 		out << YAML::Key << "Exposure" << YAML::Value << m_Scene->GetExposure();
+		out << YAML::Key << "EnableBloom" << YAML::Value << Renderer3D::GetUseBloom();
+		out << YAML::Key << "BloomIntensity" << YAML::Value << Renderer3D::GetBloomIntensity();
 
 		out << YAML::EndMap; // SceneSettings 结束
 
@@ -310,6 +312,12 @@ namespace Snail {
 					out << YAML::Key << "EnableTextures" << YAML::Value << mesh->GetEnableTextures();
 
 					// 材质基础参数
+					out << YAML::Key << "EmissiveColor" << YAML::Value << mesh->GetMaterial()->GetEmissiveColor();
+					out << YAML::Key << "EmissiveIntensity" << YAML::Value << mesh->GetMaterial()->GetEmissiveIntensity();
+					out << YAML::Key << "Diffuse" << YAML::Value << mesh->GetMaterial()->GetDiffuseColor();
+					out << YAML::Key << "Specular" << YAML::Value << mesh->GetMaterial()->GetSpecularColor();
+					out << YAML::Key << "Ambient" << YAML::Value << mesh->GetMaterial()->GetAmbientColor();
+					out << YAML::Key << "Shininess" << YAML::Value << mesh->GetMaterial()->GetShininess();
 					out << YAML::Key << "Albedo" << YAML::Value << mesh->GetMaterial()->GetAlbedoColor();
 					out << YAML::Key << "Metallic" << YAML::Value << mesh->GetMaterial()->GetMetallic();
 					out << YAML::Key << "Roughness" << YAML::Value << mesh->GetMaterial()->GetRoughness();
@@ -354,6 +362,7 @@ namespace Snail {
 		// 单次加载场景内，设置模型缓存，防止相同模型创建多个实体（对应实例化批量渲染功能）
 		static std::map<std::string, Refptr<Model>> s_ModelCache;
 		s_ModelCache.clear();
+		TextureLibrary::Clear();
 
 		std::ifstream infile(filepath);
 		if (!infile.is_open()) {
@@ -381,6 +390,10 @@ namespace Snail {
 				m_Scene->SetGamma(settingsNode["Gamma"].as<float>());
 			if (settingsNode["Exposure"])
 				m_Scene->SetExposure(settingsNode["Exposure"].as<float>());
+			if (settingsNode["EnableBloom"])
+				Renderer3D::SetUseBloom(settingsNode["EnableBloom"].as<bool>());
+			if (settingsNode["BloomIntensity"])
+				Renderer3D::SetBloomIntensity(settingsNode["BloomIntensity"].as<float>());
 		}
 
 		// 反序列化编辑器相机 (EditorCamera)
@@ -520,7 +533,8 @@ namespace Snail {
 						cacheKey = filePath; // 导入模型的 Key 就是文件路径
 
 						if (!cacheKey.empty() && s_ModelCache.find(cacheKey) != s_ModelCache.end()) {
-							model = s_ModelCache[cacheKey];
+							model = std::make_shared<Model>(defaultShader, filePath); // TODO: 现在取消了缓存替换，因为所有属性都会共享
+							//model = s_ModelCache[cacheKey];
 						}
 						else {
 							// 使用默认 Shader 加载模型
@@ -561,7 +575,8 @@ namespace Snail {
 							}
 
 							if (!cacheKey.empty() && s_ModelCache.find(cacheKey) != s_ModelCache.end()) {
-								model = s_ModelCache[cacheKey];
+								model = std::make_shared<Model>(primType, defaultShader, initialTextures); // TODO: 现在取消了缓存替换，因为所有属性都会共享
+								//model = s_ModelCache[cacheKey];
 							}
 							else {
 								model = std::make_shared<Model>(primType, defaultShader, initialTextures);
@@ -581,6 +596,12 @@ namespace Snail {
 								auto& material = targetMesh->GetMaterial();
 
 								// 材质基础参数
+								if (meshNode["EmissiveColor"]) material->SetEmissiveColor(meshNode["EmissiveColor"].as<glm::vec3>());
+								if (meshNode["EmissiveIntensity"]) material->SetEmissiveIntensity(meshNode["EmissiveIntensity"].as<float>());
+								if (meshNode["Diffuse"]) material->SetDiffuseColor(meshNode["Diffuse"].as<glm::vec3>());
+								if (meshNode["Specular"]) material->SetSpecularColor(meshNode["Specular"].as<glm::vec3>());
+								if (meshNode["Ambient"]) material->SetAmbientColor(meshNode["Ambient"].as<glm::vec3>());
+								if (meshNode["Shininess"]) material->SetShininess(meshNode["Shininess"].as<float>());
 								if (meshNode["Albedo"]) material->SetAlbedoColor(meshNode["Albedo"].as<glm::vec3>());
 								if (meshNode["Metallic"]) material->SetMetallic(meshNode["Metallic"].as<float>());
 								if (meshNode["Roughness"]) material->SetRoughness(meshNode["Roughness"].as<float>());
@@ -604,19 +625,19 @@ namespace Snail {
 									// 获取当前 Mesh 的纹理列表
 									auto currentTextures = targetMesh->GetTextures();
 
-									// 如果数量或内容不一致，清空并重新添加
 									if (texturesNode) {
-										bool flag = true;
+										// 如果数量不一致，为true，表示重新覆盖
+										bool remapTexturesFlag = (texturesNode.size() != currentTextures.size());
 										// 先循环检查一遍路径，如果有空路径就不覆盖了
 										for (auto texNode : texturesNode) {
 											auto paths = texNode["Paths"].as<std::vector<std::string>>();
 											if (!paths.size()) {
-												flag = false;
+												remapTexturesFlag = false;
 												break;
 											}
 										}
 
-										if (flag) {
+										if (remapTexturesFlag) { // 数量不一致，并且没有空路径
 											// 清空现有纹理
 											targetMesh->ClearTextures();
 
@@ -634,9 +655,20 @@ namespace Snail {
 												}
 											}
 										}
+										else if (texturesNode.size() == currentTextures.size()) { // 如果仅数量一致就复制控制状态
+											// 不重新添加，但是复制控制状态
+											for (unsigned int i = 0; i < currentTextures.size(); i++) {
+												bool enable = texturesNode[i]["Enable"] ? texturesNode[i]["Enable"].as<bool>() : false;
+												currentTextures[i]->SetEnable(enable);
+											}
+										}
+										else { // 数量不一致而且有空路径，不重新加载，也不复制状态
+
+										}
 										
 									}
 									targetMesh->SetEnableTextures(enableTextures);
+									targetMesh->RemapMaterialTextures();
 								}
 							}
 						}

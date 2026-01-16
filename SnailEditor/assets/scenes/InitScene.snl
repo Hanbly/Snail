@@ -7,12 +7,12 @@ EditorCamera:
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.65142858
+  Aspect: 1.61318052
   ViewMatrix: [1, -0, 0, -0, -0, 1, -0, 0, 0, -0, 1, -0, -0, 0, -10, 1]
   Position: [0, 0, 10]
-  DirvecFront: [1, 0, 0]
-  DirvecRight: [0, 0, 1]
-  DirvecUp: [0, 1, 0]
+  DirvecFront: [0.979440868, -0.201253772, 0.0138753653]
+  DirvecRight: [-0.0141651966, 0, 0.999899626]
+  DirvecUp: [0.201233566, 0.979539156, 0.00285079912]
   DirvecWorldUp: [0, 1, 0]
   EulerPitch: 0
   DirvecYaw: 0
@@ -22,6 +22,6 @@ EditorCamera:
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
-  DollySpeed: 0.5
+  DollySpeed: 0.100000001
 Entities:
   []

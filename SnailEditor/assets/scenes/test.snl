@@ -2,53 +2,94 @@ Scene: test
 SceneSettings:
   Gamma: 2.20000005
   Exposure: 1
+  EnableBloom: true
+  BloomIntensity: 0.00203999993
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.60857141
-  ViewMatrix: [0.998134851, 0.0036201661, -0.0609410629, -0, -2.32830644e-10, 0.998240173, 0.059299849, 0, 0.0610484928, -0.0591892377, 0.996378303, -0, 17.8215008, -50.1614227, -1648.93799, 1]
-  Position: [-118.094704, 147.854919, 1638.90906]
-  DirvecFront: [0.0609410629, -0.0592998452, -0.996378303]
-  DirvecRight: [0.998134792, -0, 0.0610484928]
-  DirvecUp: [0.00362016656, 0.998240292, -0.0591892451]
+  Aspect: 1.61318052
+  ViewMatrix: [0.963679671, -0.147593781, 0.222570658, -0, 2.23517453e-08, 0.833407402, 0.552659333, -0, -0.267061085, -0.532586515, 0.80313772, -0, 59.2704582, 16.5872974, -1645.31665, 1]
+  Position: [311.529572, 895.475464, 1346.07849]
+  DirvecFront: [1, 0, 0]
+  DirvecRight: [0, 0, 1]
+  DirvecUp: [0, 1, 0]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 3.39962554
-  DirvecYaw: -356.5
+  EulerPitch: 33.5496445
+  DirvecYaw: -375.489471
   FocalPoint: [-25.7466259, 57.9938965, 129.030258]
   Distance: 1515.36694
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
   MoveSpeed: 0.00999999978
-  DollySpeed: 0.5
+  DollySpeed: 0.100000001
 Entities:
-  - Entity: 7f8221b8-016d-46c8-8dd7-24193e270848
+  - Entity: 372edd4d-04f6-462a-b10b-8b7c4590e3d9
     TagComponent:
-      Tag: New Model
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Tag: UnnamedEntity
     ModelComponent:
-      IsImported: true
-      DefaultShaderPath: assets/shaders/Standard.glsl
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
       EnableTextures: false
-      FilePath: assets/models/spider-fbx/Spider.fbx
       Meshes:
-        - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
           EnableTextures: false
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
           AO: 1
           Textures:
-            []
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
+              Enable: false
+      Visible: true
+      EdgeEnable: false
+  - Entity: a07ecef9-946c-4d68-803d-b8028aa1460f
+    TagComponent:
+      Tag: 1
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: f5234af8-2feb-4740-8fde-0e383c79c597
+    TagComponent:
+      Tag: 2
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: 56d64d01-00e9-4fe7-af88-6ac467961c0b
+    TagComponent:
+      Tag: New Model
+    TransformComponent:
+      Position: [0, 0, 606.917603]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/spider-fbx/Spider_3.fbx
+      Meshes:
         - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          EnableTextures: false
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 1060.07104
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
@@ -59,8 +100,14 @@ Entities:
               Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
               Enable: true
         - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          EnableTextures: false
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 1060.07104
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
@@ -83,8 +130,14 @@ Entities:
               Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
               Enable: true
         - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          EnableTextures: false
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 1060.07104
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
@@ -95,8 +148,14 @@ Entities:
               Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
               Enable: true
         - PrimitiveType: NonePrimitive
-          ShaderPath: assets/shaders/Standard.glsl
-          EnableTextures: false
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 1060.07104
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
@@ -111,26 +170,107 @@ Entities:
               Paths: [assets/models/spider-fbx/textures/SH3.png]
               Enable: true
       Visible: true
-      EdgeEnable: false
-  - Entity: 372edd4d-04f6-462a-b10b-8b7c4590e3d9
+      EdgeEnable: true
+  - Entity: 0718fd55-d239-40c6-a106-809739d2e49c
     TagComponent:
-      Tag: UnnamedEntity
+      Tag: New Model
+    TransformComponent:
+      Position: [4.76837158e-07, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
     ModelComponent:
-      IsImported: false
-      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
-      EnableTextures: false
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/spider-fbx/Spider_3.fbx
       Meshes:
-        - PrimitiveType: Skybox
-          ShaderPath: assets/shaders/TextureCube_Shader.glsl
-          EnableTextures: false
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
           Albedo: [1, 1, 1]
           Metallic: 0
           Roughness: 0.5
           AO: 1
           Textures:
-            - DimType: TextureCube
-              Usage: texture_cubemap
-              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
-              Enable: false
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_specular
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_2.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/spider-fbx/textures/SH3.png]
+              Enable: true
       Visible: true
       EdgeEnable: false

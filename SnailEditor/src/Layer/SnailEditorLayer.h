@@ -22,6 +22,7 @@ namespace Snail {
 	{
 	private:
 		Refptr<FrameBuffer> m_TempFBO;		// 中间帧缓冲，存储浮点数类型的数据
+		std::vector<std::shared_ptr<FrameBuffer>> m_BloomFBOs; // 两个FBO
 		Refptr<FrameBuffer> m_DepthMapFBO;	// 深度贴图FBO，仅深度附件
 		Refptr<FrameBuffer> m_FinalFBO;		// gamma 矫正后的输出帧缓冲，存储RGBA8
 

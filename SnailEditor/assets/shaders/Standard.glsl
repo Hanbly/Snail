@@ -104,6 +104,12 @@ uniform bool u_UseSpecularMap;
 uniform bool u_UseNormalMap;
 uniform sampler2D u_ShadowMap; 
 
+// 自发光贴图
+uniform sampler2D u_EmissiveMap;
+uniform bool u_UseEmissiveMap;
+uniform vec3 u_EmissiveColor;
+uniform float u_EmissiveIntensityVal;
+
 uniform vec3 u_ColorDiffuse;
 uniform vec3 u_ColorSpecular;
 uniform vec3 u_ColorAmbient;
@@ -153,13 +159,11 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
 void main()
 {
     // 1. 纹理/材质颜色采样
-    vec3 diffMapColor;
+    vec3 diffMapColor = u_ColorDiffuse;
     if(u_UseTexture && u_UseDiffuseMap) {
         vec4 texColor = texture(u_Diffuse1, v_TextureCoords);
         if(texColor.a < 0.1) discard;
-        diffMapColor = texColor.rgb;
-    } else {
-        diffMapColor = u_ColorDiffuse;
+        diffMapColor *= texColor.rgb;
     }
 
     // 2. 高光遮罩采样
@@ -201,8 +205,12 @@ void main()
         result += CalcPointLight(u_PointLights[i], norm, v_FragPos, viewDir, diffMapColor, specMask);
     }
 
-    // Tone Mapping
-    // result = result / (result + vec3(1.0));
+    // --- 自发光 ---
+    vec3 emissive = u_EmissiveColor * u_EmissiveIntensityVal; 
+    if (u_UseTexture && u_UseEmissiveMap) {
+        vec4 texColor = texture(u_EmissiveMap, v_TextureCoords);
+        emissive *= texColor.rgb; 
+    }
     
     FinalColor = vec4(result, 1.0);
     EntityIDBuffer = v_EntityID;

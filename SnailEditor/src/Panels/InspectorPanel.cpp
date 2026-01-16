@@ -378,6 +378,21 @@ namespace Snail {
 			// --- 材质参数 ---
 			if (ImGui::TreeNodeEx(u8"基础材质参数", ImGuiTreeNodeFlags_Framed)) {
 				auto firstMaterial = component.model->GetMeshes()[0]->GetMaterial();
+
+				// 自发光
+				glm::vec3 emissive = firstMaterial->GetEmissiveColor();
+				if (ImGui::ColorEdit3("Emissive", glm::value_ptr(emissive))) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetEmissiveColor(emissive);
+					}
+				}
+				float intensity = firstMaterial->GetEmissiveIntensity();
+				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
+					for (auto& mesh : component.model->GetMeshes()) {
+						mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+					}
+				}
+
 				ImGui::TextDisabled("———— Phong 管线 ————");
 				// Ambient
 				glm::vec3 ambient = firstMaterial->GetAmbientColor();
@@ -514,47 +529,58 @@ namespace Snail {
 
 			// --- 材质参数 ---
 			if (ImGui::TreeNodeEx(u8"Mesh 基础材质参数", ImGuiTreeNodeFlags_Framed)) {
-				auto firstMaterial = mesh->GetMaterial();
+				auto& material = mesh->GetMaterial();
+
+				// 自发光
+				glm::vec3 emissive = material->GetEmissiveColor();
+				if (ImGui::ColorEdit3("Emissive", glm::value_ptr(emissive))) {
+					mesh->GetMaterial()->SetEmissiveColor(emissive);
+				}
+				float intensity = material->GetEmissiveIntensity();
+				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
+					mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+				}
+
 				ImGui::TextDisabled("———— Phong 管线 ————");
 				// Ambient
-				glm::vec3 ambient = firstMaterial->GetAmbientColor();
+				glm::vec3 ambient = material->GetAmbientColor();
 				if (ImGui::ColorEdit3("Ambient", glm::value_ptr(ambient))) {
 					mesh->GetMaterial()->SetAmbientColor(ambient);
 				}
 				// Diffuse
-				glm::vec3 diffuse = firstMaterial->GetDiffuseColor();
+				glm::vec3 diffuse = material->GetDiffuseColor();
 				if (ImGui::ColorEdit3("Diffuse", glm::value_ptr(diffuse))) {
 					mesh->GetMaterial()->SetDiffuseColor(diffuse);
 				}
 				// Specular
-				glm::vec3 specular = firstMaterial->GetSpecularColor();
+				glm::vec3 specular = material->GetSpecularColor();
 				if (ImGui::ColorEdit3("Specular", glm::value_ptr(specular))) {
 					mesh->GetMaterial()->SetSpecularColor(specular);
 				}
 				// Shininess
-				float shininess = firstMaterial->GetShininess();
+				float shininess = material->GetShininess();
 				if (ImGui::SliderFloat("Shininess", &shininess, 0.0f, 1000.0f)) {
 					mesh->GetMaterial()->SetShininess(shininess);
 				}
 
 				ImGui::TextDisabled("———— PBR 管线 ————");
 				// Albedo
-				glm::vec3 albedo = firstMaterial->GetAlbedoColor();
+				glm::vec3 albedo = material->GetAlbedoColor();
 				if (ImGui::ColorEdit3("Albedo", glm::value_ptr(albedo))) {
 					mesh->GetMaterial()->SetAlbedoColor(albedo);
 				}
 				// Roughness
-				float rough = firstMaterial->GetRoughness();
+				float rough = material->GetRoughness();
 				if (ImGui::SliderFloat("Roughness", &rough, 0.0f, 1.0f)) {
 					mesh->GetMaterial()->SetRoughness(rough);
 				}
 				// Metallic
-				float metal = firstMaterial->GetMetallic();
+				float metal = material->GetMetallic();
 				if (ImGui::SliderFloat("Metallic", &metal, 0.0f, 1.0f)) {
 					mesh->GetMaterial()->SetMetallic(metal);
 				}
 				// AO
-				float ao = firstMaterial->GetAO();
+				float ao = material->GetAO();
 				if (ImGui::SliderFloat("AO", &ao, 0.0f, 1.0f)) {
 					mesh->GetMaterial()->SetAO(ao);
 				}

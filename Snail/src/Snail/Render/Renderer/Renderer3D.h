@@ -88,6 +88,10 @@ namespace Snail {
 
 			const int ShadowMapSlot = 10;
 			const int IBLMapsStartSlot = 11;
+
+			// --- 泛光控制 ---
+			bool UseBloom = true;
+			float BloomIntensity = 0.0004f; // 0.04% 的强度
 		};
 
 		static Renderer3DSceneData s_3DSceneData;
@@ -124,6 +128,10 @@ namespace Snail {
 		static bool& GetEnableInstancing() { return s_3DSceneData.EnableInstancing; }
 		static void SetUseIBL(const bool& status) { s_3DSceneData.UseIBL = status; }
 		static bool& GetUseIBL() { return s_3DSceneData.UseIBL; }
+		static void SetUseBloom(const bool& status) { s_3DSceneData.UseBloom = status; }
+		static bool& GetUseBloom() { return s_3DSceneData.UseBloom; }
+		static void SetBloomIntensity(const float& val) { s_3DSceneData.BloomIntensity = val; }
+		static float& GetBloomIntensity() { return s_3DSceneData.BloomIntensity; }
 	private:
 		static void UploadLightsUniforms(const Refptr<Shader>& shader);
 		static void UploadEnvUniforms(const Refptr<Shader>& shader, int startSlot);

@@ -130,13 +130,19 @@ namespace Snail {
 
         // --- 点光源组件 ---
         {
-            auto view = m_Registry.view<TransformComponent, PointLightComponent>();
-            for (auto [entity, transform, light] : view.each())
+            auto view = m_Registry.view<TransformComponent, PointLightComponent, ModelComponent>();
+            for (auto [entity, transform, light, model] : view.each())
             {
                 glm::vec3 lightPos = transform.position;
                 glm::vec3 lightColor = light.color;
 				float intensity = light.intensity;
-                PointLight pointLight(lightPos, lightColor, intensity);
+				PointLight pointLight(lightPos, lightColor, intensity);
+
+				// 设置光源的自发光参数
+				for (auto& mesh : model.model->GetMeshes()) {
+					mesh->GetMaterial()->SetEmissiveColor(lightColor);
+					mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+				}
                 
                 poiLights.push_back(pointLight);
             }

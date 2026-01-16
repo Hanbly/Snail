@@ -37,6 +37,17 @@ namespace Snail{
 			ImGui::SetTooltip(u8"当开启时，环境图像（天空盒）会被计算光照，并附加在PBR物体上。");
 		}
 
+		bool isUseBloom = Renderer3D::GetUseBloom();
+		auto& bloomIntensity = Renderer3D::GetBloomIntensity();
+		if (ImGui::Checkbox(u8"启用泛光", &isUseBloom)) {
+			Renderer3D::SetUseBloom(isUseBloom);
+		}
+		// 鼠标悬停提示
+		if (ImGui::IsItemHovered()) {
+			ImGui::SetTooltip(u8"当开启时，场景中超过一定亮度的部分，将会被高斯模糊。");
+		}
+		ImGui::DragFloat("Bloom Intensity", &bloomIntensity, 0.00001f, 0.0f, 0.1f, "%.5f");
+
 		ImGui::Separator();
 
 

@@ -15,8 +15,9 @@ namespace Snail {
 	{
 		m_EditorContext->scene = m_Scene;
 
+		// --- FBO初始化 ---
 		FrameBufferSpecification spec(1920, 1080);
-
+		// 中间FBO
 		spec.width = 1920, spec.height = 1080;
 		spec.attachments = {
 			FrameBufferTextureFormat::RGBA32F,
@@ -24,12 +25,16 @@ namespace Snail {
 			FrameBufferTextureFormat::DEPTH24_STENCIL8
 		};
 		m_TempFBO = FrameBuffer::Create(spec);
-
-		// 阴影贴图分辨率
+		// 泛光FBO
+		spec.width = 1920 / 4, spec.height = 1080 / 4;
+		spec.attachments = { FrameBufferTextureFormat::RGB32F };
+		m_BloomFBOs.push_back(FrameBuffer::Create(spec));
+		m_BloomFBOs.push_back(FrameBuffer::Create(spec));
+		// 阴影贴图FBO
 		spec.width = 10240, spec.height = 10240;
 		spec.attachments = { FrameBufferTextureFormat::DEPTH_COMPONENT };
 		m_DepthMapFBO = FrameBuffer::Create(spec);
-
+		// 最终FBO
 		spec.width = 1920, spec.height = 1080;
 		spec.attachments = { FrameBufferTextureFormat::RGB8 };
 		m_FinalFBO = FrameBuffer::Create(spec);
@@ -124,9 +129,12 @@ namespace Snail {
 		SNL_PROFILE_FUNCTION();
 
 
-		// 依据 final fbo 来resize中间fbo
-		if(m_TempFBO->GetSpecification().width != m_FinalFBO->GetSpecification().width || m_TempFBO->GetSpecification().height != m_FinalFBO->GetSpecification().height)
+		// 依据 final fbo 来resize其它fbo
+		if (m_TempFBO->GetSpecification().width != m_FinalFBO->GetSpecification().width || m_TempFBO->GetSpecification().height != m_FinalFBO->GetSpecification().height) {
 			m_TempFBO->Resize(m_FinalFBO->GetSpecification().width, m_FinalFBO->GetSpecification().height);
+			m_BloomFBOs[0]->Resize(m_FinalFBO->GetSpecification().width / 4, m_FinalFBO->GetSpecification().height / 4);
+			m_BloomFBOs[1]->Resize(m_FinalFBO->GetSpecification().width / 4, m_FinalFBO->GetSpecification().height / 4);
+		}
 
 		// ------ 渲染光照空间深度附件 ------
 		m_DepthMapFBO->Bind();
@@ -170,20 +178,71 @@ namespace Snail {
 		m_Scene->OnRenderEditor(m_EditorCamera, m_EditorCamera->GetTransform(), lightSpaceMatrix, m_DepthMapFBO->GetDepthAttachmentRendererID());
 		m_TempFBO->Unbind();
 
-		// --------后处理：伽马矫正 (Tone Mapping + Gamma) -----------
+		// -------- 泛光处理 -----------
+		RendererCommand::DepthTest(false);
+
+		// 提取高亮区域
+		auto extractShader = ShaderLibrary::Load("BloomExtractShader", "assets/shaders/bloom_extract.glsl", {});
+
+		m_BloomFBOs[0]->Bind();
+		RendererCommand::Clear(); // 清除旧的亮部
+
+		extractShader->Bind();
+		extractShader->SetFloat("u_Threshold", 1.0f); // 阈值，超过1.0才发光
+		Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0)); // 绑定场景FBO
+
+		m_ScreenQuadVAO->Bind();
+		RendererCommand::DrawIndexed(m_ScreenQuadVAO);
+		m_BloomFBOs[0]->Unbind();
+
+		// 乒乓高斯模糊
+		auto blurShader = ShaderLibrary::Load("BloomBlurShader", "assets/shaders/bloom_blur.glsl", {});
+		blurShader->Bind();
+
+		bool horizontal = true;
+		bool first_iteration = true;
+		int amount = 10; // 模糊次数，越多越糊，光晕越大
+
+		for (int i = 0; i < amount; i++)
+		{
+			// 绑定当前的目标 FBO
+			m_BloomFBOs[horizontal]->Bind();
+
+			blurShader->SetInt("u_Horizontal", horizontal);
+
+			// 第一次循环读“提取出的亮部”，之后读“上一次模糊的结果”
+			unsigned int texID = first_iteration ? m_BloomFBOs[0]->GetColorAttachmentRendererID(0) : m_BloomFBOs[!horizontal]->GetColorAttachmentRendererID(0);
+			Texture2D::BindExternal(0, texID);
+
+			m_ScreenQuadVAO->Bind();
+			RendererCommand::DrawIndexed(m_ScreenQuadVAO);
+
+			horizontal = !horizontal;
+			if (first_iteration) first_iteration = false;
+
+			m_BloomFBOs[!horizontal]->Unbind();
+		}
+		// 循环结束后，最后一次写入的结果在 m_BloomFBOs[!horizontal] 里
+
+		// -------- 后处理：泛光混合 + 伽马矫正 (Tone Mapping + Gamma) -----------
 		m_FinalFBO->Bind();
 		RendererCommand::Clear();
 		RendererCommand::DepthTest(false);
 
-		auto gammaShader = ShaderLibrary::Load("PostProcessGamma", "assets/shaders/post_process_gamma.glsl", {});
-		if (gammaShader) {
-			gammaShader->Bind();
-			gammaShader->SetInt("u_ScreenTexture", 0);
-			gammaShader->SetFloat("u_Gamma", m_Scene->GetGamma());
-			gammaShader->SetFloat("u_Exposure", m_Scene->GetExposure());
+		auto screenShader = ShaderLibrary::Load("PostProcessScreenShader", "assets/shaders/post_process_screen.glsl", {});
+		if (screenShader) {
+			screenShader->Bind();
+			screenShader->SetInt("u_ScreenTexture", 0);
+			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0)); // 绑定 中间fbo 的结果作为输入
+			
+			screenShader->SetInt("u_BloomBlurTexture", 1);
+			Texture2D::BindExternal(1, m_BloomFBOs[!horizontal]->GetColorAttachmentRendererID(0));
+			screenShader->SetFloat("u_BloomIntensity", Renderer3D::GetBloomIntensity()); // 0.04% 的强度
+			screenShader->SetInt("u_BloomEnabled", (int)Renderer3D::GetUseBloom());
 
-			// 绑定 中间fbo 的结果作为输入
-			Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0));
+			screenShader->SetFloat("u_Gamma", m_Scene->GetGamma());
+			screenShader->SetFloat("u_Exposure", m_Scene->GetExposure());
+
 
 			m_ScreenQuadVAO->Bind();
 			RendererCommand::DrawIndexed(m_ScreenQuadVAO);

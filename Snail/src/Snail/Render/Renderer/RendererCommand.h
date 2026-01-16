@@ -32,6 +32,13 @@ namespace Snail {
 			LEQUAL,
 			ALWAYS
 		};
+		enum class BlendFuncType {
+			None = 0,
+			ONE,
+			SRC_ALPHA,
+			ONE_MINUS_SRC_ALPHA,
+
+		};
 		virtual ~RendererCommand() = default;
 
 		inline static API GetAPI() { return s_API; }
@@ -56,6 +63,7 @@ namespace Snail {
 		virtual void DepthTestImpl(const bool& enable) const = 0;
 		virtual void SetDepthFuncImpl(const DepthFuncType& type) const = 0;
 		virtual void EnableBlendImpl(const bool& enable) const = 0;
+		virtual void BlendFuncImpl(const BlendFuncType& sfactor, const BlendFuncType& dfactor) const = 0;
 
 		virtual void EnableCullImpl(bool enable) = 0;
 		virtual void CullFrontImpl() = 0;
@@ -85,6 +93,8 @@ namespace Snail {
 		{ RC->SetDepthFuncImpl(type); }
 		inline static void EnableBlend(const bool& enable)
 		{ RC->EnableBlendImpl(enable); }
+		inline static void BlendFunc(const BlendFuncType& sfactor, const BlendFuncType& dfactor)
+		{ RC->BlendFuncImpl(sfactor, dfactor); }
 
 		inline static void EnableCull(bool enable)
 		{ RC->EnableCullImpl(enable); }
