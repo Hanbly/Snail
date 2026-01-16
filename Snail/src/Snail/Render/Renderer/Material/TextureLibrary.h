@@ -20,6 +20,8 @@ namespace Snail {
 
 		static Refptr<Texture> GetIBLIrradianceofTexture(const Refptr<Texture>& cubemap);
 		static Refptr<Texture> GetIBLPrefilterofTexture(const Refptr<Texture>& cubemap);
+		static void SetPrefilterMipLevels(int levels) { m_PrefilterMipLevels = levels; }
+		static int GetPrefilterMipLevels() { return m_PrefilterMipLevels; }
 	private:
 		static std::vector<std::string> CleanFilePath(std::vector<std::string>& rawPath);
 		// 同时生成IBL的漫反射辐照和镜面IBL
@@ -28,6 +30,8 @@ namespace Snail {
 		static std::unordered_map<std::string, Refptr<Texture>> m_TextureNames;
 		static std::unordered_map<std::string, Refptr<Texture>> m_TexturePaths;
 		static std::unordered_map<std::string, Refptr<Texture>> m_EmbeddedTexturePaths;
+		static int m_PrefilterMapResolution;
+		static int m_PrefilterMipLevels;
 	};
 
 }

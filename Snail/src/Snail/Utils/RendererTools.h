@@ -291,13 +291,12 @@ namespace Snail {
 			return irradianceMap;
 		}
 
-		static Refptr<Texture> CalculateCubemapToIBLPrefilter(const Refptr<Texture>& cubemap)
+		static Refptr<Texture> CalculateCubemapToIBLPrefilter(const Refptr<Texture>& cubemap, int prefilterMapResolution = 128, int maxPrefilterMipLevels = 5)
 		{
-			int dim = 128;
 			bool genMipmap = true;
-			auto prefilterMap = TextureCube::Create(dim, genMipmap);
+			auto prefilterMap = TextureCube::Create(prefilterMapResolution, genMipmap);
 
-			FrameBufferSpecification spec(dim, dim);
+			FrameBufferSpecification spec(prefilterMapResolution, prefilterMapResolution);
 			spec.attachments = { FrameBufferTextureFormat::RGBA32F };
 			auto captureFBO = FrameBuffer::Create(spec);
 
@@ -305,18 +304,18 @@ namespace Snail {
 			prefilterShader->Bind();
 			prefilterShader->SetInt("u_EnvironmentMap", 0);
 			prefilterShader->SetMat4("u_Projection", captureProjection);
+			prefilterShader->SetFloat("u_Resolution", (float)prefilterMapResolution);
 			cubemap->Bind(0);
 
 			captureFBO->Bind();
-			int maxMipLevels = 5;
-			for (int mip = 0; mip < maxMipLevels; ++mip)
+			for (int mip = 0; mip < maxPrefilterMipLevels; ++mip)
 			{
 				// 根据 mip 级别调整 FBO 大小
-				unsigned int mipWidth = 128 * std::pow(0.5, mip);
-				unsigned int mipHeight = 128 * std::pow(0.5, mip);
+				unsigned int mipWidth = prefilterMapResolution * std::pow(0.5, mip);
+				unsigned int mipHeight = prefilterMapResolution * std::pow(0.5, mip);
 				captureFBO->Resize(mipWidth, mipHeight);
 
-				float roughness = (float)mip / (float)(maxMipLevels - 1);
+				float roughness = (float)mip / (float)(maxPrefilterMipLevels - 1);
 				prefilterShader->SetFloat("u_Roughness", roughness);
 
 				captureFBO->Bind();

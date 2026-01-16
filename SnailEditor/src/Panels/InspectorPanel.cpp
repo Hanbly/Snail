@@ -763,7 +763,7 @@ namespace Snail {
 							// --- 立方体贴图 单面 作为拖拽对象 ---
 							DragDrop::DrawPathDragDropTarget("ASSETS_BROWSER_ITEM", [&](const std::filesystem::path& path) {
 								std::string extension = path.extension().string();
-								if (extension == ".hdr" || extension == ".exr") {
+								if (extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".tga" || extension == ".hdr" || extension == ".exr") {
 									m_Context->currentEditingMeshIndex = meshIndex;
 									m_Context->currentEditingTexIndex = t;
 									m_Context->currentEditingFaceIndex = (int)i;

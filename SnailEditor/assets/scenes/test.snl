@@ -7,15 +7,15 @@ EditorCamera:
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.65142858
-  ViewMatrix: [0.999283075, -0.0157303736, 0.0344380438, -0, -0, 0.909601629, 0.415481567, 0, -0.0378605798, -0.415183663, 0.908949435, -0, 30.6133289, 0.414856583, -1655.85779, 1]
-  Position: [26.4396458, 687.600952, 1506.42224]
-  DirvecFront: [1, 0, 0]
-  DirvecRight: [0, 0, 1]
-  DirvecUp: [0, 1, 0]
+  Aspect: 1.60857141
+  ViewMatrix: [0.998134851, 0.0036201661, -0.0609410629, -0, -2.32830644e-10, 0.998240173, 0.059299849, 0, 0.0610484928, -0.0591892377, 0.996378303, -0, 17.8215008, -50.1614227, -1648.93799, 1]
+  Position: [-118.094704, 147.854919, 1638.90906]
+  DirvecFront: [0.0609410629, -0.0592998452, -0.996378303]
+  DirvecRight: [0.998134792, -0, 0.0610484928]
+  DirvecUp: [0.00362016656, 0.998240292, -0.0591892451]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 24.5496426
-  DirvecYaw: -362.169769
+  EulerPitch: 3.39962554
+  DirvecYaw: -356.5
   FocalPoint: [-25.7466259, 57.9938965, 129.030258]
   Distance: 1515.36694
   RotateSensitivity: 20
@@ -67,12 +67,12 @@ Entities:
           AO: 1
           Textures:
             - DimType: Texture2D
-              Usage: texture_diffuse
-              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
-              Enable: true
-            - DimType: Texture2D
               Usage: texture_normal
               Paths: [assets/models/spider-fbx/textures/haar_detail_NRM.jpg]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/spider-fbx/textures/Spinnen_Bein_tex_COLOR_.png]
               Enable: true
             - DimType: Texture2D
               Usage: texture_specular
@@ -110,5 +110,27 @@ Entities:
               Usage: texture_albedo
               Paths: [assets/models/spider-fbx/textures/SH3.png]
               Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: 372edd4d-04f6-462a-b10b-8b7c4590e3d9
+    TagComponent:
+      Tag: UnnamedEntity
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
+              Enable: false
       Visible: true
       EdgeEnable: false

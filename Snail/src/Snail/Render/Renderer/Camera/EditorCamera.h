@@ -145,7 +145,7 @@ namespace Snail {
 		// 鼠标操作的灵敏度，鼠标是每帧计算实际的屏幕偏移量，直接使用偏移量*speed即可
 		float m_RotateSpeed = 0.1f;
 		float m_MoveSpeed = 0.01f;
-		float m_DollySpeed = 0.5f;
+		float m_DollySpeed = 0.1f;
 	};
 
 }

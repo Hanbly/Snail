@@ -427,6 +427,7 @@ namespace Snail {
 			shader->SetInt("u_IrradianceMap", startSlot);
 			s_3DSceneData.IrradianceMap->Bind(startSlot);
 
+			shader->SetFloat("u_MaxReflectionLOD", (float)TextureLibrary::GetPrefilterMipLevels() - 1.0f);
 			shader->SetInt("u_PrefilterMap", startSlot + 1);
 			s_3DSceneData.PrefilterMap->Bind(startSlot + 1);
 

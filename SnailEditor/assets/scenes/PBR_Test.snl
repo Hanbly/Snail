@@ -7,15 +7,15 @@ EditorCamera:
   FOV: 45
   Near: 1
   Far: 10000
-  Aspect: 1.65142858
-  ViewMatrix: [0.80448854, 0.28514567, -0.521047115, -0, -1.49011612e-08, 0.877230763, 0.480068982, 0, 0.593968153, -0.386209965, 0.705722094, -0, -148.956848, 4.68214798, -513.890503, 1]
-  Position: [-149.262207, 242.595566, 452.947815]
-  DirvecFront: [0.521047115, -0.480068952, -0.705722094]
-  DirvecRight: [0.804488599, -0, 0.593968153]
-  DirvecUp: [0.28514567, 0.877230763, -0.386209995]
+  Aspect: 1.60857141
+  ViewMatrix: [0.769633651, 0.299454987, -0.563906729, -0, -0, 0.883193851, 0.469008118, 0, 0.63848567, -0.360964417, 0.67973572, -0, -140.096436, 3.06531715, -506.743439, 1]
+  Position: [-178.851013, 234.959518, 435.00769]
+  DirvecFront: [0.559612572, -0.459268779, -0.68985939]
+  DirvecRight: [0.776608586, -0, 0.629983366]
+  DirvecUp: [0.289331734, 0.888297439, -0.356672108]
   DirvecWorldUp: [0, 1, 0]
-  EulerPitch: 28.6899071
-  DirvecYaw: 36.439106
+  EulerPitch: 27.9699306
+  DirvecYaw: 39.6790009
   FocalPoint: [210.451538, -88.8282013, -34.2594337]
   Distance: 690.367004
   RotateSensitivity: 20
@@ -217,6 +217,48 @@ Entities:
             - DimType: Texture2D
               Usage: texture_albedo
               Paths: [assets/models/Cerberus_by_Andrew_Maximov/Textures/Cerberus_A.tga]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: c7bd6325-9060-4a01-a62f-f98261b51ae6
+    TagComponent:
+      Tag: 球1
+    TransformComponent:
+      Position: [0, 76.6583481, 266.895447]
+      Rotation: [0, -0, 0]
+      Scale: [74.1324692, 74.1324692, 74.1324692]
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: true
+      Meshes:
+        - PrimitiveType: Sphere
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: false
+          Albedo: [1, 1, 1]
+          Metallic: 1
+          Roughness: 0
+          AO: 1
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/PBRMaps/gold-scuffed-bl/gold-scuffed_basecolor-boosted.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/PBRMaps/gold-scuffed-bl/gold-scuffed_normal.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/PBRMaps/gold-scuffed-bl/gold-scuffed_metallic.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/PBRMaps/gold-scuffed-bl/gold-scuffed_basecolor-boosted.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/PBRMaps/gold-scuffed-bl/gold-scuffed_roughness.png]
               Enable: true
       Visible: true
       EdgeEnable: false

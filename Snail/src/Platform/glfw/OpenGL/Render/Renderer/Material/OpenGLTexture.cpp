@@ -227,6 +227,18 @@ namespace Snail {
 			type = GL_FLOAT;
 			internalFormat = GL_RGBA32F;
 			dataFormat = GL_RGBA;
+			if (channels == 4) {
+				internalFormat = GL_RGBA32F;
+				dataFormat = GL_RGBA;
+			}
+			else if (channels == 3) {
+				internalFormat = GL_RGB32F;
+				dataFormat = GL_RGB;
+			}
+			else {
+				internalFormat = GL_R32F;
+				dataFormat = GL_RED;
+			}
 		}
 		else {
 			// 普通 LDR 处理
@@ -466,6 +478,18 @@ namespace Snail {
 			if (isFloat) {				
 				currentInternalFormat = GL_RGBA32F;
 				dataFormat = GL_RGBA;
+				if (channels == 4) {
+					currentInternalFormat = GL_RGBA32F;
+					dataFormat = GL_RGBA;
+				}
+				else if (channels == 3) {
+					currentInternalFormat = GL_RGB32F;
+					dataFormat = GL_RGB;
+				}
+				else {
+					currentInternalFormat = GL_R32F;
+					dataFormat = GL_RED;
+				}
 			}
 			else {
 				// --- 普通字节纹理 (LDR) ---

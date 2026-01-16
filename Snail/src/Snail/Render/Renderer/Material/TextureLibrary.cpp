@@ -13,6 +13,8 @@ namespace Snail {
 	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_TextureNames = std::unordered_map<std::string, Refptr<Texture>>();
 	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_TexturePaths = std::unordered_map<std::string, Refptr<Texture>>();
 	std::unordered_map<std::string, Refptr<Texture>> TextureLibrary::m_EmbeddedTexturePaths = std::unordered_map<std::string, Refptr<Texture>>();
+	int TextureLibrary::m_PrefilterMapResolution = 256;
+	int TextureLibrary::m_PrefilterMipLevels = 5;
 
 	Refptr<Texture> TextureLibrary::Load(const std::vector<std::string>& rawPath, const TextureUsage& usage)
 	{
@@ -206,7 +208,7 @@ namespace Snail {
 		Refptr<Texture> prefilterTexture;
 		if (usage == TextureUsage::Cubemap) {
 			irradianceTexture = RendererTools::CalculateCubemapToIBLIrradianceConvolution(cubemap);
-			prefilterTexture = RendererTools::CalculateCubemapToIBLPrefilter(cubemap);
+			prefilterTexture = RendererTools::CalculateCubemapToIBLPrefilter(cubemap, m_PrefilterMapResolution, m_PrefilterMipLevels);
 		}
 		m_TextureNames[irradianceName] = irradianceTexture;
 		m_TexturePaths[irradiancePathKey] = irradianceTexture;

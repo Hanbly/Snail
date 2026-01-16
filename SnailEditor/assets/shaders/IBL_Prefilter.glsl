@@ -20,6 +20,7 @@ in vec3 v_WorldPos;
 
 uniform samplerCube u_EnvironmentMap;
 uniform float u_Roughness; // C++ 循环里每次传入不同的粗糙度 (0.0 到 1.0)
+uniform float u_Resolution; // 贴图分辨率
 
 const float PI = 3.14159265359;
 
@@ -85,7 +86,7 @@ void main()
             // 这里的 mipLevel 计算是为了减少采样时的噪点
             float D   = (u_Roughness * u_Roughness * u_Roughness * u_Roughness) / (PI * pow(dot(N, H) * dot(N, H) * (u_Roughness * u_Roughness - 1.0) + 1.0, 2.0));
             float pdf = D * max(dot(N, H), 0.0) / (4.0 * max(dot(H, V), 0.0)) + 0.0001; 
-            float saTexel  = 4.0 * PI / (6.0 * 512.0 * 512.0);
+            float saTexel  = 4.0 * PI / (6.0 * u_Resolution * u_Resolution);
             float saSample = 1.0 / (float(SAMPLE_COUNT) * pdf + 0.0001);
             float mipLevel = u_Roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel); 
             

@@ -130,6 +130,7 @@ uniform sampler2D u_ShadowMap;
 uniform samplerCube u_IrradianceMap; // 漫反射环境
 uniform samplerCube u_PrefilterMap;  // 镜面反射环境 (带 Mipmap)
 uniform sampler2D   u_BRDFLUT;       // BRDF 积分图
+uniform float u_MaxReflectionLOD;
 uniform bool        u_UseIBL;
 
 // 摄像机位置
@@ -300,8 +301,7 @@ void main()
 
         // --- 2. 镜面反射部分 (Specular IBL) ---
         // 2.1 采样 Prefilter Map
-        const float MAX_REFLECTION_LOD = 4.0; // cpp中 Prefilter Map 生成了 5 级 mip (0-4)
-        vec3 prefilteredColor = textureLod(u_PrefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+        vec3 prefilteredColor = textureLod(u_PrefilterMap, R, roughness * u_MaxReflectionLOD).rgb;
 
         // 2.2 采样 BRDF LUT
         // x轴是 NdotV, y轴是 Roughness
