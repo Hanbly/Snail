@@ -387,7 +387,7 @@ namespace Snail {
 					}
 				}
 				float intensity = firstMaterial->GetEmissiveIntensity();
-				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
+				if (ImGui::DragFloat("EmissiveIntensity", &intensity, 1.0f, 0.0f, 10000.0f)) {
 					for (auto& mesh : component.model->GetMeshes()) {
 						mesh->GetMaterial()->SetEmissiveIntensity(intensity);
 					}
@@ -537,7 +537,7 @@ namespace Snail {
 					mesh->GetMaterial()->SetEmissiveColor(emissive);
 				}
 				float intensity = material->GetEmissiveIntensity();
-				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
+				if (ImGui::DragFloat("EmissiveIntensity", &intensity, 1.0f, 0.0f, 10000.0f)) {
 					mesh->GetMaterial()->SetEmissiveIntensity(intensity);
 				}
 

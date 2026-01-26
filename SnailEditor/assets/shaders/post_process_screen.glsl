@@ -25,13 +25,15 @@ uniform float u_Gamma; // 通常为 2.2
 uniform float u_Exposure; // 曝光度，通常为 1.0
 
 // ACES Tone Mapping 算法
-vec3 ace_tone_mapping(vec3 x) {
+// float 版本的 ACES
+float aces_approx_scalar(float v)
+{
     float a = 2.51f;
     float b = 0.03f;
     float c = 2.43f;
     float d = 0.59f;
     float e = 0.14f;
-    return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0, 1.0);
+    return clamp((v*(a*v+b))/(v*(c*v+d)+e), 0.0f, 1.0f);
 }
 
 void main()
@@ -47,15 +49,35 @@ void main()
         hdrColor += bloomColor * u_BloomIntensity; 
     }
 
-    // Tone Mapping (HDR -> LDR)
-    // 这里使用 ACES 电影级色调映射，能很好处理 EXR 的高光
-    vec3 mapped = ace_tone_mapping(hdrColor);
+    // 2. 计算当前颜色的亮度 (Luminance)
+    // 使用 Rec.709 系数，或者更简单的 dot(color, vec3(0.299, 0.587, 0.114))
+    float luminance = dot(hdrColor, vec3(0.2126, 0.7152, 0.0722));
     
-    // 如果你不喜欢 ACES，也可以用简单的 Reinhard:
-    // vec3 mapped = hdrColor / (hdrColor + vec3(1.0));
+    // 防止除以 0
+    luminance = max(luminance, 0.0001);
+
+    // 3. 对亮度进行 Tone Mapping，而不是对颜色通道
+    float mappedLuminance = aces_approx_scalar(luminance);
+
+    // 4. 计算缩放比例：将 HDR 亮度缩放到 LDR 范围
+    vec3 mapped = hdrColor * (mappedLuminance / luminance);
+
+    // 5. [关键步骤] 高光平滑去饱和 (Highlight Desaturation)
+    // 如果不加这一步，极亮的红色会变成 (1.0, 0.0, 0.0) 而不是白色，看起来很假且刺眼。
+    // 我们根据“原始亮度”来决定混合白色的程度。
+    
+    // 阈值控制：当亮度超过 2.0 时开始变白，超过 10.0 时完全变白 (参数可调)
+    float desaturationFactor = smoothstep(10.0, 15000.0, luminance);
+    
+    // 混合目标：纯白色的亮度应该是 mappedLuminance
+    vec3 whiteScale = vec3(mappedLuminance);
+    
+    // 执行混合：保留色相 -> 平滑过渡 -> 纯白
+    mapped = mix(mapped, whiteScale, desaturationFactor);
+    
+    //vec3 mapped = ace_tone_mapping(hdrColor);
 
     // Gamma Correction (Linear -> sRGB)
-    // 这一步解决了"暗部细节不足"的问题
     mapped = pow(mapped, vec3(1.0 / u_Gamma));
 
     color = vec4(mapped, 1.0);

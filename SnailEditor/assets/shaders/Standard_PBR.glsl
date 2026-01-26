@@ -197,6 +197,8 @@ void main()
     if (u_UseTexture && u_UseRoughnessMap) {
         roughness *= texture(u_RoughnessMap, v_TextureCoords).r;
     }
+    // 限制 roughness，避免 0.0 的除零错误和 1.0 的边界伪影
+    roughness = clamp(roughness, 0.0, 0.99);
 
     // AO 计算
     float ao = u_AOVal;

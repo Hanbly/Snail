@@ -505,8 +505,6 @@ namespace Snail {
 
 					// 光照强度
 					if (pointLightComponent["Intensity"]) plc.intensity = pointLightComponent["Intensity"].as<float>();
-
-					// 注意：旧代码中的 Intensity 字段已被移除，不需要再读取
 				}
 
 				// --- 反序列化 ModelComponent ---

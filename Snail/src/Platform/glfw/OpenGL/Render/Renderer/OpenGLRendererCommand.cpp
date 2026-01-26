@@ -21,6 +21,9 @@ namespace Snail {
 
 		// 开启剔除，默认背面
 		//glEnable(GL_CULL_FACE);
+
+		// 开启立方体贴图的接缝处理
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	}
 
 	void OpenGLRendererCommand::SetViewPortImpl(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

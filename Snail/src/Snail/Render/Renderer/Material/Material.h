@@ -89,7 +89,7 @@ namespace Snail {
 		float m_Metallic = 0.0f;					// 默认为非金属
 		float m_Roughness = 0.5f;					// 默认为中等粗糙
 		float m_AO = 1.0f;							// 默认为 1.0 (无遮蔽)
-		glm::vec3 m_EmissiveColor = glm::vec3(1.0f);	// 默认为白色
+		glm::vec3 m_EmissiveColor = glm::vec3(0.0f);	// 默认为无
 		float m_EmissiveIntensity = 0.0f;				// 默认不发光
 	};
 

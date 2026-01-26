@@ -91,7 +91,7 @@ namespace Snail {
 
 			// --- 泛光控制 ---
 			bool UseBloom = true;
-			float BloomIntensity = 0.0004f; // 0.04% 的强度
+			float BloomIntensity = 0.0002f; // 0.02% 的强度
 		};
 
 		static Renderer3DSceneData s_3DSceneData;

@@ -188,7 +188,8 @@ namespace Snail {
 		RendererCommand::Clear(); // 清除旧的亮部
 
 		extractShader->Bind();
-		extractShader->SetFloat("u_Threshold", 1.0f); // 阈值，超过1.0才发光
+		extractShader->SetFloat("u_Threshold", 0.8f); // 阈值
+		extractShader->SetFloat("u_SoftKnee", 0.5f);
 		Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0)); // 绑定场景FBO
 
 		m_ScreenQuadVAO->Bind();
@@ -198,6 +199,8 @@ namespace Snail {
 		// 乒乓高斯模糊
 		auto blurShader = ShaderLibrary::Load("BloomBlurShader", "assets/shaders/bloom_blur.glsl", {});
 		blurShader->Bind();
+
+		blurShader->SetFloat("u_Spread", 1.5f);
 
 		bool horizontal = true;
 		bool first_iteration = true;
@@ -237,7 +240,7 @@ namespace Snail {
 			
 			screenShader->SetInt("u_BloomBlurTexture", 1);
 			Texture2D::BindExternal(1, m_BloomFBOs[!horizontal]->GetColorAttachmentRendererID(0));
-			screenShader->SetFloat("u_BloomIntensity", Renderer3D::GetBloomIntensity()); // 0.04% 的强度
+			screenShader->SetFloat("u_BloomIntensity", Renderer3D::GetBloomIntensity());
 			screenShader->SetInt("u_BloomEnabled", (int)Renderer3D::GetUseBloom());
 
 			screenShader->SetFloat("u_Gamma", m_Scene->GetGamma());

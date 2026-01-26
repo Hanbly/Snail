@@ -2,22 +2,24 @@ Scene: MutiLights_Test
 SceneSettings:
   Gamma: 2.20000005
   Exposure: 1
+  EnableBloom: true
+  BloomIntensity: 0.000199999995
 EditorCamera:
   EditorCameraMode: Arcball
   FOV: 45
   Near: 1
   Far: 10000
   Aspect: 1.61318052
-  ViewMatrix: [-0.0141651984, 0.201233581, -0.979440868, -0, -1.39698386e-09, 0.979539216, 0.201253772, 0, 0.999899685, 0.00285081659, -0.0138754491, -0, 10.3824749, -130.443909, -363.304199, 1]
-  Position: [-329.438202, 200.891266, -15.0505419]
-  DirvecFront: [0.979440868, -0.201253772, 0.0138753653]
-  DirvecRight: [-0.0141651966, 0, 0.999899626]
-  DirvecUp: [0.201233566, 0.979539156, 0.00285079912]
+  ViewMatrix: [-0.0141651984, 0.201233581, -0.979440868, -0, -1.39698386e-09, 0.979539216, 0.201253772, 0, 0.999899685, 0.00285081659, -0.0138754491, -0, 10.3824749, -130.443939, -348.304199, 1]
+  Position: [-314.746582, 197.872467, -14.842411]
+  DirvecFront: [1, 0, 0]
+  DirvecRight: [0, 0, 1]
+  DirvecUp: [0, 1, 0]
   DirvecWorldUp: [0, 1, 0]
   EulerPitch: 11.6102848
   DirvecYaw: 90.8116379
   FocalPoint: [0.513023674, 133.093475, -10.3762484]
-  Distance: 336.877136
+  Distance: 321.877136
   RotateSensitivity: 20
   MoveSensitivity: 200
   RotateSpeed: 0.100000001
@@ -4570,7 +4572,7 @@ Entities:
       Rotation: [0, -0, 0]
       Scale: [10.7842531, 10.7842531, 10.7842531]
     PointLightComponent:
-      Color: [1, 0, 0]
+      Color: [1, 0.0198019743, 0.0198019743]
       Intensity: 5000
     ModelComponent:
       IsImported: false
@@ -4580,7 +4582,7 @@ Entities:
         - PrimitiveType: Sphere
           ShaderPath: assets/shaders/Standard_PBR.glsl
           EnableTextures: false
-          EmissiveColor: [1, 0, 0]
+          EmissiveColor: [1, 0.0198019743, 0.0198019743]
           EmissiveIntensity: 5000
           Diffuse: [1, 1, 1]
           Specular: [1, 1, 1]
