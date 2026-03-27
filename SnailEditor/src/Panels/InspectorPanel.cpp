@@ -925,7 +925,7 @@ namespace Snail {
 								
 				if (ImGui::MenuItem("导入外部模型..."))
 				{
-					FileSelecter::Open("ModelImportKey", "导入模型", "(.obj,.fbx,.gltf,.glb){.obj,.fbx,.gltf,.glb},.obj,.fbx,.gltf,.glb");
+					FileSelecter::Open("ModelImportKey", "导入模型", "(.obj,.fbx,.gltf,.glb,.pmx){.obj,.fbx,.gltf,.glb,.pmx},.obj,.fbx,.gltf,.glb,.pmx");
 				}
 				ImGui::EndMenu();
 			}

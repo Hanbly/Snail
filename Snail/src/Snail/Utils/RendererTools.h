@@ -84,10 +84,13 @@ namespace Snail {
 		// --- 手动计算切线空间 ---
 		static void RecalculateTangents(std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 		{
-			// 1. 重置切线
+			// 1. 重置切线 & 防御零法线
 			for (auto& v : vertices) {
 				v.tangent = glm::vec3(0.0f);
 				v.bitangent = glm::vec3(0.0f);
+				if (glm::length(v.normal) < 0.0001f) {
+					v.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+				}
 			}
 
 			// 2. 遍历三角形累加切线
@@ -102,31 +105,50 @@ namespace Snail {
 				glm::vec2 deltaUV1 = v1.texCoords - v0.texCoords;
 				glm::vec2 deltaUV2 = v2.texCoords - v0.texCoords;
 
-				float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+				float denom = (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
-				// 防止除零 (退化三角形)
-				if (std::isinf(f) || std::isnan(f)) f = 0.0f;
+				glm::vec3 faceTangent(0.0f);
+				glm::vec3 faceBitangent(0.0f);
 
-				glm::vec3 tangent, bitangent;
-				tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-				tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-				tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+				// 防御极小值，避免产生巨大的乘数 f
+				if (std::abs(denom) > 1e-6f) {
+					float f = 1.0f / denom;
+					faceTangent = f * (deltaUV2.y * edge1 - deltaUV1.y * edge2);
+					faceBitangent = f * (-deltaUV2.x * edge1 + deltaUV1.x * edge2);
+				}
+				else {
+					// 如果 UV 畸变或没有 UV，直接用模型边作为切线空间（作为防崩底线）
+					faceTangent = edge1;
+					faceBitangent = edge2;
+				}
 
-				bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-				bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-				bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+				// 在累加到顶点之前，必须先归一化面切线！
+				// 这样可以防止大模型（edge 极大）或小面片（denom 极小）主导切线方向并产生 Inf/NaN。
+				if (glm::length(faceTangent) > 0.0001f) faceTangent = glm::normalize(faceTangent);
+				if (glm::length(faceBitangent) > 0.0001f) faceBitangent = glm::normalize(faceBitangent);
 
-				v0.tangent += tangent; v1.tangent += tangent; v2.tangent += tangent;
-				v0.bitangent += bitangent; v1.bitangent += bitangent; v2.bitangent += bitangent;
+				v0.tangent += faceTangent; v1.tangent += faceTangent; v2.tangent += faceTangent;
+				v0.bitangent += faceBitangent; v1.bitangent += faceBitangent; v2.bitangent += faceBitangent;
 			}
 
 			// 3. 正交化 (Gram-Schmidt)
 			for (auto& v : vertices) {
-				if (glm::length(v.tangent) < 0.0001f) continue; // 防止零向量
+				glm::vec3 t = v.tangent - v.normal * glm::dot(v.normal, v.tangent);
 
-				// 重新正交化 T，使其垂直于 N
-				v.tangent = glm::normalize(v.tangent - v.normal * glm::dot(v.normal, v.tangent));
-				v.bitangent = glm::normalize(v.bitangent); // 简单归一化
+				if (glm::length(t) < 0.0001f) {
+					// 伪造合法的切线
+					glm::vec3 up = std::abs(v.normal.y) < 0.999f ? glm::vec3(0.0f, 1.0f, 0.0f) : glm::vec3(1.0f, 0.0f, 0.0f);
+					v.tangent = glm::normalize(glm::cross(up, v.normal));
+				}
+				else {
+					v.tangent = glm::normalize(t);
+				}
+
+				// 构建完美的正交 TBN 矩阵
+				// 不要直接 Normalize 累加得到的副切线，它不一定和法线/切线完全垂直。
+				// 通过叉乘生成完美正交的副切线，再利用累加的副切线判断 UV 镜像方向（手性）。
+				float handedness = glm::dot(glm::cross(v.normal, v.tangent), v.bitangent) < 0.0f ? -1.0f : 1.0f;
+				v.bitangent = handedness * glm::normalize(glm::cross(v.normal, v.tangent));
 			}
 		}
 

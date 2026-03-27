@@ -1,0 +1,3625 @@
+Scene: glTF_test
+SceneSettings:
+  Gamma: 2.20000005
+  Exposure: 1
+  EnableBloom: true
+  BloomIntensity: 0.000199999995
+EditorCamera:
+  EditorCameraMode: Arcball
+  FOV: 45
+  Near: 1
+  Far: 10000
+  Aspect: 1.48567331
+  ViewMatrix: [0.106582724, 0.160174057, -0.981317699, -0, -7.4505806e-09, 0.98693949, 0.161091655, 0, 0.994303823, -0.0171695761, 0.105190672, -0, 10.2624636, -131.615524, -341.722473, 1]
+  Position: [-315.350708, 184.94519, 23.4822311]
+  DirvecFront: [0.981317699, -0.161091655, -0.105190694]
+  DirvecRight: [0.106582716, -0, 0.994303763]
+  DirvecUp: [0.160174057, 0.98693949, -0.0171695873]
+  DirvecWorldUp: [0, 1, 0]
+  EulerPitch: 9.27026558
+  DirvecYaw: 83.8816452
+  FocalPoint: [0.513023674, 133.093475, -10.3762484]
+  Distance: 321.877136
+  RotateSensitivity: 20
+  MoveSensitivity: 200
+  RotateSpeed: 0.100000001
+  MoveSpeed: 0.00999999978
+  DollySpeed: 0.100000001
+Entities:
+  - Entity: 877bafa2-9eab-4064-ba9f-a3ad4e27f068
+    TagComponent:
+      Tag: 天空盒
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/TextureCube_Shader.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Skybox
+          ShaderPath: assets/shaders/TextureCube_Shader.glsl
+          EnableTextures: false
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            - DimType: TextureCube
+              Usage: texture_cubemap
+              Paths: [assets/images/defaultSky/right.jpg, assets/images/defaultSky/left.jpg, assets/images/defaultSky/top.jpg, assets/images/defaultSky/bottom.jpg, assets/images/defaultSky/front.jpg, assets/images/defaultSky/back.jpg]
+              Enable: false
+      Visible: true
+      EdgeEnable: false
+  - Entity: ec6d661f-7a22-4188-a317-88f51aabd136
+    TagComponent:
+      Tag: 平行光
+    DirectionalLightComponent:
+      Color: [1, 1, 1]
+      Direction: [0, -1, -0.129999995]
+      Intensity: 5
+  - Entity: 2ba485a9-f8f3-4401-b1aa-91c53582b134
+    TagComponent:
+      Tag: sponza
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [48.5518227, 48.5518227, 48.5518227]
+    ModelComponent:
+      IsImported: true
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: true
+      FilePath: assets/models/sponza-gltf-pbr/sponza.glb
+      Meshes:
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/2476780530225283311.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/9902244931375451333.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13403324930296584722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/9902244931375451333.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13403324930296584722.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3024505075340887865.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14756318304758091217.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/11951833815537665903.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/11767032366500980006.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/11951833815537665903.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/11767032366500980006.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/2079865044350246831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/17895787136451829206.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/11730337235035663189.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/17895787136451829206.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/11730337235035663189.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12329509035612604735.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1998971870295487297.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13409925532914268225.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1998971870295487297.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13409925532914268225.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3923303327751769896.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8296618020194622850.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16356796650360613890.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1122449420293395305.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1122449420293395305.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1122449420293395305.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/18323644941784144220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13595501589012174731.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12329509035612604735.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1998971870295487297.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13409925532914268225.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1998971870295487297.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13409925532914268225.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/2079865044350246831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/17895787136451829206.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/11730337235035663189.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/17895787136451829206.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/11730337235035663189.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14756318304758091217.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/11951833815537665903.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/11767032366500980006.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/11951833815537665903.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/11767032366500980006.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7972573899771518506.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5832062518599983612.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1028279501752930479.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14205398132421384128.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/16011208436118768083.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/1584091021348870901.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/16011208436118768083.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/1584091021348870901.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            []
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3978994262251708158.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/16477962303174451462.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/14579308432899259383.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/16477962303174451462.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/14579308432899259383.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/2476780530225283311.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/9902244931375451333.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/13403324930296584722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/9902244931375451333.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/13403324930296584722.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14688151170495968673.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/6310083497554052894.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/10052086730298500641.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/2882036392247032076.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/2882036392247032076.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14688151170495968673.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/6310083497554052894.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14688151170495968673.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1140786120295422654.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/10052086730298500641.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/2882036392247032076.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/2882036392247032076.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/6310083497554052894.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/14930275953430797156.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16821249183869841744.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3978994262251708158.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/16477962303174451462.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/14579308432899259383.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/16477962303174451462.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/14579308432899259383.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11135942082434865011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11767596326202387460.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5884384475331579104.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11767596326202387460.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5884384475331579104.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11767596326202387460.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11135942082434865011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5884384475331579104.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/2763628767906623784.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11767596326202387460.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10048691058615206298.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/11135942082434865011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/6868100442424064722.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9324166217220601391.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1580937199681144457.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5341784451809001011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1580937199681144457.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5341784451809001011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1580937199681144457.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5341784451809001011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1580937199681144457.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/10522109282340384846.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/6589266898288282879.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/5341784451809001011.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/3466468048949695469.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9502968375209926516.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/14889877426847768220.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/15763468896848997518.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/9690544065500475605.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/12594002301861873831.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1542529576189667841.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/5664105101133334238.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7377890232508786340.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1774157975403286845.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8114265492436541323.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1774157975403286845.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8114265492436541323.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7151673072344121468.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5775677410124227070.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/7385312956576678639.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5775677410124227070.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/7385312956576678639.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3024505075340887865.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/7151673072344121468.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/5775677410124227070.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/7385312956576678639.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/5775677410124227070.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/7385312956576678639.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/3024505075340887865.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/1032882375854590004.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/16629179577494203696.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/8148743991790068494.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/17644577987043643793.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/823547076410903191.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/17644577987043643793.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/823547076410903191.png]
+              Enable: true
+        - PrimitiveType: NonePrimitive
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: true
+          EmissiveColor: [1, 1, 1]
+          EmissiveIntensity: 0
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 1
+          AO: 0.504000008
+          Textures:
+            - DimType: Texture2D
+              Usage: texture_normal
+              Paths: [assets/models/sponza-gltf-pbr/1180362371129094107.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_diffuse
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_metallic
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_albedo
+              Paths: [assets/models/sponza-gltf-pbr/8759994149281352776.png]
+              Enable: true
+            - DimType: Texture2D
+              Usage: texture_roughness
+              Paths: [assets/models/sponza-gltf-pbr/8131002636958089324.png]
+              Enable: true
+      Visible: true
+      EdgeEnable: false
+  - Entity: d2e7f48c-cbce-43fc-bf8f-7e845f1eb71d
+    TagComponent:
+      Tag: 2
+    TransformComponent:
+      Position: [41.8790321, 127.989235, 34.1645508]
+      Rotation: [0, -0, 0]
+      Scale: [10.7842531, 10.7842531, 10.7842531]
+    PointLightComponent:
+      Color: [0, 1, 0.0990097523]
+      Intensity: 5000
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Sphere
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: false
+          EmissiveColor: [0, 1, 0.0990097523]
+          EmissiveIntensity: 5000
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false
+  - Entity: f03ecfb8-1341-4d14-9bb0-c76c75dc0d8d
+    TagComponent:
+      Tag: 1
+    TransformComponent:
+      Position: [-51.6719742, 127.989288, -63.4821053]
+      Rotation: [0, -0, 0]
+      Scale: [10.7842531, 10.7842531, 10.7842531]
+    PointLightComponent:
+      Color: [1, 0.0198019743, 0.0198019743]
+      Intensity: 5000
+    ModelComponent:
+      IsImported: false
+      DefaultShaderPath: assets/shaders/Standard_PBR.glsl
+      EnableTextures: false
+      Meshes:
+        - PrimitiveType: Sphere
+          ShaderPath: assets/shaders/Standard_PBR.glsl
+          EnableTextures: false
+          EmissiveColor: [1, 0.0198019743, 0.0198019743]
+          EmissiveIntensity: 5000
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Ambient: [1, 1, 1]
+          Shininess: 32
+          Albedo: [1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          AO: 1
+          Textures:
+            []
+      Visible: true
+      EdgeEnable: false

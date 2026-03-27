@@ -70,7 +70,7 @@ namespace Snail{
 					// 加载场景
 					m_OnSceneFileOpenCallback(path.string());
 				}
-				else if (extension == ".obj" || extension == ".fbx" || extension == ".gltf" || extension == ".glb")
+				else if (extension == ".obj" || extension == ".fbx" || extension == ".gltf" || extension == ".glb" || extension == ".pmx")
 				{
 					m_OnEntityFileOpenCallback(path.string());
 				}

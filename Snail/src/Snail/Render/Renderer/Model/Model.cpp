@@ -72,7 +72,9 @@ namespace Snail {
 		const aiScene* scene = importer.ReadFile(
 			path,
 			//aiProcess_CalcTangentSpace |	// 计算切线和副切线（debug模式很慢）
-			//aiProcess_FlipUVs |				// 翻转y轴
+			//aiProcess_FlipUVs |			// 翻转y轴
+			//aiProcess_SortByPType |		// 分离线/点与三角形
+			//aiProcess_JoinIdenticalVertices |
 			aiProcess_Triangulate |			// 分割成三角形
 			aiProcess_GenNormals			// 生成法线
 		);
@@ -133,7 +135,7 @@ namespace Snail {
 		// 处理顶点位置、法线和纹理坐标
 		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 		{
-			Vertex vertex;
+			Vertex vertex{};
 
 			// --- 读取顶点 ---
 			vertex.position.x = static_cast<float>(mesh->mVertices[i].x);
@@ -142,9 +144,9 @@ namespace Snail {
 			// --- 读取法线 ---
 			if (mesh->HasNormals())
 			{
-				vertex.normal.x = static_cast<float>(mesh->mNormals[i].x);
-				vertex.normal.y = static_cast<float>(mesh->mNormals[i].y);
-				vertex.normal.z = static_cast<float>(mesh->mNormals[i].z);
+				glm::vec3 n(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+				bool isNormalValid = std::isfinite(n.x) && std::isfinite(n.y) && std::isfinite(n.z) && (glm::length(n) > 0.0001f);
+				vertex.normal = isNormalValid ? glm::normalize(n) : glm::vec3(0.0f, 1.0f, 0.0f);
 			}
 			else
 			{
@@ -161,22 +163,56 @@ namespace Snail {
 			{
 				vertex.texCoords = glm::vec2(0.0f, 0.0f);
 			}
-			// --- 读取切线和副切线 ---
+			//--- 读取切线和副切线 ---
 			//if (mesh->HasTangentsAndBitangents())
 			//{
-			//	vertex.tangent.x = static_cast<float>(mesh->mTangents[i].x);
-			//	vertex.tangent.y = static_cast<float>(mesh->mTangents[i].y);
-			//	vertex.tangent.z = static_cast<float>(mesh->mTangents[i].z);
-
-			//	vertex.bitangent.x = static_cast<float>(mesh->mBitangents[i].x);
-			//	vertex.bitangent.y = static_cast<float>(mesh->mBitangents[i].y);
-			//	vertex.bitangent.z = static_cast<float>(mesh->mBitangents[i].z);
+			//	glm::vec3 t(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+			//	glm::vec3 b(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+			//	bool isTangentValid = std::isfinite(t.x) && std::isfinite(t.y) && std::isfinite(t.z) && (glm::length(t) > 0.0001f);
+			//	bool isBitangentValid = std::isfinite(b.x) && std::isfinite(b.y) && std::isfinite(b.z) && (glm::length(b) > 0.0001f);
+			//	// 处理切线并进行施密特正交化
+			//	if (isTangentValid) {
+			//		// 剔除切线中与法线平行的分量，确保它们绝对垂直
+			//		glm::vec3 t_ortho = t - glm::dot(t, vertex.normal) * vertex.normal;
+			//		// 检查剔除后是否变成了零向量（即原切线与法线完全平行）
+			//		if (glm::length(t_ortho) > 0.0001f) {
+			//			vertex.tangent = glm::normalize(t_ortho);
+			//		}
+			//		else {
+			//			// 触发此分支说明原切线数据错误，使用备用方案
+			//			glm::vec3 up = std::abs(vertex.normal.y) < 0.999f ? glm::vec3(0.0f, 1.0f, 0.0f) : glm::vec3(1.0f, 0.0f, 0.0f);
+			//			vertex.tangent = glm::normalize(glm::cross(up, vertex.normal));
+			//		}
+			//	}
+			//	else {
+			//		// Fallback: 伪造合法的正交切线
+			//		glm::vec3 up = std::abs(vertex.normal.y) < 0.999f ? glm::vec3(0.0f, 1.0f, 0.0f) : glm::vec3(1.0f, 0.0f, 0.0f);
+			//		vertex.tangent = glm::normalize(glm::cross(up, vertex.normal));
+			//	}
+			//	// 处理副切线
+			//	if (isBitangentValid) {
+			//		// 同样正交化副切线，确保它垂直于法线和切线
+			//		glm::vec3 b_ortho = b - glm::dot(b, vertex.normal) * vertex.normal - glm::dot(b, vertex.tangent) * vertex.tangent;
+			//		if (glm::length(b_ortho) > 0.0001f) {
+			//			vertex.bitangent = glm::normalize(b_ortho);
+			//		}
+			//		else {
+			//			vertex.bitangent = glm::normalize(glm::cross(vertex.normal, vertex.tangent));
+			//		}
+			//	}
+			//	else {
+			//		// Fallback: 由于前面的代码已经保证了 vertex.tangent 绝对垂直于 vertex.normal，
+			//		// 这里的 cross 绝对安全，不会再产生 (0,0,0) 导致 NaN。
+			//		vertex.bitangent = glm::normalize(glm::cross(vertex.normal, vertex.tangent));
+			//	}
 			//}
 			//else
 			//{
-			//	// 默认值，防止由未初始化导致的渲染错误
-			//	vertex.tangent = glm::vec3(0.0f);
-			//	vertex.bitangent = glm::vec3(0.0f);
+			//	// 伪造合法的正交切线空间，不能设为 0 向量
+			//	// 找到一个与 normal 不平行的临时向上向量
+			//	glm::vec3 up = std::abs(vertex.normal.y) < 0.999f ? glm::vec3(0.0f, 1.0f, 0.0f) : glm::vec3(1.0f, 0.0f, 0.0f);
+			//	vertex.tangent = glm::normalize(glm::cross(up, vertex.normal));
+			//	vertex.bitangent = glm::normalize(glm::cross(vertex.normal, vertex.tangent));
 			//}
 			
 			vertices.push_back(vertex);
@@ -186,6 +222,10 @@ namespace Snail {
 		for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace face = mesh->mFaces[i];
+
+			// 忽略非三角形（点、线），防止在后续计算切线时 indices 数组越界
+			if (face.mNumIndices != 3) continue;
+
 			for (uint32_t j = 0; j < face.mNumIndices; j++)
 				indices.push_back(face.mIndices[j]);
 		}

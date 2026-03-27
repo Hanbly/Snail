@@ -53,8 +53,8 @@ namespace Snail {
 
 		bool m_EnableTextures = false;
 	public:
-		glm::vec3 m_MinVertex;
-		glm::vec3 m_MaxVertex;
+		glm::vec3 m_MinVertex{ 0.0f };
+		glm::vec3 m_MaxVertex{ 0.0f };
 	public:
 		Mesh(const PrimitiveType& type, 
 			const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices,

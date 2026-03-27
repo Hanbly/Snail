@@ -199,15 +199,15 @@ namespace Snail {
 						break;
 					case TextureUsage::Metallic:
 						uniformName = "u_MetallicMap";
-						m_Material->SetInt("u_MetallicMap", isEnable);
+						m_Material->SetInt("u_UseMetallicMap", isEnable);
 						break;
 					case TextureUsage::Roughness:
 						uniformName = "u_RoughnessMap";
-						m_Material->SetInt("u_RoughnessMap", isEnable);
+						m_Material->SetInt("u_UseRoughnessMap", isEnable);
 						break;
 					case TextureUsage::AO:
 						uniformName = "u_AOMap";
-						m_Material->SetInt("u_AOMap", isEnable);
+						m_Material->SetInt("u_UseAOMap", isEnable);
 						break;
 				}
 
@@ -275,15 +275,15 @@ namespace Snail {
 					break;
 				case TextureUsage::Metallic:
 					uniformName = "u_MetallicMap";
-					m_Material->SetInt("u_MetallicMap", isEnable);
+					m_Material->SetInt("u_UseMetallicMap", isEnable);
 					break;
 				case TextureUsage::Roughness:
 					uniformName = "u_RoughnessMap";
-					m_Material->SetInt("u_RoughnessMap", isEnable);
+					m_Material->SetInt("u_UseRoughnessMap", isEnable);
 					break;
 				case TextureUsage::AO:
 					uniformName = "u_AOMap";
-					m_Material->SetInt("u_AOMap", isEnable);
+					m_Material->SetInt("u_UseAOMap", isEnable);
 					break;
 				}
 
