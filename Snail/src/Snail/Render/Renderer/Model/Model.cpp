@@ -1,4 +1,4 @@
-﻿#include "SNLpch.h"
+#include "SNLpch.h"
 
 #include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Renderer3D.h"
@@ -83,7 +83,7 @@ namespace Snail {
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			SNL_CORE_ERROR("Model Importer 读取模型错误: ERROR::ASSIMP:: '{0}'", importer.GetErrorString());
-			SNL_CORE_ASSERT(false, "Model Importer 读取模型错误");
+			// SNL_CORE_ASSERT(false, "Model Importer 读取模型错误");
 			return;
 		}
 		// 示例：assets/models/sponza/sponza.obj
@@ -138,9 +138,16 @@ namespace Snail {
 			Vertex vertex{};
 
 			// --- 读取顶点 ---
-			vertex.position.x = static_cast<float>(mesh->mVertices[i].x);
-			vertex.position.y = static_cast<float>(mesh->mVertices[i].y);
-			vertex.position.z = static_cast<float>(mesh->mVertices[i].z);
+			{
+				glm::vec3 n(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+				bool isPositionValid = std::isfinite(n.x) && std::isfinite(n.y) && std::isfinite(n.z) && (glm::length(n) > 0.0001f);
+				vertex.position = isPositionValid ? n : glm::vec3(0.0f, 0.0f, 0.0f);
+				if(!isPositionValid)
+					SNL_CORE_ERROR("Model::ProcessMesh 读取顶点位置时发现无效数据，已替换为默认值。位置索引 i={0}, 原始数据=({1}, {2}, {3})", i, mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			}
+			 //vertex.position.x = mesh->mVertices[i].x;
+			 //vertex.position.y = mesh->mVertices[i].y;
+			 //vertex.position.z = mesh->mVertices[i].z;
 			// --- 读取法线 ---
 			if (mesh->HasNormals())
 			{
@@ -348,7 +355,7 @@ namespace Snail {
 				{
 					int textureIndex = atoi(str.C_Str() + 1); // 解析 "*0" -> 0
 
-					if (textureIndex < scene->mNumTextures)
+					if (textureIndex >= 0 && textureIndex < scene->mNumTextures)
 					{
 						aiTexture* aiTex = scene->mTextures[textureIndex];
 

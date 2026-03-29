@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Snail/Basic/Core.h"
 #include "Snail/Basic/Macro.h"
@@ -33,6 +33,7 @@ namespace Snail {
 			case TextureUsage::Specular: return "texture_specular";
 			case TextureUsage::Cubemap: return "texture_cubemap";
 			case TextureUsage::Normal: return "texture_normal";
+			case TextureUsage::Emissive: return "texture_emissive";
 
 			case TextureUsage::Albedo: return "texture_albedo";
 			case TextureUsage::Metallic: return "texture_metallic";

@@ -95,6 +95,12 @@ namespace Snail {
 
 			// 2. 遍历三角形累加切线
 			for (size_t i = 0; i < indices.size(); i += 3) {
+
+				if(i + 2 >= indices.size() || indices[i] >= vertices.size() || indices[i + 1] >= vertices.size() || indices[i + 2] >= vertices.size()) {
+					SNL_CORE_WARN("RendererTools::RecalculateTangents 索引越界，跳过三角形 i={0}, indices={1}, {2}, {3}, vertices size={4}", i, indices[i], indices[i + 1], indices[i + 2], vertices.size());
+					continue;
+				}
+
 				Vertex& v0 = vertices[indices[i]];
 				Vertex& v1 = vertices[indices[i + 1]];
 				Vertex& v2 = vertices[indices[i + 2]];

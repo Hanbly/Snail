@@ -211,6 +211,7 @@ void main()
         vec4 texColor = texture(u_EmissiveMap, v_TextureCoords);
         emissive *= texColor.rgb; 
     }
+    result += emissive;
     
     FinalColor = vec4(result, 1.0);
     EntityIDBuffer = v_EntityID;

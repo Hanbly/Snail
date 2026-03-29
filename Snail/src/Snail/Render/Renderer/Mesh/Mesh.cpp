@@ -1,4 +1,4 @@
-﻿#include "SNLpch.h"
+#include "SNLpch.h"
 
 #include "Snail/Render/Renderer/Material/ShaderLibrary.h"
 #include "Snail/Render/Renderer/Material/TextureLibrary.h"
@@ -268,6 +268,10 @@ namespace Snail {
 				case TextureUsage::Normal:
 					uniformName = "u_NormalMap";
 					m_Material->SetInt("u_UseNormalMap", isEnable);
+					break;
+				case TextureUsage::Emissive:
+					uniformName = "u_EmissiveMap";
+					m_Material->SetInt("u_UseEmissiveMap", isEnable);
 					break;
 				case TextureUsage::Albedo:
 					uniformName = "u_AlbedoMap";
