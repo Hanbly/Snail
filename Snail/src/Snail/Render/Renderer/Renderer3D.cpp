@@ -176,6 +176,9 @@ namespace Snail {
 	{
 		shader->Bind();
 
+		shader->SetMat4("u_ViewProjection", s_3DSceneData.ViewProjectionMatrix);
+		shader->SetFloat3("u_ViewPosition", s_3DSceneData.CameraPosition);
+
 		shader->SetMat4("u_Model", transform);
 
 		// 绘制几何体

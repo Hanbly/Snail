@@ -62,6 +62,8 @@ namespace Snail {
 		glm::vec3 GetEmissiveColor() const { return m_EmissiveColor; }
 		void SetEmissiveIntensity(float val) { m_EmissiveIntensity = val; }
 		float GetEmissiveIntensity() const { return m_EmissiveIntensity; }
+		void SetProxyEmissiveIntensity(float val) { m_ProxyEmissiveIntensity = val; }
+		float GetProxyEmissiveIntensity() const { return m_ProxyEmissiveIntensity; }
 		void SetBasicValues();
 
 		static Refptr<Material> Create(const Refptr<Shader>& shader) { return std::make_shared<Material>(shader); }
@@ -91,6 +93,7 @@ namespace Snail {
 		float m_AO = 1.0f;							// 默认为 1.0 (无遮蔽)
 		glm::vec3 m_EmissiveColor = glm::vec3(0.0f);	// 默认为无
 		float m_EmissiveIntensity = 0.0f;				// 默认不发光
+		float m_ProxyEmissiveIntensity = 0.0f;			// 默认不发光
 	};
 
 }

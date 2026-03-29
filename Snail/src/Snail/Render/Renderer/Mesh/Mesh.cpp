@@ -160,6 +160,7 @@ namespace Snail {
 			m_Material->SetInt("u_UseSpecularMap", 0);
 			m_Material->SetInt("u_UseCubemapMap", 0);
 			m_Material->SetInt("u_UseNormalMap", 0);
+			m_Material->SetInt("u_UseEmissiveMap", 0);
 			m_Material->SetInt("u_UseAlbedoMap", 0);
 			m_Material->SetInt("u_UseMetallicMap", 0);
 			m_Material->SetInt("u_UseRoughnessMap", 0);
@@ -192,6 +193,10 @@ namespace Snail {
 					case TextureUsage::Normal:
 						uniformName = "u_NormalMap";
 						m_Material->SetInt("u_UseNormalMap", isEnable);
+						break;
+					case TextureUsage::Emissive:
+						uniformName = "u_EmissiveMap";
+						m_Material->SetInt("u_UseEmissiveMap", isEnable);
 						break;
 					case TextureUsage::Albedo:
 						uniformName = "u_AlbedoMap";
@@ -231,6 +236,7 @@ namespace Snail {
 		m_Material->SetInt("u_UseSpecularMap", 0);
 		m_Material->SetInt("u_UseCubemapMap", 0);
 		m_Material->SetInt("u_UseNormalMap", 0);
+		m_Material->SetInt("u_UseEmissiveMap", 0);
 		m_Material->SetInt("u_UseAlbedoMap", 0);
 		m_Material->SetInt("u_UseMetallicMap", 0);
 		m_Material->SetInt("u_UseRoughnessMap", 0);

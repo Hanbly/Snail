@@ -49,6 +49,7 @@ namespace Snail {
 		if (typestr == "texture_specular") return TextureUsage::Specular;
 		if (typestr == "texture_cubemap") return TextureUsage::Cubemap;
 		if (typestr == "texture_normal") return TextureUsage::Normal;
+		if (typestr == "texture_emissive") return TextureUsage::Emissive;
 
 		if (typestr == "texture_albedo") return TextureUsage::Albedo;
 		if (typestr == "texture_metallic") return TextureUsage::Metallic;

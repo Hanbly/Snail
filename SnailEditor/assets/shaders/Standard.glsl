@@ -109,6 +109,7 @@ uniform sampler2D u_EmissiveMap;
 uniform bool u_UseEmissiveMap;
 uniform vec3 u_EmissiveColor;
 uniform float u_EmissiveIntensityVal;
+uniform float u_ProxyEmissiveIntensityVal;
 
 uniform vec3 u_ColorDiffuse;
 uniform vec3 u_ColorSpecular;
@@ -206,7 +207,7 @@ void main()
     }
 
     // --- 自发光 ---
-    vec3 emissive = u_EmissiveColor * u_EmissiveIntensityVal; 
+    vec3 emissive = u_EmissiveColor * u_ProxyEmissiveIntensityVal; 
     if (u_UseTexture && u_UseEmissiveMap) {
         vec4 texColor = texture(u_EmissiveMap, v_TextureCoords);
         emissive *= texColor.rgb; 

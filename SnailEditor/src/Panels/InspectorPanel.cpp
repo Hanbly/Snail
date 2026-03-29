@@ -390,6 +390,7 @@ namespace Snail {
 				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
 					for (auto& mesh : component.model->GetMeshes()) {
 						mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+						mesh->GetMaterial()->SetProxyEmissiveIntensity(intensity * 0.0001f);
 					}
 				}
 
@@ -539,6 +540,7 @@ namespace Snail {
 				float intensity = material->GetEmissiveIntensity();				
 				if (ImGui::SliderFloat("EmissiveIntensity", &intensity, 0.0f, 10000.0f)) {
 					mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+					mesh->GetMaterial()->SetProxyEmissiveIntensity(intensity * 0.0001f);
 				}
 
 				ImGui::TextDisabled("———— Phong 管线 ————");

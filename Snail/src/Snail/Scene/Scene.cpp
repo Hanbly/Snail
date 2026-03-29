@@ -142,6 +142,7 @@ namespace Snail {
 				for (auto& mesh : model.model->GetMeshes()) {
 					mesh->GetMaterial()->SetEmissiveColor(lightColor);
 					mesh->GetMaterial()->SetEmissiveIntensity(intensity);
+					mesh->GetMaterial()->SetProxyEmissiveIntensity(intensity * 0.0001f);
 				}
                 
                 poiLights.push_back(pointLight);

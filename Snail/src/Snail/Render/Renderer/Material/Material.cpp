@@ -132,6 +132,7 @@ namespace Snail {
 		SetFloat("u_AOVal", m_AO);
 		SetFloat3("u_EmissiveColor", m_EmissiveColor);
 		SetFloat("u_EmissiveIntensityVal", m_EmissiveIntensity);
+		SetFloat("u_ProxyEmissiveIntensityVal", m_ProxyEmissiveIntensity);
 	}
 
 }
