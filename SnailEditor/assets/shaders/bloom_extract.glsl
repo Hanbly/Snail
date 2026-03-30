@@ -14,12 +14,16 @@ out vec4 FragColor;
 in vec2 v_TexCoords;
 
 uniform sampler2D u_SceneTexture;
+uniform sampler2D u_EmissiveBloomTexture;
 uniform float u_Threshold; // 0.8 - 1.2
 // 控制过渡区的柔软度。值越大，渐变越丰富，光球感越弱。
 uniform float u_SoftKnee; 
 
 void main() {
-    vec3 color = texture(u_SceneTexture, v_TexCoords).rgb;
+    vec3 sceneColor = texture(u_SceneTexture, v_TexCoords).rgb;
+    vec3 emissiveBloom = texture(u_EmissiveBloomTexture, v_TexCoords).rgb;
+    // 将真实发光能量并入提取输入，避免主画面过曝却仍能触发正确泛光。
+    vec3 color = sceneColor + emissiveBloom;
     
     // 计算亮度 (人眼感知亮度公式)
     float brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));

@@ -87,6 +87,7 @@ const float PI = 3.14159265359;
 // 输出
 layout(location = 0) out vec4 FinalColor;
 layout(location = 1) out int EntityIDBuffer;
+layout(location = 2) out vec4 BloomSourceColor;
 
 // 输入
 in vec2 v_TextureCoords;
@@ -329,16 +330,21 @@ void main()
     }
 
     // --- 自发光 ---
-    vec3 emissive = u_EmissiveColor * u_ProxyEmissiveIntensityVal; 
+    vec3 emissiveBase = u_EmissiveColor;
     if (u_UseTexture && u_UseEmissiveMap) {
         vec4 texColor = texture(u_EmissiveMap, v_TextureCoords);
-        emissive *= texColor.rgb; 
+        emissiveBase *= texColor.rgb; 
     }
+    // 仅将“可见自发光”加到主画面，避免表面过曝。
+    vec3 emissiveVisible = emissiveBase * u_ProxyEmissiveIntensityVal;
+    // 将“真实发光能量”写入 Bloom 源附件，供后处理提取。
+    vec3 emissiveBloom = emissiveBase * u_EmissiveIntensityVal;
     
-    vec3 color = ambient + Lo + emissive;
+    vec3 color = ambient + Lo + emissiveVisible;
 
     FinalColor = vec4(color, 1.0);
     EntityIDBuffer = v_EntityID;
+    BloomSourceColor = vec4(emissiveBloom, 1.0);
 }
 
 // ----------------------------------------------------------------------------

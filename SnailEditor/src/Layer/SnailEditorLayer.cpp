@@ -22,6 +22,7 @@ namespace Snail {
 		spec.attachments = {
 			FrameBufferTextureFormat::RGBA32F,
 			FrameBufferTextureFormat::R32I,
+			FrameBufferTextureFormat::RGB32F,
 			FrameBufferTextureFormat::DEPTH24_STENCIL8
 		};
 		m_TempFBO = FrameBuffer::Create(spec);
@@ -188,9 +189,12 @@ namespace Snail {
 		RendererCommand::Clear(); // 清除旧的亮部
 
 		extractShader->Bind();
+		extractShader->SetInt("u_SceneTexture", 0);
+		extractShader->SetInt("u_EmissiveBloomTexture", 1);
 		extractShader->SetFloat("u_Threshold", 0.8f); // 阈值
 		extractShader->SetFloat("u_SoftKnee", 0.5f);
-		Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0)); // 绑定场景FBO
+		Texture2D::BindExternal(0, m_TempFBO->GetColorAttachmentRendererID(0)); // 场景HDR颜色
+		Texture2D::BindExternal(1, m_TempFBO->GetColorAttachmentRendererID(2)); // 发光Bloom源
 
 		m_ScreenQuadVAO->Bind();
 		RendererCommand::DrawIndexed(m_ScreenQuadVAO);
